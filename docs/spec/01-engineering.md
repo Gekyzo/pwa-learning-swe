@@ -17,6 +17,7 @@
 | `src/notes.js` | Pure note operations, the doc and its validation (demo) | `config` |
 | `src/cards.js` | The validation of a card and a pack of `content/`, and the pool of cards (CARD-1 to CARD-5) | nothing |
 | `src/learning.js` | The learning doc: the record of a seen card, its review box, the signals and the save (LRN-1 to LRN-8) | `config` |
+| `src/feed.js` | The order of the feed, the seen cards again, the due count and the saved cards (FEED-1 to FEED-5) | `cards`, `learning` |
 | `src/swipe.js` | The rule that settles the slide of a row (optional) | nothing |
 | `src/reorder.js` | The geometry of a row move (optional) | nothing |
 | `src/particles.js` | The particles of a picture and their place in time (optional) | nothing |
@@ -93,6 +94,7 @@ The doc keys are in [07-notes.md](07-notes.md). The device preferences are `pwa-
 | `tests/notes.test.js` | The note operations and the validation of the doc (demo) |
 | `tests/cards.test.js` | The validation of a card and a pack, and the pool (CARD-1 to CARD-5) |
 | `tests/learning.test.js` | The learning doc, the review boxes, the signals and the validation of the doc (LRN-1 to LRN-8) |
+| `tests/feed.test.js` | The order of the feed, its end, the seen cards again, the due count and the saved cards (FEED-1 to FEED-5) |
 | `tests/content.test.js` | The packs of `content/`: each one valid, listed and in `SHELL` (CARD-6) |
 | `tests/pocketbase.test.js` | The client of the account server and its URL (ACC-3, ACC-4, ACC-6) |
 | `tests/session.test.js` | The session, the start route, the offline flag, the pending sign-in and the return URL (ACC-1, ACC-4, ACC-5, ACC-10) |

@@ -33,6 +33,7 @@ const SHELL = [
   './src/notes.js',
   './src/cards.js',
   './src/learning.js',
+  './src/feed.js',
   './src/install.js',
   './src/sections.js',
   './src/modules.js',

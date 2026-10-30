@@ -54,3 +54,21 @@ the clock.
 - **LRN-8** `normalizeLearning` accepts a doc of version 1 whose records are all valid, and drops
   unknown fields. A record of a card that no pack has stays in the doc and shows nowhere, so a
   pack that comes back finds its state.
+
+## Order of the feed
+
+Rules of `src/feed.js`. The random source is a parameter; the screen passes `Math.random`.
+
+- **FEED-1** A card may show when it is not retired, not suspended and not in the feed yet. A
+  card with no record is new; a card whose record is due is due (LRN-3).
+- **FEED-2** Each next card takes one draw from 0 to 1. Below 0.25 it is the most overdue card;
+  below 0.85 a new card; else an exploration card. A share with no card takes a due card, and a
+  due draw with no due card takes a new card.
+- **FEED-3** A new card comes from a topic drawn with the weight 1 plus the liked cards of the
+  topic. An exploration card comes from the topic with the fewest seen cards, the first in pack
+  order on a tie. In both, the lowest level of the topic comes first, then the pack order. With no
+  due and no new card, the feed is at its end.
+- **FEED-4** At the end, **Show seen cards again** fills the feed with the seen cards that may
+  show, the least recently seen first.
+- **FEED-5** The due count is the due cards that may show. The saved cards are the cards of the
+  packs whose record is saved, the last saved first; a retired card stays among them.
