@@ -4,7 +4,7 @@ What changes for you in each version of the app. The newest version is first.
 
 ## Unreleased
 
-No change.
+- The introduction now shows the whole feed in four pages: the cards and **Like**, the review and its grades, **Save** and **More**, and how the app works offline.
 
 ## 0.2.0 - 2026-10-31
 

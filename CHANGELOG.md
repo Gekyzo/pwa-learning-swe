@@ -4,7 +4,7 @@ User-visible changes, newest first.
 
 ## Unreleased
 
-No change.
+- The walkthrough has four pages (ONB-2): `welcome`, the new `review` and `keep`, and `offline`. Its texts name the grades, **Save**, Saved and **More** of 0.2.0; new key `onboarding.icon.more`.
 
 ## 0.2.0 - 2026-10-31
 

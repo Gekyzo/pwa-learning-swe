@@ -49,7 +49,9 @@ centred column of cards in each class; this app has no `pane` layout (LAY-3).
 
 - **ONB-1** The walkthrough shows at the start of a new install only: no `pwa-learning-swe.onboarded`
   flag and no stored doc. A storage that cannot be read counts as seen.
-- **ONB-2** It has the pages of `PAGES`, each with a drawing, a title and a text. **Next** goes
+- **ONB-2** It has the pages of `PAGES`: welcome (the feed and **Like**), review (the boxes and
+  the grades), keep (**Save**, Saved and **More**) and offline (install and update), each with a
+  drawing, a title and a text. **Next** goes
   forward, **Skip** and Escape close it, a slide or the arrow keys turn a page. The last page has
   **Start** in place of **Next**, and no **Skip**.
 - **ONB-3** A close stores the flag. **Show the introduction** in Settings opens it again.
