@@ -21,6 +21,9 @@ import {
   MODULES_KEY,
   loadModules,
   saveModules,
+  TOPICS_KEY,
+  loadTopics,
+  saveTopics,
   ONBOARDED_KEY, SEEN_VERSION_KEY, loadSeen, saveSeen,
   loadOnboarded,
   saveOnboarded,
@@ -149,6 +152,7 @@ test('a preference is not part of the stored doc', () => {
   saveHand(storage, 'left');
   saveTheme(storage, 'dark');
   saveModules(storage, ['saved']);
+  saveTopics(storage, ['git']);
   saveOnboarded(storage);
   assert.deepEqual(loadDoc(storage, opts), empty());
   assert.equal(hasStoredDoc(storage, KEY), false);
@@ -236,6 +240,30 @@ test('the module functions do not throw when the storage does', () => {
   assert.deepEqual(loadModules(brokenStorage()), []);
   assert.equal(saveModules(brokenStorage(), ['saved']), false);
   assert.equal(saveModules(brokenStorage(), []), false);
+});
+
+test('loadTopics returns the stored topic ids, in their order', () => {
+  assert.deepEqual(loadTopics(fakeStorage({ [TOPICS_KEY]: '["http","git"]' })), ['http', 'git']);
+});
+
+test('loadTopics returns no topic off for no value, bad JSON, a value that is not a list and bad ids', () => {
+  assert.deepEqual(loadTopics(fakeStorage()), []);
+  assert.deepEqual(loadTopics(fakeStorage({ [TOPICS_KEY]: '{' })), []);
+  assert.deepEqual(loadTopics(fakeStorage({ [TOPICS_KEY]: '"git"' })), []);
+  assert.deepEqual(loadTopics(fakeStorage({ [TOPICS_KEY]: '["git",1,null,"Bad id","git"]' })), ['git']);
+});
+
+test('saveTopics stores the ids and an empty list removes the key', () => {
+  const storage = fakeStorage();
+  assert.equal(saveTopics(storage, ['git', 'http']), true);
+  assert.equal(storage.getItem(TOPICS_KEY), '["git","http"]');
+  assert.equal(saveTopics(storage, []), true);
+  assert.equal(storage.getItem(TOPICS_KEY), null);
+});
+
+test('the topic functions do not throw when the storage does', () => {
+  assert.deepEqual(loadTopics(brokenStorage()), []);
+  assert.equal(saveTopics(brokenStorage(), ['git']), false);
 });
 
 test('loadOnboarded is true only when the flag is stored', () => {

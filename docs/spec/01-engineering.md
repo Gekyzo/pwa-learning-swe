@@ -16,7 +16,7 @@
 | `src/install.js` | The install offer state machine | nothing |
 | `src/cards.js` | The validation of a card and a pack of `content/`, and the pool of cards (CARD-1 to CARD-5) | nothing |
 | `src/learning.js` | The learning doc: the record of a seen card, its review box, the signals and the save (LRN-1 to LRN-8) | `config` |
-| `src/feed.js` | The order of the feed, the seen cards again, the due count and the saved cards (FEED-1 to FEED-5) | `cards`, `learning` |
+| `src/feed.js` | The order of the feed, the seen cards again, the due count, the saved cards and the topics that are off (FEED-1 to FEED-5, FEED-14) | `cards`, `learning` |
 | `src/particles.js` | The particles of a picture and their place in time (optional) | nothing |
 | `src/onboarding.js` | The show rule and the page steps of the walkthrough (optional) | nothing |
 | `src/ui/context.js` | The values that the views share, the pool of cards, the toast, `render`, `commit` and `apply` | `learning`, `storage`, `i18n`, `onboarding` |
@@ -25,11 +25,11 @@
 | `src/ui/install.js` | The Install button | `install`, `ui/context` |
 | `src/ui/nav.js` | The navigation, the change and the slide of a section | `sections`, `modules`, `ui/context`, `ui/update`, `ui/dust` |
 | `src/ui/card.js` | One card of the feed or of Saved, its actions, and the sheet of its other signals (FEED-9 to FEED-12) | `learning`, `ds/sheet`, `ui/context`, `ui/controls` |
-| `src/ui/feed.js` | The Feed section: the load of the packs, the next cards as the list scrolls, the seen cards and the due line (FEED-6 to FEED-8) | `cards`, `feed`, `learning`, `ui/context`, `ui/card` |
+| `src/ui/feed.js` | The Feed section: the load of the packs, the next cards as the list scrolls, the seen cards, the due line and the switch of a topic (FEED-6 to FEED-8, FEED-14) | `cards`, `feed`, `learning`, `ui/context`, `ui/card` |
 | `src/ui/saved.js` | The Saved section (FEED-13) | `feed`, `ui/context`, `ui/card`, `ui/nav` |
-| `src/ui/settings.js` | Settings, Delete all data (SET-2), and the text of the page in its language | `learning`, `storage`, `i18n`, `modules`, `ui/context`, `ui/update`, `ui/onboarding`, `ui/account` |
+| `src/ui/settings.js` | Settings, Delete all data (SET-2), the Topics group (FEED-15), and the text of the page in its language | `learning`, `storage`, `i18n`, `modules`, `ui/context`, `ui/update`, `ui/onboarding`, `ui/feed`, `ui/account` |
 | `src/ui/dust.js` | The dust of a navigation item (optional) | `particles`, `ui/context`, `ui/controls` |
-| `src/ui/onboarding.js` | The walkthrough (optional) | `onboarding`, `sections`, `storage`, `ui/context`, `ui/controls` |
+| `src/ui/onboarding.js` | The walkthrough and its topic chips (optional; ONB-4) | `onboarding`, `sections`, `storage`, `ui/context`, `ui/controls`, `ui/feed` |
 | `src/ui/whatsnew.js` | The release notes sheet, its Settings row and the seen version | `whatsnew`, `onboarding`, `i18n`, `storage`, `ds/sheet`, `ui/context` |
 | `src/ui/account.js` | The account screens and the group Account of Settings (ACC-1 to ACC-10) | `pocketbase`, `session`, `config`, `ui/context` |
 | `src/app.js` | Wires the views, the global keys, the service worker and the update check | all of the above |
@@ -66,7 +66,7 @@
 ## Storage keys
 
 The doc keys are in [09-feed.md](09-feed.md). The device preferences are `pwa-learning-swe.lang`,
-`pwa-learning-swe.hand`, `pwa-learning-swe.theme`, `pwa-learning-swe.modules` and `pwa-learning-swe.onboarded`. The account keeps `pwa-learning-swe.session` (ACC-5) and
+`pwa-learning-swe.hand`, `pwa-learning-swe.theme`, `pwa-learning-swe.modules`, `pwa-learning-swe.topics` and `pwa-learning-swe.onboarded`. The account keeps `pwa-learning-swe.session` (ACC-5) and
 `pwa-learning-swe.offline` (ACC-10), and `pwa-learning-swe.oauth` in `sessionStorage` for the time of a Google redirect (ACC-4).
 
 ## Change guide
@@ -90,7 +90,7 @@ The doc keys are in [09-feed.md](09-feed.md). The device preferences are `pwa-le
 |---|---|
 | `tests/cards.test.js` | The validation of a card and a pack, and the pool (CARD-1 to CARD-5) |
 | `tests/learning.test.js` | The learning doc, the review boxes, the signals and the validation of the doc (LRN-1 to LRN-8) |
-| `tests/feed.test.js` | The order of the feed, its end, the seen cards again, the due count and the saved cards (FEED-1 to FEED-5) |
+| `tests/feed.test.js` | The order of the feed, its end, the seen cards again, the due count, the saved cards and the topics that are off (FEED-1 to FEED-5, FEED-14) |
 | `tests/content.test.js` | The packs of `content/`: each one valid, listed and in `SHELL` (CARD-6) |
 | `tests/pocketbase.test.js` | The client of the account server and its URL (ACC-3, ACC-4, ACC-6) |
 | `tests/session.test.js` | The session, the start route, the offline flag, the pending sign-in and the return URL (ACC-1, ACC-4, ACC-5, ACC-10) |

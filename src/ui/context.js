@@ -10,6 +10,8 @@ import {
   saveTheme,
   loadModules,
   saveModules,
+  loadTopics,
+  saveTopics,
   loadOnboarded,
   hasStoredDoc,
 } from '#storage';
@@ -61,6 +63,9 @@ document.documentElement.dataset.theme = theme;
 export let off = storage ? loadModules(storage) : [];
 export const isOn = (id) => !off.includes(id);
 export let navMotion = false;
+
+// The topics that the user turned off (FEED-14), by pack id.
+export let topicsOff = storage ? loadTopics(storage) : [];
 
 // The text of a message of a pure module.
 export const textOf = ({ key, params }) => t(key, params);
@@ -185,6 +190,11 @@ export const setTheme = (value) => {
 export const setModules = (next) => {
   off = next;
   if (storage) saveModules(storage, off);
+};
+
+export const setTopics = (next) => {
+  topicsOff = next;
+  if (storage) saveTopics(storage, topicsOff);
 };
 
 // Set by a switch of Modules, so that the render that follows animates the navigation (MOD-3).

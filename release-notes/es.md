@@ -5,6 +5,7 @@ Lo que cambia para ti en cada versión de la app. La versión más nueva va prim
 ## Unreleased
 
 - La introducción muestra ahora todo el feed en cuatro páginas: las tarjetas y **Me gusta**, el repaso y sus notas, **Guardar** y **Más**, y cómo funciona la aplicación sin conexión.
+- Elige tus temas en la última página de la introducción, y cámbialos en **Ajustes › Temas**. El feed muestra solo las tarjetas de los temas activos; Guardadas mantiene todas las tarjetas guardadas.
 
 ## 0.2.0 - 2026-10-31
 

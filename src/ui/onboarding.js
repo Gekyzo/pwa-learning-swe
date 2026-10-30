@@ -3,6 +3,7 @@ import { slideDirection } from '#sections';
 import { saveOnboarded } from '#storage';
 import { $, el, storage, ui, t, guardClick } from '#ui/context';
 import { icon } from '#ui/controls';
+import { chooseTopic, topicStates } from '#ui/feed';
 
 // A part of a page text: plain text, or a key with an optional icon. A key with an icon and no
 // text gets the name of its control (`onboarding.icon.<name>`).
@@ -26,7 +27,7 @@ export const renderOnboarding = () => {
   if (!open) return;
   const page = PAGES[ui.onboarding];
   // An SVG element has no `hidden` property, so the attribute is set.
-  document.querySelectorAll('#onboarding svg[data-page]').forEach((drawing) => {
+  document.querySelectorAll('#onboarding [data-page]').forEach((drawing) => {
     drawing.toggleAttribute('hidden', drawing.dataset.page !== page);
   });
   $('onboarding-title').textContent = t(`onboarding.${page}.title`);
@@ -36,6 +37,27 @@ export const renderOnboarding = () => {
   $('onboarding-dots').setAttribute('aria-label', t('onboarding.page', { page: ui.onboarding + 1, total: PAGES.length }));
   $('onboarding-skip').hidden = isLast(ui.onboarding);
   $('onboarding-next').textContent = t(isLast(ui.onboarding) ? 'onboarding.start' : 'onboarding.next');
+};
+
+// The chips of the topics page (ONB-4). A chip node stays while the topics stay, so the focus
+// stays on the chip that was pressed.
+export const renderOnboardingTopics = () => {
+  const list = $('onboarding-chips');
+  const topics = topicStates();
+  if (list.dataset.ids !== topics.map(({ id }) => id).join()) {
+    list.dataset.ids = topics.map(({ id }) => id).join();
+    list.replaceChildren(
+      ...topics.map(({ id, title }) => {
+        const chip = el('button', { type: 'button', className: 'chip', textContent: title, lang: 'en' });
+        chip.addEventListener('click', () => chooseTopic(id, chip.getAttribute('aria-pressed') !== 'true'));
+        return chip;
+      }),
+    );
+  }
+  [...list.children].forEach((chip, index) => {
+    chip.setAttribute('aria-pressed', String(topics[index].on));
+    chip.disabled = topics[index].last;
+  });
 };
 
 const openOnboarding = () => {

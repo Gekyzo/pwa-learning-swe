@@ -56,9 +56,9 @@ test('the card sheet has a veil, a dialog with its title and Close, and one entr
   assert.deepEqual(signals, ['hard', 'skip', 'report']);
 });
 
-test('the walkthrough has one drawing for each page, in the order of the pages', () => {
+test('the walkthrough has one drawing for each page, the chips of the topics last, in the order of the pages', () => {
   const [layer = ''] = body.match(/<div id="onboarding"[\s\S]*?<input id="import-file"/) ?? [];
-  const drawings = [...layer.matchAll(/<svg data-page="([^"]+)"/g)].map(([, page]) => page);
+  const drawings = [...layer.matchAll(/<(?:svg|div id="onboarding-chips"[^>]*?) data-page="([^"]+)"/g)].map(([, page]) => page);
   assert.deepEqual(drawings, PAGES);
 });
 

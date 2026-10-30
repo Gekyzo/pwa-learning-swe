@@ -333,6 +333,7 @@
      @part onboarding-dot      One dot.
      @part onboarding-actions  Saltar and the next button, side by side. On the last page the next button fills the bar.
      @part onboarding-switch   The switch of the sample data on the last page. It keeps its room on each page.
+     @part onboarding-chips    The chips of the topics on the last page (ONB-4), in the place of a drawing, centred.
      @state away               On onboarding-switch: a page with no switch. The room stays, so nothing moves.
      @state on                 On onboarding-dot: the page in view.
      @state enter-next         On onboarding-page: it comes in from the right.
@@ -408,6 +409,12 @@
     min-height: 5lh;
     margin: 0;
     color: var(--muted);
+  }
+
+  .onboarding-chips {
+    justify-content: center;
+    max-width: var(--art-width);
+    margin: 0;
   }
 
   .onboarding-switch {

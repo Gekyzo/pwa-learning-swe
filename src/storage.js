@@ -175,6 +175,33 @@ export const saveModules = (storage, off) => {
   }
 };
 
+// The topics that the user turned off (FEED-14), by pack id. A preference of the device, as the
+// modules are. An id of no pack stays, so a pack that comes back is still off.
+export const TOPICS_KEY = keyOf('topics');
+
+const TOPIC_ID = /^[a-z][a-z0-9-]*$/;
+
+// The stored ids, once each and in their order. Anything else reads as all on.
+export const loadTopics = (storage) => {
+  try {
+    const ids = JSON.parse(storage.getItem(TOPICS_KEY));
+    return Array.isArray(ids) ? [...new Set(ids.filter((id) => typeof id === 'string' && TOPIC_ID.test(id)))] : [];
+  } catch {
+    return [];
+  }
+};
+
+// No topic off is the app with no choice: it removes the key.
+export const saveTopics = (storage, off) => {
+  try {
+    if (off.length) storage.setItem(TOPICS_KEY, JSON.stringify(off));
+    else storage.removeItem(TOPICS_KEY);
+    return true;
+  } catch {
+    return false;
+  }
+};
+
 // Set after the walkthrough of the first start closed. It is a preference of the device, as the
 // hand is.
 export const ONBOARDED_KEY = keyOf('onboarded');

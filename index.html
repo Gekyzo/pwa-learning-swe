@@ -88,6 +88,10 @@
         <div class="list-group">
           <label class="switch"><span data-i18n="nav.saved"></span><input class="switch-input" type="checkbox" role="switch" data-module="saved"></label>
         </div>
+        <div id="topics-group" hidden>
+          <h2 class="list-group-head" data-i18n="settings.topics"></h2>
+          <div id="topics" class="list-group"></div>
+        </div>
         <div id="install-group" hidden>
           <h2 class="list-group-head" data-i18n="settings.app"></h2>
           <div class="list-group">
@@ -173,6 +177,7 @@
             <circle class="art-accent" cx="120" cy="96" r="4"/>
             <path d="M92 52l56 64"/>
           </svg>
+          <div id="onboarding-chips" class="cluster onboarding-chips" data-page="topics" role="group" data-i18n-attr="aria-label:settings.topics"></div>
         </div>
         <div aria-live="polite">
           <h2 id="onboarding-title" class="onboarding-title"></h2>

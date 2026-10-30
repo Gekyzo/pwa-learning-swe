@@ -26,6 +26,7 @@ import {
 } from '#ui/context';
 import { runUpdate } from '#ui/update';
 import { renderOnboarding } from '#ui/onboarding';
+import { chooseTopic, topicStates } from '#ui/feed';
 import { signedIn } from '#ui/account';
 
 // The value of a row of Preferences is the text of the option that its select has.
@@ -70,6 +71,28 @@ export const applyLanguage = () => {
   renderValues();
   render();
   renderOnboarding();
+};
+
+// The Topics group (FEED-15): one switch for each pack, once the packs load. A switch node stays
+// while the topics stay, so the focus stays on the switch that was pressed.
+export const renderTopics = () => {
+  const topics = topicStates();
+  $('topics-group').hidden = !topics.length;
+  const list = $('topics');
+  if (list.dataset.ids !== topics.map(({ id }) => id).join()) {
+    list.dataset.ids = topics.map(({ id }) => id).join();
+    list.replaceChildren(
+      ...topics.map(({ id, title }) => {
+        const box = el('input', { className: 'switch-input', type: 'checkbox', onchange: (event) => chooseTopic(id, event.target.checked) });
+        box.setAttribute('role', 'switch');
+        return el('label', { className: 'switch' }, [el('span', { textContent: title, lang: 'en' }), box]);
+      }),
+    );
+  }
+  [...list.querySelectorAll('.switch-input')].forEach((box, index) => {
+    box.checked = topics[index].on;
+    box.disabled = topics[index].last;
+  });
 };
 
 const download = (filename, text) => {

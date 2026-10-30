@@ -106,3 +106,13 @@ Rules of `src/ui/feed.js`, `src/ui/card.js` and `src/ui/saved.js`.
 - **FEED-13** Saved lists the saved cards (FEED-5) with **Like** and **Save** only. Unsave there
   removes the card from the list, with **Undo**. With no saved card it shows `saved.empty` and
   **Go to the feed**.
+- **FEED-14** The topics that are off are a preference of the device under
+  `pwa-learning-swe.topics`: a list of pack ids, with no key when every topic is on. A card of a
+  topic that is off does not come into the Feed, leaves the list of this start, and is not in the
+  due count; Saved still shows it, and its record keeps its review state. The last topic that is
+  on cannot be turned off, and a list that covers every pack counts as no topic off. An id of no
+  pack stays in the list, so a pack that comes back is still off.
+- **FEED-15** Settings has the group **Topics**, once the packs load: one switch for each pack, in
+  pack order, with the title of the pack in English. A switch acts at once, as a chip of ONB-4
+  does: the switch of the last topic that is on is disabled, and a topic that comes back on may
+  add its cards at the end of the list.

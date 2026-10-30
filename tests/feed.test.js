@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { DUE_SHARE, NEW_SHARE, nextCard, nextCards, seenAgain, dueCount, savedCards } from '#feed';
+import { DUE_SHARE, NEW_SHARE, nextCard, nextCards, seenAgain, dueCount, savedCards, hiddenTopics, switchTopic } from '#feed';
 import { DAY } from '#learning';
 
 const NOW = Date.UTC(2026, 9, 30, 12);
@@ -121,4 +121,46 @@ test('savedCards gives the saved cards, the last saved first, retired ones too',
     'gone-x': record({ saved: true, savedAt: NOW }),
   };
   assert.deepEqual(savedCards(pool(cards), doc(records)).map((one) => one.id), ['git-b', 'git-a']);
+});
+
+const TOPICS = [{ id: 'git', title: 'Git' }, { id: 'http', title: 'HTTP' }, { id: 'testing', title: 'Testing' }];
+
+test('a card of a topic that is off never shows, and is not in the due count', () => {
+  const cards = [card('git-a', 'git'), card('http-a', 'http')];
+  const records = { 'git-a': record({ due: NOW - DAY }) };
+  const options = { now: NOW, random: seq(0.1, 0.5, 0.9), off: ['git'] };
+  assert.deepEqual(nextCards(pool(cards), doc(records), { ...options, count: 5 }).map((entry) => entry.card.id), ['http-a']);
+  assert.equal(dueCount(pool(cards), doc(records), NOW, ['git']), 0);
+  assert.equal(dueCount(pool(cards), doc(records), NOW), 1);
+  assert.deepEqual(seenAgain(pool(cards), doc(records), { count: 5, off: ['git'] }), []);
+});
+
+test('savedCards keeps the saved cards of a topic that is off', () => {
+  const cards = [card('git-a', 'git')];
+  const records = { 'git-a': record({ saved: true, savedAt: NOW }) };
+  assert.deepEqual(savedCards(pool(cards), doc(records)), cards);
+});
+
+test('hiddenTopics gives the ids that are off, and none when they cover every topic', () => {
+  assert.deepEqual(hiddenTopics(TOPICS, ['http']), ['http']);
+  assert.deepEqual(hiddenTopics(TOPICS, ['gone']), ['gone']);
+  assert.deepEqual(hiddenTopics(TOPICS, ['git', 'http', 'testing']), []);
+  assert.deepEqual(hiddenTopics(TOPICS, ['testing', 'git', 'http', 'gone']), []);
+});
+
+test('switchTopic turns a topic off and on again', () => {
+  assert.deepEqual(switchTopic(TOPICS, [], 'http', false), ['http']);
+  assert.deepEqual(switchTopic(TOPICS, ['http', 'git'], 'http', true), ['git']);
+});
+
+test('switchTopic keeps the ids of no pack, so a pack that comes back stays off', () => {
+  assert.deepEqual(switchTopic(TOPICS, ['gone'], 'git', false), ['gone', 'git']);
+});
+
+test('switchTopic does not turn off the last topic that is on', () => {
+  assert.deepEqual(switchTopic(TOPICS, ['git', 'http'], 'testing', false), ['git', 'http']);
+});
+
+test('switchTopic of an unknown id changes nothing', () => {
+  assert.deepEqual(switchTopic(TOPICS, ['git'], 'nope', false), ['git']);
 });

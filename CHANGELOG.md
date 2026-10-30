@@ -5,6 +5,7 @@ User-visible changes, newest first.
 ## Unreleased
 
 - The walkthrough has four pages (ONB-2): `welcome`, the new `review` and `keep`, and `offline`. Its texts name the grades, **Save**, Saved and **More** of 0.2.0; new key `onboarding.icon.more`.
+- The topics that are off are a device preference under `pwa-learning-swe.topics` (FEED-14): `hiddenTopics` and `switchTopic` in `src/feed.js`, an `off` option on `nextCard`, `nextCards`, `seenAgain` and `dueCount`. The walkthrough ends with a `topics` page of chips (ONB-4), and Settings has a Topics group of switches (FEED-15); both call `chooseTopic` of `src/ui/feed.js`.
 
 ## 0.2.0 - 2026-10-31
 

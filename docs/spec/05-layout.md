@@ -33,7 +33,7 @@ centred column of cards in each class; this app has no `pane` layout (LAY-3).
 
 - **SET-1** Settings is a column of groups, each a `list-group-head` above a `list-group` of
   settings rows, as in pwa-shopping-list: **Backup** (**Export**, **Import**, **Delete all data**), **Preferences**
-  (**Language**, **Hand**, **Theme**), **Modules** (MOD-1), **App** (INS-2) and **Help** (ONB-3),
+  (**Language**, **Hand**, **Theme**), **Modules** (MOD-1), **Topics** (FEED-15), **App** (INS-2) and **Help** (ONB-3),
   then the version lines (VER-4). A row of Preferences shows its current value and a chevron, and
   a tap on it opens the native picker of its select. A row that opens something ends with a
   chevron. Modules keeps its switches.
@@ -50,8 +50,12 @@ centred column of cards in each class; this app has no `pane` layout (LAY-3).
 - **ONB-1** The walkthrough shows at the start of a new install only: no `pwa-learning-swe.onboarded`
   flag and no stored doc. A storage that cannot be read counts as seen.
 - **ONB-2** It has the pages of `PAGES`: welcome (the feed and **Like**), review (the boxes and
-  the grades), keep (**Save**, Saved and **More**) and offline (install and update), each with a
-  drawing, a title and a text. **Next** goes
+  the grades), keep (**Save**, Saved and **More**), offline (install and update) and topics
+  (ONB-4), each with a drawing, a title and a text. **Next** goes
   forward, **Skip** and Escape close it, a slide or the arrow keys turn a page. The last page has
   **Start** in place of **Next**, and no **Skip**.
 - **ONB-3** A close stores the flag. **Show the introduction** in Settings opens it again.
+- **ONB-4** The last page chooses the topics (FEED-14): one chip for each pack, in pack order, in
+  the place of the drawing, pressed when the topic is on. A tap switches the topic at once; the
+  chip of the last topic that is on is disabled. With the packs not loaded yet, the page has no
+  chip. **Skip** keeps every topic on.

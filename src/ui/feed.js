@@ -1,7 +1,7 @@
 import { normalizePack, buildPool } from '#cards';
-import { nextCards, seenAgain, dueCount } from '#feed';
+import { nextCards, seenAgain, dueCount, hiddenTopics, switchTopic } from '#feed';
 import { markSeen, isUpdated } from '#learning';
-import { $, ui, state, pool, lang, t, scroller, setPool, commit, render } from '#ui/context';
+import { $, ui, state, pool, lang, t, scroller, topicsOff, setPool, setTopics, commit, render } from '#ui/context';
 import { cardOf, cardNode } from '#ui/card';
 
 // The Feed section: the packs, the cards that come in as the user scrolls, and the seen ones
@@ -32,6 +32,9 @@ export const loadPool = async () => {
   fill();
 };
 
+// The topics whose cards do not show (FEED-14).
+const off = () => hiddenTopics(pool.topics, topicsOff);
+
 const nearEnd = () => $('feed-more').getBoundingClientRect().top < scroller.getBoundingClientRect().bottom + AHEAD;
 
 // Adds the next cards, and goes on while the end of the list is still near the screen.
@@ -42,8 +45,8 @@ const fill = () => {
   }
   const exclude = ui.feed.map((entry) => entry.id);
   const entries = ui.again
-    ? seenAgain(pool, state, { exclude, count: BATCH })
-    : nextCards(pool, state, { now: Date.now(), random: Math.random, exclude, count: BATCH });
+    ? seenAgain(pool, state, { exclude, off: off(), count: BATCH })
+    : nextCards(pool, state, { now: Date.now(), random: Math.random, exclude, off: off(), count: BATCH });
   ui.feed.push(...entries.map(({ card, reason }) => ({ id: card.id, reason, updated: isUpdated(state.records[card.id], card) })));
   ui.ended = entries.length < BATCH;
   render();
@@ -91,7 +94,7 @@ export const renderFeed = () => {
   const list = $('feed-list');
   const cards = (pool ? ui.feed : [])
     .map((entry) => ({ entry, card: cardOf(entry.id) }))
-    .filter(({ card }) => card && !state.records[card.id]?.suspended);
+    .filter(({ card }) => card && !state.records[card.id]?.suspended && !off().includes(card.topic));
   // The action that has the focus keeps it in the new node of its card.
   const focused = document.activeElement?.closest('.feed-card') ? document.activeElement : null;
   const keep = cards.map(({ entry, card }) => nodeFor(entry, card));
@@ -113,8 +116,25 @@ export const renderFeed = () => {
 
 // The line under the title: the cards to review now, or nothing.
 export const dueText = () => {
-  const count = pool ? dueCount(pool, state, Date.now()) : 0;
+  const count = pool ? dueCount(pool, state, Date.now(), off()) : 0;
   return count ? t('feed.due', { count }) : '';
+};
+
+// A switch of a topic, from the walkthrough or from Settings. The cards of a topic that is off
+// leave the list and come back when it is on again; a topic that is on may add cards at the end.
+export const chooseTopic = (id, on) => {
+  if (!pool) return;
+  setTopics(switchTopic(pool.topics, topicsOff, id, on));
+  ui.ended = false;
+  fill();
+};
+
+// Whether a topic is on, and whether its switch is locked as the last one on.
+export const topicStates = () => {
+  if (!pool) return [];
+  const hidden = off();
+  const on = pool.topics.filter(({ id }) => !hidden.includes(id));
+  return pool.topics.map(({ id, title }) => ({ id, title, on: !hidden.includes(id), last: on.length === 1 && on[0].id === id }));
 };
 
 export const bind = () => {
