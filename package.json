@@ -1,6 +1,6 @@
 {
   "name": "pwa-learning-swe",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "A doomscroll feed of software development content and learning resources",
   "private": true,
   "type": "module",
