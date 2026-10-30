@@ -1,0 +1,64 @@
+{
+  "id": "javascript",
+  "version": 1,
+  "title": "JavaScript",
+  "cards": [
+    {
+      "id": "javascript-event-loop",
+      "kind": "concept",
+      "level": "intermediate",
+      "title": "Microtasks run before the next task",
+      "body": "After each task, such as a timer or an event, the engine empties the whole microtask queue: promise callbacks and queueMicrotask. Only then does it render or take the next task. A loop of promises that never ends freezes the page like a while (true)."
+    },
+    {
+      "id": "javascript-closures",
+      "kind": "concept",
+      "level": "intro",
+      "title": "A closure keeps the variable, not its value",
+      "body": "A function remembers the variables of the scope where it was made. If the variable changes later, the function sees the new value. let in a for loop makes a new binding for each turn, which is why it fixes the classic loop bug."
+    },
+    {
+      "id": "javascript-group-by",
+      "kind": "snippet",
+      "level": "intermediate",
+      "title": "Group an array without a reduce",
+      "body": "Object.groupBy (ES2024) returns an object with one array for each key. Map.groupBy does the same with a Map, for keys that are not strings.",
+      "code": "const byTopic = Object.groupBy(cards, (card) => card.topic);\n// { git: [...], http: [...] }"
+    },
+    {
+      "id": "javascript-foreach-async",
+      "kind": "pitfall",
+      "level": "intermediate",
+      "title": "forEach does not wait for an async callback",
+      "body": "items.forEach(async (item) => await save(item)) starts every save and returns at once; errors become unhandled rejections. Use for...of with await for one at a time, or await Promise.all(items.map(save)) to run them together."
+    },
+    {
+      "id": "javascript-order-quiz",
+      "kind": "quiz",
+      "level": "intermediate",
+      "title": "In which order does this log? setTimeout(() => log('a')); Promise.resolve().then(() => log('b')); log('c');",
+      "options": ["a b c", "c a b", "c b a", "b c a"],
+      "answer": 2,
+      "body": "The synchronous log runs first. The promise callback is a microtask and runs as soon as the current script ends. The timer is a task and runs after that."
+    },
+    {
+      "id": "javascript-equality-quiz",
+      "kind": "quiz",
+      "level": "intro",
+      "title": "What is [] == false?",
+      "options": ["true", "false", "It throws a TypeError"],
+      "answer": 0,
+      "body": "Loose equality converts both sides to numbers: false is 0, and [] becomes '' then 0. Use === and the question never comes up."
+    },
+    {
+      "id": "javascript-info",
+      "kind": "resource",
+      "level": "intro",
+      "title": "The Modern JavaScript Tutorial",
+      "body": "javascript.info covers the language from the basics to promises, generators and modules, with tasks at the end of each chapter.",
+      "url": "https://javascript.info/",
+      "media": "course",
+      "minutes": 600
+    }
+  ]
+}

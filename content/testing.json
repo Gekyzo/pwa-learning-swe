@@ -1,0 +1,68 @@
+{
+  "id": "testing",
+  "version": 1,
+  "title": "Testing",
+  "cards": [
+    {
+      "id": "testing-pyramid",
+      "kind": "concept",
+      "level": "intro",
+      "title": "Many fast tests, few slow ones",
+      "body": "The test pyramid: a wide base of unit tests that run in milliseconds, fewer integration tests, and a thin top of end-to-end tests. The shape keeps the suite fast enough to run on every change."
+    },
+    {
+      "id": "testing-doubles",
+      "kind": "concept",
+      "level": "intermediate",
+      "title": "A stub answers, a mock checks",
+      "body": "A stub returns canned data so the code under test can run. A mock also records the calls and fails the test when the expected calls did not happen. A fake is a working light version, such as an in-memory database."
+    },
+    {
+      "id": "testing-node-test",
+      "kind": "snippet",
+      "level": "intro",
+      "title": "A unit test with no dependency",
+      "body": "Node has a test runner since version 18. node --test finds the test files and runs them; --watch runs them again on each save.",
+      "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\n\ntest('adds', () => {\n  assert.equal(add(2, 3), 5);\n});"
+    },
+    {
+      "id": "testing-flaky",
+      "kind": "pitfall",
+      "level": "intermediate",
+      "title": "A test that reads the clock will fail one day",
+      "body": "Code that calls Date.now() or new Date() inside the logic gives a test that passes today and fails at midnight, at a month end or in another time zone. Pass the time in as a parameter, as you would any other input."
+    },
+    {
+      "id": "testing-tdd-quiz",
+      "kind": "quiz",
+      "level": "intro",
+      "title": "In test-driven development, what comes right after a failing test?",
+      "options": ["Refactor the code", "Write the least code that makes it pass", "Write the next test"],
+      "answer": 1,
+      "body": "Red, green, refactor: a failing test, the least code to make it pass, then clean-up with the test as a safety net."
+    },
+    {
+      "id": "testing-coverage-quiz",
+      "kind": "quiz",
+      "level": "advanced",
+      "title": "A suite has 100% line coverage. What does that prove?",
+      "options": [
+        "Every line ran during the tests",
+        "Every behaviour is correct",
+        "Every branch was taken both ways"
+      ],
+      "answer": 0,
+      "body": "Line coverage proves that a line ran, not that a test checked its result. Branch coverage and mutation testing measure more of what the assertions really catch."
+    },
+    {
+      "id": "testing-fowler",
+      "kind": "resource",
+      "level": "intermediate",
+      "title": "The Practical Test Pyramid",
+      "body": "Ham Vocke's article on martinfowler.com: which tests to write at each layer of a real service, with examples of unit, integration, contract and UI tests.",
+      "url": "https://martinfowler.com/articles/practical-test-pyramid.html",
+      "media": "article",
+      "minutes": 60
+    }
+  ]
+}

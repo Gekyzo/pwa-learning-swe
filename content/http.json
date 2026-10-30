@@ -1,0 +1,64 @@
+{
+  "id": "http",
+  "version": 1,
+  "title": "HTTP and the web",
+  "cards": [
+    {
+      "id": "http-idempotent",
+      "kind": "concept",
+      "level": "intro",
+      "title": "Idempotent is not the same as safe",
+      "body": "A safe method changes nothing on the server: GET, HEAD, OPTIONS. An idempotent method gives the same result when sent once or ten times: the safe ones plus PUT and DELETE. POST is neither, so a client must not retry it blindly."
+    },
+    {
+      "id": "http-cache-control",
+      "kind": "concept",
+      "level": "intermediate",
+      "title": "no-cache does not mean do not cache",
+      "body": "Cache-Control: no-cache lets a cache store the response but makes it revalidate with the server before each use. no-store is the directive that forbids storing it at all."
+    },
+    {
+      "id": "http-curl-verbose",
+      "kind": "snippet",
+      "level": "intro",
+      "title": "See the headers of a request and its response",
+      "body": "-v prints the request and response headers, and -o /dev/null drops the body. Add -L to follow redirects.",
+      "code": "curl -sv -o /dev/null https://example.com"
+    },
+    {
+      "id": "http-cors",
+      "kind": "pitfall",
+      "level": "intermediate",
+      "title": "CORS protects the user, not your API",
+      "body": "CORS is enforced by the browser. A script on another origin cannot read your response without the right Access-Control-Allow-Origin header, but curl or a server can call the API freely. Authenticate and authorise on the server."
+    },
+    {
+      "id": "http-status-quiz",
+      "kind": "quiz",
+      "level": "intro",
+      "title": "A request has a valid token, but the user may not see the resource. Which status fits?",
+      "options": ["401 Unauthorized", "403 Forbidden", "404 Not Found", "400 Bad Request"],
+      "answer": 1,
+      "body": "401 means the request is not authenticated. 403 means the server knows who you are and refuses. Some APIs answer 404 instead, so as not to reveal that the resource exists."
+    },
+    {
+      "id": "http-etag-quiz",
+      "kind": "quiz",
+      "level": "advanced",
+      "title": "A client sends If-None-Match with the current ETag. What does the server answer?",
+      "options": ["200 with the full body", "204 No Content", "304 Not Modified with no body", "412 Precondition Failed"],
+      "answer": 2,
+      "body": "A matching ETag means the cached copy is still current, so the server sends 304 with no body. 412 is the answer to a failed If-Match, used for safe concurrent updates."
+    },
+    {
+      "id": "http-mdn",
+      "kind": "resource",
+      "level": "intro",
+      "title": "MDN: An overview of HTTP",
+      "body": "The reference that most web developers return to: messages, sessions, caching, CORS and the evolution from HTTP/1.1 to HTTP/3.",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Overview",
+      "media": "docs",
+      "minutes": 20
+    }
+  ]
+}

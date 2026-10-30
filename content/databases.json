@@ -1,0 +1,64 @@
+{
+  "id": "databases",
+  "version": 1,
+  "title": "Databases",
+  "cards": [
+    {
+      "id": "databases-btree",
+      "kind": "concept",
+      "level": "intro",
+      "title": "An index is a sorted copy of some columns",
+      "body": "A B-tree index keeps the indexed values in order, each with a pointer to its row. A lookup walks a few levels of the tree instead of scanning the table. The cost is extra writes: every insert and update must also change the index."
+    },
+    {
+      "id": "databases-isolation",
+      "kind": "concept",
+      "level": "advanced",
+      "title": "Read committed still allows lost updates",
+      "body": "Two transactions read a balance of 100, each adds 10 and writes back 110. Both commit and one update is lost. Use SELECT ... FOR UPDATE, an atomic UPDATE balance = balance + 10, or a stricter isolation level."
+    },
+    {
+      "id": "databases-explain",
+      "kind": "snippet",
+      "level": "intermediate",
+      "title": "Ask PostgreSQL what a query really did",
+      "body": "EXPLAIN shows the plan; ANALYZE runs the query and adds the real times and row counts. A Seq Scan on a large table where you expected an Index Scan is the first thing to look for.",
+      "code": "EXPLAIN (ANALYZE, BUFFERS)\nSELECT * FROM orders WHERE customer_id = 42;"
+    },
+    {
+      "id": "databases-n-plus-one",
+      "kind": "pitfall",
+      "level": "intro",
+      "title": "The N+1 query",
+      "body": "Load 50 posts, then the author of each post in its own query: 51 round trips. An ORM hides this behind a property access. Load the authors in one query with a join or an IN list, or use the eager loading of the ORM."
+    },
+    {
+      "id": "databases-composite-quiz",
+      "kind": "quiz",
+      "level": "intermediate",
+      "title": "An index on (country, city). Which filter can it serve alone?",
+      "options": ["WHERE city = 'Lyon'", "WHERE country = 'FR'", "WHERE city LIKE '%on'", "None of them"],
+      "answer": 1,
+      "body": "A composite index is sorted by its first column, then by the next. It helps a filter on a leftmost prefix: country, or country and city. A filter on city alone cannot use the order."
+    },
+    {
+      "id": "databases-null-quiz",
+      "kind": "quiz",
+      "level": "intermediate",
+      "title": "What does WHERE price <> 10 return for a row whose price is NULL?",
+      "options": ["The row", "Not the row", "An error"],
+      "answer": 1,
+      "body": "A comparison with NULL is unknown, not true, so the row is filtered out. Write WHERE price IS DISTINCT FROM 10 (or add OR price IS NULL) to keep it."
+    },
+    {
+      "id": "databases-luke",
+      "kind": "resource",
+      "level": "intermediate",
+      "title": "Use The Index, Luke",
+      "body": "Markus Winand's free guide to SQL indexing for developers, with examples for the main databases. It explains why a query is slow, not just how to add an index.",
+      "url": "https://use-the-index-luke.com/",
+      "media": "book",
+      "minutes": 120
+    }
+  ]
+}

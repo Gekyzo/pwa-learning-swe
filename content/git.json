@@ -1,0 +1,68 @@
+{
+  "id": "git",
+  "version": 1,
+  "title": "Git",
+  "cards": [
+    {
+      "id": "git-objects",
+      "kind": "concept",
+      "level": "intro",
+      "title": "A commit is a snapshot, not a diff",
+      "body": "Git stores each commit as a full tree of the project, plus its parent commits, author and message. A diff is computed when you ask for one. Identical files share one blob, so snapshots stay cheap."
+    },
+    {
+      "id": "git-branch-pointer",
+      "kind": "concept",
+      "level": "intro",
+      "title": "A branch is a movable pointer",
+      "body": "A branch is a file that holds one commit hash. A new commit on the branch moves the pointer forward. HEAD points at the branch you are on, or directly at a commit when it is detached."
+    },
+    {
+      "id": "git-log-graph",
+      "kind": "snippet",
+      "level": "intro",
+      "title": "See the shape of the history",
+      "body": "One line per commit, with the branch graph and every ref name. Add a path at the end to see only the commits that touched it.",
+      "code": "git log --oneline --graph --decorate --all"
+    },
+    {
+      "id": "git-force-push",
+      "kind": "pitfall",
+      "level": "intermediate",
+      "title": "Plain --force can erase a teammate's push",
+      "body": "git push --force overwrites the remote branch with your copy, even if someone pushed in the meantime. Use --force-with-lease: it refuses when the remote moved since your last fetch."
+    },
+    {
+      "id": "git-rebase-quiz",
+      "kind": "quiz",
+      "level": "intermediate",
+      "title": "What does git rebase main do on a feature branch?",
+      "options": [
+        "Merges main into the branch with a merge commit",
+        "Replays the branch commits on top of main as new commits",
+        "Deletes the branch and recreates it from main"
+      ],
+      "answer": 1,
+      "body": "Rebase rewrites the branch: each commit is applied again on top of main and gets a new hash. That is why rebasing a shared branch forces everyone else to reset."
+    },
+    {
+      "id": "git-reflog-quiz",
+      "kind": "quiz",
+      "level": "advanced",
+      "title": "You ran git reset --hard and lost a commit. Where do you find its hash?",
+      "options": ["git reflog", "git stash list", "git fsck --lost-found only", "It is gone"],
+      "answer": 0,
+      "body": "The reflog records every move of HEAD and the branches, about 90 days by default. git reflog shows the hash; git reset --hard <hash> brings it back."
+    },
+    {
+      "id": "git-pro-git",
+      "kind": "resource",
+      "level": "intro",
+      "title": "Pro Git, chapter 10: Git Internals",
+      "body": "The free book by Scott Chacon and Ben Straub. Chapter 10 builds a commit by hand from blobs and trees, which makes every other command easier to reason about.",
+      "url": "https://git-scm.com/book/en/v2/Git-Internals-Plumbing-and-Porcelain",
+      "media": "book",
+      "minutes": 45
+    }
+  ]
+}

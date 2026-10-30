@@ -1,0 +1,64 @@
+{
+  "id": "design",
+  "version": 1,
+  "title": "Software design",
+  "cards": [
+    {
+      "id": "design-coupling",
+      "kind": "concept",
+      "level": "intro",
+      "title": "Low coupling, high cohesion",
+      "body": "Cohesion: the parts of a module change for the same reason. Coupling: how much one module must know about another. A change that touches five files in five folders is the sign of low cohesion and high coupling."
+    },
+    {
+      "id": "design-pure-core",
+      "kind": "concept",
+      "level": "intermediate",
+      "title": "Functional core, imperative shell",
+      "body": "Keep the decisions in pure functions that take values and return values, and push the I/O (database, network, clock, DOM) to a thin outer layer. The core is easy to test; the shell is too simple to need many tests."
+    },
+    {
+      "id": "design-strategy",
+      "kind": "snippet",
+      "level": "intro",
+      "title": "A strategy is often just a map of functions",
+      "body": "In a language with first-class functions, the strategy pattern needs no class hierarchy. A new rule is a new entry.",
+      "code": "const PRICE = {\n  standard: (base) => base,\n  member: (base) => base * 0.9,\n  staff: () => 0,\n};\nconst total = PRICE[customer.kind](base);"
+    },
+    {
+      "id": "design-premature",
+      "kind": "pitfall",
+      "level": "intermediate",
+      "title": "An abstraction with one user",
+      "body": "An interface, a factory and a plugin system for the one case you have make the code harder to change, not easier. Wait for the second or third real case; then the right seam is visible."
+    },
+    {
+      "id": "design-solid-quiz",
+      "kind": "quiz",
+      "level": "intermediate",
+      "title": "A Square subclass breaks code that sets the width of a Rectangle. Which principle does it break?",
+      "options": ["Single responsibility", "Open/closed", "Liskov substitution", "Dependency inversion"],
+      "answer": 2,
+      "body": "Liskov substitution: code written for the base type must work with any subtype. A Square that changes its height when its width is set breaks the promise of Rectangle."
+    },
+    {
+      "id": "design-di-quiz",
+      "kind": "quiz",
+      "level": "advanced",
+      "title": "What is the main gain of passing a clock into a function instead of calling Date.now() inside it?",
+      "options": ["Speed", "A deterministic test", "Less memory", "Thread safety"],
+      "answer": 1,
+      "body": "The function now depends on an input, not on the world. A test passes a fixed time and gets the same result on every run."
+    },
+    {
+      "id": "design-refactoring-guru",
+      "kind": "resource",
+      "level": "intro",
+      "title": "Refactoring.Guru: design patterns",
+      "body": "Each classic pattern with the problem it solves, a diagram and short examples in several languages. Read the problem section first: a pattern is only worth its cost when you have that problem.",
+      "url": "https://refactoring.guru/design-patterns",
+      "media": "article",
+      "minutes": 30
+    }
+  ]
+}
