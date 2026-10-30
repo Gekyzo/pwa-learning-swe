@@ -39,7 +39,7 @@ The rules DS-1 to DS-8 and LAY-1 to LAY-4 belong to the design system, `pwa-desi
 | `I18N` | 06-i18n |
 | `NOTE` | 07-notes |
 | `ACC` | 08-account |
-| `CARD` | 09-feed |
+| `CARD`, `LRN` | 09-feed |
 
 ## Words
 
