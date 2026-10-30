@@ -4,6 +4,10 @@ User-visible changes, newest first.
 
 ## Unreleased
 
+No change.
+
+## 0.2.0 - 2026-10-31
+
 - The feed replaces the notes demo. Cards live in six JSON packs of `content/` (42 cards), validated by `src/cards.js` (CARD-1 to CARD-6) and precached in `SHELL`. `src/learning.js` keeps one record per seen card in `pwa-learning-swe.feed` with Leitner boxes of 1, 3, 7, 16 and 35 days (LRN-1 to LRN-8). `src/feed.js` orders the feed: a quarter due cards, then new cards from a topic weighted by its likes, then exploration (FEED-1 to FEED-5). Views `src/ui/feed.js`, `src/ui/card.js` and `src/ui/saved.js` (FEED-6 to FEED-13); `saved` is the one module of Settings.
 - Removed with the demo: `src/notes.js`, `src/ui/notes.js` and the optional modules that only the notes used, `swipe`, `drag` (`src/reorder.js`) and `src/ui/motion.js`; the `notes.*` keys, the `note` and `trash` icons. The old `pwa-learning-swe.notes` key is no longer read; the cache name stays `v1`, as no module reads the new key in an old format (SW-10).
 
