@@ -72,3 +72,37 @@ Rules of `src/feed.js`. The random source is a parameter; the screen passes `Mat
   show, the least recently seen first.
 - **FEED-5** The due count is the due cards that may show. The saved cards are the cards of the
   packs whose record is saved, the last saved first; a retired card stays among them.
+
+## Screen
+
+Rules of `src/ui/feed.js`, `src/ui/card.js` and `src/ui/saved.js`.
+
+- **FEED-6** At each start the app reads `content/index.json`, then each pack that it lists. A
+  pack that cannot be read or is not valid is left out. An index that cannot be read shows
+  `feed.error` with **Try again**, which reads the packs again.
+- **FEED-7** The Feed is one column of cards. It starts with 5 cards and adds the next 5 when the
+  end of the list comes within 600 px of the screen, until the feed is at its end (FEED-3). Then it
+  shows **All caught up** with **Show seen cards again**, which starts the list again from the top
+  with the seen cards (FEED-4); once that list ends too, the end shows `feed.endAgain` with no
+  button. The cards of the feed are kept for the time of the
+  start only.
+- **FEED-8** A card counts as seen (LRN-4) once in a start, when 60% of the card, or 60% of the
+  height of the screen, is in view. The header line of the Feed is `feed.due`, the due count
+  (FEED-5), and is empty when nothing is due.
+- **FEED-9** A card shows its topic, kind and level; the pill **Review** when it came as a due
+  card, **Updated** when it was updated (LRN-7) as it came in, and **Retired** when it is retired.
+  Then its title, the code of a snippet, and its body. A resource has a button that opens its URL
+  in a new tab, with the medium and the minutes. The text of a card is in English (`lang="en"`).
+- **FEED-10** A quiz shows its options. A tap answers it (LRN-5): the options lock, the right one
+  is marked, a wrong choice is marked too, and `card.right` or `card.wrong` shows above the
+  explanation.
+- **FEED-11** Each card of the feed has **Like** and **Save** (LRN-6), then **I knew this**, or
+  **Remembered** and **Forgot** for a due card that is not a quiz. After an answer, a grade or
+  **I knew this**, the card says when it comes back (`card.back`). **More** opens a sheet with
+  **Too hard**, **Not interested** and **Wrong or outdated** (LRN-5); each one closes the sheet and
+  shows its toast with **Undo**. A suspended card leaves the feed at once.
+- **FEED-12** A card that shows the same thing keeps its node, so a sight does not build it
+  again; an action keeps the focus on its button in the new node of its card.
+- **FEED-13** Saved lists the saved cards (FEED-5) with **Like** and **Save** only. Unsave there
+  removes the card from the list, with **Undo**. With no saved card it shows `saved.empty` and
+  **Go to the feed**.

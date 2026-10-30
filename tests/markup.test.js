@@ -34,17 +34,26 @@ test('the markup has no text of its own', () => {
   assert.doesNotMatch(body, /\s(aria-label|placeholder|title)="/);
 });
 
-test('the note sheet has a veil, a dialog and a text field with the maximum length', () => {
-  const [layer = ''] = body.match(/<div id="note-sheet" class="sheet-layer"[\s\S]*?<\/form>\s*<\/div>/) ?? [];
-  assert.match(layer, /<div id="note-veil" class="sheet-veil">/);
-  assert.match(layer, /<form id="note-form" class="sheet" role="dialog"/);
-  assert.match(layer, /<textarea id="note-text"[^>]*maxlength="200"/);
+test('the Feed has its list, the mark of its end, and its end and error states (FEED-7, FEED-4)', () => {
+  const [section = ''] = body.match(/<section id="feed" class="feed">[\s\S]*?<\/section>/) ?? [];
+  assert.match(section, /<ol id="feed-list" class="feed-list"><\/ol>\s*<div id="feed-more" class="feed-more"><\/div>/);
+  assert.match(section, /<div id="feed-end" class="empty-state" hidden>[\s\S]*<button id="feed-again" class="button primary"/);
+  assert.match(section, /<div id="feed-error" class="empty-state" hidden>[\s\S]*<button id="feed-retry" class="button primary"/);
 });
 
-test('the note sheet has a head with its title and Close, a body, and Save in its foot', () => {
-  const [layer = ''] = body.match(/<div id="note-sheet" class="sheet-layer"[\s\S]*?<\/form>\s*<\/div>/) ?? [];
-  assert.match(layer, /<header class="sheet-head"><h2 id="note-sheet-title" class="sheet-title main"><\/h2><button id="note-close" class="button tonal" type="button" data-i18n="notes.close"><\/button><\/header>\s*<div class="sheet-body">/);
-  assert.match(layer, /<footer class="sheet-foot"><button class="button primary wide" type="submit" data-i18n="notes.save"><\/button><\/footer>\s*<\/form>/);
+test('Saved has its list and an empty state that goes to the feed (FEED-13)', () => {
+  const [section = ''] = body.match(/<section id="saved" class="feed" hidden>[\s\S]*?<\/section>/) ?? [];
+  assert.match(section, /<ol id="saved-list" class="feed-list"><\/ol>/);
+  assert.match(section, /<div id="saved-empty" class="empty-state" hidden>[\s\S]*<button id="saved-feed" class="button primary"/);
+});
+
+test('the card sheet has a veil, a dialog with its title and Close, and one entry for each other signal (FEED-11)', () => {
+  const [layer = ''] = body.match(/<div id="card-sheet" class="sheet-layer"[\s\S]*?<\/section>\s*<\/div>/) ?? [];
+  assert.match(layer, /<div id="card-veil" class="sheet-veil">/);
+  assert.match(layer, /<section id="card-menu" class="sheet" role="dialog" aria-modal="true" aria-labelledby="card-sheet-title">/);
+  assert.match(layer, /<header class="sheet-head"><h2 id="card-sheet-title" class="sheet-title main" data-i18n="card.sheetTitle"><\/h2><button id="card-close" class="button tonal" type="button" data-i18n="card.close"><\/button><\/header>/);
+  const signals = [...layer.matchAll(/<button class="entry" type="button" data-signal="(\w+)">/g)].map(([, kind]) => kind);
+  assert.deepEqual(signals, ['hard', 'skip', 'report']);
 });
 
 test('the walkthrough has one drawing for each page, in the order of the pages', () => {

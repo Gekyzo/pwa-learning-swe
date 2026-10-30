@@ -157,6 +157,139 @@
     padding-left: var(--space-5);
   }
 
+  /* @component feed
+     @scope feed
+     @summary The Feed and Saved sections: one centred column of cards that grows as it scrolls.
+     @part feed-list  The list of the cards.
+     @part feed-more  The empty mark at the end of the list: in view, the next cards come in.
+     @example <section class="feed" style="width: 100%"><ol class="feed-list"><li class="feed-card"><p class="feed-card-meta">Git · Concept · Intro</p><h2 class="feed-card-title">A branch is a movable pointer</h2></li></ol></section> */
+  .feed {
+    width: 100%;
+    max-width: var(--content-max);
+    margin-inline: auto;
+    padding: var(--space-3) var(--space-3) var(--space-6);
+    box-sizing: border-box;
+  }
+
+  .feed-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .feed-more {
+    height: 1px;
+  }
+
+  /* @component feed-card
+     @scope feed
+     @summary One card of the feed: its topic, kind and level, its title, its content, then its actions. The text is English in every language of the screen.
+     @part feed-card-meta     The topic, the kind and the level, with a pill for a review, an update or a retired card.
+     @part feed-card-title    The title, or the question of a quiz.
+     @part feed-card-code     The code of a snippet. It scrolls on its own, sideways.
+     @part feed-card-options  The answers of a quiz, one button each.
+     @part feed-card-option   One answer. After the answer, data-result="right" or "wrong" marks it.
+     @part feed-card-result   The line that says if the answer was right, with data-result.
+     @part feed-card-body     The text, or the explanation of a quiz once it is answered.
+     @part feed-card-link     The button of a resource that opens its URL in a new tab, as wide as its text.
+     @part feed-card-note     A muted line, such as when the card comes back.
+     @part feed-card-actions  The buttons: like, save, then the review or I knew this, then more.
+     @part feed-card-more     The button that opens the other signals of the card.
+     @example <li class="feed-card" style="list-style: none"><p class="feed-card-meta">Git · Code · Intro<span class="pill">Review</span></p><h2 class="feed-card-title">See the shape of the history</h2><pre class="feed-card-code">git log --oneline --graph</pre><p class="feed-card-body">One line per commit.</p><div class="cluster feed-card-actions"><button class="button icon toggle" type="button" aria-label="Like" aria-pressed="true"><svg class="icon" aria-hidden="true"><use href="icons.svg#heart"/></svg></button><button class="button tonal" type="button">I knew this</button><button class="button icon feed-card-more" type="button" aria-label="More"><svg class="icon" aria-hidden="true"><use href="icons.svg#more"/></svg></button></div></li> */
+  .feed-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding: var(--space-4);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-l);
+  }
+
+  .feed-card-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+    margin: 0;
+    color: var(--muted);
+    font-size: var(--text-xs);
+  }
+
+  .feed-card-title {
+    margin: 0;
+    font-size: var(--text-l);
+    font-weight: var(--weight-strong);
+    line-height: 1.3;
+  }
+
+  .feed-card-code {
+    margin: 0;
+    padding: var(--space-3);
+    overflow-x: auto;
+    background: var(--surface-2);
+    border-radius: var(--radius-m);
+    font: var(--text-s)/1.5 var(--font-mono);
+    white-space: pre;
+  }
+
+  .feed-card-options {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .feed-card-option {
+    justify-content: flex-start;
+    text-align: start;
+  }
+
+  .feed-card-option[data-result] {
+    opacity: 1;
+  }
+
+  .feed-card-option[data-result='right'],
+  .feed-card-result[data-result='right'] {
+    border-color: var(--done);
+    color: var(--done);
+  }
+
+  .feed-card-option[data-result='wrong'],
+  .feed-card-result[data-result='wrong'] {
+    border-color: var(--danger);
+    color: var(--danger);
+  }
+
+  .feed-card-result {
+    margin: 0;
+    font-weight: var(--weight-strong);
+  }
+
+  .feed-card-body {
+    margin: 0;
+  }
+
+  .feed-card-link {
+    align-self: flex-start;
+  }
+
+  .feed-card-note {
+    margin: 0;
+    color: var(--muted);
+    font-size: var(--text-s);
+  }
+
+  .feed-card-actions {
+    align-items: center;
+  }
+
+  .feed-card-more {
+    margin-inline-start: auto;
+  }
+
   /* @component about
      @scope settings
      @summary The version lines at the end of Settings.

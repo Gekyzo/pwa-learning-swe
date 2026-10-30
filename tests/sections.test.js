@@ -6,7 +6,7 @@ import { SECTIONS, direction, slideDirection, slideTo } from '#sections';
 const FIVE = ['a', 'b', 'c', 'd', 'settings'];
 
 test('SECTIONS has the order of the navigation', () => {
-  assert.deepEqual(SECTIONS, ['notes', 'settings']);
+  assert.deepEqual(SECTIONS, ['feed', 'saved', 'settings']);
 });
 
 test('slideDirection is 1 for a slide to the left and -1 for a slide to the right', () => {
@@ -28,9 +28,10 @@ test('slideDirection is 0 for a slide that is not horizontal', () => {
   assert.equal(slideDirection(80, -40), -1);
 });
 
-test('slideTo goes between the sections of the template', () => {
-  assert.equal(slideTo('notes', -80, 0), 'settings');
-  assert.equal(slideTo('settings', 80, 0), 'notes');
+test('slideTo goes between the sections of the app', () => {
+  assert.equal(slideTo('feed', -80, 0), 'saved');
+  assert.equal(slideTo('saved', -80, 0), 'settings');
+  assert.equal(slideTo('settings', 80, 0), 'saved');
 });
 
 test('slideTo goes to the next section on a slide to the left', () => {
@@ -60,8 +61,8 @@ test('slideTo ignores a view that is not a section', () => {
 });
 
 test('direction is 1 towards a later section and -1 towards an earlier one', () => {
-  assert.equal(direction('notes', 'settings'), 1);
-  assert.equal(direction('settings', 'notes'), -1);
+  assert.equal(direction('feed', 'settings'), 1);
+  assert.equal(direction('settings', 'feed'), -1);
   assert.equal(direction('a', 'd', FIVE), 1);
 });
 

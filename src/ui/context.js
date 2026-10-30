@@ -1,4 +1,4 @@
-import { NOTES_KEY, emptyNotes, normalizeNotes } from '#notes';
+import { FEED_KEY, emptyLearning, normalizeLearning } from '#learning';
 import {
   loadDoc,
   saveDoc,
@@ -22,15 +22,6 @@ import { shouldShow } from '#onboarding';
 export const UNDO_MS = 5000;
 export const MESSAGE_MS = 3000;
 export const CLICK_GUARD_MS = 350;
-// Width of one swipe-action of a row, the same as in styles.css.
-export const SIDE_BUTTON = 64;
-export const DRAG_START = 10;
-// The hold of a finger that lifts a row for a manual order.
-export const HOLD_MS = 400;
-// The distance from an edge of the list where a lifted row scrolls it, and the scroll of one frame.
-export const EDGE = 56;
-export const EDGE_STEP = 8;
-export const LEAVE_MS = 200;
 // The wait for the service worker to load the new deploy.
 export const REFRESH_MS = 15000;
 // The wait for the deployed version: a weak network can leave the request open.
@@ -75,23 +66,33 @@ export let navMotion = false;
 export const textOf = ({ key, params }) => t(key, params);
 
 // Read before the doc. A stored doc, valid or not, means that the install is not new.
-const firstStart = storage ? shouldShow({ seen: loadOnboarded(storage), hasState: hasStoredDoc(storage, NOTES_KEY) }) : false;
+const firstStart = storage ? shouldShow({ seen: loadOnboarded(storage), hasState: hasStoredDoc(storage, FEED_KEY) }) : false;
 
-const DOC = { key: NOTES_KEY, normalize: normalizeNotes, empty: emptyNotes };
-export let state = storage ? loadDoc(storage, DOC) : emptyNotes();
+const DOC = { key: FEED_KEY, normalize: normalizeLearning, empty: emptyLearning };
+export let state = storage ? loadDoc(storage, DOC) : emptyLearning();
+
+// The cards of the packs of content/, or null until they load (FEED-6).
+export let pool = null;
 
 export const ui = {
   // The section in view.
-  view: 'notes',
-  // The note whose detail is open, or null.
-  noteId: null,
-  sheetOpen: false,
-  // The note that the sheet edits, or null for a new note.
-  editing: null,
-  // The note row whose side actions are open, or null.
-  openId: null,
-  // Where the last swipe left its row, so that the next render moves the row from there.
-  settleFrom: null,
+  view: 'feed',
+  // The cards of the feed in this start, in their order: { id, reason } (FEED-7).
+  feed: [],
+  // The ids that counted as seen in this start, so that a card counts once (FEED-8).
+  seen: new Set(),
+  // What the user did to a card in this start, by id: the quiz answer { choice, correct }, the
+  // review grade (true for Remembered) and I knew this.
+  answers: {},
+  graded: {},
+  knew: {},
+  // True once the feed reached its end, and once it shows the seen cards again (FEED-4).
+  ended: false,
+  again: false,
+  // True when the packs could not be read.
+  loadError: false,
+  // The card whose sheet of signals is open, or null.
+  sheetCard: null,
   // The page of the walkthrough in view, or null while the walkthrough is closed.
   onboarding: firstStart ? 0 : null,
   // `running` is the version of the cached shell; `latest` is the deployed one.
@@ -132,7 +133,7 @@ export const render = () => renderer();
 
 export const commit = (next) => {
   state = next;
-  const saved = storage !== null && saveDoc(storage, NOTES_KEY, state);
+  const saved = storage !== null && saveDoc(storage, FEED_KEY, state);
   render();
   return saved;
 };
@@ -155,6 +156,10 @@ export const apply = (result, { undoText = null } = {}) => {
 export let clickGuardUntil = 0;
 export const guardClick = () => {
   clickGuardUntil = Date.now() + CLICK_GUARD_MS;
+};
+
+export const setPool = (next) => {
+  pool = next;
 };
 
 // With no storage a choice lasts until the app closes.

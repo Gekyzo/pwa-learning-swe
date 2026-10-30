@@ -1,10 +1,11 @@
-import { $, ui, storage, t, setRender, render, showToast, hideToast, toastAction, clickGuardUntil } from '#ui/context';
+import { $, ui, storage, t, setRender, showToast, hideToast, toastAction, clickGuardUntil } from '#ui/context';
 import { bind as bindNav, renderNav } from '#ui/nav';
-import { bind as bindNotes, renderNotes, closeNoteSheet } from '#ui/notes';
+import { bind as bindFeed, renderFeed, loadPool, dueText } from '#ui/feed';
+import { bind as bindSaved, renderSaved } from '#ui/saved';
+import { bind as bindCard, renderCardSheet, closeCardSheet } from '#ui/card';
 import { bind as bindSettings, applyLanguage } from '#ui/settings';
 import { bind as bindInstall, renderInstall } from '#ui/install';
 import { readVersion, renderVersion, offerUpdate } from '#ui/update';
-import { bind as bindDrag, endReorder } from '#ui/drag';
 import { bind as bindOnboarding, closeOnboarding, turnOnboarding } from '#ui/onboarding';
 import { bind as bindWhatsNew, startWhatsNew, isWhatsNewOpen, closeWhatsNew } from '#ui/whatsnew';
 import { bind as bindAccount, renderAccount, startAccount, goOnline, isAccountOpen, closeAccount } from '#ui/account';
@@ -17,7 +18,10 @@ if (oauth) history.replaceState(history.state, '', clean);
 const renderAll = () => {
   renderNav();
   $('title').textContent = t(`nav.${ui.view}`);
-  renderNotes();
+  $('subtitle').textContent = ui.view === 'feed' ? dueText() : '';
+  renderFeed();
+  renderSaved();
+  renderCardSheet();
   $('settings').hidden = ui.view !== 'settings';
   renderVersion();
   renderInstall();
@@ -26,10 +30,11 @@ const renderAll = () => {
 setRender(renderAll);
 
 bindNav();
-bindNotes();
+bindFeed();
+bindSaved();
+bindCard();
 bindSettings();
 bindInstall();
-bindDrag();
 bindOnboarding();
 bindWhatsNew();
 bindAccount();
@@ -61,12 +66,7 @@ document.addEventListener('keydown', (event) => {
     closeWhatsNew();
     return;
   }
-  endReorder(false);
-  if (ui.sheetOpen) closeNoteSheet();
-  else if (ui.noteId !== null) {
-    ui.noteId = null;
-    render();
-  }
+  if (ui.sheetCard !== null) closeCardSheet();
 });
 
 $('toast-action').addEventListener('click', () => {
@@ -76,6 +76,7 @@ $('toast-action').addEventListener('click', () => {
 });
 
 applyLanguage();
+loadPool();
 if (ui.onboarding !== null) $('onboarding-next').focus();
 startAccount(oauth);
 window.addEventListener('online', goOnline);

@@ -14,23 +14,20 @@
 | `src/modules.js` | The modules that Settings turns off, and the visible sections | `sections` |
 | `src/storage.js` | Load, save, validation hook, export, import, device preferences | `config`, `modules` |
 | `src/install.js` | The install offer state machine | nothing |
-| `src/notes.js` | Pure note operations, the doc and its validation (demo) | `config` |
 | `src/cards.js` | The validation of a card and a pack of `content/`, and the pool of cards (CARD-1 to CARD-5) | nothing |
 | `src/learning.js` | The learning doc: the record of a seen card, its review box, the signals and the save (LRN-1 to LRN-8) | `config` |
 | `src/feed.js` | The order of the feed, the seen cards again, the due count and the saved cards (FEED-1 to FEED-5) | `cards`, `learning` |
-| `src/swipe.js` | The rule that settles the slide of a row (optional) | nothing |
-| `src/reorder.js` | The geometry of a row move (optional) | nothing |
 | `src/particles.js` | The particles of a picture and their place in time (optional) | nothing |
 | `src/onboarding.js` | The show rule and the page steps of the walkthrough (optional) | nothing |
-| `src/ui/context.js` | The values that the views share, the toast, `render`, `commit` and `apply` | `notes`, `storage`, `i18n`, `onboarding` |
-| `src/ui/controls.js` | The icon builder and the side-action button | `ui/context` |
-| `src/ui/motion.js` | Row collapse, expand and slide animations | `ui/context` |
+| `src/ui/context.js` | The values that the views share, the pool of cards, the toast, `render`, `commit` and `apply` | `learning`, `storage`, `i18n`, `onboarding` |
+| `src/ui/controls.js` | The icon builder | nothing |
 | `src/ui/update.js` | The version line, the check, the refresh and the update toast | `version`, `i18n`, `ui/context` |
 | `src/ui/install.js` | The Install button | `install`, `ui/context` |
-| `src/ui/nav.js` | The navigation, the change and the slide of a section | `sections`, `modules`, `ui/context`, `ui/drag`, `ui/update`, `ui/dust` |
-| `src/ui/notes.js` | The Notes section, its rows and its sheet (demo) | `ds/sheet`, `notes`, `swipe`, `ui/context`, `ui/controls`, `ui/drag` |
-| `src/ui/settings.js` | Settings, Delete all data (SET-2), and the text of the page in its language | `notes`, `storage`, `i18n`, `modules`, `ui/context`, `ui/update`, `ui/onboarding`, `ui/account` |
-| `src/ui/drag.js` | The hold and move of a row (optional) | `notes`, `reorder`, `ui/context`, `ui/motion` |
+| `src/ui/nav.js` | The navigation, the change and the slide of a section | `sections`, `modules`, `ui/context`, `ui/update`, `ui/dust` |
+| `src/ui/card.js` | One card of the feed or of Saved, its actions, and the sheet of its other signals (FEED-9 to FEED-12) | `learning`, `ds/sheet`, `ui/context`, `ui/controls` |
+| `src/ui/feed.js` | The Feed section: the load of the packs, the next cards as the list scrolls, the seen cards and the due line (FEED-6 to FEED-8) | `cards`, `feed`, `learning`, `ui/context`, `ui/card` |
+| `src/ui/saved.js` | The Saved section (FEED-13) | `feed`, `ui/context`, `ui/card`, `ui/nav` |
+| `src/ui/settings.js` | Settings, Delete all data (SET-2), and the text of the page in its language | `learning`, `storage`, `i18n`, `modules`, `ui/context`, `ui/update`, `ui/onboarding`, `ui/account` |
 | `src/ui/dust.js` | The dust of a navigation item (optional) | `particles`, `ui/context`, `ui/controls` |
 | `src/ui/onboarding.js` | The walkthrough (optional) | `onboarding`, `sections`, `storage`, `ui/context`, `ui/controls` |
 | `src/ui/whatsnew.js` | The release notes sheet, its Settings row and the seen version | `whatsnew`, `onboarding`, `i18n`, `storage`, `ds/sheet`, `ui/context` |
@@ -48,7 +45,7 @@
   storage object), so that a test passes a fake.
 - **ENG-5** No module imports `src/app.js`. A view of `src/ui/` renders the screen through
   `render` of `src/ui/context.js`.
-- **ENG-6** A module of `src/` is imported by its alias, `from '#notes'`, never by a relative
+- **ENG-6** A module of `src/` is imported by its alias, `from '#cards'`, never by a relative
   path. Node resolves `#name` through `imports` of `package.json`; the browser resolves it through
   the import map of `index.html`. `tests/aliases.test.js` checks that the two agree. An alias
   `#ds/<name>` names the module `vendor/design-system/<name>.js` (DSV-1).
@@ -68,7 +65,7 @@
 
 ## Storage keys
 
-The doc keys are in [07-notes.md](07-notes.md). The device preferences are `pwa-learning-swe.lang`,
+The doc keys are in [09-feed.md](09-feed.md). The device preferences are `pwa-learning-swe.lang`,
 `pwa-learning-swe.hand`, `pwa-learning-swe.theme`, `pwa-learning-swe.modules` and `pwa-learning-swe.onboarded`. The account keeps `pwa-learning-swe.session` (ACC-5) and
 `pwa-learning-swe.offline` (ACC-10), and `pwa-learning-swe.oauth` in `sessionStorage` for the time of a Google redirect (ACC-4).
 
@@ -91,7 +88,6 @@ The doc keys are in [07-notes.md](07-notes.md). The device preferences are `pwa-
 
 | Test file | Covers |
 |---|---|
-| `tests/notes.test.js` | The note operations and the validation of the doc (demo) |
 | `tests/cards.test.js` | The validation of a card and a pack, and the pool (CARD-1 to CARD-5) |
 | `tests/learning.test.js` | The learning doc, the review boxes, the signals and the validation of the doc (LRN-1 to LRN-8) |
 | `tests/feed.test.js` | The order of the feed, its end, the seen cards again, the due count and the saved cards (FEED-1 to FEED-5) |
@@ -100,13 +96,11 @@ The doc keys are in [07-notes.md](07-notes.md). The device preferences are `pwa-
 | `tests/session.test.js` | The session, the start route, the offline flag, the pending sign-in and the return URL (ACC-1, ACC-4, ACC-5, ACC-10) |
 | `tests/storage.test.js` | Load, save, the corrupt copy, export, import and the device preferences |
 | `tests/install.test.js` | The install offer states (INS-1) |
-| `tests/swipe.test.js` | The settle rule of a row slide |
 | `tests/sw.test.js` | The manifest text that the worker puts in place (SW-13) |
 | `tests/sections.test.js` | The slide between sections |
 | `tests/modules.test.js` | The visible sections and the switch of a module |
 | `tests/particles.test.js` | The particles of a picture and their place in time |
 | `tests/onboarding.test.js` | The show rule and the page steps of the walkthrough |
-| `tests/reorder.test.js` | The geometry of a row move |
 | `tests/version.test.js` | Version rules and the update offer rule |
 | `tests/whatsnew.test.js` | The parse of the release notes and the unseen versions |
 | `tests/release-notes-files.test.js` | One release-notes file for each language, with the same versions (VER-19) |
