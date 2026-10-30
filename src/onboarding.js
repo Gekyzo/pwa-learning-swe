@@ -16,19 +16,38 @@ const keyPart = (text) => {
 };
 
 // The parts of a page text. A text between two backticks is a key, such as `↻` or `+`; a
-// backtick with no pair stays in the text.
+// backtick with no pair stays in the text. A text between two `**` is bold (`strong: true`), keys
+// in it too; a `**` with no pair stays in the text.
 export const textParts = (text) => {
   const pieces = text.split('`');
   // An even count of pieces means that the last backtick has no pair.
   const open = pieces.length % 2 === 0 ? pieces.splice(-2).join('`') : null;
-  const parts = pieces.map((piece, index) => ({ text: piece, key: index % 2 === 1 }));
-  if (open !== null) parts.push({ text: open, key: false });
+  const raw = pieces.map((piece, index) => ({ text: piece, key: index % 2 === 1 }));
+  if (open !== null) raw.push({ text: open, key: false });
+  // The bold marks outside the keys. An odd last mark has no pair.
+  const marks = raw.filter((part) => !part.key).reduce((count, part) => count + part.text.split('**').length - 1, 0);
+  let pairs = marks - (marks % 2);
+  let strong = false;
+  const parts = [];
+  for (const part of raw) {
+    if (part.key) {
+      parts.push({ ...part, strong });
+      continue;
+    }
+    part.text.split('**').forEach((piece, index) => {
+      if (index > 0 && pairs > 0) {
+        pairs -= 1;
+        strong = !strong;
+        parts.push({ text: piece, key: false, strong });
+      } else parts.push({ text: index > 0 ? `**${piece}` : piece, key: false, strong });
+    });
+  }
   return parts
     .filter((part) => part.text)
-    .reduce((joined, part) => {
+    .reduce((joined, { strong: bold, ...part }) => {
       const last = joined.at(-1);
-      if (last && !last.key && !part.key) last.text += part.text;
-      else joined.push(part.key ? keyPart(part.text) : { ...part });
+      if (last && !last.key && !part.key && Boolean(last.strong) === bold) last.text += part.text;
+      else joined.push({ ...(part.key ? keyPart(part.text) : part), ...(bold && { strong: true }) });
       return joined;
     }, []);
 };

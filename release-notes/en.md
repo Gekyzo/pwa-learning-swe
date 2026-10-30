@@ -4,6 +4,7 @@ What changes for you in each version of the app. The newest version is first.
 
 ## Unreleased
 
+- **What's new** shows bold text in bold, no longer between asterisks.
 - The introduction now shows the whole feed in four pages: the cards and **Like**, the review and its grades, **Save** and **More**, and how the app works offline.
 - Choose your topics on the last page of the introduction, and change them in **Settings › Topics**. The feed shows only the cards of the topics that are on; Saved keeps every saved card.
 
