@@ -26,14 +26,16 @@ This document holds the rules of the app only.
   layer, so that it wins; the block documents the parts, variants and states that the app adds.
   A version holds only the rules that differ from the shared ones, so that a change of the shared
   sheet reaches the app. No other rule of `components` or `layouts` repeats a selector of the
-  shared sheet. The six versions of a shared component are:
+  shared sheet. The seven versions of a shared component are:
   - `main`: a size container, so that the side column of the Feed is at most as high as the
     scrolling area (FEED-18).
   - `app-header` and `nav-bar`: the Noche look of the shell (the ground behind them, a rule on the
     inner edge, no fill on the current item).
   - `pill`: the variant `data`, for the Review tag.
-  - `progress`: the variant `data`, the data hue on the nested fill, for the progress of **Hoy**
-    (FEED-18).
+  - `button`: the pill corners of the Noche look. The shared `--radius-m` stays for the toast and
+    the entries of a sheet.
+  - `progress`: the variant `data`, the done part in the data hue instead of the ink, on the
+    shared track, for the progress of **Hoy** (FEED-18).
   - `list-group` in `settings`: no border, the card radius; the select of a row of Preferences lies
     over the row (SET-1).
 - **DSV-4** A change of a shared part is made in `pwa-design-system`, then `npm run ds` here.
@@ -47,5 +49,5 @@ The parts of `styles.css`, by layer. The shared parts are in the design system.
 |---|---|
 | tokens | the Noche roles: ground, surface, nested by lightness only; `--primary` is the ink pill; `--data` is the one data hue, for data only; `--done-soft` is a neutral fill, so the New tag has no green |
 | base | `main` (a version of the shared part) |
-| components | `app-header`, `nav-bar`, `pill`, `progress` (versions of the shared parts) |
+| components | `button`, `app-header`, `nav-bar`, `pill`, `progress` (versions of the shared parts) |
 | screens | feed: `feed`, `feed-layout`, `feed-panels`, `feed-panel`, `due-bars`, `topic-ledger`, `feed-card` · settings: `settings` (version of `list-group`), `about`, `version-status` · nav: `dust` · onboarding: `onboarding`, `onboarding-art` |

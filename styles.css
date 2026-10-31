@@ -25,7 +25,6 @@
     --done: light-dark(#0a0a0a, #ffffff);
     --on-done: light-dark(#ffffff, #000000);
     --radius-l: 20px;
-    --radius-m: var(--radius-pill);
     --radius-card: 20px;
     --radius-inner: 12px;
     --feed-max: 1138px;
@@ -79,6 +78,13 @@
 }
 
 @layer components {
+  /* @extends button */
+  /* The Noche button is a pill. The shared --radius-m stays, so a toast, a sheet entry and the code
+     of a card keep their own corners. */
+  .button {
+    border-radius: var(--radius-pill);
+  }
+
   /* @extends app-header */
   .app-header {
     background: var(--bg);
@@ -98,9 +104,9 @@
   }
 
   /* @extends progress
-     @variant data  The data hue on the nested fill, for the progress of Today (FEED-18). */
+     @variant data  The done part in the data hue instead of the ink, for the progress of Today (FEED-18). The track stays the shared --line. */
   .progress.data {
-    background: linear-gradient(to right, var(--data) var(--pct), var(--surface-2) 0);
+    --done: var(--data);
   }
 }
 
@@ -518,7 +524,7 @@
     padding: var(--space-3);
     overflow-x: auto;
     background: var(--surface-2);
-    border-radius: var(--radius-m);
+    border-radius: var(--radius-inner);
     font: var(--text-s)/1.5 var(--font-mono);
     white-space: pre;
   }

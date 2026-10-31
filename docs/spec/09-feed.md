@@ -127,9 +127,10 @@ Rules of `src/ui/feed.js`, `src/ui/card.js` and `src/ui/saved.js`.
   does: the switch of the last topic that is on is disabled, and a topic that comes back on may
   add its cards at the end of the list.
 - **FEED-18** The Feed has four panels, once the packs load. **Hoy** shows `side.todayCount`:
-  `done` is the due cards of the feed seen in this start (`sessionDone`), and `total` is `done`
-  plus the due count (bar 0 of FEED-16); a progress bar shows `done / total` (0 when `total` is
-  0), and the note is `side.todayNote` with the due count, or `side.todayDone` at 0. **Vuelven a
+  `done` is the cards that came into the feed as due in this start and were seen, of a topic that
+  is on (`sessionDone`); **Show seen cards again** does not reset it. `total` is `done` plus the
+  due count (bar 0 of FEED-16); a progress bar, named by the head and the count, shows
+  `done / total` (0 when `total` is 0), and the note is `side.todayNote` with the due count, or `side.todayDone` at 0. **Vuelven a
   repaso** shows the 7 due bars of FEED-16, each one as high as its count over the highest count
   (at least 1), with its count and its day (`side.day0`, then `side.dayN`). **Tus n tarjetas
   vistas** (`side.states`) shows the state counts of FEED-17, and **Por tema** the ledger of

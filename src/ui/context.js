@@ -86,6 +86,8 @@ export const ui = {
   feed: [],
   // The ids that counted as seen in this start, so that a card counts once (FEED-8).
   seen: new Set(),
+  // The ids that came into the feed as due in this start. Show seen cards again keeps them (FEED-18).
+  dueIds: new Set(),
   // What the user did to a card in this start, by id: the quiz answer { choice, correct }, the
   // review grade (true for Remembered) and I knew this.
   answers: {},

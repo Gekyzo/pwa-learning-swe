@@ -54,6 +54,7 @@ const fill = () => {
     ? seenAgain(pool, state, { exclude, off: off(), count: BATCH })
     : nextCards(pool, state, { now: Date.now(), random: Math.random, exclude, off: off(), count: BATCH });
   ui.feed.push(...entries.map(({ card, reason }) => ({ id: card.id, reason, updated: isUpdated(state.records[card.id], card) })));
+  for (const { card, reason } of entries) if (reason === 'due') ui.dueIds.add(card.id);
   ui.ended = entries.length < BATCH;
   render();
   requestAnimationFrame(() => {
@@ -143,9 +144,14 @@ const renderSide = () => {
   const now = Date.now();
   const hidden = off();
   const bars = dueBars(pool, state, now, hidden);
-  const done = sessionDone(ui.feed, ui.seen);
+  // A card of a topic that is off leaves Today, as it leaves the due count.
+  const topicOn = (id) => {
+    const card = cardOf(id);
+    return Boolean(card) && !hidden.includes(card.topic);
+  };
+  const done = sessionDone(ui.dueIds, ui.seen, topicOn);
   const total = done + bars[0];
-  $('today-count').textContent = t('side.todayCount', { done, total });
+  $('today-count').textContent = t('side.todayCount', { done, count: total });
   const progress = $('today-progress');
   progress.style.setProperty('--pct', `${total ? (done / total) * 100 : 0}%`);
   progress.setAttribute('aria-valuemax', String(total));

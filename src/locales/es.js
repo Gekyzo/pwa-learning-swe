@@ -20,7 +20,7 @@ export default {
   'feed.error': 'No se pudieron cargar las tarjetas.',
   'feed.retry': 'Reintentar',
   'side.today': 'Hoy',
-  'side.todayCount': '{done} de {total} repasos',
+  'side.todayCount': { one: '{done} de {count} repaso', other: '{done} de {count} repasos' },
   'side.todayNote': { one: 'Queda {count} repaso; luego el feed sigue con tarjetas nuevas.', other: 'Quedan {count} repasos; luego el feed sigue con tarjetas nuevas.' },
   'side.todayDone': 'Repasos de hoy hechos.',
   'side.bars': 'Vuelven a repaso',

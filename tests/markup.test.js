@@ -46,7 +46,7 @@ test('the Feed has the side column with its four panels (FEED-18)', () => {
   assert.match(side, /^<aside id="feed-side" class="feed-side-col">\s*<div id="feed-panels" class="feed-panels" hidden>/);
   const panels = [...side.matchAll(/<section id="([^"]+)" class="feed-panel">/g)].map(([, id]) => id);
   assert.deepEqual(panels, ['panel-today', 'panel-bars', 'panel-states', 'panel-topics']);
-  assert.match(side, /<div id="today-progress" class="progress data" role="progressbar" aria-valuemin="0"><\/div>/);
+  assert.match(side, /<div id="today-progress" class="progress data" role="progressbar" aria-valuemin="0" aria-labelledby="today-title today-count"><\/div>/);
   assert.match(side, /<ol id="due-bars" class="due-bars"><\/ol>/);
   assert.match(side, /<ol id="topic-ledger" class="topic-ledger"><\/ol>/);
   assert.equal([...body.matchAll(/id="feed-panels"/g)].length, 1);

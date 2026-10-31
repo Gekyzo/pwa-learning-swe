@@ -20,7 +20,7 @@ export default {
   'feed.error': 'The cards could not be loaded.',
   'feed.retry': 'Try again',
   'side.today': 'Today',
-  'side.todayCount': '{done} of {total} reviews',
+  'side.todayCount': { one: '{done} of {count} review', other: '{done} of {count} reviews' },
   'side.todayNote': { one: '{count} review left; then the feed goes on with new cards.', other: '{count} reviews left; then the feed goes on with new cards.' },
   'side.todayDone': "Today's reviews are done.",
   'side.bars': 'Coming back for review',

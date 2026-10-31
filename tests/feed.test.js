@@ -236,8 +236,16 @@ test('tagOf names the tag of a card by the reason it came (FEED-9)', () => {
 });
 
 test('sessionDone counts the due cards seen in this start', () => {
-  const feed = [{ id: 'a', reason: 'due' }, { id: 'b', reason: 'new' }, { id: 'c', reason: 'due' }];
-  assert.equal(sessionDone(feed, new Set(['a', 'b'])), 1);
-  assert.equal(sessionDone([], new Set(['a'])), 0);
-  assert.equal(sessionDone(feed, new Set()), 0);
+  const due = new Set(['a', 'c']);
+  assert.equal(sessionDone(due, new Set(['a', 'b'])), 1);
+  assert.equal(sessionDone(new Set(), new Set(['a'])), 0);
+  assert.equal(sessionDone(due, new Set()), 0);
+});
+
+test('sessionDone leaves out the cards of a topic that is off', () => {
+  const topic = { a: 'git', c: 'http' };
+  const due = new Set(['a', 'c']);
+  const seen = new Set(['a', 'c']);
+  assert.equal(sessionDone(due, seen, (id) => topic[id] !== 'http'), 1);
+  assert.equal(sessionDone(due, seen), 2);
 });
