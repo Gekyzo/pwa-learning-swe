@@ -75,7 +75,13 @@ export const applyLanguage = () => {
 // while the topics stay, so the focus stays on the switch that was pressed.
 export const renderTopics = () => {
   const topics = topicStates();
-  $('topics-group').hidden = !topics.length;
+  $('topics').closest('.settings-group').hidden = !topics.length;
+  const shown = topics.filter(({ on }) => on);
+  $('topics-note').textContent = t('settings.topicsNote', {
+    on: shown.length,
+    total: topics.length,
+    count: shown.reduce((sum, { count }) => sum + count, 0),
+  });
   const list = $('topics');
   if (list.dataset.ids !== topics.map(({ id }) => id).join()) {
     list.dataset.ids = topics.map(({ id }) => id).join();
@@ -83,10 +89,14 @@ export const renderTopics = () => {
       ...topics.map(({ id, title }) => {
         const box = el('input', { className: 'switch-input', type: 'checkbox', onchange: (event) => chooseTopic(id, event.target.checked) });
         box.setAttribute('role', 'switch');
-        return el('label', { className: 'switch' }, [el('span', { textContent: title, lang: 'en' }), box]);
+        const name = el('span', { className: 'switch-title' }, [el('span', { textContent: title, lang: 'en' }), el('span', { className: 'switch-meta' })]);
+        return el('label', { className: 'switch' }, [name, box]);
       }),
     );
   }
+  [...list.querySelectorAll('.switch')].forEach((label, index) => {
+    label.querySelector('.switch-meta').textContent = t('onboarding.count', { count: topics[index].count });
+  });
   [...list.querySelectorAll('.switch-input')].forEach((box, index) => {
     box.checked = topics[index].on;
     box.disabled = topics[index].last;

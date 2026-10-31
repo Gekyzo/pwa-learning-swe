@@ -22,23 +22,28 @@ cards in each class; this app has no `pane` layout (LAY-3).
 ## Modules
 
 - **MOD-1** `MODULES` lists the parts that Settings turns off: `saved`, which shows the Saved
-  section. With a module off, its sections leave the navigation, and a view of one of them goes
+  section. Its switch, **Guardadas en la barra**, is the last row of **Preferencias**.
+  With a module off, its sections leave the navigation, and a view of one of them goes
   to the first section that is on.
 - **MOD-2** The modules that are off are a preference of the device under `pwa-learning-swe.modules`,
   not part of the doc. No module off removes the key.
-- **MOD-3** A switch of Modules animates the item of its section: it breaks into dust and its
+- **MOD-3** The switch of Saved animates the item of its section: it breaks into dust and its
   place closes, or its place opens and the dust settles (`src/ui/dust.js`). With reduced motion
   the item goes or comes at once.
 
 ## Settings
 
-- **SET-1** Settings is a column of groups, each a `list-group-head` above a `list-group` of
-  settings rows, as in pwa-shopping-list: **Backup** (**Export**, **Import**, **Delete all data**), **Preferences**
-  (**Language**, **Hand**, **Theme**), **Modules** (MOD-1), **Topics** (FEED-15), **App** (INS-2) and **Help** (ONB-3),
-  then the version lines (VER-4). A row of Preferences shows its current value and a chevron, and
-  a tap on it opens the native picker of its select. A row that opens something ends with a
-  chevron. Modules keeps its switches.
-- **SET-2** **Delete all data** is the last row of Backup, in the colour of danger, with no
+- **SET-1** Settings is a column of groups, each a `settings-group`: a `list-group-head` with an
+  optional muted line, above a `list-group` of settings rows. The order is **Temas** (FEED-15, with the
+  line `settings.topicsNote`: topics on of all, and the cards of the topics on), **Preferencias**
+  (**Language**, **Hand**, **Theme**, then the switch of Saved, MOD-1; line `settings.preferencesNote`),
+  **Cuenta y copia** (the account rows, ACC-8, then **Export** and **Import**), **Aplicación**
+  (**Install** only when INS-2 shows it, **Show the introduction**, **How review works**, **What's new**,
+  then the version lines, VER-4) and **Borrar** (SET-2; line `settings.eraseNote`). A row of Preferences
+  shows its current value and a chevron, and a tap on it opens the native picker of its select. A
+  row that opens something ends with a chevron. From 840px the head and its line stand in a column beside
+  the rows (2 : 4); below, above them.
+- **SET-2** **Delete all data** is the only row of **Borrar**, the last group, in the colour of danger, with no
   chevron. It asks `reset.confirm`, or `reset.confirmLocal` with a session, which also says that
   the session closes. A yes removes each `localStorage` key of the app, `<slug>.*` (`resetAll`),
   and no key of another app of the origin, then loads the page again: the app starts as a new
@@ -55,7 +60,7 @@ cards in each class; this app has no `pane` layout (LAY-3).
   (ONB-5). The sample is the first card that is not retired of the first topic that is on, inert,
   beside the tiles from 840px and under them below. **Start** and Escape close it and keep every
   topic it has on. It has no pages, no drawings, no **Skip**, no slide and no arrow keys.
-- **ONB-3** A close stores the flag. **Show the introduction** in Settings › Help opens it again.
+- **ONB-3** A close stores the flag. **Show the introduction** in Settings › Aplicación opens it again.
 - **ONB-4** The tiles choose the topics (FEED-14): one tile for each pack, in pack order, with a
   check mark, the title of the pack (in English) and its count of cards that are not retired. A
   tile is pressed when its topic is on. A tap switches the topic at once; the tile of the last
@@ -63,7 +68,7 @@ cards in each class; this app has no `pane` layout (LAY-3).
   The tiles take 2 columns below 840px and 3 from 840px. Below 840px the bar of **Start** and
   **See how review works** is sticky at the bottom of the screen. With the packs not loaded yet,
   the page has no tile and no sample.
-- **ONB-5** **See how review works** on the walkthrough and **How review works** in Settings › Help
+- **ONB-5** **See how review works** on the walkthrough and **How review works** in Settings › Aplicación
   open one sheet over the screen: a head with its title and **Close**, then how a seen
   card comes back (1, 3, 7, 16 and 35 days, LRN-3) and what **Remembered**, **Forgot**, **I knew
   this** and a quiz answer do (LRN-5). **Close**, the veil and Escape close it; Escape closes it

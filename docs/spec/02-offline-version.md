@@ -128,7 +128,7 @@ Rules of `sw.js`, `src/version.js`, `version.json`, `scripts/bump-version.mjs`,
   the language, then the notes as a list. A `` `name` `` in a note shows as the key of the
   walkthrough, and a `**text**` shows bold, keys in it too; a `**` with no pair stays as text.
   The veil, `Close`, a drag down and `Escape` close it.
-- **VER-23** **Help** in Settings has the row `settings.whatsNew`, which shows the sheet with
+- **VER-23** **Aplicación** in Settings has the row `settings.whatsNew`, which shows the sheet with
   every version. The row is hidden while the notes have no version.
 
 ## Installation

@@ -4,7 +4,8 @@ What changes for you in each version of the app. The newest version is first.
 
 ## Unreleased
 
-- The introduction is now one page: choose your topics on tiles that say how many cards each one has, and **See how review works** tells you when a card comes back. **Settings › Help** shows it too.
+- Settings puts **Topics** first, with how many cards each one has, and **Erase** last. The Saved switch is in **Preferences**, the account and the backup go together, and the help is in **Application**.
+- The introduction is now one page: choose your topics on tiles that say how many cards each one has, and **See how review works** tells you when a card comes back. **Settings › Application** shows it too.
 - Sign in puts **Start without an account** first, with the figures of the app and a sample card. From Settings, **Continue with Google** comes first and the other button reads **Not now**.
 - Beside the feed (or after the first cards on a phone) you see how many reviews you did today, the cards that come back in the next 7 days, how your seen cards are doing and the counts of each topic.
 - Under the feed title, a greeting says how many cards come back today and how many new ones wait for you.

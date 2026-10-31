@@ -38,7 +38,7 @@ two ways in: **Continue with Google**, or **Start without an account** with no a
   server error changes nothing. A logout during the request makes the answer save nothing.
 - **ACC-7** **Check again** refreshes the session as ACC-6. A session that is still not approved
   shows the toast `account.waiting.still`.
-- **ACC-8** Settings has the group **Account**: with a session, the email and **Log out**; with
+- **ACC-8** Settings has the account rows in the group **Cuenta y copia**, above Export and Import: with a session, the email and **Log out**; with
   none, **Sign in with Google**, which opens **Sign in**. There **Continue with Google** comes
   first, as the main button, and the other reads **Not now** and closes the screen. **Log out** removes the session only;
   the learning doc and the preferences stay. It then routes as ACC-1: with the offline flag the app

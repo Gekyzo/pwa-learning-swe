@@ -79,65 +79,90 @@
       </section>
 
       <section id="settings" class="settings" hidden>
-        <div id="account-group" hidden>
-          <h2 class="list-group-head" data-i18n="settings.account"></h2>
-          <div class="list-group">
-            <div id="account-row" class="settings-row"><span id="account-email" class="settings-row-label"></span></div>
-            <button id="logout" class="settings-row" type="button"><span class="settings-row-label" data-i18n="account.logout"></span><span class="chevron" aria-hidden="true">›</span></button>
-            <button id="account-login" class="settings-row" type="button"><span class="settings-row-label" data-i18n="account.signIn"></span><span class="chevron" aria-hidden="true">›</span></button>
+        <section class="settings-group">
+          <div class="settings-label">
+            <h2 class="list-group-head" data-i18n="settings.topics"></h2>
+            <p id="topics-note" class="settings-note"></p>
           </div>
-        </div>
-        <h2 class="list-group-head" data-i18n="settings.backup"></h2>
-        <div class="list-group">
-          <button id="export" class="settings-row" type="button"><span class="settings-row-label" data-i18n="settings.export"></span><span class="chevron" aria-hidden="true">›</span></button>
-          <button id="import" class="settings-row" type="button"><span class="settings-row-label" data-i18n="settings.import"></span><span class="chevron" aria-hidden="true">›</span></button>
-          <button id="reset" class="settings-row danger" type="button"><span class="settings-row-label" data-i18n="settings.reset"></span></button>
-        </div>
-        <h2 class="list-group-head" data-i18n="settings.preferences"></h2>
-        <div class="list-group">
-          <div class="settings-row">
-            <span class="settings-row-label" data-i18n="settings.language"></span>
-            <span id="language-value" class="settings-row-value"></span>
-            <span class="chevron" aria-hidden="true">›</span>
-            <select id="language" class="select" data-i18n-attr="aria-label:settings.language"></select>
+          <div class="settings-rows">
+            <div id="topics" class="list-group"></div>
           </div>
-          <div class="settings-row">
-            <span class="settings-row-label" data-i18n="settings.hand"></span>
-            <span id="hand-value" class="settings-row-value"></span>
-            <span class="chevron" aria-hidden="true">›</span>
-            <select id="hand" class="select" data-i18n-attr="aria-label:settings.hand"></select>
+        </section>
+        <section class="settings-group">
+          <div class="settings-label">
+            <h2 class="list-group-head" data-i18n="settings.preferences"></h2>
+            <p class="settings-note" data-i18n="settings.preferencesNote"></p>
           </div>
-          <div class="settings-row">
-            <span class="settings-row-label" data-i18n="settings.theme"></span>
-            <span id="theme-value" class="settings-row-value"></span>
-            <span class="chevron" aria-hidden="true">›</span>
-            <select id="theme" class="select" data-i18n-attr="aria-label:settings.theme"></select>
+          <div class="settings-rows">
+            <div class="list-group">
+              <div class="settings-row">
+                <span class="settings-row-label" data-i18n="settings.language"></span>
+                <span id="language-value" class="settings-row-value"></span>
+                <span class="chevron" aria-hidden="true">›</span>
+                <select id="language" class="select" data-i18n-attr="aria-label:settings.language"></select>
+              </div>
+              <div class="settings-row">
+                <span class="settings-row-label" data-i18n="settings.hand"></span>
+                <span id="hand-value" class="settings-row-value"></span>
+                <span class="chevron" aria-hidden="true">›</span>
+                <select id="hand" class="select" data-i18n-attr="aria-label:settings.hand"></select>
+              </div>
+              <div class="settings-row">
+                <span class="settings-row-label" data-i18n="settings.theme"></span>
+                <span id="theme-value" class="settings-row-value"></span>
+                <span class="chevron" aria-hidden="true">›</span>
+                <select id="theme" class="select" data-i18n-attr="aria-label:settings.theme"></select>
+              </div>
+              <label class="switch"><span data-i18n="settings.savedInNav"></span><input class="switch-input" type="checkbox" role="switch" data-module="saved"></label>
+            </div>
           </div>
-        </div>
-        <h2 class="list-group-head" data-i18n="settings.modules"></h2>
-        <div class="list-group">
-          <label class="switch"><span data-i18n="nav.saved"></span><input class="switch-input" type="checkbox" role="switch" data-module="saved"></label>
-        </div>
-        <div id="topics-group" hidden>
-          <h2 class="list-group-head" data-i18n="settings.topics"></h2>
-          <div id="topics" class="list-group"></div>
-        </div>
-        <div id="install-group" hidden>
-          <h2 class="list-group-head" data-i18n="settings.app"></h2>
-          <div class="list-group">
-            <button id="install" class="settings-row" type="button"><span class="settings-row-label" data-i18n="settings.install"></span><span class="chevron" aria-hidden="true">›</span></button>
+        </section>
+        <section class="settings-group">
+          <div class="settings-label">
+            <h2 class="list-group-head" data-i18n="settings.accountBackup"></h2>
           </div>
-        </div>
-        <h2 class="list-group-head" data-i18n="settings.help"></h2>
-        <div class="list-group">
-          <button id="show-onboarding" class="settings-row" type="button"><span class="settings-row-label" data-i18n="settings.onboarding"></span><span class="chevron" aria-hidden="true">›</span></button>
-          <button id="show-review" class="settings-row" type="button"><span class="settings-row-label" data-i18n="settings.review"></span><span class="chevron" aria-hidden="true">›</span></button>
-          <button id="show-whatsnew" class="settings-row" type="button" hidden><span class="settings-row-label" data-i18n="settings.whatsNew"></span><span class="chevron" aria-hidden="true">›</span></button>
-        </div>
-        <footer class="about">
-          <p class="about-line"><span id="version"></span><span id="version-status" class="version-status" role="status" data-status="checking"><svg data-for="checking" class="icon small" aria-hidden="true"><use href="icons.svg#refresh"/></svg><svg data-for="current" class="icon small" aria-hidden="true"><use href="icons.svg#check-circle"/></svg><svg data-for="outdated" class="icon small" aria-hidden="true"><use href="icons.svg#download"/></svg><svg data-for="unknown" class="icon small" aria-hidden="true"><use href="icons.svg#offline"/></svg><span id="version-status-text" class="version-status-text"></span></span></p>
-          <button id="update" class="button accent" type="button" hidden><span data-i18n="settings.update"></span></button>
-        </footer>
+          <div class="settings-rows">
+            <div id="account-group" class="list-group" hidden>
+              <div id="account-row" class="settings-row"><span id="account-email" class="settings-row-label"></span></div>
+              <button id="logout" class="settings-row" type="button"><span class="settings-row-label" data-i18n="account.logout"></span><span class="chevron" aria-hidden="true">›</span></button>
+              <button id="account-login" class="settings-row" type="button"><span class="settings-row-label" data-i18n="account.signIn"></span><span class="chevron" aria-hidden="true">›</span></button>
+            </div>
+            <div class="list-group">
+              <button id="export" class="settings-row" type="button"><span class="settings-row-label" data-i18n="settings.export"></span><span class="chevron" aria-hidden="true">›</span></button>
+              <button id="import" class="settings-row" type="button"><span class="settings-row-label" data-i18n="settings.import"></span><span class="chevron" aria-hidden="true">›</span></button>
+            </div>
+          </div>
+        </section>
+        <section class="settings-group">
+          <div class="settings-label">
+            <h2 class="list-group-head" data-i18n="settings.app"></h2>
+          </div>
+          <div class="settings-rows">
+            <div id="install-group" class="list-group" hidden>
+              <button id="install" class="settings-row" type="button"><span class="settings-row-label" data-i18n="settings.install"></span><span class="chevron" aria-hidden="true">›</span></button>
+            </div>
+            <div class="list-group">
+              <button id="show-onboarding" class="settings-row" type="button"><span class="settings-row-label" data-i18n="settings.onboarding"></span><span class="chevron" aria-hidden="true">›</span></button>
+              <button id="show-review" class="settings-row" type="button"><span class="settings-row-label" data-i18n="settings.review"></span><span class="chevron" aria-hidden="true">›</span></button>
+              <button id="show-whatsnew" class="settings-row" type="button" hidden><span class="settings-row-label" data-i18n="settings.whatsNew"></span><span class="chevron" aria-hidden="true">›</span></button>
+            </div>
+          <footer class="about">
+            <p class="about-line"><span id="version"></span><span id="version-status" class="version-status" role="status" data-status="checking"><svg data-for="checking" class="icon small" aria-hidden="true"><use href="icons.svg#refresh"/></svg><svg data-for="current" class="icon small" aria-hidden="true"><use href="icons.svg#check-circle"/></svg><svg data-for="outdated" class="icon small" aria-hidden="true"><use href="icons.svg#download"/></svg><svg data-for="unknown" class="icon small" aria-hidden="true"><use href="icons.svg#offline"/></svg><span id="version-status-text" class="version-status-text"></span></span></p>
+            <button id="update" class="button accent" type="button" hidden><span data-i18n="settings.update"></span></button>
+          </footer>
+          </div>
+        </section>
+        <section class="settings-group">
+          <div class="settings-label">
+            <h2 class="list-group-head" data-i18n="settings.erase"></h2>
+            <p class="settings-note" data-i18n="settings.eraseNote"></p>
+          </div>
+          <div class="settings-rows">
+            <div class="list-group">
+              <button id="reset" class="settings-row danger" type="button"><span class="settings-row-label" data-i18n="settings.reset"></span></button>
+            </div>
+          </div>
+        </section>
       </section>
     </main>
 

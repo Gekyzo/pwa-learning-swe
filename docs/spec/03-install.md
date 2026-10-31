@@ -5,7 +5,7 @@ Rules of `src/install.js` and `src/ui/install.js`.
 - **INS-1** The install offer has three states: `idle` (no offer), `available` (Chrome gave
   `beforeinstallprompt`) and `installed`. `installNext` moves among them: `prompt` makes it
   `available`, `dismissed` makes it `idle` until the next prompt, and `installed` is final.
-- **INS-2** Settings shows the group **App**, with its row **Install the app**, only in the state
+- **INS-2** Settings shows the row **Install the app**, first in **Aplicación**, only in the state
   `available`. A tap
   shows the prompt of Chrome. An accepted prompt makes the state `installed`; a dismissed one
   makes it `idle`.

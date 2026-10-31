@@ -97,7 +97,7 @@ test('the review sheet has a veil, a dialog with its title and Close, and a body
   assert.match(layer, /<section id="review" class="sheet" role="dialog" aria-modal="true" aria-labelledby="review-title">/);
   assert.match(layer, /<header class="sheet-head"><h2 id="review-title" class="sheet-title main" data-i18n="review.title"><\/h2><button id="review-close" class="button tonal" type="button" data-i18n="review.close"><\/button><\/header>/);
   assert.match(layer, /<div id="review-body" class="sheet-body review-body"><\/div>/);
-  // Help in Settings opens the same sheet, from the row after Show the introduction.
+  // Aplicación in Settings opens the same sheet, from the row after Show the introduction.
   assert.match(body, /<button id="show-onboarding" class="settings-row" type="button">[\s\S]*?<\/button>\s*<button id="show-review" class="settings-row" type="button"><span class="settings-row-label" data-i18n="settings.review"><\/span><span class="chevron" aria-hidden="true">›<\/span><\/button>/);
 });
 
@@ -109,7 +109,7 @@ test('the What\'s new sheet has a veil, a dialog with its title and Close, and a
   assert.match(layer, /<div id="whatsnew-body" class="sheet-body whatsnew-body"><\/div>/);
 });
 
-test('Help in Settings has the What\'s new row, hidden until there are notes (VER-23)', () => {
+test('Aplicación in Settings has the What\'s new row, hidden until there are notes (VER-23)', () => {
   assert.match(body, /<button id="show-whatsnew" class="settings-row" type="button" hidden><span class="settings-row-label" data-i18n="settings.whatsNew"><\/span><span class="chevron" aria-hidden="true">›<\/span><\/button>/);
 });
 
@@ -132,15 +132,39 @@ test('the account screens cover the app: Sign in with Google or offline, and Wai
   assert.deepEqual(buttons, ['waiting-check', 'waiting-logout']);
 });
 
-test('Settings has the Account group: the email and Log out, or Sign in with Google (ACC-8)', () => {
-  const [group = ''] = body.match(/<div id="account-group" hidden>[\s\S]*?<\/div>\s*<\/div>/) ?? [];
-  assert.match(group, /data-i18n="settings.account"/);
+test('Settings has its groups in order: Temas, Preferencias, Cuenta y copia, Aplicación, Borrar (SET-1)', () => {
+  const [settings = ''] = body.match(/<section id="settings"[\s\S]*?<\/main>/) ?? [];
+  const heads = [...settings.matchAll(/<h2 class="list-group-head" data-i18n="([^"]+)">/g)].map(([, key]) => key);
+  assert.deepEqual(heads, ['settings.topics', 'settings.preferences', 'settings.accountBackup', 'settings.app', 'settings.erase']);
+  assert.match(settings, /data-i18n="settings.preferencesNote"/);
+  assert.match(settings, /data-i18n="settings.eraseNote"/);
+  assert.match(settings, /<p id="topics-note" class="settings-note">/);
+  // The ids that go with each group, in order.
+  const order = ['id="topics"', 'id="language"', 'id="hand"', 'id="theme"', 'data-module="saved"', 'id="account-group"', 'id="export"', 'id="import"', 'id="install-group"', 'id="show-onboarding"', 'id="show-review"', 'id="show-whatsnew"', 'class="about"', 'id="reset"'];
+  const at = order.map((mark) => settings.indexOf(mark));
+  assert.ok(at.every((index) => index >= 0), 'every part is there');
+  assert.deepEqual(at, [...at].sort((a, b) => a - b));
+  assert.doesNotMatch(settings, /settings\.(modules|backup|help)\b/);
+});
+
+test('Preferencias ends with the switch of Saved (MOD-1)', () => {
+  assert.match(body, /<label class="switch"><span data-i18n="settings.savedInNav"><\/span><input class="switch-input" type="checkbox" role="switch" data-module="saved"><\/label>\s*<\/div>/);
+});
+
+test('Settings has the account rows in Cuenta y copia: the email and Log out, or Sign in with Google (ACC-8)', () => {
+  const [group = ''] = body.match(/<div id="account-group" class="list-group" hidden>[\s\S]*?<\/div>\s*<\/div>/) ?? [];
   assert.match(group, /<span id="account-email" class="settings-row-label"><\/span>/);
   assert.match(group, /<div id="account-row" class="settings-row"><span id="account-email" class="settings-row-label"><\/span><\/div>/);
   assert.match(group, /<button id="logout" class="settings-row" type="button">/);
   assert.match(group, /<button id="account-login" class="settings-row" type="button"><span class="settings-row-label" data-i18n="account.signIn"><\/span>/);
 });
 
-test('Backup ends with Delete all data, a danger row with no chevron (SET-2)', () => {
-  assert.match(body, /<button id="import" class="settings-row" type="button">.*?<\/button>\s*<button id="reset" class="settings-row danger" type="button"><span class="settings-row-label" data-i18n="settings.reset"><\/span><\/button>\s*<\/div>/);
+test('Install is hidden until it is available, in Aplicación (INS-2)', () => {
+  assert.match(body, /<div id="install-group" class="list-group" hidden>\s*<button id="install" class="settings-row" type="button">/);
+});
+
+test('Borrar holds only Delete all data, a danger row with no chevron, last (SET-2)', () => {
+  assert.match(body, /<h2 class="list-group-head" data-i18n="settings.erase"><\/h2>[\s\S]*?<div class="list-group">\s*<button id="reset" class="settings-row danger" type="button"><span class="settings-row-label" data-i18n="settings.reset"><\/span><\/button>\s*<\/div>/);
+  assert.equal(body.match(/<section id="settings"[\s\S]*?<\/main>/)[0].match(/id="reset"/g).length, 1);
+  assert.ok(body.indexOf('id="reset"') > body.indexOf('id="show-whatsnew"'));
 });
