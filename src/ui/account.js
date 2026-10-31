@@ -23,7 +23,7 @@ const client = storage ? createClient({ url: apiUrl(location.hostname), fetch: w
 
 // The screen in view, or null.
 let screen = null;
-// Use offline for this start, when the storage refused the flag (ACC-10).
+// Start without an account for this start, when the storage refused the flag (ACC-10).
 let offlineNow = false;
 // A refresh in progress, so that the start and an `online` event send one request.
 let refreshing = null;
@@ -64,7 +64,8 @@ const orderLogin = () => {
   other.textContent = t(fromSettings ? 'account.notNow' : 'account.offline');
   // data-i18n keeps the text right when the language changes.
   other.dataset.i18n = fromSettings ? 'account.notNow' : 'account.offline';
-  google.parentElement.prepend(fromSettings ? google : other);
+  const first = fromSettings ? google : other;
+  if (google.parentElement.firstElementChild !== first) google.parentElement.prepend(first);
 };
 
 export const renderAccount = () => {
@@ -141,7 +142,7 @@ const logout = () => {
   showRoute(null);
 };
 
-// ACC-10: Use offline opens the app, for this start too when the storage refuses the flag.
+// ACC-10: Start without an account opens the app, for this start too when the storage refuses the flag.
 const useOffline = () => {
   offlineNow = !saveOffline(storage);
   showError(null);
@@ -233,7 +234,7 @@ export const goOnline = () => {
 
 export const isAccountOpen = () => screen !== null;
 
-// ACC-2: Sign in over an open app (the offline flag is set) closes with Escape, as Use offline.
+// ACC-2: Sign in over an open app (the offline flag is set) closes with Escape, as Start without an account.
 export const closeAccount = () => {
   if (screen === 'login' && isOffline()) show(null);
 };

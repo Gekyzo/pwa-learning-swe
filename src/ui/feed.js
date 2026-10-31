@@ -54,6 +54,7 @@ const fill = () => {
     ? seenAgain(pool, state, { exclude, off: off(), count: BATCH })
     : nextCards(pool, state, { now: Date.now(), random: Math.random, exclude, off: off(), count: BATCH });
   ui.feed.push(...entries.map(({ card, reason }) => ({ id: card.id, reason, updated: isUpdated(state.records[card.id], card) })));
+  if (firstStart) ui.hinted = hintIds(ui.hinted, entries.map(({ card }) => card.id), HINTED);
   for (const { card, reason } of entries) if (reason === 'due') ui.dueIds.add(card.id);
   ui.ended = entries.length < BATCH;
   render();
@@ -90,7 +91,7 @@ const keyOf = (id, hint) => {
 const HINTED = 2;
 
 const nodeFor = (entry, card) => {
-  const hint = firstStart && ui.feed.indexOf(entry) < HINTED;
+  const hint = firstStart && ui.hinted.has(card.id);
   const key = keyOf(card.id, hint);
   const cached = nodes.get(card.id);
   if (cached?.key === key) return cached.node;

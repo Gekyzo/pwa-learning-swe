@@ -83,6 +83,7 @@ export default {
   'onboarding.title': 'What do you want to review?',
   'onboarding.text': 'Choose one or more topics. The feed starts with their cards, and you can change them in Settings.',
   'onboarding.count': { one: '{count} card', other: '{count} cards' },
+  'onboarding.startPlain': 'Start',
   'onboarding.start': { one: 'Start with {count} card', other: 'Start with {count} cards' },
   'onboarding.how': 'See how review works',
   'review.title': 'How review works',

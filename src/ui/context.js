@@ -88,6 +88,8 @@ export const ui = {
   seen: new Set(),
   // The ids that came into the feed as due in this start. Show seen cards again keeps them (FEED-18).
   dueIds: new Set(),
+  // The ids that show the gesture hint on a first start: the first two cards that came into the feed. Never cleared (FEED-19).
+  hinted: new Set(),
   // What the user did to a card in this start, by id: the quiz answer { choice, correct }, the
   // review grade (true for Remembered) and I knew this.
   answers: {},

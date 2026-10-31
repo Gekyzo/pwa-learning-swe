@@ -83,6 +83,7 @@ export default {
   'onboarding.title': '¿Qué quieres repasar?',
   'onboarding.text': 'Elige uno o más temas. El feed empieza con sus tarjetas y puedes cambiarlos en Ajustes.',
   'onboarding.count': { one: '{count} tarjeta', other: '{count} tarjetas' },
+  'onboarding.startPlain': 'Empezar',
   'onboarding.start': { one: 'Empezar con {count} tarjeta', other: 'Empezar con {count} tarjetas' },
   'onboarding.how': 'Ver cómo funciona el repaso',
   'review.title': 'Cómo funciona el repaso',

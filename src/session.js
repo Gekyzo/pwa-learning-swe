@@ -5,7 +5,7 @@ import { keyOf } from '#storage';
 export const SESSION_KEY = keyOf('session');
 // In sessionStorage, for the time of the Google redirect only: the state and the verifier.
 export const OAUTH_KEY = keyOf('oauth');
-// The device works with no account: Use offline (ACC-10).
+// The device works with no account: Start without an account (ACC-10).
 export const OFFLINE_KEY = keyOf('offline');
 
 const isObject = (value) => typeof value === 'object' && value !== null;

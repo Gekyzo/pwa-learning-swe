@@ -26,7 +26,7 @@ npm run ds      # copy the design system again from ../pwa-design-system
 ## Account and set-up outside the app
 
 The app opens with **Sign in**: **Continue with Google** (an account on the PocketBase server of
-`pwa-server`, approved per app) or **Use offline** (no account). The notes stay on the device in
+`pwa-server`, approved per app) or **Empezar sin cuenta** (no account). The notes stay on the device in
 both modes; nothing syncs. The rules are in [docs/spec/08-account.md](docs/spec/08-account.md).
 
 The server slug is `APP_SLUG` of `src/config.js`, which `npm run init` rewrites. Two steps happen

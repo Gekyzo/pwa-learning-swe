@@ -67,7 +67,7 @@ cards in each class; this app has no `pane` layout (LAY-3).
   topic that is on is disabled. **Start** reads the sum of the counts of the topics that are on.
   The tiles take 2 columns below 840px and 3 from 840px. Below 840px the bar of **Start** and
   **See how review works** is sticky at the bottom of the screen. With the packs not loaded yet,
-  the page has no tile and no sample.
+  the page has no tile and no sample, and **Start** reads `onboarding.startPlain` (Empezar, Start) with no count.
 - **ONB-5** **See how review works** on the walkthrough and **How review works** in Settings › Aplicación
   open one sheet over the screen: a head with its title and **Close**, then how a seen
   card comes back (1, 3, 7, 16 and 35 days, LRN-3) and what **Remembered**, **Forgot**, **I knew

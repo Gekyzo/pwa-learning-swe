@@ -58,7 +58,8 @@ export const renderOnboarding = () => {
   renderTiles(topics);
   renderSample(topics);
   const count = topics.filter(({ on }) => on).reduce((sum, topic) => sum + topic.count, 0);
-  $('onboarding-start').textContent = t('onboarding.start', { count });
+  // With no packs yet there is no count to show (ONB-4).
+  $('onboarding-start').textContent = pool && topics.length ? t('onboarding.start', { count }) : t('onboarding.startPlain');
 };
 
 const openOnboarding = () => {

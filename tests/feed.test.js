@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { DUE_SHARE, NEW_SHARE, nextCard, nextCards, seenAgain, dueCount, savedCards, hiddenTopics, switchTopic, dueBars, newCount, stateCounts, topicLedger, greetingOf, tagOf, sessionDone } from '#feed';
+import { DUE_SHARE, NEW_SHARE, nextCard, nextCards, seenAgain, dueCount, savedCards, hiddenTopics, switchTopic, dueBars, newCount, stateCounts, topicLedger, greetingOf, tagOf, sessionDone, hintIds } from '#feed';
 import { DAY } from '#learning';
 
 const NOW = Date.UTC(2026, 9, 30, 12);
@@ -248,4 +248,11 @@ test('sessionDone leaves out the cards of a topic that is off', () => {
   const seen = new Set(['a', 'c']);
   assert.equal(sessionDone(due, seen, (id) => topic[id] !== 'http'), 1);
   assert.equal(sessionDone(due, seen), 2);
+});
+
+test('the hint ids are the first cards that come into the feed, never more than the limit (FEED-19)', () => {
+  assert.deepEqual([...hintIds(new Set(), ['a', 'b', 'c'], 2)], ['a', 'b']);
+  assert.deepEqual([...hintIds(new Set(['a']), ['b', 'c'], 2)], ['a', 'b']);
+  assert.deepEqual([...hintIds(new Set(['a', 'b']), ['c'], 2)], ['a', 'b']);
+  assert.deepEqual([...hintIds(new Set(), [], 2)], []);
 });

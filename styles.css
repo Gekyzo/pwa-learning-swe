@@ -1004,6 +1004,12 @@
     color: var(--muted);
   }
 
+  /* The label is the term and the number the description; the number shows above its label. */
+  .account-facts > div {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+
   .account-facts dd {
     margin: 0;
   }
