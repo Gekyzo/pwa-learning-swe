@@ -1,5 +1,5 @@
 import { normalizePack, buildPool } from '#cards';
-import { nextCards, seenAgain, dueCount, hiddenTopics, switchTopic } from '#feed';
+import { nextCards, seenAgain, dueBars, newCount, greetingOf, hiddenTopics, switchTopic } from '#feed';
 import { markSeen, isUpdated } from '#learning';
 import { $, ui, state, pool, lang, t, scroller, topicsOff, setPool, setTopics, commit, render } from '#ui/context';
 import { cardOf, cardNode } from '#ui/card';
@@ -114,10 +114,17 @@ export const renderFeed = () => {
   $('feed-error').hidden = !ui.loadError;
 };
 
-// The line under the title: the cards to review now, or nothing.
-export const dueText = () => {
-  const count = pool ? dueCount(pool, state, Date.now(), off()) : 0;
-  return count ? t('feed.due', { count }) : '';
+// The line under the title: a greeting, what comes back today and what is new. Empty until the packs load.
+export const subline = () => {
+  if (!pool) return '';
+  const hidden = off();
+  const due = dueBars(pool, state, Date.now(), hidden)[0];
+  const fresh = newCount(pool, state, hidden);
+  const count = pool.topics.length - hidden.filter((id) => pool.topics.some((topic) => topic.id === id)).length;
+  const topics = t('feed.topics', { count });
+  const greeting = t(`feed.greeting.${greetingOf(new Date().getHours())}`);
+  if (due > 0) return `${greeting} ${t('feed.dueToday', { count: due })}${fresh > 0 ? ` ${t('feed.thenNew', { count: fresh, topics })}` : ''}`;
+  return `${greeting} ${fresh > 0 ? `${t('feed.nothingDue')} ${t('feed.newOnly', { count: fresh, topics })}` : t('feed.allDone')}`;
 };
 
 // A switch of a topic, from the walkthrough or from Settings. The cards of a topic that is off

@@ -95,8 +95,10 @@ Rules of `src/ui/feed.js`, `src/ui/card.js` and `src/ui/saved.js`.
   button. The cards of the feed are kept for the time of the
   start only.
 - **FEED-8** A card counts as seen (LRN-4) once in a start, when 60% of the card, or 60% of the
-  height of the screen, is in view. The header line of the Feed is `feed.due`, the due count
-  (FEED-5), and is empty when nothing is due.
+  height of the screen, is in view. The subline of the Feed is a greeting (`feed.greeting.morning` from 6:00,
+  `feed.greeting.afternoon` from 14:00, `feed.greeting.evening` from 21:00) and one of four forms: `feed.dueToday` with
+  the due count (FEED-5) and `feed.thenNew` for the new cards; `feed.nothingDue` with `feed.newOnly`; or `feed.allDone`.
+  The topics of the new cards are `feed.topics`, for the topics that are on. The line is empty only until the packs load.
 - **FEED-9** A card shows its topic, kind and level; the pill **Review** when it came as a due
   card, **Updated** when it was updated (LRN-7) as it came in, and **Retired** when it is retired.
   Then its title, the code of a snippet, and its body. A resource has a button that opens its URL

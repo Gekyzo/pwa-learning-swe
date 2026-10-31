@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { DUE_SHARE, NEW_SHARE, nextCard, nextCards, seenAgain, dueCount, savedCards, hiddenTopics, switchTopic, dueBars, newCount, stateCounts, topicLedger } from '#feed';
+import { DUE_SHARE, NEW_SHARE, nextCard, nextCards, seenAgain, dueCount, savedCards, hiddenTopics, switchTopic, dueBars, newCount, stateCounts, topicLedger, greetingOf } from '#feed';
 import { DAY } from '#learning';
 
 const NOW = Date.UTC(2026, 9, 30, 12);
@@ -219,4 +219,9 @@ test('the ledger sums to the totals', () => {
   assert.equal(sum(rows, 'due'), dueBars(pool(cards), doc(records), NOW)[0]);
   assert.equal(sum(rows, 'fresh'), newCount(pool(cards), doc(records)));
   assert.equal(sum(rows, 'seen'), states.learning + states.known + states.mastered);
+});
+
+test('greetingOf splits the day at 6, 14 and 21', () => {
+  const bands = [[5, 'evening'], [6, 'morning'], [13, 'morning'], [14, 'afternoon'], [20, 'afternoon'], [21, 'evening'], [0, 'evening']];
+  bands.forEach(([hour, band]) => assert.equal(greetingOf(hour), band));
 });

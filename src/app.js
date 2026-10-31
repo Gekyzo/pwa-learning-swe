@@ -1,6 +1,6 @@
 import { $, ui, storage, t, setRender, showToast, hideToast, toastAction, clickGuardUntil } from '#ui/context';
 import { bind as bindNav, renderNav } from '#ui/nav';
-import { bind as bindFeed, renderFeed, loadPool, dueText } from '#ui/feed';
+import { bind as bindFeed, renderFeed, loadPool, subline } from '#ui/feed';
 import { bind as bindSaved, renderSaved } from '#ui/saved';
 import { bind as bindCard, renderCardSheet, closeCardSheet } from '#ui/card';
 import { bind as bindSettings, applyLanguage, renderTopics } from '#ui/settings';
@@ -18,7 +18,7 @@ if (oauth) history.replaceState(history.state, '', clean);
 const renderAll = () => {
   renderNav();
   $('title').textContent = t(`nav.${ui.view}`);
-  $('subtitle').textContent = ui.view === 'feed' ? dueText() : '';
+  $('subtitle').textContent = ui.view === 'feed' ? subline() : '';
   renderFeed();
   renderSaved();
   renderCardSheet();

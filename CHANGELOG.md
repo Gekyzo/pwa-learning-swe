@@ -4,6 +4,7 @@ User-visible changes, newest first.
 
 ## Unreleased
 
+- `greetingOf` in `src/feed.js`; `subline` of `src/ui/feed.js` replaces `dueText` and key `feed.due` (greeting, `feed.dueToday`, `feed.thenNew`, `feed.nothingDue`, `feed.newOnly`, `feed.allDone`, `feed.topics`) (FEED-8).
 - Noche tokens in `styles.css`: neutral ground and surfaces, `--data` hue, `--faint`, `--radius-card`, `--feed-max`, `--side-gap`, `--panel-pad`; `--primary` is the ink pill and `--done` the ink. Versions of `app-header` and `nav-bar`; cards and settings groups lose their borders; `theme-color` metas follow the ground.
 
 ## 0.3.0 - 2026-10-31

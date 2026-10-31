@@ -4,6 +4,7 @@ What changes for you in each version of the app. The newest version is first.
 
 ## Unreleased
 
+- Under the feed title, a greeting says how many cards come back today and how many new ones wait for you.
 - The app has a new look: pure black in the dark theme, with the cards as the only surface.
 
 ## 0.3.0 - 2026-10-31
