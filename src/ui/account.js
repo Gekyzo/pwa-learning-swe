@@ -4,7 +4,8 @@
 import { createClient, PocketBaseError } from '#pocketbase';
 import { loadSession, saveSession, dropSession, routeAtStart, savePending, takePending, loadOffline, saveOffline, dropOffline } from '#session';
 import { apiUrl } from '#config';
-import { $, storage, t, showToast } from '#ui/context';
+import { $, el, storage, pool, t, showToast } from '#ui/context';
+import { cardNode } from '#ui/card';
 
 const SCREENS = ['login', 'waiting'];
 
@@ -34,6 +35,38 @@ export const signedIn = () => sessionNow() !== null;
 
 const isOffline = () => offlineNow || loadOffline(storage);
 
+// ACC-2: the facts and the sample of Sign in come from the pool; both stay hidden until it loads.
+const renderLogin = () => {
+  const ready = Boolean(pool);
+  $('login-facts').hidden = !ready;
+  const sample = $('login-sample');
+  sample.hidden = !ready;
+  if (!ready) return;
+  $('fact-cards').textContent = String(pool.cards.filter((card) => !card.retired).length);
+  // No account is needed: the number is fixed.
+  $('fact-accounts').textContent = '0';
+  $('fact-topics').textContent = String(pool.topics.length);
+  const first = pool.cards.find((card) => card.kind === 'concept' && !card.retired);
+  const list = el('ul', { className: 'account-sample-list' }, first ? [cardNode(first, null, { preview: true })] : []);
+  sample.replaceChildren(list);
+  sample.hidden = !first;
+};
+
+// ACC-8: from Settings (the offline flag is set) Google comes first and the other button reads Not now.
+const orderLogin = () => {
+  const fromSettings = isOffline();
+  const google = $('login-google');
+  const other = $('login-offline');
+  google.classList.toggle('primary', fromSettings);
+  google.classList.toggle('tonal', !fromSettings);
+  other.classList.toggle('primary', !fromSettings);
+  other.classList.toggle('tonal', fromSettings);
+  other.textContent = t(fromSettings ? 'account.notNow' : 'account.offline');
+  // data-i18n keeps the text right when the language changes.
+  other.dataset.i18n = fromSettings ? 'account.notNow' : 'account.offline';
+  google.parentElement.prepend(fromSettings ? google : other);
+};
+
 export const renderAccount = () => {
   $('account-group').hidden = !client;
   const session = sessionNow();
@@ -41,6 +74,10 @@ export const renderAccount = () => {
   $('logout').hidden = !session;
   $('account-login').hidden = session !== null;
   $('account-email').textContent = session ? session.user.email || session.user.name : '';
+  if (screen === 'login') {
+    orderLogin();
+    renderLogin();
+  }
 };
 
 const show = (name) => {

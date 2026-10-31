@@ -226,9 +226,18 @@
         <img class="account-logo" src="./icons/logo.png" alt="">
         <h2 id="login-title" class="account-title" tabindex="-1" data-i18n="account.login.title"></h2>
         <p class="account-text" data-i18n="account.login.text"></p>
-        <button id="login-google" class="button tonal wide" type="button"><svg class="icon small" aria-hidden="true"><use href="icons.svg#google"/></svg><span data-i18n="account.google"></span></button>
+        <dl id="login-facts" class="account-facts" hidden>
+          <div><dt id="fact-cards" class="account-fact-number"></dt><dd data-i18n="account.facts.cards"></dd></div>
+          <div><dt id="fact-topics" class="account-fact-number"></dt><dd data-i18n="account.facts.topics"></dd></div>
+          <div><dt id="fact-accounts" class="account-fact-number"></dt><dd data-i18n="account.facts.accounts"></dd></div>
+        </dl>
+        <div class="account-buttons">
+          <button id="login-offline" class="button primary wide" type="button" data-i18n="account.offline"></button>
+          <button id="login-google" class="button tonal wide" type="button"><svg class="icon small" aria-hidden="true"><use href="icons.svg#google"/></svg><span data-i18n="account.google"></span></button>
+        </div>
         <p id="login-error" class="input-help danger" role="alert" hidden></p>
-        <button id="login-offline" class="button accent" type="button" data-i18n="account.offline"></button>
+        <p class="account-fine" data-i18n="account.login.fine"></p>
+        <div id="login-sample" class="account-sample" hidden></div>
       </div>
       <div id="waiting" class="account-page" hidden>
         <svg class="icon account-wait" aria-hidden="true"><use href="icons.svg#refresh"/></svg>

@@ -26,6 +26,7 @@
     --on-done: light-dark(#ffffff, #000000);
     --radius-l: 20px;
     --radius-card: 20px;
+    --choice-max: 22rem;
     --radius-inner: 12px;
     --feed-max: 1138px;
     --side-gap: 14px;
@@ -827,6 +828,12 @@
      @part account-title   The name of the screen.
      @part account-text    The line below the title.
      @part account-wait    The large icon of Waiting for approval.
+     @part account-facts   The numbers of the pool, in a row, under the text of Sign in.
+     @part account-fact-number  One number of the facts.
+     @part account-buttons The two choices of Sign in, in one column.
+     @part account-fine    The small print below the choices.
+     @part account-sample  A card of the pool, inert, beside the copy from 840px and below it before.
+     @part account-sample-list  The list that holds the sample card.
      @example <div class="account-page" style="width: 100%"><h2 class="account-title">Iniciar sesión</h2><p class="account-text">El administrador aprueba cada cuenta nueva.</p><button class="button tonal wide" type="button"><svg class="icon small" aria-hidden="true"><use href="icons.svg#google"/></svg>Continuar con Google</button></div> */
   .account {
     position: fixed;
@@ -887,5 +894,80 @@
 
   .account-page > .button.accent {
     align-self: center;
+  }
+
+  .account-facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-5);
+    margin: 0;
+    color: var(--muted);
+  }
+
+  .account-facts dd {
+    margin: 0;
+  }
+
+  .account-fact-number {
+    display: block;
+    color: var(--text);
+    font-size: var(--text-l);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .account-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .account-fine {
+    margin: 0;
+    color: var(--faint);
+    font-size: var(--text-s);
+  }
+
+  .account-sample-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  @media (min-width: 840px) {
+    .account:has(.account-sample) {
+      padding-left: max(var(--space-5) + env(safe-area-inset-left), (100% - var(--feed-max)) / 2);
+      padding-right: max(var(--space-5) + env(safe-area-inset-right), (100% - var(--feed-max)) / 2);
+    }
+
+    .account-page:has(> .account-sample) {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-auto-flow: dense;
+      align-content: center;
+      align-items: center;
+      column-gap: var(--space-6);
+    }
+
+    .account-page:has(> .account-sample) > * {
+      grid-column: 1;
+    }
+
+    .account-page:has(> .account-sample) .account-title,
+    .account-page:has(> .account-sample) .account-text {
+      text-align: left;
+    }
+
+    .account-page:has(> .account-sample) .account-logo {
+      align-self: start;
+    }
+
+    .account-buttons {
+      max-width: var(--choice-max);
+    }
+
+    .account-page > .account-sample {
+      grid-column: 2;
+      grid-row: 1 / span 8;
+    }
   }
 }

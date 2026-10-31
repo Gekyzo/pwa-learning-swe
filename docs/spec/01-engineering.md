@@ -31,7 +31,7 @@
 | `src/ui/dust.js` | The dust of a navigation item (optional) | `particles`, `ui/context`, `ui/controls` |
 | `src/ui/onboarding.js` | The walkthrough and its topic chips (optional; ONB-4) | `onboarding`, `sections`, `storage`, `ui/context`, `ui/controls`, `ui/feed` |
 | `src/ui/whatsnew.js` | The release notes sheet, its Settings row and the seen version | `whatsnew`, `onboarding`, `i18n`, `storage`, `ds/sheet`, `ui/context` |
-| `src/ui/account.js` | The account screens and the group Account of Settings (ACC-1 to ACC-10) | `pocketbase`, `session`, `config`, `ui/context` |
+| `src/ui/account.js` | The account screens and the group Account of Settings (ACC-1 to ACC-10) | `pocketbase`, `session`, `config`, `ui/context`, `ui/card` |
 | `src/app.js` | Wires the views, the global keys, the service worker and the update check | all of the above |
 
 ## Code rules

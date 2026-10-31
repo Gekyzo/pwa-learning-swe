@@ -48,8 +48,23 @@ const options = (card, chosen) =>
 
 const pill = (text, className = 'pill') => el('span', { className, textContent: text });
 
+// The text of a card is English in every language of the screen (CARD-6).
+const cardShell = (card, parts) => {
+  const node = el('li', { className: 'feed-card', lang: 'en' }, parts);
+  node.dataset.id = card.id;
+  node.dataset.kind = card.kind;
+  return node;
+};
+
+const previewNode = (card, parts) => {
+  const node = cardShell(card, parts);
+  node.inert = true;
+  return node;
+};
+
 // `entry` is the place of the card in the feed, { reason, updated }, or null in Saved.
-export const cardNode = (card, entry = null) => {
+// With `preview` the node has no actions and is inert: the sample of Sign in and of the walkthrough.
+export const cardNode = (card, entry = null, { preview = false } = {}) => {
   const record = state.records[card.id];
   const chosen = ui.answers[card.id] ?? null;
   const topic = pool.topics.find((one) => one.id === card.topic)?.title ?? card.topic;
@@ -73,6 +88,8 @@ export const cardNode = (card, entry = null) => {
     const label = t('card.open', { media: t(`media.${card.media}`), minutes: card.minutes });
     parts.push(el('a', { className: 'button tonal feed-card-link', href: card.url, target: '_blank', rel: 'noopener', textContent: label }));
   }
+
+  if (preview) return previewNode(card, parts);
 
   const actions = [
     toggle('like', 'heart', t('card.like'), Boolean(record?.liked), () => apply(toggleLike(state, card, now()))),
@@ -104,11 +121,7 @@ export const cardNode = (card, entry = null) => {
   }
   parts.push(el('div', { className: 'cluster feed-card-actions' }, actions));
 
-  // The text of a card is English in every language of the screen (CARD-6).
-  const node = el('li', { className: 'feed-card', lang: 'en' }, parts);
-  node.dataset.id = card.id;
-  node.dataset.kind = card.kind;
-  return node;
+  return cardShell(card, parts);
 };
 
 const openCardSheet = (id) => {

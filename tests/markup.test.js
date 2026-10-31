@@ -100,9 +100,16 @@ test('Help in Settings has the What\'s new row, hidden until there are notes (VE
 test('the account screens cover the app: Sign in with Google or offline, and Waiting for approval (ACC-2)', () => {
   const [layer = ''] = body.match(/<section id="auth" class="account" role="dialog" aria-modal="true"[\s\S]*?<\/section>/) ?? [];
   assert.match(layer, /<div id="login" class="account-page">/);
+  const order = ['account-logo', 'id="login-title"', 'account.login.text', 'id="login-facts"', 'id="login-offline"', 'id="login-google"', 'id="login-error"', 'account.login.fine', 'id="login-sample"'];
+  const at = order.map((mark) => layer.indexOf(mark));
+  assert.ok(at.every((index) => index >= 0), 'every part is there');
+  assert.deepEqual(at, [...at].sort((a, b) => a - b));
   assert.match(layer, /<h2 id="login-title" class="account-title" tabindex="-1" data-i18n="account.login.title">/);
+  assert.match(layer, /<dl id="login-facts" class="account-facts" hidden>/);
+  assert.match(layer, /<button id="login-offline" class="button primary wide" type="button" data-i18n="account.offline"><\/button>/);
   assert.match(layer, /<button id="login-google" class="button tonal wide" type="button"><svg class="icon small" aria-hidden="true"><use href="icons.svg#google"\/><\/svg>/);
-  assert.match(layer, /<p id="login-error" class="input-help danger" role="alert" hidden><\/p>\s*<button id="login-offline" class="button accent" type="button" data-i18n="account.offline"><\/button>/);
+  assert.match(layer, /<p id="login-error" class="input-help danger" role="alert" hidden><\/p>/);
+  assert.match(layer, /<div id="login-sample" class="account-sample" hidden><\/div>/);
   assert.match(layer, /<div id="waiting" class="account-page" hidden>/);
   assert.match(layer, /<h2 id="waiting-title" class="account-title" tabindex="-1" data-i18n="account.waiting.title">/);
   const buttons = [...layer.matchAll(/<button id="(waiting-[^"]+)"/g)].map(([, id]) => id);

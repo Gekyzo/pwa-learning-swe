@@ -3,7 +3,7 @@
 The account and the approval gate. The server is the PocketBase server of `pwa-server`: one
 account serves every app, and the administrator approves access per app. The app talks to it
 with `fetch`, with no SDK. The learning doc stays on the device: nothing syncs. The user picks one of
-two ways in: **Continue with Google**, or **Use offline** with no account.
+two ways in: **Continue with Google**, or **Start without an account** with no account.
 
 ## Rules
 
@@ -11,11 +11,15 @@ two ways in: **Continue with Google**, or **Use offline** with no account.
   that is not approved opens **Waiting for approval**; an approved session opens the app; no
   session and the flag opens the app; no session and no flag opens **Sign in**. The route never
   reads the clock.
-- **ACC-2** **Sign in** has the app icon, the title, one line of text, **Continue with
-  Google** and **Use offline**. **Waiting for approval** has **Check again** and **Log out**. Both
-  cover the whole app, the walkthrough too. **Use offline** closes **Sign in** (ACC-10); with the
+- **ACC-2** **Sign in** has, in this order, the app icon, the title, one line of text, three facts
+  (cards, topics and `0` accounts needed), **Start without an account**, **Continue with Google**,
+  the error, the small print and a sample card. The facts and the sample come from the pool: the
+  cards that are not retired, the topics and the first concept card. They stay hidden until the pool
+  loads. The sample has no actions and is `inert`. From 840px the copy is on the left and the sample
+  on the right. **Waiting for approval** has **Check again** and **Log out**. Both cover the whole
+  app, the walkthrough too. **Start without an account** closes **Sign in** (ACC-10); with the
   offline flag set, `Escape` closes it too. Else `Escape` does nothing while one is open. An
-  error shows below the button: `account.error.google`, `account.error.network` or
+  error shows below the buttons: `account.error.google`, `account.error.network` or
   `account.error.tooMany`. A button waits for its request, so a second tap sends nothing.
 - **ACC-3** "Approved" is the `app_access` row of the app `APP_SLUG` with the status
   `approved`. Each sign-in and each refresh reads it. With no row, the app creates a `pending`
@@ -35,11 +39,12 @@ two ways in: **Continue with Google**, or **Use offline** with no account.
 - **ACC-7** **Check again** refreshes the session as ACC-6. A session that is still not approved
   shows the toast `account.waiting.still`.
 - **ACC-8** Settings has the group **Account**: with a session, the email and **Log out**; with
-  none, **Sign in with Google**, which opens **Sign in**. **Log out** removes the session only;
+  none, **Sign in with Google**, which opens **Sign in**. There **Continue with Google** comes
+  first, as the main button, and the other reads **Not now** and closes the screen. **Log out** removes the session only;
   the learning doc and the preferences stay. It then routes as ACC-1: with the offline flag the app
   stays open, else **Sign in** shows.
 - **ACC-9** With no `localStorage` the app shows no account screen and works as before.
-- **ACC-10** The offline flag is `pwa-learning-swe.offline` = `1` in `localStorage`. **Use offline**
+- **ACC-10** The offline flag is `pwa-learning-swe.offline` = `1` in `localStorage`. **Start without an account**
   writes it; an approved session that opens the app removes it. A storage that refuses the
   write still opens the app for this start.
 
