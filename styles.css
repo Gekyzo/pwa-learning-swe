@@ -31,6 +31,9 @@
     --feed-max: 1138px;
     --side-gap: 14px;
     --panel-pad: 22px;
+    /* The height of the track of a due bar, and the width of a number column of the topic ledger. */
+    --bars-height: 176px;
+    --ledger-col: 46px;
   }
 }
 
@@ -53,6 +56,13 @@
   input {
     font: inherit;
     color: inherit;
+  }
+
+  /* @extends main */
+  /* The scrolling area is a size container, so that the side column of the Feed can be as high as
+     the area at most and scroll on its own (FEED-18). */
+  main {
+    container-type: size;
   }
 
   /* From 600px the fixed rail stands at the side of the hand (LAY-2): the body pads that side (LAY-4). */
@@ -85,6 +95,12 @@
   /* The current item has no tonal fill: its label and icon take --text, as in the shared rules. */
   .nav-bar .nav-item[aria-current="page"] .icon {
     background: none;
+  }
+
+  /* @extends progress
+     @variant data  The data hue on the nested fill, for the progress of Today (FEED-18). */
+  .progress.data {
+    background: linear-gradient(to right, var(--data) var(--pct), var(--surface-2) 0);
   }
 }
 
@@ -233,6 +249,227 @@
 
   .feed-more {
     height: 1px;
+  }
+
+  /* @component feed-layout
+     @scope feed
+     @summary The Feed in two columns from 840px: the cards (4) and the side column (2), centred in --feed-max, the side column sticky at the top and at most as high as the scrolling area. Below 840px one column.
+     @part feed-main      The column of the cards, with the end and error states.
+     @part feed-side-col  The side column: it holds the panels from 840px (FEED-18).
+     @example <div class="feed-layout" style="width: 100%"><div class="feed-main"><ol class="feed-list"><li class="feed-card"><h2 class="feed-card-title">A branch is a movable pointer</h2></li></ol></div><aside class="feed-side-col"></aside></div> */
+  .feed-main {
+    min-width: 0;
+  }
+
+  @media (min-width: 840px) {
+    .feed:has(> .feed-layout) {
+      max-width: var(--feed-max);
+    }
+
+    .feed-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 4fr) minmax(0, 2fr);
+      gap: var(--side-gap);
+      align-items: start;
+    }
+
+    /* Higher than the scrolling area, the column scrolls on its own, so its last panel is never out of reach. */
+    .feed-side-col {
+      position: sticky;
+      top: 0;
+      /* The content box of main, plus the room that main keeps at its end. */
+      max-height: calc(100cqb + var(--tap-l) + var(--space-4) * 2);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      scrollbar-width: thin;
+    }
+  }
+
+  /* @component feed-panels
+     @scope feed
+     @summary The four panels of the side column (FEED-18): one column below 600px, two per row from 600px, one column again in the side column from 840px. Below 840px they stand in the list after the third card.
+     @part feed-panels-item  The item of the feed list that holds the panels below 840px.
+     @example <div class="feed-panels" style="width: 100%"><section class="feed-panel"><h2 class="feed-panel-head"><span>Hoy</span><span class="feed-panel-aside">1 de 4 repasos</span></h2></section><section class="feed-panel"><h2 class="feed-panel-head"><span>Por tema</span></h2></section></div> */
+  .feed-panels {
+    display: grid;
+    gap: var(--side-gap);
+  }
+
+  @media (min-width: 600px) {
+    .feed-panels {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      align-items: start;
+    }
+  }
+
+  @media (min-width: 840px) {
+    .feed-side-col .feed-panels {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  /* @component feed-panel
+     @scope feed
+     @summary One panel of the side column: a head with a small aside, then its data. The surface, the card radius, no border.
+     @part feed-panel-head   The name of the panel, with its aside at the end.
+     @part feed-panel-aside  A small faint text at the end of the head: a count or a range.
+     @part feed-panel-note   A muted line under the data.
+     @part feed-panel-lines  The lines of a panel, as a description list.
+     @part feed-panel-line   One line: its name, then its number at the end, over a rule.
+     @part feed-panel-value  The number of a line.
+     @example <section class="feed-panel" style="width: 100%"><h2 class="feed-panel-head"><span>Hoy</span><span class="feed-panel-aside">1 de 4 repasos</span></h2><div class="progress data" style="--pct: 25%" role="progressbar" aria-valuenow="1" aria-valuemin="0" aria-valuemax="4"></div><p class="feed-panel-note">Quedan 3 repasos; luego el feed sigue con tarjetas nuevas.</p></section>
+     @example <section class="feed-panel" style="width: 100%"><h2 class="feed-panel-head">Tus 11 tarjetas vistas</h2><dl class="feed-panel-lines"><div class="feed-panel-line"><dt>Aprendiendo</dt><dd class="feed-panel-value">6</dd></div><div class="feed-panel-line"><dt>Sabidas</dt><dd class="feed-panel-value">4</dd></div></dl></section> */
+  .feed-panel {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--panel-pad);
+    background: var(--surface);
+    border-radius: var(--radius-card);
+  }
+
+  .feed-panel-head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--space-2);
+    margin: 0;
+    font-size: var(--text-m);
+    font-weight: var(--weight-medium);
+  }
+
+  .feed-panel-aside {
+    color: var(--faint);
+    font-size: var(--text-xs);
+    font-weight: var(--weight-normal);
+    font-variant-numeric: tabular-nums;
+    text-align: end;
+  }
+
+  .feed-panel-note {
+    margin: 0;
+    color: var(--muted);
+    font-size: var(--text-s);
+  }
+
+  .feed-panel-lines {
+    margin: 0;
+  }
+
+  .feed-panel-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: var(--space-7);
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+  }
+
+  .feed-panel-value {
+    margin: 0;
+    color: var(--text);
+    font-weight: var(--weight-medium);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* @component due-bars
+     @scope feed
+     @summary The cards that come back in each of the next 7 days (FEED-16), today first: a bar for each day, its height --bar (0 to 1) of a track of --bars-height, its count over it. No chart library.
+     @part due-bar        One day: its track, then its day.
+     @part due-bar-track  The track of a bar, with the count over the fill.
+     @part due-bar-count  The count of the day.
+     @part due-bar-fill   The bar. Neutral, in the data hue for today.
+     @part due-bar-day    The name of the day: today, +1 … +6.
+     @state today         On due-bar: the bar of today, in the data hue.
+     @example <ol class="due-bars" style="width: 100%"><li class="due-bar today" style="--bar: 1"><span class="due-bar-track"><span class="due-bar-count">4</span><span class="due-bar-fill"></span></span><span class="due-bar-day">hoy</span></li><li class="due-bar" style="--bar: 0.5"><span class="due-bar-track"><span class="due-bar-count">2</span><span class="due-bar-fill"></span></span><span class="due-bar-day">+1</span></li><li class="due-bar" style="--bar: 0"><span class="due-bar-track"><span class="due-bar-count">0</span><span class="due-bar-fill"></span></span><span class="due-bar-day">+2</span></li></ol> */
+  .due-bars {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: var(--space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .due-bar {
+    --bar: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    color: var(--faint);
+    font-size: var(--text-xs);
+    font-variant-numeric: tabular-nums;
+    text-align: center;
+  }
+
+  .due-bar-track {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: var(--space-1);
+    height: var(--bars-height);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .due-bar-fill {
+    height: calc(var(--bar) * (100% - var(--space-5)));
+    background: var(--surface-2);
+    border-radius: var(--radius-s) var(--radius-s) 0 0;
+  }
+
+  .due-bar.today .due-bar-fill {
+    background: var(--data);
+  }
+
+  .due-bar.today .due-bar-day,
+  .due-bar-count {
+    color: var(--muted);
+  }
+
+  /* @component topic-ledger
+     @scope feed
+     @summary The topics that are on, one line each in pack order: the title in English, then its seen, due today and new cards (FEED-17).
+     @part topic-ledger-head   The names of the columns, over the lines.
+     @part topic-ledger-line   One topic.
+     @part topic-ledger-title  The title of the topic.
+     @part topic-ledger-value  A number of a column.
+     @example <div style="width: 100%"><p class="topic-ledger-head"><span></span><span>Vistas</span><span>Hoy</span><span>Nuevas</span></p><ol class="topic-ledger"><li class="topic-ledger-line"><span class="topic-ledger-title" lang="en">Git</span><span class="topic-ledger-value">5</span><span class="topic-ledger-value">2</span><span class="topic-ledger-value">12</span></li></ol></div> */
+  .topic-ledger {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .topic-ledger-head,
+  .topic-ledger-line {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) repeat(3, var(--ledger-col));
+    column-gap: var(--space-2);
+    align-items: center;
+    margin: 0;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .topic-ledger-head {
+    color: var(--faint);
+    font-size: var(--text-xs);
+    text-align: end;
+  }
+
+  .topic-ledger-line {
+    min-height: var(--space-7);
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    text-align: end;
+  }
+
+  .topic-ledger-title {
+    overflow: hidden;
+    color: var(--text);
+    text-align: start;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   /* @component feed-card

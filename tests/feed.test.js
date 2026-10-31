@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { DUE_SHARE, NEW_SHARE, nextCard, nextCards, seenAgain, dueCount, savedCards, hiddenTopics, switchTopic, dueBars, newCount, stateCounts, topicLedger, greetingOf, tagOf } from '#feed';
+import { DUE_SHARE, NEW_SHARE, nextCard, nextCards, seenAgain, dueCount, savedCards, hiddenTopics, switchTopic, dueBars, newCount, stateCounts, topicLedger, greetingOf, tagOf, sessionDone } from '#feed';
 import { DAY } from '#learning';
 
 const NOW = Date.UTC(2026, 9, 30, 12);
@@ -233,4 +233,11 @@ test('tagOf names the tag of a card by the reason it came (FEED-9)', () => {
   assert.equal(tagOf('again'), null);
   assert.equal(tagOf(undefined), null);
   assert.equal(tagOf(null), null);
+});
+
+test('sessionDone counts the due cards seen in this start', () => {
+  const feed = [{ id: 'a', reason: 'due' }, { id: 'b', reason: 'new' }, { id: 'c', reason: 'due' }];
+  assert.equal(sessionDone(feed, new Set(['a', 'b'])), 1);
+  assert.equal(sessionDone([], new Set(['a'])), 0);
+  assert.equal(sessionDone(feed, new Set()), 0);
 });

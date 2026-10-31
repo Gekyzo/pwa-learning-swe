@@ -137,3 +137,6 @@ export const greetingOf = (hour) => (hour >= 6 && hour < 14 ? 'morning' : hour >
 
 // The tag of a card by the reason it came: 'review', 'new' or null (FEED-9).
 export const tagOf = (reason) => (reason === 'due' ? 'review' : reason === 'new' || reason === 'explore' ? 'new' : null);
+
+// The due cards of the feed that were seen in this start: the done part of Today (FEED-18).
+export const sessionDone = (feed, seen) => feed.filter(({ id, reason }) => reason === 'due' && seen.has(id)).length;

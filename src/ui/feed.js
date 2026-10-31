@@ -1,7 +1,7 @@
 import { normalizePack, buildPool } from '#cards';
-import { nextCards, seenAgain, dueBars, newCount, greetingOf, hiddenTopics, switchTopic } from '#feed';
+import { nextCards, seenAgain, dueBars, newCount, stateCounts, topicLedger, sessionDone, greetingOf, hiddenTopics, switchTopic } from '#feed';
 import { markSeen, isUpdated } from '#learning';
-import { $, ui, state, pool, lang, t, scroller, topicsOff, setPool, setTopics, commit, render } from '#ui/context';
+import { $, el, ui, state, pool, lang, t, scroller, topicsOff, setPool, setTopics, commit, render } from '#ui/context';
 import { cardOf, cardNode } from '#ui/card';
 
 // The Feed section: the packs, the cards that come in as the user scrolls, and the seen ones
@@ -11,6 +11,12 @@ const BATCH = 5;
 const AHEAD = 600;
 // A card counts as seen when 60% of it, or 60% of the height of the screen, is in view.
 const SEEN = 0.6;
+// From this width the panels stand in a column beside the cards; below it they come after the
+// first cards of the list (FEED-18).
+const WIDE = matchMedia('(min-width: 840px)');
+const PANELS_AFTER = 3;
+// The item of the list that holds the panels below 840px.
+const slot = el('li', { className: 'feed-panels-item' });
 
 const getJson = async (url) => {
   const response = await fetch(url);
@@ -98,6 +104,17 @@ export const renderFeed = () => {
   // The action that has the focus keeps it in the new node of its card.
   const focused = document.activeElement?.closest('.feed-card') ? document.activeElement : null;
   const keep = cards.map(({ entry, card }) => nodeFor(entry, card));
+  // One node of the panels moves between the side column and the list; the item that holds it
+  // in the list is kept like a card.
+  const panels = $('feed-panels');
+  // An empty side column below 840px is no landmark.
+  $('feed-side').hidden = !WIDE.matches;
+  if (WIDE.matches) {
+    if (panels.parentElement !== $('feed-side')) $('feed-side').append(panels);
+  } else {
+    if (panels.parentElement !== slot) slot.append(panels);
+    keep.splice(Math.min(PANELS_AFTER, keep.length), 0, slot);
+  }
   [...list.children].forEach((child) => {
     if (!keep.includes(child)) child.remove();
   });
@@ -112,6 +129,60 @@ export const renderFeed = () => {
   $('feed-end-text').textContent = t(ui.again ? 'feed.endAgain' : 'feed.end');
   $('feed-again').hidden = ui.again;
   $('feed-error').hidden = !ui.loadError;
+  renderSide();
+};
+
+const ledgerCell = (text, number) => el('span', { textContent: text, className: number ? 'topic-ledger-value' : 'topic-ledger-title' });
+
+// The panels of the side column: Today, the coming reviews, the card states and the topics
+// (FEED-18). Hidden until the packs load.
+const renderSide = () => {
+  $('feed-panels').hidden = !pool;
+  slot.hidden = !pool;
+  if (!pool) return;
+  const now = Date.now();
+  const hidden = off();
+  const bars = dueBars(pool, state, now, hidden);
+  const done = sessionDone(ui.feed, ui.seen);
+  const total = done + bars[0];
+  $('today-count').textContent = t('side.todayCount', { done, total });
+  const progress = $('today-progress');
+  progress.style.setProperty('--pct', `${total ? (done / total) * 100 : 0}%`);
+  progress.setAttribute('aria-valuemax', String(total));
+  progress.setAttribute('aria-valuenow', String(done));
+  $('today-note').textContent = bars[0] > 0 ? t('side.todayNote', { count: bars[0] }) : t('side.todayDone');
+
+  const max = Math.max(1, ...bars);
+  $('due-bars').replaceChildren(
+    ...bars.map((value, day) => {
+      // The count stands over the fill; as an image, the track reads as its label.
+      const track = el('span', { className: 'due-bar-track' }, [
+        el('span', { className: 'due-bar-count', textContent: String(value) }),
+        el('span', { className: 'due-bar-fill' }),
+      ]);
+      track.setAttribute('role', 'img');
+      track.setAttribute('aria-label', t('side.barLabel', { count: value }));
+      const bar = el('li', { className: day === 0 ? 'due-bar today' : 'due-bar' }, [
+        track,
+        el('span', { className: 'due-bar-day', textContent: day === 0 ? t('side.day0') : t('side.dayN', { count: day }) }),
+      ]);
+      bar.style.setProperty('--bar', String(value / max));
+      return bar;
+    }),
+  );
+
+  const counts = stateCounts(pool, state, hidden);
+  $('states-title').textContent = t('side.states', { count: counts.learning + counts.known + counts.mastered });
+  for (const name of ['learning', 'known', 'mastered']) $(`state-${name}`).textContent = String(counts[name]);
+
+  $('topic-ledger').replaceChildren(
+    ...topicLedger(pool, state, now, hidden).map(({ title, seen, due, fresh }) => {
+      const name = ledgerCell(title, false);
+      // A long title is cut with an ellipsis; the whole title shows on hover.
+      Object.assign(name, { lang: 'en', title });
+      return el('li', { className: 'topic-ledger-line' }, [name, ...[seen, due, fresh].map((value) => ledgerCell(String(value), true))]);
+    }),
+  );
 };
 
 // The line under the title: a greeting, what comes back today and what is new. Empty until the packs load.
@@ -145,6 +216,7 @@ export const topicStates = () => {
 };
 
 export const bind = () => {
+  WIDE.addEventListener('change', render);
   new IntersectionObserver(
     (entries) => {
       if (entries.some((entry) => entry.isIntersecting) && pool && !ui.ended && ui.view === 'feed') fill();

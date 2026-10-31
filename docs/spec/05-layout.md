@@ -6,8 +6,9 @@ Rules of `src/sections.js`, `src/modules.js`, `src/onboarding.js`, the views `na
 ## Size classes
 
 The size classes, the navigation element, the `pane` layout and the safe areas are the rules
-LAY-1 to LAY-4 of the design system (04-design-system). The Feed and Saved sections are one
-centred column of cards in each class; this app has no `pane` layout (LAY-3).
+LAY-1 to LAY-4 of the design system (04-design-system). The Feed is one column below 840px and a
+4 : 2 grid from 840px: the cards, and the side column of FEED-18. Saved is one centred column of
+cards in each class; this app has no `pane` layout (LAY-3).
 
 ## Navigation
 

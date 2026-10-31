@@ -27,16 +27,46 @@
 
     <main>
       <section id="feed" class="feed">
-        <ol id="feed-list" class="feed-list"></ol>
-        <div id="feed-more" class="feed-more"></div>
-        <div id="feed-end" class="empty-state" hidden>
-          <p class="empty-state-title" data-i18n="feed.endTitle"></p>
-          <p id="feed-end-text"></p>
-          <button id="feed-again" class="button primary" type="button" data-i18n="feed.again"></button>
-        </div>
-        <div id="feed-error" class="empty-state" hidden>
-          <p data-i18n="feed.error"></p>
-          <button id="feed-retry" class="button primary" type="button" data-i18n="feed.retry"></button>
+        <div class="feed-layout">
+          <div class="feed-main">
+            <ol id="feed-list" class="feed-list"></ol>
+            <div id="feed-more" class="feed-more"></div>
+            <div id="feed-end" class="empty-state" hidden>
+              <p class="empty-state-title" data-i18n="feed.endTitle"></p>
+              <p id="feed-end-text"></p>
+              <button id="feed-again" class="button primary" type="button" data-i18n="feed.again"></button>
+            </div>
+            <div id="feed-error" class="empty-state" hidden>
+              <p data-i18n="feed.error"></p>
+              <button id="feed-retry" class="button primary" type="button" data-i18n="feed.retry"></button>
+            </div>
+          </div>
+          <aside id="feed-side" class="feed-side-col">
+            <div id="feed-panels" class="feed-panels" hidden>
+              <section id="panel-today" class="feed-panel">
+                <h2 class="feed-panel-head"><span data-i18n="side.today"></span><span id="today-count" class="feed-panel-aside"></span></h2>
+                <div id="today-progress" class="progress data" role="progressbar" aria-valuemin="0"></div>
+                <p id="today-note" class="feed-panel-note"></p>
+              </section>
+              <section id="panel-bars" class="feed-panel">
+                <h2 class="feed-panel-head"><span data-i18n="side.bars"></span><span class="feed-panel-aside" data-i18n="side.barsNote"></span></h2>
+                <ol id="due-bars" class="due-bars"></ol>
+              </section>
+              <section id="panel-states" class="feed-panel">
+                <h2 id="states-title" class="feed-panel-head"></h2>
+                <dl class="feed-panel-lines">
+                  <div class="feed-panel-line"><dt data-i18n="side.learning"></dt><dd id="state-learning" class="feed-panel-value"></dd></div>
+                  <div class="feed-panel-line"><dt data-i18n="side.known"></dt><dd id="state-known" class="feed-panel-value"></dd></div>
+                  <div class="feed-panel-line"><dt data-i18n="side.mastered"></dt><dd id="state-mastered" class="feed-panel-value"></dd></div>
+                </dl>
+              </section>
+              <section id="panel-topics" class="feed-panel">
+                <h2 class="feed-panel-head"><span data-i18n="side.topics"></span></h2>
+                <p class="topic-ledger-head"><span></span><span data-i18n="side.seen"></span><span data-i18n="side.due"></span><span data-i18n="side.fresh"></span></p>
+                <ol id="topic-ledger" class="topic-ledger"></ol>
+              </section>
+            </div>
+          </aside>
         </div>
       </section>
 

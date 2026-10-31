@@ -126,3 +126,15 @@ Rules of `src/ui/feed.js`, `src/ui/card.js` and `src/ui/saved.js`.
   pack order, with the title of the pack in English. A switch acts at once, as a chip of ONB-4
   does: the switch of the last topic that is on is disabled, and a topic that comes back on may
   add its cards at the end of the list.
+- **FEED-18** The Feed has four panels, once the packs load. **Hoy** shows `side.todayCount`:
+  `done` is the due cards of the feed seen in this start (`sessionDone`), and `total` is `done`
+  plus the due count (bar 0 of FEED-16); a progress bar shows `done / total` (0 when `total` is
+  0), and the note is `side.todayNote` with the due count, or `side.todayDone` at 0. **Vuelven a
+  repaso** shows the 7 due bars of FEED-16, each one as high as its count over the highest count
+  (at least 1), with its count and its day (`side.day0`, then `side.dayN`). **Tus n tarjetas
+  vistas** (`side.states`) shows the state counts of FEED-17, and **Por tema** the ledger of
+  FEED-17, one line for each topic that is on, with its seen, due and new cards. From 840px the
+  panels stand in a column beside the cards, sticky at the top; below 840px one node of the
+  panels stands in the list after the third card, or at the end of a shorter list, and moves
+  when the width changes, so the cards keep their nodes (FEED-12). The data hue is only on the
+  bar of today and the progress of **Hoy**.

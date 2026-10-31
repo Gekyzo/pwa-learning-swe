@@ -41,6 +41,17 @@ test('the Feed has its list, the mark of its end, and its end and error states (
   assert.match(section, /<div id="feed-error" class="empty-state" hidden>[\s\S]*<button id="feed-retry" class="button primary"/);
 });
 
+test('the Feed has the side column with its four panels (FEED-18)', () => {
+  const [side = ''] = body.match(/<aside id="feed-side" class="feed-side-col">[\s\S]*?<\/aside>/) ?? [];
+  assert.match(side, /^<aside id="feed-side" class="feed-side-col">\s*<div id="feed-panels" class="feed-panels" hidden>/);
+  const panels = [...side.matchAll(/<section id="([^"]+)" class="feed-panel">/g)].map(([, id]) => id);
+  assert.deepEqual(panels, ['panel-today', 'panel-bars', 'panel-states', 'panel-topics']);
+  assert.match(side, /<div id="today-progress" class="progress data" role="progressbar" aria-valuemin="0"><\/div>/);
+  assert.match(side, /<ol id="due-bars" class="due-bars"><\/ol>/);
+  assert.match(side, /<ol id="topic-ledger" class="topic-ledger"><\/ol>/);
+  assert.equal([...body.matchAll(/id="feed-panels"/g)].length, 1);
+});
+
 test('Saved has its list and an empty state that goes to the feed (FEED-13)', () => {
   const [section = ''] = body.match(/<section id="saved" class="feed" hidden>[\s\S]*?<\/section>/) ?? [];
   assert.match(section, /<ol id="saved-list" class="feed-list"><\/ol>/);
