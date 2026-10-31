@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { CATALOGS, FALLBACK, LANGUAGES, LANGUAGE_NAMES, intlTag, resolveLanguage, translator } from '#i18n';
+import { CATALOGS, FALLBACK, LANGUAGES, LANGUAGE_NAMES, intlTag, resolveLanguage, resolveCardLanguage, translator } from '#i18n';
 
 const fake = {
   en: { hello: 'Hello {name}', items: { one: '{count} item', other: '{count} items' }, onlyEn: 'English only' },
@@ -116,4 +116,11 @@ test('the Spanish catalog has each message key of the pure modules', () => {
 
 test('intlTag gives the code of each language that has no regional tag', () => {
   for (const lang of LANGUAGES) assert.equal(intlTag(lang), lang);
+});
+
+test('the card language is the chosen one, or the language of the screen for app (I18N-7)', () => {
+  assert.equal(resolveCardLanguage('es', 'en'), 'es');
+  assert.equal(resolveCardLanguage('en', 'es'), 'en');
+  assert.equal(resolveCardLanguage('app', 'es'), 'es');
+  assert.equal(resolveCardLanguage('xx', 'es'), 'en');
 });

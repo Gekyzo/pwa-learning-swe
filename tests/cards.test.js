@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { KINDS, LEVELS, MEDIA, MAX_TITLE, normalizeCard, normalizePack, buildPool } from '#cards';
+import { KINDS, LEVELS, MEDIA, MAX_TITLE, SOURCE_LANG, normalizeCard, normalizePack, buildPool } from '#cards';
 
 const concept = (over = {}) => ({ id: 'git-a', kind: 'concept', level: 'intro', title: 'Title', body: 'Body.', ...over });
 const quiz = (over = {}) => concept({ id: 'git-q', kind: 'quiz', options: ['Yes', 'No'], answer: 1, ...over });
@@ -101,7 +101,8 @@ test('the pool has each card of each pack with its topic, and the topics in pack
   const git = normalizePack(pack([concept(), quiz()])).pack;
   const pool = buildPool([git, http]);
   assert.deepEqual(pool.cards.map((card) => [card.id, card.topic]), [['git-a', 'git'], ['git-q', 'git'], ['http-a', 'http']]);
-  assert.deepEqual(pool.topics, [{ id: 'git', title: 'Git' }, { id: 'http', title: 'HTTP' }]);
+  assert.deepEqual(pool.topics, [{ id: 'git', title: 'Git', lang: 'en' }, { id: 'http', title: 'HTTP', lang: 'en' }]);
+  assert.ok(pool.cards.every((card) => card.lang === 'en'));
 });
 
 test('a pack id that is twice keeps the first pack', () => {
@@ -109,5 +110,66 @@ test('a pack id that is twice keeps the first pack', () => {
   const two = normalizePack(pack([concept({ id: 'git-b' })], { title: 'Again' })).pack;
   const pool = buildPool([one, two]);
   assert.deepEqual(pool.cards.map((card) => card.id), ['git-a']);
-  assert.deepEqual(pool.topics, [{ id: 'git', title: 'Git' }]);
+  assert.deepEqual(pool.topics, [{ id: 'git', title: 'Git', lang: 'en' }]);
+});
+
+test('the text of the cards is English', () => {
+  assert.equal(SOURCE_LANG, 'en');
+});
+
+test('a card keeps its valid translations, trimmed, and drops the others (CARD-7)', () => {
+  const card = normalizeCard(
+    concept({
+      translations: {
+        es: { title: ' Título ', body: 'Cuerpo.', extra: 1 },
+        fr: { title: 'Titre' },
+        EN: { title: 'T', body: 'B' },
+        de: 'Titel',
+      },
+    }),
+    'git',
+  );
+  assert.deepEqual(card.translations, { es: { title: 'Título', body: 'Cuerpo.' } });
+  assert.equal('translations' in normalizeCard(concept({ translations: { fr: {} } }), 'git'), false);
+  assert.equal('translations' in normalizeCard(concept({ translations: 'es' }), 'git'), false);
+});
+
+test('a quiz translation has as many options as the quiz (CARD-7)', () => {
+  const good = normalizeCard(quiz({ translations: { es: { title: 'T', body: 'B', options: ['Sí ', 'No'] } } }), 'git');
+  assert.deepEqual(good.translations.es.options, ['Sí', 'No']);
+  const short = normalizeCard(quiz({ translations: { es: { title: 'T', body: 'B', options: ['Sí'] } } }), 'git');
+  assert.equal('translations' in short, false);
+  const none = normalizeCard(quiz({ translations: { es: { title: 'T', body: 'B' } } }), 'git');
+  assert.equal('translations' in none, false);
+  const extra = normalizeCard(concept({ translations: { es: { title: 'T', body: 'B', options: ['a', 'b'] } } }), 'git');
+  assert.deepEqual(extra.translations.es, { title: 'T', body: 'B' });
+});
+
+test('a pack keeps the valid translations of its title (CARD-7)', () => {
+  const { pack: one } = normalizePack(pack([concept()], { translations: { es: { title: ' Git ' }, fr: { title: '' } } }));
+  assert.deepEqual(one.translations, { es: { title: 'Git' } });
+  assert.equal('translations' in normalizePack(pack([concept()])).pack, false);
+});
+
+test('the pool takes the text of a language and keeps English where a card has no translation (CARD-7)', () => {
+  const git = normalizePack(
+    pack(
+      [
+        concept({ translations: { es: { title: 'Título', body: 'Cuerpo.' } } }),
+        quiz({ translations: { es: { title: '¿Sí?', body: 'Porque.', options: ['Sí', 'No'] } } }),
+        concept({ id: 'git-b' }),
+      ],
+      { title: 'Git', translations: { es: { title: 'Git en español' } } },
+    ),
+  ).pack;
+  const pool = buildPool([git], 'es');
+  const [a, q, b] = pool.cards;
+  assert.deepEqual([a.title, a.body, a.lang], ['Título', 'Cuerpo.', 'es']);
+  assert.deepEqual([q.title, q.options, q.answer, q.lang], ['¿Sí?', ['Sí', 'No'], 1, 'es']);
+  assert.deepEqual([b.title, b.lang], ['Title', 'en']);
+  assert.ok(pool.cards.every((card) => !('translations' in card)));
+  assert.deepEqual(pool.topics, [{ id: 'git', title: 'Git en español', lang: 'es' }]);
+  assert.equal(buildPool([git], 'en').cards[0].title, 'Title');
+  assert.equal(buildPool([git]).topics[0].title, 'Git');
+  assert.equal(git.cards[0].title, 'Title');
 });

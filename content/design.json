@@ -2,20 +2,37 @@
   "id": "design",
   "version": 1,
   "title": "Software design",
+  "translations": {
+    "es": {
+      "title": "Diseño de software"
+    }
+  },
   "cards": [
     {
       "id": "design-coupling",
       "kind": "concept",
       "level": "intro",
       "title": "Low coupling, high cohesion",
-      "body": "Cohesion: the parts of a module change for the same reason. Coupling: how much one module must know about another. A change that touches five files in five folders is the sign of low cohesion and high coupling."
+      "body": "Cohesion: the parts of a module change for the same reason. Coupling: how much one module must know about another. A change that touches five files in five folders is the sign of low cohesion and high coupling.",
+      "translations": {
+        "es": {
+          "title": "Bajo acoplamiento, alta cohesión",
+          "body": "Cohesión: las partes de un módulo cambian por el mismo motivo. Acoplamiento: cuánto debe saber un módulo de otro. Un cambio que toca cinco archivos en cinco carpetas es la señal de baja cohesión y alto acoplamiento."
+        }
+      }
     },
     {
       "id": "design-pure-core",
       "kind": "concept",
       "level": "intermediate",
       "title": "Functional core, imperative shell",
-      "body": "Keep the decisions in pure functions that take values and return values, and push the I/O (database, network, clock, DOM) to a thin outer layer. The core is easy to test; the shell is too simple to need many tests."
+      "body": "Keep the decisions in pure functions that take values and return values, and push the I/O (database, network, clock, DOM) to a thin outer layer. The core is easy to test; the shell is too simple to need many tests.",
+      "translations": {
+        "es": {
+          "title": "Núcleo funcional, capa imperativa",
+          "body": "Pon las decisiones en funciones puras que reciben valores y devuelven valores, y lleva la E/S (base de datos, red, reloj, DOM) a una capa exterior fina. El núcleo es fácil de probar; la capa exterior es tan simple que apenas necesita pruebas."
+        }
+      }
     },
     {
       "id": "design-strategy",
@@ -23,32 +40,78 @@
       "level": "intro",
       "title": "A strategy is often just a map of functions",
       "body": "In a language with first-class functions, the strategy pattern needs no class hierarchy. A new rule is a new entry.",
-      "code": "const PRICE = {\n  standard: (base) => base,\n  member: (base) => base * 0.9,\n  staff: () => 0,\n};\nconst total = PRICE[customer.kind](base);"
+      "code": "const PRICE = {\n  standard: (base) => base,\n  member: (base) => base * 0.9,\n  staff: () => 0,\n};\nconst total = PRICE[customer.kind](base);",
+      "translations": {
+        "es": {
+          "title": "Una estrategia suele ser solo un mapa de funciones",
+          "body": "En un lenguaje con funciones de primera clase, el patrón estrategia no necesita una jerarquía de clases. Una regla nueva es una entrada nueva."
+        }
+      }
     },
     {
       "id": "design-premature",
       "kind": "pitfall",
       "level": "intermediate",
       "title": "An abstraction with one user",
-      "body": "An interface, a factory and a plugin system for the one case you have make the code harder to change, not easier. Wait for the second or third real case; then the right seam is visible."
+      "body": "An interface, a factory and a plugin system for the one case you have make the code harder to change, not easier. Wait for the second or third real case; then the right seam is visible.",
+      "translations": {
+        "es": {
+          "title": "Una abstracción con un solo usuario",
+          "body": "Una interfaz, una factoría y un sistema de plugins para el único caso que tienes hacen el código más difícil de cambiar, no más fácil. Espera al segundo o al tercer caso real; entonces se ve el punto de corte correcto."
+        }
+      }
     },
     {
       "id": "design-solid-quiz",
       "kind": "quiz",
       "level": "intermediate",
       "title": "A Square subclass breaks code that sets the width of a Rectangle. Which principle does it break?",
-      "options": ["Single responsibility", "Open/closed", "Liskov substitution", "Dependency inversion"],
+      "options": [
+        "Single responsibility",
+        "Open/closed",
+        "Liskov substitution",
+        "Dependency inversion"
+      ],
       "answer": 2,
-      "body": "Liskov substitution: code written for the base type must work with any subtype. A Square that changes its height when its width is set breaks the promise of Rectangle."
+      "body": "Liskov substitution: code written for the base type must work with any subtype. A Square that changes its height when its width is set breaks the promise of Rectangle.",
+      "translations": {
+        "es": {
+          "title": "Una subclase Square rompe el código que fija el ancho de un Rectangle. ¿Qué principio rompe?",
+          "body": "Sustitución de Liskov: el código escrito para el tipo base debe funcionar con cualquier subtipo. Un Square que cambia su alto cuando se fija su ancho rompe la promesa de Rectangle.",
+          "options": [
+            "Responsabilidad única",
+            "Abierto/cerrado",
+            "Sustitución de Liskov",
+            "Inversión de dependencias"
+          ]
+        }
+      }
     },
     {
       "id": "design-di-quiz",
       "kind": "quiz",
       "level": "advanced",
       "title": "What is the main gain of passing a clock into a function instead of calling Date.now() inside it?",
-      "options": ["Speed", "A deterministic test", "Less memory", "Thread safety"],
+      "options": [
+        "Speed",
+        "A deterministic test",
+        "Less memory",
+        "Thread safety"
+      ],
       "answer": 1,
-      "body": "The function now depends on an input, not on the world. A test passes a fixed time and gets the same result on every run."
+      "body": "The function now depends on an input, not on the world. A test passes a fixed time and gets the same result on every run.",
+      "translations": {
+        "es": {
+          "title": "¿Cuál es la ventaja principal de pasar un reloj a una función en lugar de llamar a Date.now() dentro?",
+          "body": "La función depende ahora de una entrada, no del mundo. Una prueba pasa una hora fija y obtiene el mismo resultado en cada ejecución.",
+          "options": [
+            "Velocidad",
+            "Una prueba determinista",
+            "Menos memoria",
+            "Seguridad entre hilos"
+          ]
+        }
+      }
     },
     {
       "id": "design-refactoring-guru",
@@ -58,7 +121,13 @@
       "body": "Each classic pattern with the problem it solves, a diagram and short examples in several languages. Read the problem section first: a pattern is only worth its cost when you have that problem.",
       "url": "https://refactoring.guru/design-patterns",
       "media": "article",
-      "minutes": 30
+      "minutes": 30,
+      "translations": {
+        "es": {
+          "title": "Refactoring.Guru: patrones de diseño",
+          "body": "Cada patrón clásico con el problema que resuelve, un diagrama y ejemplos cortos en varios lenguajes. Lee primero la sección del problema: un patrón solo compensa su coste cuando tienes ese problema."
+        }
+      }
     }
   ]
 }

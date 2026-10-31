@@ -23,8 +23,16 @@ for review on a spaced schedule. Rules of `src/cards.js` and the packs of `conte
 - **CARD-5** `buildPool` joins the packs in their order. Each card takes the id of its pack as its
   `topic`. A pack id that is twice keeps the first pack.
 - **CARD-6** The packs are `content/<id>.json`, listed in `content/index.json` and in `SHELL`.
-  Their text is in English in every language of the screen. `tests/content.test.js` checks that
-  each pack is valid and drops no card, and that each card id is unique.
+  Their text is in English, with a translation for each other language of the screen (CARD-7).
+  `tests/content.test.js` checks that each pack is valid and drops no card, that each card id is
+  unique, and that each pack and each card has a valid translation for each other language.
+- **CARD-7** A pack and a card may have `translations`: `{ [lang]: texts }`, with a lowercase
+  two-letter code other than `en`. The texts of a pack are its `title`; those of a card are its
+  `title` and `body`, with the limits of CARD-2, and for a quiz its `options`, as many as the quiz
+  has, in the same order. A translation that is not valid is dropped and its card stays.
+  `buildPool(packs, lang)` gives each card and each topic the texts of `lang` where it has them,
+  else the English ones, and its `lang`: the language of its text. The code, the answer, the URL
+  and the state of a card are the same in every language.
 
 ## Learning
 

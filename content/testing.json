@@ -2,20 +2,37 @@
   "id": "testing",
   "version": 1,
   "title": "Testing",
+  "translations": {
+    "es": {
+      "title": "Pruebas"
+    }
+  },
   "cards": [
     {
       "id": "testing-pyramid",
       "kind": "concept",
       "level": "intro",
       "title": "Many fast tests, few slow ones",
-      "body": "The test pyramid: a wide base of unit tests that run in milliseconds, fewer integration tests, and a thin top of end-to-end tests. The shape keeps the suite fast enough to run on every change."
+      "body": "The test pyramid: a wide base of unit tests that run in milliseconds, fewer integration tests, and a thin top of end-to-end tests. The shape keeps the suite fast enough to run on every change.",
+      "translations": {
+        "es": {
+          "title": "Muchas pruebas rápidas, pocas lentas",
+          "body": "La pirámide de pruebas: una base ancha de pruebas unitarias que tardan milisegundos, menos pruebas de integración y una punta fina de pruebas de extremo a extremo. Esa forma mantiene la suite lo bastante rápida para ejecutarla con cada cambio."
+        }
+      }
     },
     {
       "id": "testing-doubles",
       "kind": "concept",
       "level": "intermediate",
       "title": "A stub answers, a mock checks",
-      "body": "A stub returns canned data so the code under test can run. A mock also records the calls and fails the test when the expected calls did not happen. A fake is a working light version, such as an in-memory database."
+      "body": "A stub returns canned data so the code under test can run. A mock also records the calls and fails the test when the expected calls did not happen. A fake is a working light version, such as an in-memory database.",
+      "translations": {
+        "es": {
+          "title": "Un stub responde, un mock comprueba",
+          "body": "Un stub devuelve datos preparados para que el código bajo prueba pueda ejecutarse. Un mock además registra las llamadas y hace fallar la prueba si no llegaron las esperadas. Un fake es una versión ligera que funciona, como una base de datos en memoria."
+        }
+      }
     },
     {
       "id": "testing-node-test",
@@ -23,23 +40,50 @@
       "level": "intro",
       "title": "A unit test with no dependency",
       "body": "Node has a test runner since version 18. node --test finds the test files and runs them; --watch runs them again on each save.",
-      "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\n\ntest('adds', () => {\n  assert.equal(add(2, 3), 5);\n});"
+      "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\n\ntest('adds', () => {\n  assert.equal(add(2, 3), 5);\n});",
+      "translations": {
+        "es": {
+          "title": "Una prueba unitaria sin dependencias",
+          "body": "Node tiene un ejecutor de pruebas desde la versión 18. node --test encuentra los archivos de prueba y los ejecuta; --watch los ejecuta de nuevo cada vez que guardas."
+        }
+      }
     },
     {
       "id": "testing-flaky",
       "kind": "pitfall",
       "level": "intermediate",
       "title": "A test that reads the clock will fail one day",
-      "body": "Code that calls Date.now() or new Date() inside the logic gives a test that passes today and fails at midnight, at a month end or in another time zone. Pass the time in as a parameter, as you would any other input."
+      "body": "Code that calls Date.now() or new Date() inside the logic gives a test that passes today and fails at midnight, at a month end or in another time zone. Pass the time in as a parameter, as you would any other input.",
+      "translations": {
+        "es": {
+          "title": "Una prueba que lee el reloj fallará algún día",
+          "body": "El código que llama a Date.now() o new Date() dentro de la lógica da una prueba que pasa hoy y falla a medianoche, a fin de mes o en otra zona horaria. Pasa la hora como parámetro, como harías con cualquier otra entrada."
+        }
+      }
     },
     {
       "id": "testing-tdd-quiz",
       "kind": "quiz",
       "level": "intro",
       "title": "In test-driven development, what comes right after a failing test?",
-      "options": ["Refactor the code", "Write the least code that makes it pass", "Write the next test"],
+      "options": [
+        "Refactor the code",
+        "Write the least code that makes it pass",
+        "Write the next test"
+      ],
       "answer": 1,
-      "body": "Red, green, refactor: a failing test, the least code to make it pass, then clean-up with the test as a safety net."
+      "body": "Red, green, refactor: a failing test, the least code to make it pass, then clean-up with the test as a safety net.",
+      "translations": {
+        "es": {
+          "title": "En el desarrollo guiado por pruebas, ¿qué viene justo después de una prueba que falla?",
+          "body": "Rojo, verde, refactorizar: una prueba que falla, el mínimo código para que pase y luego la limpieza, con la prueba como red de seguridad.",
+          "options": [
+            "Refactorizar el código",
+            "Escribir el mínimo código que la haga pasar",
+            "Escribir la siguiente prueba"
+          ]
+        }
+      }
     },
     {
       "id": "testing-coverage-quiz",
@@ -52,7 +96,18 @@
         "Every branch was taken both ways"
       ],
       "answer": 0,
-      "body": "Line coverage proves that a line ran, not that a test checked its result. Branch coverage and mutation testing measure more of what the assertions really catch."
+      "body": "Line coverage proves that a line ran, not that a test checked its result. Branch coverage and mutation testing measure more of what the assertions really catch.",
+      "translations": {
+        "es": {
+          "title": "Una suite tiene un 100 % de cobertura de líneas. ¿Qué demuestra eso?",
+          "body": "La cobertura de líneas demuestra que una línea se ejecutó, no que una prueba comprobó su resultado. La cobertura de ramas y las pruebas de mutación miden mejor lo que las aserciones detectan de verdad.",
+          "options": [
+            "Cada línea se ejecutó durante las pruebas",
+            "Cada comportamiento es correcto",
+            "Cada rama se tomó en los dos sentidos"
+          ]
+        }
+      }
     },
     {
       "id": "testing-fowler",
@@ -62,7 +117,13 @@
       "body": "Ham Vocke's article on martinfowler.com: which tests to write at each layer of a real service, with examples of unit, integration, contract and UI tests.",
       "url": "https://martinfowler.com/articles/practical-test-pyramid.html",
       "media": "article",
-      "minutes": 60
+      "minutes": 60,
+      "translations": {
+        "es": {
+          "title": "The Practical Test Pyramid",
+          "body": "El artículo de Ham Vocke en martinfowler.com: qué pruebas escribir en cada capa de un servicio real, con ejemplos de pruebas unitarias, de integración, de contrato y de interfaz."
+        }
+      }
     }
   ]
 }

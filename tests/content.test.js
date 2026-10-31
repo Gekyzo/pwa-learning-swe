@@ -1,7 +1,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, readdirSync } from 'node:fs';
-import { KINDS, normalizePack, buildPool } from '#cards';
+import { KINDS, SOURCE_LANG, normalizePack, buildPool } from '#cards';
+import { LANGUAGES } from '#i18n';
 
 // The packs of content/ that the app ships (CARD-6).
 const root = new URL('../', import.meta.url);
@@ -21,6 +22,17 @@ test('each pack is valid, has its file name as its id and drops no card', () => 
     assert.ok(pack, id);
     assert.equal(pack.id, id);
     assert.deepEqual(dropped, [], id);
+  }
+});
+
+test('each pack and each card has a valid translation for each other language of the screen (CARD-7)', () => {
+  const others = LANGUAGES.filter((lang) => lang !== SOURCE_LANG);
+  for (const { id, data } of packs) {
+    const { pack } = normalizePack(data);
+    for (const lang of others) {
+      assert.ok(pack.translations?.[lang], `${id} ${lang}`);
+      for (const card of pack.cards) assert.ok(card.translations?.[lang], `${card.id} ${lang}`);
+    }
   }
 });
 

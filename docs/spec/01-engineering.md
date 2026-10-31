@@ -9,12 +9,12 @@
 | `src/session.js` | The session on the device, the start route and the return from Google (ACC-1, ACC-4, ACC-5) | `storage` |
 | `src/version.js` | Version rules and the update offer rule | nothing |
 | `src/whatsnew.js` | The parse of the release notes and the versions that a user has not seen | `version` |
-| `src/i18n.js` | The language choice and the translator | `locales/*` |
+| `src/i18n.js` | The language choice, the card language (I18N-7) and the translator | `locales/*` |
 | `src/sections.js` | The order of the sections and the rule of the slide between them | nothing |
 | `src/modules.js` | The modules that Settings turns off, and the visible sections | `sections` |
 | `src/storage.js` | Load, save, validation hook, export, import, device preferences | `config`, `modules` |
 | `src/install.js` | The install offer state machine | nothing |
-| `src/cards.js` | The validation of a card and a pack of `content/`, and the pool of cards (CARD-1 to CARD-5) | nothing |
+| `src/cards.js` | The validation of a card and a pack of `content/`, and the pool of cards in a language (CARD-1 to CARD-5, CARD-7) | nothing |
 | `src/learning.js` | The learning doc: the record of a seen card, its review box, the signals and the save (LRN-1 to LRN-8) | `config` |
 | `src/feed.js` | The order of the feed, the seen cards again, the due count, the saved cards and the topics that are off (FEED-1 to FEED-5, FEED-14) | `cards`, `learning` |
 | `src/particles.js` | The particles of a picture and their place in time (optional) | nothing |
@@ -65,7 +65,7 @@
 
 ## Storage keys
 
-The doc keys are in [09-feed.md](09-feed.md). The device preferences are `pwa-learning-swe.lang`,
+The doc keys are in [09-feed.md](09-feed.md). The device preferences are `pwa-learning-swe.lang`, `pwa-learning-swe.cardLang`,
 `pwa-learning-swe.hand`, `pwa-learning-swe.theme`, `pwa-learning-swe.modules`, `pwa-learning-swe.topics` and `pwa-learning-swe.onboarded`. The account keeps `pwa-learning-swe.session` (ACC-5) and
 `pwa-learning-swe.offline` (ACC-10), and `pwa-learning-swe.oauth` in `sessionStorage` for the time of a Google redirect (ACC-4).
 
@@ -88,10 +88,10 @@ The doc keys are in [09-feed.md](09-feed.md). The device preferences are `pwa-le
 
 | Test file | Covers |
 |---|---|
-| `tests/cards.test.js` | The validation of a card and a pack, and the pool (CARD-1 to CARD-5) |
+| `tests/cards.test.js` | The validation of a card and a pack, their translations, and the pool (CARD-1 to CARD-5, CARD-7) |
 | `tests/learning.test.js` | The learning doc, the review boxes, the signals and the validation of the doc (LRN-1 to LRN-8) |
 | `tests/feed.test.js` | The order of the feed, its end, the seen cards again, the due count, the saved cards and the topics that are off (FEED-1 to FEED-5, FEED-14) |
-| `tests/content.test.js` | The packs of `content/`: each one valid, listed and in `SHELL` (CARD-6) |
+| `tests/content.test.js` | The packs of `content/`: each one valid, listed, translated and in `SHELL` (CARD-6) |
 | `tests/pocketbase.test.js` | The client of the account server and its URL (ACC-3, ACC-4, ACC-6) |
 | `tests/session.test.js` | The session, the start route, the offline flag, the pending sign-in and the return URL (ACC-1, ACC-4, ACC-5, ACC-10) |
 | `tests/storage.test.js` | Load, save, the corrupt copy, export, import and the device preferences |
@@ -104,7 +104,7 @@ The doc keys are in [09-feed.md](09-feed.md). The device preferences are `pwa-le
 | `tests/version.test.js` | Version rules and the update offer rule |
 | `tests/whatsnew.test.js` | The parse of the release notes and the unseen versions |
 | `tests/release-notes-files.test.js` | One release-notes file for each language, with the same versions (VER-19) |
-| `tests/i18n.test.js` | The language choice, the translator, the parity of the catalogs |
+| `tests/i18n.test.js` | The language choice, the card language, the translator, the parity of the catalogs |
 | `tests/markup.test.js` | `index.html` holds no text of its own; the sheets, the walkthrough and the account markup |
 | `tests/aliases.test.js` | The import map against `package.json`; each `#ds/` alias names a vendored module |
 | `tests/layers.test.js` | The layer rules and `SHELL` (ENG-16) |

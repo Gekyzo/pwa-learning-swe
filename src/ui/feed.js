@@ -1,7 +1,7 @@
 import { normalizePack, buildPool } from '#cards';
 import { nextCards, seenAgain, dueBars, newCount, stateCounts, topicLedger, sessionDone, greetingOf, hiddenTopics, hintIds, switchTopic } from '#feed';
 import { markSeen, isUpdated } from '#learning';
-import { $, el, ui, state, pool, lang, firstStart, t, scroller, topicsOff, setPool, setTopics, commit, render } from '#ui/context';
+import { $, el, ui, state, pool, lang, cardLang, firstStart, t, scroller, topicsOff, setPool, setTopics, commit, render } from '#ui/context';
 import { cardOf, cardNode } from '#ui/card';
 
 // The Feed section: the packs, the cards that come in as the user scrolls, and the seen ones
@@ -24,18 +24,27 @@ const getJson = async (url) => {
   return response.json();
 };
 
+// The packs as they loaded, so a new card language builds the pool again with no fetch.
+let packs = [];
+
 // A pack that cannot be read is left out; an index that cannot be read is an error.
 export const loadPool = async () => {
   ui.loadError = false;
   render();
   try {
-    const { packs } = await getJson('./content/index.json');
+    const index = await getJson('./content/index.json');
     const read = (id) => getJson(`./content/${id}.json`).then((data) => normalizePack(data).pack, () => null);
-    setPool(buildPool((await Promise.all(packs.map(read))).filter(Boolean)));
+    packs = (await Promise.all(index.packs.map(read))).filter(Boolean);
+    setPool(buildPool(packs, cardLang));
   } catch {
     ui.loadError = true;
   }
   fill();
+};
+
+// The cards in the language of `cardLang` (I18N-7), once the packs load. The feed keeps its cards.
+export const localizePool = () => {
+  if (pool) setPool(buildPool(packs, cardLang));
 };
 
 // The topics whose cards do not show (FEED-14).
@@ -84,7 +93,7 @@ const nodes = new Map();
 
 const keyOf = (id, hint) => {
   const record = state.records[id];
-  return JSON.stringify([lang, record?.liked, record?.saved, record?.box, ui.answers[id], ui.graded[id], ui.knew[id], hint]);
+  return JSON.stringify([lang, cardLang, record?.liked, record?.saved, record?.box, ui.answers[id], ui.graded[id], ui.knew[id], hint]);
 };
 
 // The first two entries of the feed show the gesture hint on a first start (FEED-19).
@@ -187,10 +196,10 @@ const renderSide = () => {
   for (const name of ['learning', 'known', 'mastered']) $(`state-${name}`).textContent = String(counts[name]);
 
   $('topic-ledger').replaceChildren(
-    ...topicLedger(pool, state, now, hidden).map(({ title, seen, due, fresh }) => {
+    ...topicLedger(pool, state, now, hidden).map(({ id, title, seen, due, fresh }) => {
       const name = ledgerCell(title, false);
       // A long title is cut with an ellipsis; the whole title shows on hover.
-      Object.assign(name, { lang: 'en', title });
+      Object.assign(name, { lang: pool.topics.find((topic) => topic.id === id)?.lang ?? cardLang, title });
       return el('li', { className: 'topic-ledger-line' }, [name, ...[seen, due, fresh].map((value) => ledgerCell(String(value), true))]);
     }),
   );
@@ -225,7 +234,7 @@ export const topicStates = () => {
   const hidden = off();
   const on = pool.topics.filter(({ id }) => !hidden.includes(id));
   const count = (id) => pool.cards.filter((card) => card.topic === id && !card.retired).length;
-  return pool.topics.map(({ id, title }) => ({ id, title, on: !hidden.includes(id), last: on.length === 1 && on[0].id === id, count: count(id) }));
+  return pool.topics.map(({ id, title, lang: topicLang }) => ({ id, title, lang: topicLang, on: !hidden.includes(id), last: on.length === 1 && on[0].id === id, count: count(id) }));
 };
 
 export const bind = () => {

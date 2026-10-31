@@ -10,6 +10,7 @@ import {
   t,
   lang,
   chosen,
+  cardChoice,
   hand,
   theme,
   off,
@@ -19,18 +20,19 @@ import {
   apply,
   render,
   setLanguage,
+  setCardLanguage,
   setHand,
   setTheme,
   setModules,
   setNavMotion,
 } from '#ui/context';
 import { runUpdate } from '#ui/update';
-import { chooseTopic, topicStates } from '#ui/feed';
+import { chooseTopic, topicStates, localizePool } from '#ui/feed';
 import { signedIn } from '#ui/account';
 
 // The value of a row of Preferences is the text of the option that its select has.
 const renderValues = () => {
-  for (const id of ['language', 'hand', 'theme']) {
+  for (const id of ['language', 'card-language', 'hand', 'theme']) {
     $(`${id}-value`).textContent = $(id).selectedOptions[0]?.textContent ?? '';
   }
 };
@@ -55,6 +57,11 @@ export const applyLanguage = () => {
   $('language').replaceChildren(
     option('', t('settings.automatic')),
     ...LANGUAGES.map((code) => option(code, LANGUAGE_NAMES[code])),
+  );
+  const cardOption = (value, text) => el('option', { value, textContent: text, selected: value === cardChoice });
+  $('card-language').replaceChildren(
+    cardOption('app', t('settings.cardLanguageApp')),
+    ...LANGUAGES.map((code) => cardOption(code, LANGUAGE_NAMES[code])),
   );
   const handOption = (value, key) => el('option', { value, textContent: t(key), selected: value === hand });
   $('hand').replaceChildren(handOption('right', 'settings.handRight'), handOption('left', 'settings.handLeft'));
@@ -86,15 +93,17 @@ export const renderTopics = () => {
   if (list.dataset.ids !== topics.map(({ id }) => id).join()) {
     list.dataset.ids = topics.map(({ id }) => id).join();
     list.replaceChildren(
-      ...topics.map(({ id, title }) => {
+      ...topics.map(({ id }) => {
         const box = el('input', { className: 'switch-input', type: 'checkbox', onchange: (event) => chooseTopic(id, event.target.checked) });
         box.setAttribute('role', 'switch');
-        const name = el('span', { className: 'switch-title' }, [el('span', { textContent: title, lang: 'en' }), el('span', { className: 'switch-meta' })]);
+        const name = el('span', { className: 'switch-title' }, [el('span'), el('span', { className: 'switch-meta' })]);
         return el('label', { className: 'switch' }, [name, box]);
       }),
     );
   }
+  // A title follows the card language (I18N-7).
   [...list.querySelectorAll('.switch')].forEach((label, index) => {
+    Object.assign(label.querySelector('.switch-title').firstElementChild, { textContent: topics[index].title, lang: topics[index].lang });
     label.querySelector('.switch-meta').textContent = t('onboarding.count', { count: topics[index].count });
   });
   [...list.querySelectorAll('.switch-input')].forEach((box, index) => {
@@ -127,6 +136,13 @@ export const bind = () => {
   });
   $('language').addEventListener('change', (event) => {
     setLanguage(event.target.value || null);
+    localizePool();
+    applyLanguage();
+  });
+  // The cards take the new language in place; the feed keeps them and their order.
+  $('card-language').addEventListener('change', (event) => {
+    setCardLanguage(event.target.value);
+    localizePool();
     applyLanguage();
   });
   $('hand').addEventListener('change', (event) => setHand(event.target.value));

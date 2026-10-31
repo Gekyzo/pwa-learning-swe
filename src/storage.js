@@ -99,6 +99,31 @@ export const saveLanguage = (storage, lang) => {
   }
 };
 
+// The language of the cards (I18N-7): a language, or `app` for the language of the screen. A
+// preference of the device, as the language is.
+export const CARD_LANGUAGE_KEY = keyOf('cardLang');
+
+// The stored choice when it is `app` or one of `supported`, else `en`.
+export const loadCardLanguage = (storage, supported) => {
+  try {
+    const choice = storage.getItem(CARD_LANGUAGE_KEY);
+    return choice === 'app' || supported.includes(choice) ? choice : 'en';
+  } catch {
+    return 'en';
+  }
+};
+
+// `en` is the choice of an app with no choice: it removes the key.
+export const saveCardLanguage = (storage, choice) => {
+  try {
+    if (choice === 'en') storage.removeItem(CARD_LANGUAGE_KEY);
+    else storage.setItem(CARD_LANGUAGE_KEY, choice);
+    return true;
+  } catch {
+    return false;
+  }
+};
+
 // The hand that the user holds the phone with. It is a preference of the device, as the language is.
 export const HAND_KEY = keyOf('hand');
 

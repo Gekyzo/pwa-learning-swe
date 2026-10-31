@@ -7,8 +7,11 @@ export const MAX_TITLE = 120;
 export const MAX_BODY = 600;
 export const MAX_CODE = 800;
 export const MAX_MINUTES = 600;
+// The language of the text of the packs; a translation adds another one (CARD-7).
+export const SOURCE_LANG = 'en';
 
 const ID = /^[a-z][a-z0-9-]*$/;
+const LANG = /^[a-z]{2}$/;
 
 const isCount = (value, min = 1) => Number.isInteger(value) && value >= min;
 
@@ -44,6 +47,33 @@ const KIND_FIELDS = {
   },
 };
 
+// `{ [lang]: texts }` with the texts that `clean` accepts, or null when no language has them (CARD-7).
+const translationsOf = (data, clean) => {
+  if (typeof data !== 'object' || data === null) return null;
+  const kept = Object.entries(data)
+    .filter(([lang]) => LANG.test(lang) && lang !== SOURCE_LANG)
+    .map(([lang, texts]) => [lang, typeof texts === 'object' && texts !== null ? clean(texts) : null])
+    .filter(([, texts]) => texts);
+  return kept.length ? Object.fromEntries(kept) : null;
+};
+
+const withTranslations = (translations) => (translations ? { translations } : {});
+
+// The title and the body of a card in another language, and the options of a quiz, as many as it has.
+const cardTexts = (card) => (texts) => {
+  const title = text(texts.title, MAX_TITLE);
+  const body = text(texts.body, MAX_BODY);
+  if (!title || !body) return null;
+  if (card.kind !== 'quiz') return { title, body };
+  const options = Array.isArray(texts.options) ? texts.options.map((option) => text(option, MAX_TITLE)) : [];
+  return options.length === card.options.length && !options.includes(null) ? { title, body, options } : null;
+};
+
+const packTexts = (texts) => {
+  const title = text(texts.title, MAX_TITLE);
+  return title ? { title } : null;
+};
+
 // A clean card of the pack `packId`, or null (CARD-2, CARD-3).
 export const normalizeCard = (data, packId) => {
   if (typeof data !== 'object' || data === null) return null;
@@ -54,7 +84,8 @@ export const normalizeCard = (data, packId) => {
   const body = text(data.body, MAX_BODY);
   const extra = KIND_FIELDS[kind](data);
   if (!title || !body || !extra) return null;
-  return { id, rev, kind, level, title, body, ...extra, ...(data.retired === true ? { retired: true } : {}) };
+  const card = { id, rev, kind, level, title, body, ...extra, ...(data.retired === true ? { retired: true } : {}) };
+  return { ...card, ...withTranslations(translationsOf(data.translations, cardTexts(card))) };
 };
 
 // { pack, dropped }: the pack with its valid cards and the ids of the cards it dropped (`#index`
@@ -73,15 +104,22 @@ export const normalizePack = (data) => {
     if (card && !kept.some((other) => other.id === card.id)) kept.push(card);
     else dropped.push(typeof raw?.id === 'string' ? raw.id : `#${index}`);
   });
-  return { pack: { id, version, title, cards: kept }, dropped };
+  const translations = withTranslations(translationsOf(data.translations, packTexts));
+  return { pack: { id, version, title, ...translations, cards: kept }, dropped };
 };
 
-// The cards of the packs, each with its topic, and the topics in the order of the packs. A pack
-// id that is twice keeps its first pack (CARD-5).
-export const buildPool = (packs) => {
+// A card or a topic in `lang` where it has a translation, else in English, with the language of its text.
+const localize = ({ translations, ...item }, lang) => {
+  const texts = translations?.[lang];
+  return texts ? { ...item, ...texts, lang } : { ...item, lang: SOURCE_LANG };
+};
+
+// The cards of the packs, each with its topic, and the topics in the order of the packs, in `lang`
+// (CARD-7). A pack id that is twice keeps its first pack (CARD-5).
+export const buildPool = (packs, lang = SOURCE_LANG) => {
   const used = packs.filter((pack, index) => packs.findIndex((other) => other.id === pack.id) === index);
   return {
-    cards: used.flatMap((pack) => pack.cards.map((card) => ({ ...card, topic: pack.id }))),
-    topics: used.map(({ id, title }) => ({ id, title })),
+    cards: used.flatMap((pack) => pack.cards.map((card) => ({ ...localize(card, lang), topic: pack.id }))),
+    topics: used.map(({ id, title, translations }) => localize({ id, title, translations }, lang)),
   };
 };

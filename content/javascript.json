@@ -2,20 +2,37 @@
   "id": "javascript",
   "version": 1,
   "title": "JavaScript",
+  "translations": {
+    "es": {
+      "title": "JavaScript"
+    }
+  },
   "cards": [
     {
       "id": "javascript-event-loop",
       "kind": "concept",
       "level": "intermediate",
       "title": "Microtasks run before the next task",
-      "body": "After each task, such as a timer or an event, the engine empties the whole microtask queue: promise callbacks and queueMicrotask. Only then does it render or take the next task. A loop of promises that never ends freezes the page like a while (true)."
+      "body": "After each task, such as a timer or an event, the engine empties the whole microtask queue: promise callbacks and queueMicrotask. Only then does it render or take the next task. A loop of promises that never ends freezes the page like a while (true).",
+      "translations": {
+        "es": {
+          "title": "Las microtareas se ejecutan antes de la siguiente tarea",
+          "body": "Tras cada tarea, como un temporizador o un evento, el motor vacía toda la cola de microtareas: los callbacks de promesas y queueMicrotask. Solo entonces pinta o toma la siguiente tarea. Un bucle de promesas que nunca acaba congela la página como un while (true)."
+        }
+      }
     },
     {
       "id": "javascript-closures",
       "kind": "concept",
       "level": "intro",
       "title": "A closure keeps the variable, not its value",
-      "body": "A function remembers the variables of the scope where it was made. If the variable changes later, the function sees the new value. let in a for loop makes a new binding for each turn, which is why it fixes the classic loop bug."
+      "body": "A function remembers the variables of the scope where it was made. If the variable changes later, the function sees the new value. let in a for loop makes a new binding for each turn, which is why it fixes the classic loop bug.",
+      "translations": {
+        "es": {
+          "title": "Una closure guarda la variable, no su valor",
+          "body": "Una función recuerda las variables del ámbito donde se creó. Si la variable cambia después, la función ve el valor nuevo. let en un bucle for crea un binding nuevo en cada vuelta, y por eso corrige el clásico error del bucle."
+        }
+      }
     },
     {
       "id": "javascript-group-by",
@@ -23,32 +40,76 @@
       "level": "intermediate",
       "title": "Group an array without a reduce",
       "body": "Object.groupBy (ES2024) returns an object with one array for each key. Map.groupBy does the same with a Map, for keys that are not strings.",
-      "code": "const byTopic = Object.groupBy(cards, (card) => card.topic);\n// { git: [...], http: [...] }"
+      "code": "const byTopic = Object.groupBy(cards, (card) => card.topic);\n// { git: [...], http: [...] }",
+      "translations": {
+        "es": {
+          "title": "Agrupar un array sin reduce",
+          "body": "Object.groupBy (ES2024) devuelve un objeto con un array por cada clave. Map.groupBy hace lo mismo con un Map, para claves que no son strings."
+        }
+      }
     },
     {
       "id": "javascript-foreach-async",
       "kind": "pitfall",
       "level": "intermediate",
       "title": "forEach does not wait for an async callback",
-      "body": "items.forEach(async (item) => await save(item)) starts every save and returns at once; errors become unhandled rejections. Use for...of with await for one at a time, or await Promise.all(items.map(save)) to run them together."
+      "body": "items.forEach(async (item) => await save(item)) starts every save and returns at once; errors become unhandled rejections. Use for...of with await for one at a time, or await Promise.all(items.map(save)) to run them together.",
+      "translations": {
+        "es": {
+          "title": "forEach no espera a un callback async",
+          "body": "items.forEach(async (item) => await save(item)) lanza todos los save y vuelve enseguida; los errores se convierten en rechazos sin capturar. Usa for...of con await para ir de uno en uno, o await Promise.all(items.map(save)) para ejecutarlos a la vez."
+        }
+      }
     },
     {
       "id": "javascript-order-quiz",
       "kind": "quiz",
       "level": "intermediate",
       "title": "In which order does this log? setTimeout(() => log('a')); Promise.resolve().then(() => log('b')); log('c');",
-      "options": ["a b c", "c a b", "c b a", "b c a"],
+      "options": [
+        "a b c",
+        "c a b",
+        "c b a",
+        "b c a"
+      ],
       "answer": 2,
-      "body": "The synchronous log runs first. The promise callback is a microtask and runs as soon as the current script ends. The timer is a task and runs after that."
+      "body": "The synchronous log runs first. The promise callback is a microtask and runs as soon as the current script ends. The timer is a task and runs after that.",
+      "translations": {
+        "es": {
+          "title": "¿En qué orden imprime esto? setTimeout(() => log('a')); Promise.resolve().then(() => log('b')); log('c');",
+          "body": "El log síncrono se ejecuta primero. El callback de la promesa es una microtarea y se ejecuta en cuanto acaba el script actual. El temporizador es una tarea y se ejecuta después.",
+          "options": [
+            "a b c",
+            "c a b",
+            "c b a",
+            "b c a"
+          ]
+        }
+      }
     },
     {
       "id": "javascript-equality-quiz",
       "kind": "quiz",
       "level": "intro",
       "title": "What is [] == false?",
-      "options": ["true", "false", "It throws a TypeError"],
+      "options": [
+        "true",
+        "false",
+        "It throws a TypeError"
+      ],
       "answer": 0,
-      "body": "Loose equality converts both sides to numbers: false is 0, and [] becomes '' then 0. Use === and the question never comes up."
+      "body": "Loose equality converts both sides to numbers: false is 0, and [] becomes '' then 0. Use === and the question never comes up.",
+      "translations": {
+        "es": {
+          "title": "¿Qué da [] == false?",
+          "body": "La igualdad débil convierte los dos lados a números: false es 0, y [] pasa a '' y luego a 0. Usa === y la pregunta no llega a aparecer.",
+          "options": [
+            "true",
+            "false",
+            "Lanza un TypeError"
+          ]
+        }
+      }
     },
     {
       "id": "javascript-info",
@@ -58,7 +119,13 @@
       "body": "javascript.info covers the language from the basics to promises, generators and modules, with tasks at the end of each chapter.",
       "url": "https://javascript.info/",
       "media": "course",
-      "minutes": 600
+      "minutes": 600,
+      "translations": {
+        "es": {
+          "title": "El Tutorial de JavaScript Moderno",
+          "body": "javascript.info cubre el lenguaje desde lo básico hasta las promesas, los generadores y los módulos, con ejercicios al final de cada capítulo."
+        }
+      }
     }
   ]
 }

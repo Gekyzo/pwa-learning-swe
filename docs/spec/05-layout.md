@@ -36,7 +36,7 @@ cards in each class; this app has no `pane` layout (LAY-3).
 - **SET-1** Settings is a column of groups, each a `settings-group`: a `list-group-head` with an
   optional muted line, above a `list-group` of settings rows. The order is **Temas** (FEED-15, with the
   line `settings.topicsNote`: topics on of all, and the cards of the topics on), **Preferencias**
-  (**Language**, **Hand**, **Theme**, then the switch of Saved, MOD-1; line `settings.preferencesNote`),
+  (**Language**, **Card language** (I18N-7), **Hand**, **Theme**, then the switch of Saved, MOD-1; line `settings.preferencesNote`),
   **Cuenta y copia** (the account rows, ACC-8, then **Export** and **Import**), **Aplicación**
   (**Install** only when INS-2 shows it, **Show the introduction**, **How review works**, **What's new**,
   then the version lines, VER-4) and **Borrar** (SET-2; line `settings.eraseNote`). A row of Preferences

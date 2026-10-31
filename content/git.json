@@ -2,20 +2,37 @@
   "id": "git",
   "version": 1,
   "title": "Git",
+  "translations": {
+    "es": {
+      "title": "Git"
+    }
+  },
   "cards": [
     {
       "id": "git-objects",
       "kind": "concept",
       "level": "intro",
       "title": "A commit is a snapshot, not a diff",
-      "body": "Git stores each commit as a full tree of the project, plus its parent commits, author and message. A diff is computed when you ask for one. Identical files share one blob, so snapshots stay cheap."
+      "body": "Git stores each commit as a full tree of the project, plus its parent commits, author and message. A diff is computed when you ask for one. Identical files share one blob, so snapshots stay cheap.",
+      "translations": {
+        "es": {
+          "title": "Un commit es una instantánea, no un diff",
+          "body": "Git guarda cada commit como un árbol completo del proyecto, más sus commits padre, su autor y su mensaje. El diff se calcula cuando lo pides. Los archivos idénticos comparten un blob, así que las instantáneas siguen siendo baratas."
+        }
+      }
     },
     {
       "id": "git-branch-pointer",
       "kind": "concept",
       "level": "intro",
       "title": "A branch is a movable pointer",
-      "body": "A branch is a file that holds one commit hash. A new commit on the branch moves the pointer forward. HEAD points at the branch you are on, or directly at a commit when it is detached."
+      "body": "A branch is a file that holds one commit hash. A new commit on the branch moves the pointer forward. HEAD points at the branch you are on, or directly at a commit when it is detached.",
+      "translations": {
+        "es": {
+          "title": "Una rama es un puntero que se mueve",
+          "body": "Una rama es un archivo que guarda el hash de un commit. Un commit nuevo en la rama mueve el puntero hacia delante. HEAD apunta a la rama en la que estás, o directamente a un commit cuando está detached."
+        }
+      }
     },
     {
       "id": "git-log-graph",
@@ -23,14 +40,26 @@
       "level": "intro",
       "title": "See the shape of the history",
       "body": "One line per commit, with the branch graph and every ref name. Add a path at the end to see only the commits that touched it.",
-      "code": "git log --oneline --graph --decorate --all"
+      "code": "git log --oneline --graph --decorate --all",
+      "translations": {
+        "es": {
+          "title": "Ver la forma del historial",
+          "body": "Una línea por commit, con el grafo de ramas y el nombre de cada ref. Añade una ruta al final para ver solo los commits que la tocaron."
+        }
+      }
     },
     {
       "id": "git-force-push",
       "kind": "pitfall",
       "level": "intermediate",
       "title": "Plain --force can erase a teammate's push",
-      "body": "git push --force overwrites the remote branch with your copy, even if someone pushed in the meantime. Use --force-with-lease: it refuses when the remote moved since your last fetch."
+      "body": "git push --force overwrites the remote branch with your copy, even if someone pushed in the meantime. Use --force-with-lease: it refuses when the remote moved since your last fetch.",
+      "translations": {
+        "es": {
+          "title": "Un --force a secas puede borrar el push de un compañero",
+          "body": "git push --force sobrescribe la rama remota con tu copia, aunque alguien haya hecho push mientras tanto. Usa --force-with-lease: se niega cuando el remoto cambió desde tu último fetch."
+        }
+      }
     },
     {
       "id": "git-rebase-quiz",
@@ -43,16 +72,44 @@
         "Deletes the branch and recreates it from main"
       ],
       "answer": 1,
-      "body": "Rebase rewrites the branch: each commit is applied again on top of main and gets a new hash. That is why rebasing a shared branch forces everyone else to reset."
+      "body": "Rebase rewrites the branch: each commit is applied again on top of main and gets a new hash. That is why rebasing a shared branch forces everyone else to reset.",
+      "translations": {
+        "es": {
+          "title": "¿Qué hace git rebase main en una rama de feature?",
+          "body": "El rebase reescribe la rama: cada commit se aplica de nuevo sobre main y recibe un hash nuevo. Por eso, hacer rebase de una rama compartida obliga a todos los demás a hacer reset.",
+          "options": [
+            "Fusiona main en la rama con un commit de merge",
+            "Vuelve a aplicar los commits de la rama sobre main como commits nuevos",
+            "Borra la rama y la crea de nuevo desde main"
+          ]
+        }
+      }
     },
     {
       "id": "git-reflog-quiz",
       "kind": "quiz",
       "level": "advanced",
       "title": "You ran git reset --hard and lost a commit. Where do you find its hash?",
-      "options": ["git reflog", "git stash list", "git fsck --lost-found only", "It is gone"],
+      "options": [
+        "git reflog",
+        "git stash list",
+        "git fsck --lost-found only",
+        "It is gone"
+      ],
       "answer": 0,
-      "body": "The reflog records every move of HEAD and the branches, about 90 days by default. git reflog shows the hash; git reset --hard <hash> brings it back."
+      "body": "The reflog records every move of HEAD and the branches, about 90 days by default. git reflog shows the hash; git reset --hard <hash> brings it back.",
+      "translations": {
+        "es": {
+          "title": "Ejecutaste git reset --hard y perdiste un commit. ¿Dónde encuentras su hash?",
+          "body": "El reflog registra cada movimiento de HEAD y de las ramas, unos 90 días por defecto. git reflog muestra el hash; git reset --hard <hash> lo recupera.",
+          "options": [
+            "git reflog",
+            "git stash list",
+            "Solo git fsck --lost-found",
+            "Se ha perdido"
+          ]
+        }
+      }
     },
     {
       "id": "git-pro-git",
@@ -62,7 +119,13 @@
       "body": "The free book by Scott Chacon and Ben Straub. Chapter 10 builds a commit by hand from blobs and trees, which makes every other command easier to reason about.",
       "url": "https://git-scm.com/book/en/v2/Git-Internals-Plumbing-and-Porcelain",
       "media": "book",
-      "minutes": 45
+      "minutes": 45,
+      "translations": {
+        "es": {
+          "title": "Pro Git, capítulo 10: Los entresijos de Git",
+          "body": "El libro gratuito de Scott Chacon y Ben Straub. El capítulo 10 construye un commit a mano a partir de blobs y árboles, y así es más fácil razonar sobre cualquier otro comando."
+        }
+      }
     }
   ]
 }

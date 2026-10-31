@@ -4,7 +4,7 @@ Lo que cambia para ti en cada versión de la app. La versión más nueva va prim
 
 ## Unreleased
 
-No change.
+- Las tarjetas ya están también en español. **Ajustes › Preferencias › Idioma de las tarjetas** elige su idioma aparte del de la app: inglés (como hasta ahora), español o **Como la app**.
 
 ## 0.4.0 - 2026-10-31
 

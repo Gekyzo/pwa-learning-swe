@@ -14,10 +14,10 @@ const renderTiles = (topics) => {
   if (list.dataset.ids !== ids) {
     list.dataset.ids = ids;
     list.replaceChildren(
-      ...topics.map(({ id, title }) => {
+      ...topics.map(({ id }) => {
         const tile = el('button', { type: 'button', className: 'topic-tile' }, [
           el('span', { className: 'topic-tile-check' }, [icon('check', 'small')]),
-          el('span', { className: 'topic-tile-title', textContent: title, lang: 'en' }),
+          el('span', { className: 'topic-tile-title' }),
           el('span', { className: 'topic-tile-count' }),
         ]);
         tile.addEventListener('click', () => chooseTopic(id, tile.getAttribute('aria-pressed') !== 'true'));
@@ -26,7 +26,8 @@ const renderTiles = (topics) => {
     );
   }
   [...list.children].forEach((tile, index) => {
-    const { on, last, count } = topics[index];
+    const { on, last, count, title, lang: topicLang } = topics[index];
+    Object.assign(tile.querySelector('.topic-tile-title'), { textContent: title, lang: topicLang });
     tile.setAttribute('aria-pressed', String(on));
     tile.disabled = last;
     tile.querySelector('.topic-tile-count').textContent = t('onboarding.count', { count });
@@ -40,7 +41,7 @@ const renderSample = (topics) => {
   const topic = topics.find(({ on }) => on);
   const card = topic && pool.cards.find((item) => item.topic === topic.id && !item.retired);
   sample.hidden = !card;
-  const key = card && `${lang}:${card.id}`;
+  const key = card && `${lang}:${card.lang}:${card.id}`;
   if (!card || sample.dataset.card === key) return;
   sample.dataset.card = key;
   sample.replaceChildren(el('ul', { className: 'onboarding-sample-list' }, [cardNode(card, null, { preview: true })]));

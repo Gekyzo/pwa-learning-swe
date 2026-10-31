@@ -4,7 +4,7 @@ What changes for you in each version of the app. The newest version is first.
 
 ## Unreleased
 
-No change.
+- The cards are now in Spanish too. **Settings › Preferences › Card language** chooses their language apart from the language of the app: English (as before), Spanish or **Same as the app**.
 
 ## 0.4.0 - 2026-10-31
 

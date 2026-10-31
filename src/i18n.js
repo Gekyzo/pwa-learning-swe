@@ -24,6 +24,12 @@ export const resolveLanguage = (preferred, stored) => {
   return [preferred ?? []].flat().map(base).find((lang) => LANGUAGES.includes(lang)) ?? FALLBACK;
 };
 
+// The language of the text of the cards: the choice, or the language of the screen for `app` (I18N-7).
+export const resolveCardLanguage = (choice, lang) => {
+  if (choice === 'app') return lang;
+  return LANGUAGES.includes(choice) ? choice : FALLBACK;
+};
+
 // One pass, with a function: a parameter that holds `{name}` or `$&` goes in as typed.
 const fill = (text, params) =>
   text.replace(/\{(\w+)\}/g, (match, name) => (Object.hasOwn(params, name) ? String(params[name]) : match));

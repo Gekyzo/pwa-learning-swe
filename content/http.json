@@ -2,20 +2,37 @@
   "id": "http",
   "version": 1,
   "title": "HTTP and the web",
+  "translations": {
+    "es": {
+      "title": "HTTP y la web"
+    }
+  },
   "cards": [
     {
       "id": "http-idempotent",
       "kind": "concept",
       "level": "intro",
       "title": "Idempotent is not the same as safe",
-      "body": "A safe method changes nothing on the server: GET, HEAD, OPTIONS. An idempotent method gives the same result when sent once or ten times: the safe ones plus PUT and DELETE. POST is neither, so a client must not retry it blindly."
+      "body": "A safe method changes nothing on the server: GET, HEAD, OPTIONS. An idempotent method gives the same result when sent once or ten times: the safe ones plus PUT and DELETE. POST is neither, so a client must not retry it blindly.",
+      "translations": {
+        "es": {
+          "title": "Idempotente no es lo mismo que seguro",
+          "body": "Un método seguro no cambia nada en el servidor: GET, HEAD, OPTIONS. Un método idempotente da el mismo resultado si se envía una vez o diez: los seguros más PUT y DELETE. POST no es ninguna de las dos cosas, así que un cliente no debe reintentarlo a ciegas."
+        }
+      }
     },
     {
       "id": "http-cache-control",
       "kind": "concept",
       "level": "intermediate",
       "title": "no-cache does not mean do not cache",
-      "body": "Cache-Control: no-cache lets a cache store the response but makes it revalidate with the server before each use. no-store is the directive that forbids storing it at all."
+      "body": "Cache-Control: no-cache lets a cache store the response but makes it revalidate with the server before each use. no-store is the directive that forbids storing it at all.",
+      "translations": {
+        "es": {
+          "title": "no-cache no significa no guardar en caché",
+          "body": "Cache-Control: no-cache deja que una caché guarde la respuesta, pero la obliga a validarla con el servidor antes de cada uso. La directiva que prohíbe guardarla es no-store."
+        }
+      }
     },
     {
       "id": "http-curl-verbose",
@@ -23,32 +40,78 @@
       "level": "intro",
       "title": "See the headers of a request and its response",
       "body": "-v prints the request and response headers, and -o /dev/null drops the body. Add -L to follow redirects.",
-      "code": "curl -sv -o /dev/null https://example.com"
+      "code": "curl -sv -o /dev/null https://example.com",
+      "translations": {
+        "es": {
+          "title": "Ver las cabeceras de una petición y de su respuesta",
+          "body": "-v muestra las cabeceras de la petición y de la respuesta, y -o /dev/null descarta el cuerpo. Añade -L para seguir las redirecciones."
+        }
+      }
     },
     {
       "id": "http-cors",
       "kind": "pitfall",
       "level": "intermediate",
       "title": "CORS protects the user, not your API",
-      "body": "CORS is enforced by the browser. A script on another origin cannot read your response without the right Access-Control-Allow-Origin header, but curl or a server can call the API freely. Authenticate and authorise on the server."
+      "body": "CORS is enforced by the browser. A script on another origin cannot read your response without the right Access-Control-Allow-Origin header, but curl or a server can call the API freely. Authenticate and authorise on the server.",
+      "translations": {
+        "es": {
+          "title": "CORS protege al usuario, no a tu API",
+          "body": "Es el navegador quien aplica CORS. Un script de otro origen no puede leer tu respuesta sin la cabecera Access-Control-Allow-Origin correcta, pero curl o un servidor pueden llamar a la API sin límite. Autentica y autoriza en el servidor."
+        }
+      }
     },
     {
       "id": "http-status-quiz",
       "kind": "quiz",
       "level": "intro",
       "title": "A request has a valid token, but the user may not see the resource. Which status fits?",
-      "options": ["401 Unauthorized", "403 Forbidden", "404 Not Found", "400 Bad Request"],
+      "options": [
+        "401 Unauthorized",
+        "403 Forbidden",
+        "404 Not Found",
+        "400 Bad Request"
+      ],
       "answer": 1,
-      "body": "401 means the request is not authenticated. 403 means the server knows who you are and refuses. Some APIs answer 404 instead, so as not to reveal that the resource exists."
+      "body": "401 means the request is not authenticated. 403 means the server knows who you are and refuses. Some APIs answer 404 instead, so as not to reveal that the resource exists.",
+      "translations": {
+        "es": {
+          "title": "Una petición trae un token válido, pero el usuario no puede ver el recurso. ¿Qué código corresponde?",
+          "body": "401 significa que la petición no está autenticada. 403 significa que el servidor sabe quién eres y se niega. Algunas API responden 404 para no revelar que el recurso existe.",
+          "options": [
+            "401 Unauthorized",
+            "403 Forbidden",
+            "404 Not Found",
+            "400 Bad Request"
+          ]
+        }
+      }
     },
     {
       "id": "http-etag-quiz",
       "kind": "quiz",
       "level": "advanced",
       "title": "A client sends If-None-Match with the current ETag. What does the server answer?",
-      "options": ["200 with the full body", "204 No Content", "304 Not Modified with no body", "412 Precondition Failed"],
+      "options": [
+        "200 with the full body",
+        "204 No Content",
+        "304 Not Modified with no body",
+        "412 Precondition Failed"
+      ],
       "answer": 2,
-      "body": "A matching ETag means the cached copy is still current, so the server sends 304 with no body. 412 is the answer to a failed If-Match, used for safe concurrent updates."
+      "body": "A matching ETag means the cached copy is still current, so the server sends 304 with no body. 412 is the answer to a failed If-Match, used for safe concurrent updates.",
+      "translations": {
+        "es": {
+          "title": "Un cliente envía If-None-Match con el ETag actual. ¿Qué responde el servidor?",
+          "body": "Si el ETag coincide, la copia en caché sigue al día, así que el servidor envía 304 sin cuerpo. 412 es la respuesta a un If-Match que falla, para actualizaciones concurrentes seguras.",
+          "options": [
+            "200 con el cuerpo completo",
+            "204 No Content",
+            "304 Not Modified sin cuerpo",
+            "412 Precondition Failed"
+          ]
+        }
+      }
     },
     {
       "id": "http-mdn",
@@ -58,7 +121,13 @@
       "body": "The reference that most web developers return to: messages, sessions, caching, CORS and the evolution from HTTP/1.1 to HTTP/3.",
       "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Overview",
       "media": "docs",
-      "minutes": 20
+      "minutes": 20,
+      "translations": {
+        "es": {
+          "title": "MDN: Generalidades del protocolo HTTP",
+          "body": "La referencia a la que vuelve la mayoría de desarrolladores web: mensajes, sesiones, caché, CORS y la evolución de HTTP/1.1 a HTTP/3."
+        }
+      }
     }
   ]
 }

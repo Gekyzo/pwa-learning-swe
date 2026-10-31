@@ -12,6 +12,9 @@ import {
   LANGUAGE_KEY,
   loadLanguage,
   saveLanguage,
+  CARD_LANGUAGE_KEY,
+  loadCardLanguage,
+  saveCardLanguage,
   HAND_KEY,
   loadHand,
   saveHand,
@@ -146,9 +149,30 @@ test('the language functions do not throw when the storage does', () => {
   assert.equal(saveLanguage(brokenStorage(), null), false);
 });
 
+test('loadCardLanguage returns the stored choice, else en (I18N-7)', () => {
+  assert.equal(loadCardLanguage(fakeStorage({ [CARD_LANGUAGE_KEY]: 'es' }), ['es', 'en']), 'es');
+  assert.equal(loadCardLanguage(fakeStorage({ [CARD_LANGUAGE_KEY]: 'app' }), ['es', 'en']), 'app');
+  assert.equal(loadCardLanguage(fakeStorage(), ['es', 'en']), 'en');
+  assert.equal(loadCardLanguage(fakeStorage({ [CARD_LANGUAGE_KEY]: 'xx' }), ['es', 'en']), 'en');
+});
+
+test('saveCardLanguage stores a choice and en removes the key', () => {
+  const storage = fakeStorage();
+  assert.equal(saveCardLanguage(storage, 'app'), true);
+  assert.equal(storage.getItem(CARD_LANGUAGE_KEY), 'app');
+  assert.equal(saveCardLanguage(storage, 'en'), true);
+  assert.equal(storage.getItem(CARD_LANGUAGE_KEY), null);
+});
+
+test('the card language functions do not throw when the storage does', () => {
+  assert.equal(loadCardLanguage(brokenStorage(), ['es']), 'en');
+  assert.equal(saveCardLanguage(brokenStorage(), 'es'), false);
+});
+
 test('a preference is not part of the stored doc', () => {
   const storage = fakeStorage();
   saveLanguage(storage, 'en');
+  saveCardLanguage(storage, 'es');
   saveHand(storage, 'left');
   saveTheme(storage, 'dark');
   saveModules(storage, ['saved']);

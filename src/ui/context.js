@@ -4,6 +4,8 @@ import {
   saveDoc,
   loadLanguage,
   saveLanguage,
+  loadCardLanguage,
+  saveCardLanguage,
   loadHand,
   saveHand,
   loadTheme,
@@ -15,7 +17,7 @@ import {
   loadOnboarded,
   hasStoredDoc,
 } from '#storage';
-import { LANGUAGES, resolveLanguage, translator } from '#i18n';
+import { LANGUAGES, resolveLanguage, resolveCardLanguage, translator } from '#i18n';
 import { shouldShow } from '#onboarding';
 
 // The values that the views share. A view reads them through the import, a live binding, and
@@ -51,6 +53,9 @@ export const scroller = document.querySelector('main');
 export let chosen = storage ? loadLanguage(storage, LANGUAGES) : null;
 export let lang = resolveLanguage(navigator.languages, chosen);
 export let t = translator(lang);
+// The choice for the text of the cards, a language or `app`, and the language that it gives (I18N-7).
+export let cardChoice = storage ? loadCardLanguage(storage, LANGUAGES) : 'en';
+export let cardLang = resolveCardLanguage(cardChoice, lang);
 // The hand that holds the phone: `left` mirrors the controls, in styles.css.
 export let hand = storage ? loadHand(storage) : 'right';
 document.documentElement.dataset.hand = hand;
@@ -177,6 +182,13 @@ export const setLanguage = (code) => {
   if (storage) saveLanguage(storage, chosen);
   lang = resolveLanguage(navigator.languages, chosen);
   t = translator(lang);
+  cardLang = resolveCardLanguage(cardChoice, lang);
+};
+
+export const setCardLanguage = (choice) => {
+  cardChoice = choice === 'app' || LANGUAGES.includes(choice) ? choice : 'en';
+  if (storage) saveCardLanguage(storage, cardChoice);
+  cardLang = resolveCardLanguage(cardChoice, lang);
 };
 
 export const setHand = (value) => {

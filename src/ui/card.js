@@ -48,9 +48,9 @@ const options = (card, chosen) =>
 
 const pill = (text, className = 'pill') => el('span', { className, textContent: text });
 
-// The text of a card is English in every language of the screen (CARD-6).
+// The text of a card is in the card language (I18N-7), or in English where it has no translation.
 const cardShell = (card, parts) => {
-  const node = el('li', { className: 'feed-card', lang: 'en' }, parts);
+  const node = el('li', { className: 'feed-card', lang: card.lang }, parts);
   node.dataset.id = card.id;
   node.dataset.kind = card.kind;
   return node;
