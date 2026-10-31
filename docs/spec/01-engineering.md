@@ -24,7 +24,7 @@
 | `src/ui/update.js` | The version line, the check, the refresh and the update toast | `version`, `i18n`, `ui/context` |
 | `src/ui/install.js` | The Install button | `install`, `ui/context` |
 | `src/ui/nav.js` | The navigation, the change and the slide of a section | `sections`, `modules`, `ui/context`, `ui/update`, `ui/dust` |
-| `src/ui/card.js` | One card of the feed or of Saved, its actions, and the sheet of its other signals (FEED-9 to FEED-12) | `learning`, `ds/sheet`, `ui/context`, `ui/controls` |
+| `src/ui/card.js` | One card of the feed or of Saved, its actions, and the sheet of its other signals (FEED-9 to FEED-12) | `learning`, `feed`, `ds/sheet`, `ui/context`, `ui/controls` |
 | `src/ui/feed.js` | The Feed section: the load of the packs, the next cards as the list scrolls, the seen cards, the due line and the switch of a topic (FEED-6 to FEED-8, FEED-14) | `cards`, `feed`, `learning`, `ui/context`, `ui/card` |
 | `src/ui/saved.js` | The Saved section (FEED-13) | `feed`, `ui/context`, `ui/card`, `ui/nav` |
 | `src/ui/settings.js` | Settings, Delete all data (SET-2), the Topics group (FEED-15), and the text of the page in its language | `learning`, `storage`, `i18n`, `modules`, `ui/context`, `ui/update`, `ui/onboarding`, `ui/feed`, `ui/account` |

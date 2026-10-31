@@ -21,6 +21,7 @@
     --data-soft: light-dark(#dcedf8, #10293a);
     --on-data-soft: light-dark(#0a5a8f, #4cb3f0);
     /* The checked state and the version check stay neutral: the hue is for data only. */
+    --done-soft: light-dark(#e6e6e6, #222222);
     --done: light-dark(#0a0a0a, #ffffff);
     --on-done: light-dark(#ffffff, #000000);
     --radius-l: 20px;

@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { DUE_SHARE, NEW_SHARE, nextCard, nextCards, seenAgain, dueCount, savedCards, hiddenTopics, switchTopic, dueBars, newCount, stateCounts, topicLedger, greetingOf } from '#feed';
+import { DUE_SHARE, NEW_SHARE, nextCard, nextCards, seenAgain, dueCount, savedCards, hiddenTopics, switchTopic, dueBars, newCount, stateCounts, topicLedger, greetingOf, tagOf } from '#feed';
 import { DAY } from '#learning';
 
 const NOW = Date.UTC(2026, 9, 30, 12);
@@ -224,4 +224,13 @@ test('the ledger sums to the totals', () => {
 test('greetingOf splits the day at 6, 14 and 21', () => {
   const bands = [[5, 'evening'], [6, 'morning'], [13, 'morning'], [14, 'afternoon'], [20, 'afternoon'], [21, 'evening'], [0, 'evening']];
   bands.forEach(([hour, band]) => assert.equal(greetingOf(hour), band));
+});
+
+test('tagOf names the tag of a card by the reason it came (FEED-9)', () => {
+  assert.equal(tagOf('due'), 'review');
+  assert.equal(tagOf('new'), 'new');
+  assert.equal(tagOf('explore'), 'new');
+  assert.equal(tagOf('again'), null);
+  assert.equal(tagOf(undefined), null);
+  assert.equal(tagOf(null), null);
 });

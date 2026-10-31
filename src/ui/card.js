@@ -1,4 +1,5 @@
 import { INTERVALS, answerQuiz, grade, signal, toggleLike, toggleSaved } from '#learning';
+import { tagOf } from '#feed';
 import { bindSheetDrag } from '#ds/sheet';
 import { $, el, ui, state, pool, t, apply, render } from '#ui/context';
 import { icon } from '#ui/controls';
@@ -53,8 +54,9 @@ export const cardNode = (card, entry = null) => {
   const chosen = ui.answers[card.id] ?? null;
   const topic = pool.topics.find((one) => one.id === card.topic)?.title ?? card.topic;
   const meta = el('p', { className: 'feed-card-meta' }, [`${topic} · ${t(`kind.${card.kind}`)} · ${t(`level.${card.level}`)}`]);
-  if (entry?.reason === 'due') meta.append(pill(t('card.review'), 'pill data'));
-  else if (entry?.reason === 'new' || entry?.reason === 'explore') meta.append(pill(t('card.new')));
+  const tag = tagOf(entry?.reason);
+  if (tag === 'review') meta.append(pill(t('card.review'), 'pill data'));
+  else if (tag === 'new') meta.append(pill(t('card.new')));
   if (entry?.updated) meta.append(pill(t('card.updated')));
   if (card.retired) meta.append(el('span', { className: 'pill ghost', textContent: t('card.retired') }));
 

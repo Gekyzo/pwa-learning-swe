@@ -134,3 +134,6 @@ export const switchTopic = (topics, off, id, on) => {
 
 // The part of the day for the greeting: morning [6, 14), afternoon [14, 21), else evening.
 export const greetingOf = (hour) => (hour >= 6 && hour < 14 ? 'morning' : hour >= 14 && hour < 21 ? 'afternoon' : 'evening');
+
+// The tag of a card by the reason it came: 'review', 'new' or null (FEED-9).
+export const tagOf = (reason) => (reason === 'due' ? 'review' : reason === 'new' || reason === 'explore' ? 'new' : null);

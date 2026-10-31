@@ -34,6 +34,6 @@ test('the parts of the app are documented in styles.css (DSV-3)', () => {
   for (const name of ['version-status', 'settings', 'about', 'dust', 'onboarding', 'onboarding-art']) assert.ok(names.includes(name), name);
 });
 
-test('styles.css has three versions of a shared component: app-header, nav-bar and list-group (DSV-3)', () => {
+test('styles.css has four versions of a shared component: app-header, pill, nav-bar and list-group (DSV-3)', () => {
   assert.deepEqual([...read('styles.css').matchAll(/\/\*\s*@extends\s+([\w-]+)/g)].map(([, name]) => name), ['app-header', 'pill', 'nav-bar', 'list-group']);
 });
