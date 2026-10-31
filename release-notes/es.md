@@ -4,6 +4,10 @@ Lo que cambia para ti en cada versión de la app. La versión más nueva va prim
 
 ## Unreleased
 
+No change.
+
+## 0.6.0 - 2026-10-31
+
 - El código de los ejemplos ya sale en color. **Ajustes › Preferencias › Tema del código** elige los colores: **Automático** (sigue el tema de la app), Nord, Darcula, Monokai Dimmed, Dracula, One Dark o Solarized Light.
 
 ## 0.5.0 - 2026-10-31
