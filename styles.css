@@ -71,25 +71,12 @@
   /* @extends app-header */
   .app-header {
     background: var(--bg);
-    border-bottom: 1px solid var(--line);
   }
 
   /* @extends nav-bar */
-  .nav-bar {
-    background: var(--bg);
-  }
-
-  .nav-item {
-    color: var(--muted);
-  }
-
-  .nav-item[aria-current="page"] {
-    color: var(--text);
-  }
-
-  .nav-item[aria-current="page"] .icon {
+  /* The current item has no tonal fill: its label and icon take --text, as in the shared rules. */
+  .nav-bar .nav-item[aria-current="page"] .icon {
     background: none;
-    color: var(--text);
   }
 }
 
