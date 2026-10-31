@@ -31,7 +31,7 @@ for (const rule of RULES) test(rule.title, () => assert.deepEqual(rule.check(fil
 
 test('the parts of the app are documented in styles.css (DSV-3)', () => {
   const names = parseCatalog({ css: read('styles.css'), sprite: files.sprite }).components.map((part) => part.name);
-  for (const name of ['version-status', 'settings', 'about', 'dust', 'onboarding', 'onboarding-art']) assert.ok(names.includes(name), name);
+  for (const name of ['version-status', 'settings', 'about', 'dust', 'onboarding', 'topic-tiles', 'review']) assert.ok(names.includes(name), name);
 });
 
 test('styles.css has seven versions of a shared component: main, button, app-header, pill, nav-bar, progress and list-group (DSV-3)', () => {

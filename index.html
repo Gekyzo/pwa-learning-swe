@@ -131,6 +131,7 @@
         <h2 class="list-group-head" data-i18n="settings.help"></h2>
         <div class="list-group">
           <button id="show-onboarding" class="settings-row" type="button"><span class="settings-row-label" data-i18n="settings.onboarding"></span><span class="chevron" aria-hidden="true">›</span></button>
+          <button id="show-review" class="settings-row" type="button"><span class="settings-row-label" data-i18n="settings.review"></span><span class="chevron" aria-hidden="true">›</span></button>
           <button id="show-whatsnew" class="settings-row" type="button" hidden><span class="settings-row-label" data-i18n="settings.whatsNew"></span><span class="chevron" aria-hidden="true">›</span></button>
         </div>
         <footer class="about">
@@ -164,6 +165,15 @@
       </section>
     </div>
 
+    <div id="review-sheet" class="sheet-layer review-layer" hidden>
+      <div id="review-veil" class="sheet-veil"></div>
+      <section id="review" class="sheet" role="dialog" aria-modal="true" aria-labelledby="review-title">
+        <div class="sheet-grab"></div>
+        <header class="sheet-head"><h2 id="review-title" class="sheet-title main" data-i18n="review.title"></h2><button id="review-close" class="button tonal" type="button" data-i18n="review.close"></button></header>
+        <div id="review-body" class="sheet-body review-body"></div>
+      </section>
+    </div>
+
     <div id="card-sheet" class="sheet-layer" hidden>
       <div id="card-veil" class="sheet-veil"></div>
       <section id="card-menu" class="sheet" role="dialog" aria-modal="true" aria-labelledby="card-sheet-title">
@@ -177,47 +187,17 @@
       </section>
     </div>
 
-    <div id="onboarding" class="onboarding" role="dialog" aria-modal="true" data-i18n-attr="aria-label:onboarding.label" hidden>
-      <img class="onboarding-logo" src="./icons/logo.png" alt="">
-      <div id="onboarding-page" class="onboarding-page">
-        <div class="onboarding-art">
-          <svg data-page="welcome" viewBox="0 0 240 160" aria-hidden="true">
-            <rect class="art-card" x="70" y="16" width="100" height="128" rx="12"/>
-            <path class="art-accent" d="M90 50h60M90 74h44M90 98h52"/>
-            <circle class="art-solid" cx="170" cy="130" r="18"/>
-            <path class="art-on-solid" d="M170 122v16M162 130h16"/>
-          </svg>
-          <svg data-page="review" viewBox="0 0 240 160" aria-hidden="true">
-            <rect class="art-card" x="70" y="16" width="100" height="128" rx="12"/>
-            <path class="art-accent" d="M90 50h60M90 74h44"/>
-            <rect class="art-soft" x="90" y="98" width="24" height="24" rx="6"/>
-            <path class="art-accent" d="M96 110l4 4 8-8"/>
-            <circle class="art-solid" cx="170" cy="130" r="18"/>
-            <path class="art-on-solid" d="M177 124a10 10 0 1 0 2 9M177 118v6h-6"/>
-          </svg>
-          <svg data-page="keep" viewBox="0 0 240 160" aria-hidden="true">
-            <rect class="art-card" x="70" y="16" width="100" height="128" rx="12"/>
-            <path class="art-accent" d="M90 82h60M90 106h44"/>
-            <path class="art-soft" d="M136 30h18v28l-9-7-9 7z"/>
-            <path d="M90 42h28"/>
-          </svg>
-          <svg data-page="offline" viewBox="0 0 240 160" aria-hidden="true">
-            <rect class="art-card" x="70" y="16" width="100" height="128" rx="12"/>
-            <path class="art-accent" d="M96 70a34 34 0 0 1 48 0M106 82a20 20 0 0 1 28 0"/>
-            <circle class="art-accent" cx="120" cy="96" r="4"/>
-            <path d="M92 52l56 64"/>
-          </svg>
-          <div id="onboarding-chips" class="cluster onboarding-chips" data-page="topics" role="group" data-i18n-attr="aria-label:settings.topics"></div>
+    <div id="onboarding" class="onboarding" role="dialog" aria-modal="true" aria-labelledby="onboarding-title" hidden>
+      <div class="onboarding-page">
+        <img class="onboarding-logo" src="./icons/logo.png" alt="">
+        <h2 id="onboarding-title" class="onboarding-title" data-i18n="onboarding.title"></h2>
+        <p class="onboarding-text" data-i18n="onboarding.text"></p>
+        <div id="onboarding-topics" class="topic-tiles" role="group" aria-labelledby="onboarding-title"></div>
+        <div id="onboarding-sample" class="onboarding-sample"></div>
+        <div class="onboarding-bar">
+          <button id="onboarding-start" class="button primary" type="button"></button>
+          <button id="onboarding-how" class="button quiet" type="button" data-i18n="onboarding.how"></button>
         </div>
-        <div aria-live="polite">
-          <h2 id="onboarding-title" class="onboarding-title"></h2>
-          <p id="onboarding-text" class="onboarding-text"></p>
-        </div>
-      </div>
-      <div id="onboarding-dots" class="onboarding-dots" role="img"></div>
-      <div class="onboarding-actions">
-        <button id="onboarding-skip" class="button outline quiet" type="button" data-i18n="onboarding.skip"></button>
-        <button id="onboarding-next" class="button primary" type="button"></button>
       </div>
     </div>
 

@@ -100,8 +100,8 @@ export const ui = {
   loadError: false,
   // The card whose sheet of signals is open, or null.
   sheetCard: null,
-  // The page of the walkthrough in view, or null while the walkthrough is closed.
-  onboarding: firstStart ? 0 : null,
+  // True while the walkthrough is open.
+  onboarding: firstStart,
   // `running` is the version of the cached shell; `latest` is the deployed one.
   version: { running: null, latest: null, checking: false },
   // The install offer: `idle`, `available` or `installed` (INS-1).

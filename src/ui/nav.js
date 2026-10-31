@@ -48,7 +48,7 @@ export const bind = () => {
   let sectionSlide = null;
   document.addEventListener('pointerdown', (event) => {
     sectionSlide = null;
-    if (!event.isPrimary || event.button !== 0 || ui.sheetCard !== null || ui.onboarding !== null) return;
+    if (!event.isPrimary || event.button !== 0 || ui.sheetCard !== null || ui.onboarding) return;
     if (!event.target.closest('.app-header, main') || event.target.closest('.item-row-swipe, .feed-card-code, input, textarea, select')) return;
     sectionSlide = { pointerId: event.pointerId, x: event.clientX, y: event.clientY };
   });

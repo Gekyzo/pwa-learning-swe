@@ -18,7 +18,7 @@
 | `src/learning.js` | The learning doc: the record of a seen card, its review box, the signals and the save (LRN-1 to LRN-8) | `config` |
 | `src/feed.js` | The order of the feed, the seen cards again, the due count, the saved cards and the topics that are off (FEED-1 to FEED-5, FEED-14) | `cards`, `learning` |
 | `src/particles.js` | The particles of a picture and their place in time (optional) | nothing |
-| `src/onboarding.js` | The show rule and the page steps of the walkthrough (optional) | nothing |
+| `src/onboarding.js` | The show rule of the walkthrough and `textParts` (optional) | nothing |
 | `src/ui/context.js` | The values that the views share, the pool of cards, the toast, `render`, `commit` and `apply` | `learning`, `storage`, `i18n`, `onboarding` |
 | `src/ui/controls.js` | The icon builder | nothing |
 | `src/ui/update.js` | The version line, the check, the refresh and the update toast | `version`, `i18n`, `ui/context` |
@@ -27,9 +27,9 @@
 | `src/ui/card.js` | One card of the feed or of Saved, its actions, and the sheet of its other signals (FEED-9 to FEED-12) | `learning`, `feed`, `ds/sheet`, `ui/context`, `ui/controls` |
 | `src/ui/feed.js` | The Feed section: the load of the packs, the next cards as the list scrolls, the seen cards, the due line and the switch of a topic (FEED-6 to FEED-8, FEED-14) | `cards`, `feed`, `learning`, `ui/context`, `ui/card` |
 | `src/ui/saved.js` | The Saved section (FEED-13) | `feed`, `ui/context`, `ui/card`, `ui/nav` |
-| `src/ui/settings.js` | Settings, Delete all data (SET-2), the Topics group (FEED-15), and the text of the page in its language | `learning`, `storage`, `i18n`, `modules`, `ui/context`, `ui/update`, `ui/onboarding`, `ui/feed`, `ui/account` |
+| `src/ui/settings.js` | Settings, Delete all data (SET-2), the Topics group (FEED-15), and the text of the page in its language | `learning`, `storage`, `i18n`, `modules`, `ui/context`, `ui/update`, `ui/feed`, `ui/account` |
 | `src/ui/dust.js` | The dust of a navigation item (optional) | `particles`, `ui/context`, `ui/controls` |
-| `src/ui/onboarding.js` | The walkthrough and its topic chips (optional; ONB-4) | `onboarding`, `sections`, `storage`, `ui/context`, `ui/controls`, `ui/feed` |
+| `src/ui/onboarding.js` | The walkthrough, its topic tiles (ONB-4) and the review sheet (ONB-5) (optional) | `onboarding`, `storage`, `ds/sheet`, `ui/context`, `ui/controls`, `ui/card`, `ui/feed` |
 | `src/ui/whatsnew.js` | The release notes sheet, its Settings row and the seen version | `whatsnew`, `onboarding`, `i18n`, `storage`, `ds/sheet`, `ui/context` |
 | `src/ui/account.js` | The account screens and the group Account of Settings (ACC-1 to ACC-10) | `pocketbase`, `session`, `config`, `ui/context`, `ui/card` |
 | `src/app.js` | Wires the views, the global keys, the service worker and the update check | all of the above |
@@ -100,12 +100,12 @@ The doc keys are in [09-feed.md](09-feed.md). The device preferences are `pwa-le
 | `tests/sections.test.js` | The slide between sections |
 | `tests/modules.test.js` | The visible sections and the switch of a module |
 | `tests/particles.test.js` | The particles of a picture and their place in time |
-| `tests/onboarding.test.js` | The show rule and the page steps of the walkthrough |
+| `tests/onboarding.test.js` | The show rule of the walkthrough and `textParts` |
 | `tests/version.test.js` | Version rules and the update offer rule |
 | `tests/whatsnew.test.js` | The parse of the release notes and the unseen versions |
 | `tests/release-notes-files.test.js` | One release-notes file for each language, with the same versions (VER-19) |
 | `tests/i18n.test.js` | The language choice, the translator, the parity of the catalogs |
-| `tests/markup.test.js` | `index.html` holds no text of its own; the sheet, the walkthrough and the account markup |
+| `tests/markup.test.js` | `index.html` holds no text of its own; the sheets, the walkthrough and the account markup |
 | `tests/aliases.test.js` | The import map against `package.json`; each `#ds/` alias names a vendored module |
 | `tests/layers.test.js` | The layer rules and `SHELL` (ENG-16) |
 | `tests/design.test.js` | Each rule of `vendor/design-system/rules.js` over the two stylesheets, `index.html`, `icons.svg`, `src/ui/` and `designs/`, and the parts of `styles.css` (DSV-3) |

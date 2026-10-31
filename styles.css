@@ -34,6 +34,8 @@
     /* The height of the track of a due bar, and the width of a number column of the topic ledger. */
     --bars-height: 176px;
     --ledger-col: 46px;
+    /* The least height of a topic tile of the walkthrough. */
+    --tile-height: 104px;
   }
 }
 
@@ -617,108 +619,115 @@
 
   /* @component onboarding
      @scope onboarding
-     @summary The walkthrough of the first start, over the full app: a page, the dots, the buttons.
-     @part onboarding-logo     The app icon, in the middle of the band above the page. It stays while the pages change.
-     @part onboarding-page     The page in view: its drawing, its title and its text.
-     @part onboarding-title    The title of a page.
-     @part onboarding-text     The text of a page.
+     @summary The walkthrough of the first start, over the full app: one page that chooses the topics (ONB-2).
+       One column below 840px, with the bar sticky at the bottom; from 840px the tiles take 4 of 6
+       columns and the sample card the other 2.
+     @part onboarding-page     The page: the logo, the title, the text, the tiles, the sample and the bar.
+     @part onboarding-logo     The app icon, above the title.
+     @part onboarding-title    The question of the page.
+     @part onboarding-text     The line below the title.
+     @part onboarding-sample   A card of a topic that is on, inert: beside the tiles from 840px, under them below.
+     @part onboarding-sample-list  The list that holds the sample card.
+     @part onboarding-bar      Start with its count and How review works, in one bar.
      @part onboarding-key      A control named in a text, such as ↻ or +: a key with a border, as inline code.
-     @part onboarding-dots     One dot for each page.
-     @part onboarding-dot      One dot.
-     @part onboarding-actions  Saltar and the next button, side by side. On the last page the next button fills the bar.
-     @part onboarding-switch   The switch of the sample data on the last page. It keeps its room on each page.
-     @part onboarding-chips    The chips of the topics on the last page (ONB-4), in the place of a drawing, centred.
-     @state away               On onboarding-switch: a page with no switch. The room stays, so nothing moves.
-     @state on                 On onboarding-dot: the page in view.
-     @state enter-next         On onboarding-page: it comes in from the right.
-     @state enter-previous     On onboarding-page: it comes in from the left.
-     @example <div class="onboarding-actions" style="width: 100%"><button class="button outline quiet" type="button">Skip</button><button class="button primary" type="button">Next</button></div>
-     @example <div class="onboarding-dots"><span class="onboarding-dot on"></span><span class="onboarding-dot"></span><span class="onboarding-dot"></span></div> */
+     @example <div class="onboarding-bar" style="position: static"><button class="button primary" type="button">Empezar con 42 tarjetas</button><button class="button quiet" type="button">Ver cómo funciona el repaso</button></div>
+     @example <p class="onboarding-text">Toca <span class="onboarding-key">↻</span> para empezar.</p> */
   .onboarding {
     position: fixed;
     inset: 0;
     z-index: 30;
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-4);
-    padding: calc(var(--space-5) + env(safe-area-inset-top)) calc(var(--space-5) + env(safe-area-inset-right))
-      calc(var(--space-5) + env(safe-area-inset-bottom)) calc(var(--space-5) + env(safe-area-inset-left));
+    /* No padding at the bottom: the sticky bar touches the bottom edge and clears the inset itself. */
+    padding: calc(var(--space-5) + env(safe-area-inset-top)) calc(var(--space-5) + env(safe-area-inset-right)) 0
+      calc(var(--space-5) + env(safe-area-inset-left));
     background: var(--bg);
-    /* A horizontal slide changes the page, so the browser must not take it. */
-    touch-action: pan-y;
     overflow: hidden auto;
   }
 
-  /* The free space of the layer is three equal margins: above the logo, below it and below the
-     page. The logo thus sits in the middle of the band above the drawing. */
-  .onboarding-logo {
-    flex: none;
-    align-self: center;
-    margin-block: auto;
-    width: var(--logo);
-    height: var(--logo);
+  @media (min-width: 840px) {
+    .onboarding {
+      padding-left: max(var(--space-5) + env(safe-area-inset-left), (100% - var(--feed-max)) / 2);
+      padding-right: max(var(--space-5) + env(safe-area-inset-right), (100% - var(--feed-max)) / 2);
+    }
   }
 
   .onboarding-page {
     display: flex;
-    flex: none;
-    margin-bottom: auto;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: var(--space-6);
-    text-align: center;
+    gap: var(--space-4);
+    min-height: 100%;
   }
 
-  .onboarding-page.enter-next,
-  .onboarding-page.enter-previous {
-    animation: enter var(--motion) ease-out;
+  .onboarding-logo {
+    width: var(--logo);
+    height: var(--logo);
   }
 
-  .onboarding-page.enter-next {
-    --enter-from: 48px;
-  }
-
-  .onboarding-page.enter-previous {
-    --enter-from: -48px;
-  }
-
-  /* A title can take two lines in some catalogs. It keeps the room of two, with its last line
-     next to the text, so the drawing does not move. */
   .onboarding-title {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    min-height: 2lh;
-    margin: 0 0 var(--space-2);
+    margin: 0;
     font-size: var(--text-l);
   }
 
-  /* The longest text of a page, in any catalog, is five lines at 32ch. The text keeps room for
-     five, so each page has the same height and the drawing and the logo do not move. */
   .onboarding-text {
-    max-width: 32ch;
-    /* A line break of a catalog text starts a new line. */
-    white-space: pre-line;
-    min-height: 5lh;
+    max-width: 52ch;
     margin: 0;
     color: var(--muted);
   }
 
-  .onboarding-chips {
-    justify-content: center;
-    max-width: var(--art-width);
+  .onboarding-sample-list {
     margin: 0;
+    padding: 0;
+    list-style: none;
   }
 
-  .onboarding-switch {
-    align-self: stretch;
-    border-radius: var(--radius-l);
-    background: var(--surface);
+  /* Below 840px the bar stays at the bottom of the screen while the tiles scroll under it. */
+  .onboarding-bar {
+    position: sticky;
+    bottom: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-top: auto;
+    padding: var(--space-3) 0 calc(var(--space-4) + env(safe-area-inset-bottom));
+    border-top: 1px solid var(--line);
+    background: var(--bg);
   }
 
-  .onboarding-switch.away {
-    visibility: hidden;
+  .onboarding-bar > .button {
+    flex: 1 1 auto;
+  }
+
+  @media (min-width: 840px) {
+    .onboarding-page {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      align-content: center;
+      align-items: start;
+      gap: var(--space-4) var(--side-gap);
+      padding-bottom: calc(var(--space-5) + env(safe-area-inset-bottom));
+    }
+
+    .onboarding-page > * {
+      grid-column: 1 / -1;
+    }
+
+    .onboarding-page > .topic-tiles {
+      grid-column: 1 / span 4;
+    }
+
+    .onboarding-page > .onboarding-sample {
+      grid-column: 5 / span 2;
+    }
+
+    .onboarding-bar {
+      position: static;
+      margin-top: var(--space-2);
+      padding: 0;
+      border-top: 0;
+    }
+
+    .onboarding-bar > .button {
+      flex: none;
+    }
   }
 
   .onboarding-key {
@@ -731,92 +740,98 @@
     white-space: nowrap;
   }
 
-  /* The icon of a key sits on the line of the text, with a small gap before its text. */
-  .onboarding-key > .icon {
-    display: inline-block;
-    width: 1em;
-    height: 1em;
-    margin-right: var(--space-1);
-    vertical-align: -0.2em;
-  }
-
-  .onboarding-key > .icon:only-child {
-    margin-right: 0;
-  }
-
-  .onboarding-dots {
-    display: flex;
-    flex: none;
-    justify-content: center;
-    gap: var(--space-2);
-  }
-
-  .onboarding-dot {
-    width: var(--space-2);
-    height: var(--space-2);
-    border-radius: var(--radius-round);
-    background: var(--line);
-  }
-
-  .onboarding-dot.on {
-    background: var(--ink);
-  }
-
-  /* Saltar sits beside the next button, on the side away from the thumb. */
-  .onboarding-actions {
-    display: flex;
-    flex: none;
-    gap: var(--space-2);
-  }
-
-  .onboarding-actions > .button {
-    flex: 1 1 50%;
-  }
-
-  [data-hand="left"] .onboarding-actions {
-    flex-direction: row-reverse;
-  }
-
-  /* @component onboarding-art
+  /* @component topic-tiles
      @scope onboarding
-     @summary The line drawing of a walkthrough page, inline in the page. Its shapes take these parts.
-     @part art-card     A card shape, filled with --surface.
-     @part art-accent   A --primary stroke.
-     @part art-soft     A --done-soft fill with a --primary stroke.
-     @part art-solid    A solid --primary fill.
-     @part art-on-solid A stroke on a solid fill.
-     @example <div class="onboarding-art"><svg viewBox="0 0 240 160" aria-hidden="true"><rect class="art-card art-accent" x="20" y="20" width="90" height="120" rx="10"/><circle class="art-solid" cx="160" cy="80" r="13"/><path class="art-on-solid" d="M160 74v12M154 80h12"/></svg></div> */
-  .onboarding-art > svg {
-    display: block;
-    width: min(var(--art-width), 70vw);
-    height: auto;
-    fill: none;
-    stroke: var(--muted);
-    stroke-width: 2;
-    stroke-linecap: round;
-    stroke-linejoin: round;
+     @summary The topics of the walkthrough as tiles (ONB-4): 2 columns below 840px, 3 from 840px.
+       A pressed tile is a topic that is on. The tile of the last topic that is on is disabled.
+     @part topic-tile        One topic: a button with aria-pressed.
+     @part topic-tile-check  The round check mark, filled with the ink when the tile is pressed.
+     @part topic-tile-title  The title of the pack, in English.
+     @part topic-tile-count  The count of cards of the topic.
+     @example <div class="topic-tiles" style="width: 100%"><button class="topic-tile" type="button" aria-pressed="true"><span class="topic-tile-check"><svg class="icon small" aria-hidden="true"><use href="icons.svg#check"/></svg></span><span class="topic-tile-title" lang="en">HTTP and the web</span><span class="topic-tile-count">7 tarjetas</span></button><button class="topic-tile" type="button" aria-pressed="false"><span class="topic-tile-check"><svg class="icon small" aria-hidden="true"><use href="icons.svg#check"/></svg></span><span class="topic-tile-title" lang="en">Git</span><span class="topic-tile-count">7 tarjetas</span></button></div> */
+  .topic-tiles {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--side-gap);
   }
 
-  .art-card {
-    fill: var(--surface);
+  @media (min-width: 840px) {
+    .topic-tiles {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
   }
 
-  .art-accent {
-    stroke: var(--primary);
+  .topic-tile {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    gap: var(--space-2);
+    min-height: var(--tile-height);
+    padding: var(--space-4);
+    border: 0;
+    border-radius: var(--radius-card);
+    background: var(--surface);
+    color: var(--text);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: background var(--motion) var(--ease);
   }
 
-  .art-soft {
-    fill: var(--done-soft);
-    stroke: var(--primary);
+  .topic-tile[aria-pressed="true"] {
+    background: var(--surface-2);
   }
 
-  .art-solid {
-    fill: var(--primary);
-    stroke: none;
+  .topic-tile:disabled {
+    cursor: default;
   }
 
-  .art-on-solid {
-    stroke: var(--on-primary);
+  .topic-tile-check {
+    display: grid;
+    place-items: center;
+    width: var(--space-6);
+    height: var(--space-6);
+    border: 2px solid var(--control);
+    border-radius: var(--radius-round);
+    color: transparent;
+  }
+
+  .topic-tile[aria-pressed="true"] .topic-tile-check {
+    border-color: var(--ink);
+    background: var(--ink);
+    color: var(--on-ink);
+  }
+
+  .topic-tile-title {
+    align-self: end;
+    font-weight: var(--weight-medium);
+  }
+
+  .topic-tile-count {
+    color: var(--faint);
+    font-size: var(--text-s);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* @component review
+     @scope onboarding
+     @summary The sheet How review works (ONB-5): how a seen card comes back and what the grades do.
+       It opens over the walkthrough too, so its layer sits above it.
+     @part review-layer  The sheet layer of the review sheet, above the walkthrough.
+     @part review-body   The body of the sheet.
+     @part review-text   One paragraph, with its **bold** grade names.
+     @example <p class="review-text"><strong>Lo recordaba</strong> la pasa al siguiente plazo.</p> */
+  .review-layer {
+    z-index: 35;
+  }
+
+  .review-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .review-text {
+    margin: 0;
   }
 
   /* @component account
@@ -838,7 +853,7 @@
   .account {
     position: fixed;
     inset: 0;
-    /* Over the walkthrough and the dust: the sign-in of a first start comes first. */
+    /* Over the walkthrough, its review sheet and the dust: the sign-in of a first start comes first. */
     z-index: 50;
     display: flex;
     flex-direction: column;

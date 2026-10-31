@@ -6,7 +6,7 @@ import { bind as bindCard, renderCardSheet, closeCardSheet } from '#ui/card';
 import { bind as bindSettings, applyLanguage, renderTopics } from '#ui/settings';
 import { bind as bindInstall, renderInstall } from '#ui/install';
 import { readVersion, renderVersion, offerUpdate } from '#ui/update';
-import { bind as bindOnboarding, closeOnboarding, turnOnboarding, renderOnboardingTopics } from '#ui/onboarding';
+import { bind as bindOnboarding, renderOnboarding, closeOnboarding, isReviewOpen, closeReview } from '#ui/onboarding';
 import { bind as bindWhatsNew, startWhatsNew, isWhatsNewOpen, closeWhatsNew } from '#ui/whatsnew';
 import { bind as bindAccount, renderAccount, startAccount, goOnline, isAccountOpen, closeAccount } from '#ui/account';
 import { readOAuthReturn } from '#session';
@@ -24,7 +24,7 @@ const renderAll = () => {
   renderCardSheet();
   $('settings').hidden = ui.view !== 'settings';
   renderTopics();
-  renderOnboardingTopics();
+  renderOnboarding();
   renderVersion();
   renderInstall();
   renderAccount();
@@ -57,13 +57,16 @@ document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') closeAccount();
     return;
   }
-  if (ui.onboarding !== null) {
-    if (event.key === 'Escape') closeOnboarding();
-    else if (event.key === 'ArrowRight') turnOnboarding(1);
-    else if (event.key === 'ArrowLeft') turnOnboarding(-1);
+  if (event.key !== 'Escape') return;
+  // The review sheet sits over the walkthrough, and the walkthrough over the app (ONB-2, ONB-5).
+  if (isReviewOpen()) {
+    closeReview();
     return;
   }
-  if (event.key !== 'Escape') return;
+  if (ui.onboarding) {
+    closeOnboarding();
+    return;
+  }
   if (isWhatsNewOpen()) {
     closeWhatsNew();
     return;
@@ -79,7 +82,7 @@ $('toast-action').addEventListener('click', () => {
 
 applyLanguage();
 loadPool();
-if (ui.onboarding !== null) $('onboarding-next').focus();
+if (ui.onboarding) $('onboarding-start').focus();
 startAccount(oauth);
 window.addEventListener('online', goOnline);
 if (!storage) showToast(t('error.noStorage'));

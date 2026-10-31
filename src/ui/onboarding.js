@@ -1,121 +1,113 @@
-import { PAGES, isLast, step, textParts } from '#onboarding';
-import { slideDirection } from '#sections';
+import { textParts } from '#onboarding';
 import { saveOnboarded } from '#storage';
-import { $, el, storage, ui, t, guardClick } from '#ui/context';
+import { bindSheetDrag } from '#ds/sheet';
+import { $, el, storage, pool, ui, t, lang } from '#ui/context';
 import { icon } from '#ui/controls';
+import { cardNode } from '#ui/card';
 import { chooseTopic, topicStates } from '#ui/feed';
 
-// A part of a page text: plain text, or a key with an optional icon. A key with an icon and no
-// text gets the name of its control (`onboarding.icon.<name>`).
-const keyNode = ({ text, key, icon: name }) => {
-  if (!key) return text;
-  const node = el('span', { className: 'onboarding-key' }, name ? [icon(name, 'small'), text] : [text]);
-  if (name && !text) {
-    node.setAttribute('role', 'img');
-    node.setAttribute('aria-label', t(`onboarding.icon.${name}`));
+// The tiles of the topics (ONB-4). A tile node stays while the topics stay, so the focus stays on
+// the tile that was pressed.
+const renderTiles = (topics) => {
+  const list = $('onboarding-topics');
+  const ids = topics.map(({ id }) => id).join();
+  if (list.dataset.ids !== ids) {
+    list.dataset.ids = ids;
+    list.replaceChildren(
+      ...topics.map(({ id, title }) => {
+        const tile = el('button', { type: 'button', className: 'topic-tile' }, [
+          el('span', { className: 'topic-tile-check' }, [icon('check', 'small')]),
+          el('span', { className: 'topic-tile-title', textContent: title, lang: 'en' }),
+          el('span', { className: 'topic-tile-count' }),
+        ]);
+        tile.addEventListener('click', () => chooseTopic(id, tile.getAttribute('aria-pressed') !== 'true'));
+        return tile;
+      }),
+    );
   }
-  return node;
+  [...list.children].forEach((tile, index) => {
+    const { on, last, count } = topics[index];
+    tile.setAttribute('aria-pressed', String(on));
+    tile.disabled = last;
+    tile.querySelector('.topic-tile-count').textContent = t('onboarding.count', { count });
+  });
+};
+
+// The sample: the first card of the first topic that is on, inert. It stays while that card and
+// the language stay.
+const renderSample = (topics) => {
+  const sample = $('onboarding-sample');
+  const topic = topics.find(({ on }) => on);
+  const card = topic && pool.cards.find((item) => item.topic === topic.id && !item.retired);
+  sample.hidden = !card;
+  const key = card && `${lang}:${card.id}`;
+  if (!card || sample.dataset.card === key) return;
+  sample.dataset.card = key;
+  sample.replaceChildren(el('ul', { className: 'onboarding-sample-list' }, [cardNode(card, null, { preview: true })]));
 };
 
 export const renderOnboarding = () => {
-  const open = ui.onboarding !== null;
+  const open = ui.onboarding;
   $('onboarding').hidden = !open;
   // The walkthrough covers the app: no tap, no slide and no focus goes below it.
   document.querySelectorAll('.app-header, main, .fab, .nav-bar').forEach((node) => {
     node.inert = open;
   });
   if (!open) return;
-  const page = PAGES[ui.onboarding];
-  // An SVG element has no `hidden` property, so the attribute is set.
-  document.querySelectorAll('#onboarding [data-page]').forEach((drawing) => {
-    drawing.toggleAttribute('hidden', drawing.dataset.page !== page);
-  });
-  $('onboarding-title').textContent = t(`onboarding.${page}.title`);
-  const parts = textParts(t(`onboarding.${page}.text`));
-  $('onboarding-text').replaceChildren(...parts.map(keyNode));
-  $('onboarding-dots').replaceChildren(...PAGES.map((id) => el('span', { className: id === page ? 'onboarding-dot on' : 'onboarding-dot' })));
-  $('onboarding-dots').setAttribute('aria-label', t('onboarding.page', { page: ui.onboarding + 1, total: PAGES.length }));
-  $('onboarding-skip').hidden = isLast(ui.onboarding);
-  $('onboarding-next').textContent = t(isLast(ui.onboarding) ? 'onboarding.start' : 'onboarding.next');
-};
-
-// The chips of the topics page (ONB-4). A chip node stays while the topics stay, so the focus
-// stays on the chip that was pressed.
-export const renderOnboardingTopics = () => {
-  const list = $('onboarding-chips');
   const topics = topicStates();
-  if (list.dataset.ids !== topics.map(({ id }) => id).join()) {
-    list.dataset.ids = topics.map(({ id }) => id).join();
-    list.replaceChildren(
-      ...topics.map(({ id, title }) => {
-        const chip = el('button', { type: 'button', className: 'chip', textContent: title, lang: 'en' });
-        chip.addEventListener('click', () => chooseTopic(id, chip.getAttribute('aria-pressed') !== 'true'));
-        return chip;
-      }),
-    );
-  }
-  [...list.children].forEach((chip, index) => {
-    chip.setAttribute('aria-pressed', String(topics[index].on));
-    chip.disabled = topics[index].last;
-  });
+  renderTiles(topics);
+  renderSample(topics);
+  const count = topics.filter(({ on }) => on).reduce((sum, topic) => sum + topic.count, 0);
+  $('onboarding-start').textContent = t('onboarding.start', { count });
 };
 
 const openOnboarding = () => {
-  ui.onboarding = 0;
+  ui.onboarding = true;
   renderOnboarding();
-  $('onboarding-next').focus();
+  $('onboarding-start').focus();
 };
 
-// A close marks the walkthrough as seen. With no storage it shows only from Settings.
+// A close marks the walkthrough as seen and keeps the topics it has on. With no storage it shows
+// only from Settings.
 export const closeOnboarding = () => {
-  ui.onboarding = null;
+  ui.onboarding = false;
   if (storage) saveOnboarded(storage);
   renderOnboarding();
   if (ui.view === 'settings') $('show-onboarding').focus();
 };
 
-// Shows the next page for 1 and the previous one for -1. The page comes in from its side.
-export const turnOnboarding = (way) => {
-  const index = step(ui.onboarding, way);
-  if (index === ui.onboarding) return;
-  ui.onboarding = index;
-  renderOnboarding();
-  // The skip button goes away on the last page, and the focus must not go with it.
-  $('onboarding-next').focus();
-  const page = $('onboarding-page');
-  page.classList.remove('enter-next', 'enter-previous');
-  // The read of the width starts the animation again when a change follows another one.
-  void page.offsetWidth;
-  page.classList.add(way > 0 ? 'enter-next' : 'enter-previous');
+// A part of a text of the review sheet, with its **bold** text.
+const textPart = ({ text, key, strong }) => {
+  const node = key ? el('span', { className: 'onboarding-key' }, [text]) : text;
+  return strong ? el('strong', {}, [node]) : node;
+};
+
+// The review sheet (ONB-5), over the walkthrough or over Settings.
+export const openReview = () => {
+  $('review-body').replaceChildren(
+    ...['review.when', 'review.grades'].map((key) => el('p', { className: 'review-text' }, textParts(t(key)).map(textPart))),
+  );
+  $('review-sheet').hidden = false;
+  // The walkthrough below takes no tap and no focus while the sheet is open.
+  $('onboarding').inert = true;
+  $('review-close').focus();
+};
+
+export const isReviewOpen = () => !$('review-sheet').hidden;
+
+export const closeReview = () => {
+  $('review-sheet').hidden = true;
+  $('onboarding').inert = false;
+  if (ui.onboarding) $('onboarding-how').focus();
+  else if (ui.view === 'settings') $('show-review').focus();
 };
 
 export const bind = () => {
-  $('onboarding-next').addEventListener('click', () => {
-    if (!isLast(ui.onboarding)) {
-      turnOnboarding(1);
-      return;
-    }
-    closeOnboarding();
-  });
-  $('onboarding-skip').addEventListener('click', closeOnboarding);
+  $('onboarding-start').addEventListener('click', closeOnboarding);
+  $('onboarding-how').addEventListener('click', openReview);
   $('show-onboarding').addEventListener('click', openOnboarding);
-
-  // A horizontal slide on the walkthrough changes its page, with the measures of the section slide.
-  let onboardingSlide = null;
-  $('onboarding').addEventListener('pointerdown', (event) => {
-    const primary = event.isPrimary && event.button === 0;
-    onboardingSlide = primary ? { pointerId: event.pointerId, x: event.clientX, y: event.clientY } : null;
-  });
-  $('onboarding').addEventListener('pointerup', (event) => {
-    if (onboardingSlide?.pointerId !== event.pointerId) return;
-    const way = slideDirection(event.clientX - onboardingSlide.x, event.clientY - onboardingSlide.y);
-    onboardingSlide = null;
-    if (!way) return;
-    // The click that follows a slide must not press the button below the finger.
-    guardClick();
-    turnOnboarding(way);
-  });
-  $('onboarding').addEventListener('pointercancel', () => {
-    onboardingSlide = null;
-  });
+  $('show-review').addEventListener('click', openReview);
+  $('review-veil').addEventListener('click', closeReview);
+  $('review-close').addEventListener('click', closeReview);
+  bindSheetDrag($('review-sheet'), { close: closeReview });
 };

@@ -50,4 +50,4 @@ The parts of `styles.css`, by layer. The shared parts are in the design system.
 | tokens | the Noche roles: ground, surface, nested by lightness only; `--primary` is the ink pill; `--data` is the one data hue, for data only; `--done-soft` is a neutral fill, so the New tag has no green |
 | base | `main` (a version of the shared part) |
 | components | `button`, `app-header`, `nav-bar`, `pill`, `progress` (versions of the shared parts) |
-| screens | feed: `feed`, `feed-layout`, `feed-panels`, `feed-panel`, `due-bars`, `topic-ledger`, `feed-card` · settings: `settings` (version of `list-group`), `about`, `version-status` · nav: `dust` · onboarding: `onboarding`, `onboarding-art` |
+| screens | feed: `feed`, `feed-layout`, `feed-panels`, `feed-panel`, `due-bars`, `topic-ledger`, `feed-card` · settings: `settings` (version of `list-group`), `about`, `version-status` · nav: `dust` · onboarding: `onboarding`, `topic-tiles`, `review` |

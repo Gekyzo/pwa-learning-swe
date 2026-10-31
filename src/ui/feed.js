@@ -213,12 +213,14 @@ export const chooseTopic = (id, on) => {
   fill();
 };
 
-// Whether a topic is on, and whether its switch is locked as the last one on.
+// Whether a topic is on, whether its switch is locked as the last one on, and its count of cards
+// that are not retired (ONB-4).
 export const topicStates = () => {
   if (!pool) return [];
   const hidden = off();
   const on = pool.topics.filter(({ id }) => !hidden.includes(id));
-  return pool.topics.map(({ id, title }) => ({ id, title, on: !hidden.includes(id), last: on.length === 1 && on[0].id === id }));
+  const count = (id) => pool.cards.filter((card) => card.topic === id && !card.retired).length;
+  return pool.topics.map(({ id, title }) => ({ id, title, on: !hidden.includes(id), last: on.length === 1 && on[0].id === id, count: count(id) }));
 };
 
 export const bind = () => {

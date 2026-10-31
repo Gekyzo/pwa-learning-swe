@@ -123,7 +123,7 @@ Rules of `src/ui/feed.js`, `src/ui/card.js` and `src/ui/saved.js`.
   on cannot be turned off, and a list that covers every pack counts as no topic off. An id of no
   pack stays in the list, so a pack that comes back is still off.
 - **FEED-15** Settings has the group **Topics**, once the packs load: one switch for each pack, in
-  pack order, with the title of the pack in English. A switch acts at once, as a chip of ONB-4
+  pack order, with the title of the pack in English. A switch acts at once, as a tile of ONB-4
   does: the switch of the last topic that is on is disabled, and a topic that comes back on may
   add its cards at the end of the list.
 - **FEED-18** The Feed has four panels, once the packs load. **Hoy** shows `side.todayCount`:

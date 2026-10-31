@@ -1,13 +1,5 @@
-// The pages of the walkthrough of the first start, in their order. The last one chooses the topics.
-export const PAGES = ['welcome', 'review', 'keep', 'offline', 'topics'];
-
 // The walkthrough shows at the start of a new install only: no seen flag and no stored state.
 export const shouldShow = ({ seen, hasState }) => !seen && !hasState;
-
-// The index of the page after a move of `direction` (1, -1 or 0). It stays in the pages.
-export const step = (index, direction) => Math.min(Math.max(index + direction, 0), PAGES.length - 1);
-
-export const isLast = (index) => index === PAGES.length - 1;
 
 // A key that starts with `#name` shows the icon `name` of the sprite, then the rest of its text.
 const keyPart = (text) => {
@@ -15,8 +7,8 @@ const keyPart = (text) => {
   return match ? { text: match[2] ?? '', key: true, icon: match[1] } : { text, key: true };
 };
 
-// The parts of a page text. A text between two backticks is a key, such as `↻` or `+`; a
-// backtick with no pair stays in the text. A text between two `**` is bold (`strong: true`), keys
+// The parts of a text of the review sheet or of the release notes. A text between two backticks
+// is a key, such as `↻` or `+`; a backtick with no pair stays in the text. A text between two `**` is bold (`strong: true`), keys
 // in it too; a `**` with no pair stays in the text.
 export const textParts = (text) => {
   const pieces = text.split('`');

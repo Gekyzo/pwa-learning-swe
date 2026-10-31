@@ -50,13 +50,21 @@ cards in each class; this app has no `pane` layout (LAY-3).
 
 - **ONB-1** The walkthrough shows at the start of a new install only: no `pwa-learning-swe.onboarded`
   flag and no stored doc. A storage that cannot be read counts as seen.
-- **ONB-2** It has the pages of `PAGES`: welcome (the feed and **Like**), review (the boxes and
-  the grades), keep (**Save**, Saved and **More**), offline (install and update) and topics
-  (ONB-4), each with a drawing, a title and a text. **Next** goes
-  forward, **Skip** and Escape close it, a slide or the arrow keys turn a page. The last page has
-  **Start** in place of **Next**, and no **Skip**.
-- **ONB-3** A close stores the flag. **Show the introduction** in Settings opens it again.
-- **ONB-4** The last page chooses the topics (FEED-14): one chip for each pack, in pack order, in
-  the place of the drawing, pressed when the topic is on. A tap switches the topic at once; the
-  chip of the last topic that is on is disabled. With the packs not loaded yet, the page has no
-  chip. **Skip** keeps every topic on.
+- **ONB-2** It is one page: the logo, the title **What do you want to review?**, a text, the topic tiles
+  (ONB-4), a sample card, then **Start** with the count of cards and **See how review works**
+  (ONB-5). The sample is the first card that is not retired of the first topic that is on, inert,
+  beside the tiles from 840px and under them below. **Start** and Escape close it and keep every
+  topic it has on. It has no pages, no drawings, no **Skip**, no slide and no arrow keys.
+- **ONB-3** A close stores the flag. **Show the introduction** in Settings › Help opens it again.
+- **ONB-4** The tiles choose the topics (FEED-14): one tile for each pack, in pack order, with a
+  check mark, the title of the pack (in English) and its count of cards that are not retired. A
+  tile is pressed when its topic is on. A tap switches the topic at once; the tile of the last
+  topic that is on is disabled. **Start** reads the sum of the counts of the topics that are on.
+  The tiles take 2 columns below 840px and 3 from 840px. Below 840px the bar of **Start** and
+  **See how review works** is sticky at the bottom of the screen. With the packs not loaded yet,
+  the page has no tile and no sample.
+- **ONB-5** **See how review works** on the walkthrough and **How review works** in Settings › Help
+  open one sheet over the screen: a head with its title and **Close**, then how a seen
+  card comes back (1, 3, 7, 16 and 35 days, LRN-3) and what **Remembered**, **Forgot**, **I knew
+  this** and a quiz answer do (LRN-5). **Close**, the veil and Escape close it; Escape closes it
+  before the walkthrough below it.

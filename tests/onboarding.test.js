@@ -1,11 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { PAGES, isLast, shouldShow, step, textParts } from '#onboarding';
-
-test('PAGES has the five pages in their order, the topics last, each one time', () => {
-  assert.deepEqual(PAGES, ['welcome', 'review', 'keep', 'offline', 'topics']);
-  assert.equal(new Set(PAGES).size, PAGES.length);
-});
+import { shouldShow, textParts } from '#onboarding';
 
 test('shouldShow is true for no flag and no stored state', () => {
   assert.equal(shouldShow({ seen: false, hasState: false }), true);
@@ -18,26 +13,6 @@ test('shouldShow is false for a stored state', () => {
 test('shouldShow is false after the walkthrough was seen', () => {
   assert.equal(shouldShow({ seen: true, hasState: false }), false);
   assert.equal(shouldShow({ seen: true, hasState: true }), false);
-});
-
-test('step goes one page forward and one page back', () => {
-  assert.equal(step(0, 1), 1);
-  assert.equal(step(1, -1), 0);
-});
-
-test('step stays on the page for no direction', () => {
-  assert.equal(step(1, 0), 1);
-});
-
-test('step does not go past the first and the last page', () => {
-  assert.equal(step(0, -1), 0);
-  assert.equal(step(PAGES.length - 1, 1), PAGES.length - 1);
-});
-
-test('isLast is true for the last page only', () => {
-  assert.equal(isLast(PAGES.length - 1), true);
-  assert.equal(isLast(0), false);
-  assert.equal(isLast(PAGES.length - 2), false);
 });
 
 test('textParts marks the text between backticks as a key', () => {

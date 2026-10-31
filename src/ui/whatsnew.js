@@ -19,7 +19,7 @@ const loadNotes = async () => {
   return null;
 };
 
-// A note with its `name` spans, as the onboarding text shows them, and its **bold** text.
+// A note with its `name` spans, as the review sheet shows them, and its **bold** text.
 const notePart = ({ text, key, strong }) => {
   const node = key ? el('span', { className: 'onboarding-key' }, [text]) : text;
   return strong ? el('strong', {}, [node]) : node;
@@ -61,7 +61,7 @@ export const startWhatsNew = async (running) => {
   $('show-whatsnew').hidden = !entries?.length;
   if (!storage || !running) return;
   // The walkthrough or another sheet covers the screen: the notes wait for the next start.
-  const blocked = ui.onboarding !== null || document.querySelector('.sheet-layer:not([hidden])') !== null;
+  const blocked = ui.onboarding || document.querySelector('.sheet-layer:not([hidden])') !== null;
   const { show, store } = nextSeen({ entries: entries ?? [], seen: loadSeen(storage), running: running.version, loaded: entries !== null, blocked });
   const save = () => store && saveSeen(storage, store);
   if (show.length) openWhatsNew(show, { done: save });

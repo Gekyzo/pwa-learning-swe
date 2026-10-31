@@ -25,7 +25,6 @@ import {
   setNavMotion,
 } from '#ui/context';
 import { runUpdate } from '#ui/update';
-import { renderOnboarding } from '#ui/onboarding';
 import { chooseTopic, topicStates } from '#ui/feed';
 import { signedIn } from '#ui/account';
 
@@ -70,7 +69,6 @@ export const applyLanguage = () => {
   });
   renderValues();
   render();
-  renderOnboarding();
 };
 
 // The Topics group (FEED-15): one switch for each pack, once the packs load. A switch node stays

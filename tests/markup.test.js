@@ -2,7 +2,6 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { CATALOGS } from '#i18n';
-import { PAGES } from '#onboarding';
 
 const html = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
 const body = html.slice(html.indexOf('<body'), html.indexOf('<script type="importmap">'));
@@ -67,22 +66,39 @@ test('the card sheet has a veil, a dialog with its title and Close, and one entr
   assert.deepEqual(signals, ['hard', 'skip', 'report']);
 });
 
-test('the walkthrough has one drawing for each page, the chips of the topics last, in the order of the pages', () => {
-  const [layer = ''] = body.match(/<div id="onboarding"[\s\S]*?<input id="import-file"/) ?? [];
-  const drawings = [...layer.matchAll(/<(?:svg|div id="onboarding-chips"[^>]*?) data-page="([^"]+)"/g)].map(([, page]) => page);
-  assert.deepEqual(drawings, PAGES);
+test('the walkthrough is one page: the logo, the title, the text, the topic tiles, then Start and How review works (ONB-2)', () => {
+  const [layer = ''] = body.match(/<div id="onboarding" [\s\S]*?<section id="auth"/) ?? [];
+  assert.match(layer, /^<div id="onboarding" class="onboarding" role="dialog" aria-modal="true" aria-labelledby="onboarding-title" hidden>/);
+  const parts = [...layer.matchAll(/<(img|h2|p|div|button) (?:id="([^"]+)" )?class="([^"]+)"/g)].map(([, tag, id, name]) => id ?? `${tag}.${name}`);
+  assert.deepEqual(parts, [
+    'onboarding',
+    'div.onboarding-page',
+    'img.onboarding-logo',
+    'onboarding-title',
+    'p.onboarding-text',
+    'onboarding-topics',
+    'onboarding-sample',
+    'div.onboarding-bar',
+    'onboarding-start',
+    'onboarding-how',
+  ]);
+  assert.match(layer, /<img class="onboarding-logo" src="\.\/icons\/logo\.png" alt="">/);
+  assert.match(layer, /<h2 id="onboarding-title" class="onboarding-title" data-i18n="onboarding.title"><\/h2>/);
+  assert.match(layer, /<p class="onboarding-text" data-i18n="onboarding.text"><\/p>/);
+  assert.match(layer, /<div id="onboarding-topics" class="topic-tiles" role="group" aria-labelledby="onboarding-title"><\/div>/);
+  assert.match(layer, /<button id="onboarding-start" class="button primary" type="button"><\/button>/);
+  assert.match(layer, /<button id="onboarding-how" class="button quiet" type="button" data-i18n="onboarding.how"><\/button>/);
+  assert.doesNotMatch(layer, /<svg|onboarding-skip|onboarding-dots|data-page=/);
 });
 
-test('the walkthrough shows the app icon first, out of the page that changes, with no text', () => {
-  const [, layer = ''] = body.match(/<div id="onboarding"[^>]*>\s*([\s\S]*?)<div id="onboarding-page"/) ?? [];
-  assert.match(layer, /^<img class="onboarding-logo" src="\.\/icons\/logo\.png" alt="">\s*$/);
-});
-
-test('the walkthrough has Saltar and the next button in one bar at the bottom, Saltar first', () => {
-  const [bar = ''] = body.match(/<div class="onboarding-actions">[\s\S]*?<\/div>/) ?? [];
-  const buttons = [...bar.matchAll(/<button id="([^"]+)"/g)].map(([, id]) => id);
-  assert.deepEqual(buttons, ['onboarding-skip', 'onboarding-next']);
-  assert.doesNotMatch(body, /onboarding-top/);
+test('the review sheet has a veil, a dialog with its title and Close, and a body (ONB-5)', () => {
+  const [layer = ''] = body.match(/<div id="review-sheet" class="sheet-layer[^"]*"[\s\S]*?<\/section>\s*<\/div>/) ?? [];
+  assert.match(layer, /<div id="review-veil" class="sheet-veil">/);
+  assert.match(layer, /<section id="review" class="sheet" role="dialog" aria-modal="true" aria-labelledby="review-title">/);
+  assert.match(layer, /<header class="sheet-head"><h2 id="review-title" class="sheet-title main" data-i18n="review.title"><\/h2><button id="review-close" class="button tonal" type="button" data-i18n="review.close"><\/button><\/header>/);
+  assert.match(layer, /<div id="review-body" class="sheet-body review-body"><\/div>/);
+  // Help in Settings opens the same sheet, from the row after Show the introduction.
+  assert.match(body, /<button id="show-onboarding" class="settings-row" type="button">[\s\S]*?<\/button>\s*<button id="show-review" class="settings-row" type="button"><span class="settings-row-label" data-i18n="settings.review"><\/span><span class="chevron" aria-hidden="true">›<\/span><\/button>/);
 });
 
 test('the What\'s new sheet has a veil, a dialog with its title and Close, and a body (VER-22)', () => {
