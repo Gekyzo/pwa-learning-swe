@@ -35,5 +35,5 @@ test('the parts of the app are documented in styles.css (DSV-3)', () => {
 });
 
 test('styles.css has three versions of a shared component: app-header, nav-bar and list-group (DSV-3)', () => {
-  assert.deepEqual([...read('styles.css').matchAll(/\/\*\s*@extends\s+([\w-]+)/g)].map(([, name]) => name), ['app-header', 'nav-bar', 'list-group']);
+  assert.deepEqual([...read('styles.css').matchAll(/\/\*\s*@extends\s+([\w-]+)/g)].map(([, name]) => name), ['app-header', 'pill', 'nav-bar', 'list-group']);
 });

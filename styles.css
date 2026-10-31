@@ -73,6 +73,13 @@
     background: var(--bg);
   }
 
+  /* @extends pill
+     @variant data  The data hue on a soft ground, for the Review tag of a due card. */
+  .pill.data {
+    background: var(--data-soft);
+    color: var(--on-data-soft);
+  }
+
   /* @extends nav-bar */
   /* The current item has no tonal fill: its label and icon take --text, as in the shared rules. */
   .nav-bar .nav-item[aria-current="page"] .icon {

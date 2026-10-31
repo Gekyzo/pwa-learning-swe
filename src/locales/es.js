@@ -37,6 +37,7 @@ export default {
   'media.repo': 'repositorio',
   'card.open': 'Abrir · {media}, {minutes} min',
   'card.review': 'Repaso',
+  'card.new': 'Nueva',
   'card.updated': 'Actualizada',
   'card.retired': 'Retirada',
   'card.like': 'Me gusta',

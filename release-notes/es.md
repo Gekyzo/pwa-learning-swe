@@ -5,6 +5,7 @@ Lo que cambia para ti en cada versión de la app. La versión más nueva va prim
 ## Unreleased
 
 - Bajo el título del feed, un saludo dice cuántas tarjetas vuelven hoy y cuántas nuevas te esperan.
+- Cada tarjeta del feed dice por qué está: **Repaso** si vuelve, **Nueva** si aún no la has visto.
 - La app tiene un aspecto nuevo: negro puro en el tema oscuro, con las tarjetas como única superficie.
 
 ## 0.3.0 - 2026-10-31

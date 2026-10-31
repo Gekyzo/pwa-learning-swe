@@ -5,6 +5,7 @@ User-visible changes, newest first.
 ## Unreleased
 
 - `greetingOf` in `src/feed.js`; `subline` of `src/ui/feed.js` replaces `dueText` and key `feed.due` (greeting, `feed.dueToday`, `feed.thenNew`, `feed.nothingDue`, `feed.newOnly`, `feed.allDone`, `feed.topics`) (FEED-8).
+- `cardNode` tags a card by its reason: `pill data` with `card.review` for `due`, `pill` with new key `card.new` for `new` and `explore`, none for `again`; `@extends pill` variant `data` in `styles.css` (FEED-9, DSV-3).
 - Noche tokens in `styles.css`: neutral ground and surfaces, `--data` hue, `--faint`, `--radius-card`, `--feed-max`, `--side-gap`, `--panel-pad`; `--primary` is the ink pill and `--done` the ink. Versions of `app-header` and `nav-bar`; cards and settings groups lose their borders; `theme-color` metas follow the ground.
 
 ## 0.3.0 - 2026-10-31

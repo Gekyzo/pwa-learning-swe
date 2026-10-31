@@ -45,7 +45,7 @@ const options = (card, chosen) =>
     }),
   );
 
-const pill = (text) => el('span', { className: 'pill', textContent: text });
+const pill = (text, className = 'pill') => el('span', { className, textContent: text });
 
 // `entry` is the place of the card in the feed, { reason, updated }, or null in Saved.
 export const cardNode = (card, entry = null) => {
@@ -53,7 +53,8 @@ export const cardNode = (card, entry = null) => {
   const chosen = ui.answers[card.id] ?? null;
   const topic = pool.topics.find((one) => one.id === card.topic)?.title ?? card.topic;
   const meta = el('p', { className: 'feed-card-meta' }, [`${topic} · ${t(`kind.${card.kind}`)} · ${t(`level.${card.level}`)}`]);
-  if (entry?.reason === 'due') meta.append(pill(t('card.review')));
+  if (entry?.reason === 'due') meta.append(pill(t('card.review'), 'pill data'));
+  else if (entry?.reason === 'new' || entry?.reason === 'explore') meta.append(pill(t('card.new')));
   if (entry?.updated) meta.append(pill(t('card.updated')));
   if (card.retired) meta.append(el('span', { className: 'pill ghost', textContent: t('card.retired') }));
 

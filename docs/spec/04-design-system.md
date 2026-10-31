@@ -26,7 +26,7 @@ This document holds the rules of the app only.
   layer, so that it wins; the block documents the parts, variants and states that the app adds.
   A version holds only the rules that differ from the shared ones, so that a change of the shared
   sheet reaches the app. No other rule of `components` or `layouts` repeats a selector of the
-  shared sheet. The three versions of a shared component are `app-header` and `nav-bar`
+  shared sheet. The four versions of a shared component are `app-header`, `pill` (the variant `data`, for the Review tag) and `nav-bar`
   (the Noche look of the shell: the ground behind them, a rule on the inner edge, no fill on the current
   item) and `list-group` in `settings` (no border, the card radius; the select of a row of Preferences
   lies over the row, SET-1).
