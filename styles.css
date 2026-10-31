@@ -2,9 +2,34 @@
 
 @layer tokens {
   :root {
-    /* The colour of the app: one green for the main action, the walkthrough art and the checked state. */
-    --primary: var(--done);
-    --on-primary: var(--on-done);
+    /* Noche: a ground, a surface, and a nested fill that differ by lightness only. --primary is the ink pill.
+       --data is the one hue, for data only: today's bar, the progress of Today, the review tag. */
+    --bg: light-dark(#f2f2f2, #000000);
+    --surface: light-dark(#ffffff, #111111);
+    --surface-2: light-dark(#e6e6e6, #2a2a2a);
+    --text: light-dark(#0a0a0a, #ffffff);
+    --muted: light-dark(#555555, #b4b4b4);
+    --faint: light-dark(#6b6b6b, #949494);
+    --line: light-dark(#e0e0e0, #1f1f1f);
+    --control: light-dark(#c4c4c4, #444444);
+    --primary: light-dark(#0a0a0a, #ffffff);
+    --on-primary: light-dark(#ffffff, #000000);
+    --ink: light-dark(#0a0a0a, #ffffff);
+    --on-ink: light-dark(#ffffff, #000000);
+    --secondary: light-dark(#e6e6e6, #2a2a2a);
+    --data: light-dark(#0a6fb0, #4cb3f0);
+    --data-soft: light-dark(#dcedf8, #10293a);
+    --on-data-soft: light-dark(#0a5a8f, #4cb3f0);
+    /* The checked state and the version check stay neutral: the hue is for data only. */
+    --done: light-dark(#0a0a0a, #ffffff);
+    --on-done: light-dark(#ffffff, #000000);
+    --radius-l: 20px;
+    --radius-m: var(--radius-pill);
+    --radius-card: 20px;
+    --radius-inner: 12px;
+    --feed-max: 1138px;
+    --side-gap: 14px;
+    --panel-pad: 22px;
   }
 }
 
@@ -39,6 +64,32 @@
       padding-right: env(safe-area-inset-right);
       padding-left: calc(var(--rail-width) + env(safe-area-inset-left));
     }
+  }
+}
+
+@layer components {
+  /* @extends app-header */
+  .app-header {
+    background: var(--bg);
+    border-bottom: 1px solid var(--line);
+  }
+
+  /* @extends nav-bar */
+  .nav-bar {
+    background: var(--bg);
+  }
+
+  .nav-item {
+    color: var(--muted);
+  }
+
+  .nav-item[aria-current="page"] {
+    color: var(--text);
+  }
+
+  .nav-item[aria-current="page"] .icon {
+    background: none;
+    color: var(--text);
   }
 }
 
@@ -109,6 +160,11 @@
   }
 
   /* @extends list-group */
+  .settings .list-group {
+    border: 0;
+    border-radius: var(--radius-card);
+  }
+
   .settings .settings-row {
     position: relative;
   }
@@ -205,8 +261,7 @@
     gap: var(--space-2);
     padding: var(--space-4);
     background: var(--surface);
-    border: 1px solid var(--line);
-    border-radius: var(--radius-l);
+    border-radius: var(--radius-card);
   }
 
   .feed-card-meta {

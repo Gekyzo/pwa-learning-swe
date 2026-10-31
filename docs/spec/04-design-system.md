@@ -26,8 +26,10 @@ This document holds the rules of the app only.
   layer, so that it wins; the block documents the parts, variants and states that the app adds.
   A version holds only the rules that differ from the shared ones, so that a change of the shared
   sheet reaches the app. No other rule of `components` or `layouts` repeats a selector of the
-  shared sheet. The one version of a shared component is `list-group` in `settings`: the select
-  of a row of Preferences lies over the row (SET-1).
+  shared sheet. The three versions of a shared component are `app-header` and `nav-bar`
+  (the Noche look of the shell: the ground behind them, a rule on the inner edge, no fill on the current
+  item) and `list-group` in `settings` (no border, the card radius; the select of a row of Preferences
+  lies over the row, SET-1).
 - **DSV-4** A change of a shared part is made in `pwa-design-system`, then `npm run ds` here.
   Nothing edits `vendor/` by hand, and `npm run init` copies it as it is (ENG-17).
 
@@ -37,5 +39,6 @@ The parts of `styles.css`, by layer. The shared parts are in the design system.
 
 | Layer | Parts |
 |---|---|
-| tokens | `--primary` and `--on-primary` take `--done` and `--on-done`: one green for the main action, the walkthrough art and the checked state |
+| tokens | the Noche roles: ground, surface, nested by lightness only; `--primary` is the ink pill; `--data` is the one data hue, for data only |
+| components | `app-header`, `nav-bar` (versions of the shared parts) |
 | screens | settings: `settings` (version of `list-group`), `about`, `version-status` · nav: `dust` · onboarding: `onboarding`, `onboarding-art` |

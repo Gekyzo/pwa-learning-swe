@@ -4,7 +4,7 @@ What changes for you in each version of the app. The newest version is first.
 
 ## Unreleased
 
-No change.
+- The app has a new look: pure black in the dark theme, with the cards as the only surface.
 
 ## 0.3.0 - 2026-10-31
 
