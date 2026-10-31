@@ -21,6 +21,10 @@ import {
   THEME_KEY,
   loadTheme,
   saveTheme,
+  CODE_THEME_KEY,
+  CODE_THEMES,
+  loadCodeTheme,
+  saveCodeTheme,
   MODULES_KEY,
   loadModules,
   saveModules,
@@ -64,7 +68,7 @@ const normalize = (data) => (data?.version === 1 && Array.isArray(data.items) ? 
 const opts = { key: KEY, normalize, empty };
 
 test('every key starts with the slug of the app', () => {
-  for (const key of [KEY, LANGUAGE_KEY, HAND_KEY, THEME_KEY, MODULES_KEY, ONBOARDED_KEY, SEEN_VERSION_KEY]) {
+  for (const key of [KEY, LANGUAGE_KEY, HAND_KEY, THEME_KEY, CODE_THEME_KEY, MODULES_KEY, ONBOARDED_KEY, SEEN_VERSION_KEY]) {
     assert.ok(key.startsWith(`${APP_SLUG}.`), key);
   }
 });
@@ -232,6 +236,32 @@ test('saveTheme removes the key for an unknown theme', () => {
   const storage = fakeStorage({ [THEME_KEY]: 'dark' });
   assert.equal(saveTheme(storage, 'blue'), true);
   assert.equal(storage.getItem(THEME_KEY), null);
+});
+
+test('loadCodeTheme returns each stored code theme', () => {
+  for (const theme of CODE_THEMES) assert.equal(loadCodeTheme(fakeStorage({ [CODE_THEME_KEY]: theme })), theme);
+});
+
+test('loadCodeTheme returns auto for no value and for an unknown value', () => {
+  assert.equal(loadCodeTheme(fakeStorage()), 'auto');
+  assert.equal(loadCodeTheme(fakeStorage({ [CODE_THEME_KEY]: 'blue' })), 'auto');
+  assert.equal(loadCodeTheme(fakeStorage({ [CODE_THEME_KEY]: 'auto' })), 'auto');
+});
+
+test('saveCodeTheme stores a code theme, and auto or an unknown one removes the key', () => {
+  const storage = fakeStorage();
+  assert.equal(saveCodeTheme(storage, 'nord'), true);
+  assert.equal(storage.getItem(CODE_THEME_KEY), 'nord');
+  assert.equal(saveCodeTheme(storage, 'auto'), true);
+  assert.equal(storage.getItem(CODE_THEME_KEY), null);
+  saveCodeTheme(storage, 'dracula');
+  assert.equal(saveCodeTheme(storage, 'blue'), true);
+  assert.equal(storage.getItem(CODE_THEME_KEY), null);
+});
+
+test('the code theme functions do not throw when the storage does', () => {
+  assert.equal(loadCodeTheme(brokenStorage()), 'auto');
+  assert.equal(saveCodeTheme(brokenStorage(), 'nord'), false);
 });
 
 test('the theme functions do not throw when the storage does', () => {

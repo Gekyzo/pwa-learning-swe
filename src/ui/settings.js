@@ -1,5 +1,5 @@
 import { normalizeLearning } from '#learning';
-import { exportJson, exportFilename, importJson, resetAll } from '#storage';
+import { CODE_THEMES, exportJson, exportFilename, importJson, resetAll } from '#storage';
 import { LANGUAGES, LANGUAGE_NAMES } from '#i18n';
 import { switchModule } from '#modules';
 import {
@@ -13,6 +13,7 @@ import {
   cardChoice,
   hand,
   theme,
+  codeTheme,
   off,
   isOn,
   textOf,
@@ -23,6 +24,7 @@ import {
   setCardLanguage,
   setHand,
   setTheme,
+  setCodeTheme,
   setModules,
   setNavMotion,
 } from '#ui/context';
@@ -32,7 +34,7 @@ import { signedIn } from '#ui/account';
 
 // The value of a row of Preferences is the text of the option that its select has.
 const renderValues = () => {
-  for (const id of ['language', 'card-language', 'hand', 'theme']) {
+  for (const id of ['language', 'card-language', 'hand', 'theme', 'code-theme']) {
     $(`${id}-value`).textContent = $(id).selectedOptions[0]?.textContent ?? '';
   }
 };
@@ -70,6 +72,11 @@ export const applyLanguage = () => {
     themeOption('system', 'settings.automatic'),
     themeOption('light', 'settings.themeLight'),
     themeOption('dark', 'settings.themeDark'),
+  );
+  const codeOption = (value, key) => el('option', { value, textContent: t(key), selected: value === codeTheme });
+  $('code-theme').replaceChildren(
+    codeOption('auto', 'settings.automatic'),
+    ...CODE_THEMES.map((value) => codeOption(value, `settings.codeTheme.${value}`)),
   );
   document.querySelectorAll('[data-module]').forEach((box) => {
     box.checked = isOn(box.dataset.module);
@@ -147,7 +154,8 @@ export const bind = () => {
   });
   $('hand').addEventListener('change', (event) => setHand(event.target.value));
   $('theme').addEventListener('change', (event) => setTheme(event.target.value));
-  for (const id of ['hand', 'theme']) $(id).addEventListener('change', renderValues);
+  $('code-theme').addEventListener('change', (event) => setCodeTheme(event.target.value));
+  for (const id of ['hand', 'theme', 'code-theme']) $(id).addEventListener('change', renderValues);
   document.querySelectorAll('[data-module]').forEach((box) => {
     box.addEventListener('change', () => {
       setModules(switchModule(off, box.dataset.module, box.checked));

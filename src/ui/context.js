@@ -10,6 +10,9 @@ import {
   saveHand,
   loadTheme,
   saveTheme,
+  CODE_THEMES,
+  loadCodeTheme,
+  saveCodeTheme,
   loadModules,
   saveModules,
   loadTopics,
@@ -63,6 +66,10 @@ document.documentElement.dataset.hand = hand;
 // The colours: `light` or `dark` override the phone, in styles.css; `system` follows it.
 export let theme = storage ? loadTheme(storage) : 'system';
 document.documentElement.dataset.theme = theme;
+
+// The colours of the code of a snippet (SET-3), in styles.css.
+export let codeTheme = storage ? loadCodeTheme(storage) : 'auto';
+document.documentElement.dataset.codeTheme = codeTheme;
 
 // The modules that the user turned off (MOD-2).
 export let off = storage ? loadModules(storage) : [];
@@ -201,6 +208,12 @@ export const setTheme = (value) => {
   theme = ['light', 'dark'].includes(value) ? value : 'system';
   if (storage) saveTheme(storage, theme);
   document.documentElement.dataset.theme = theme;
+};
+
+export const setCodeTheme = (value) => {
+  codeTheme = CODE_THEMES.includes(value) ? value : 'auto';
+  if (storage) saveCodeTheme(storage, codeTheme);
+  document.documentElement.dataset.codeTheme = codeTheme;
 };
 
 export const setModules = (next) => {

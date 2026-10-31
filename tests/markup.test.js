@@ -140,7 +140,7 @@ test('Settings has its groups in order: Temas, Preferencias, Cuenta y copia, Apl
   assert.match(settings, /data-i18n="settings.eraseNote"/);
   assert.match(settings, /<p id="topics-note" class="settings-note">/);
   // The ids that go with each group, in order.
-  const order = ['id="topics"', 'id="language"', 'id="card-language"', 'id="hand"', 'id="theme"', 'data-module="saved"', 'id="account-group"', 'id="export"', 'id="import"', 'id="install-group"', 'id="show-onboarding"', 'id="show-review"', 'id="show-whatsnew"', 'class="about"', 'id="reset"'];
+  const order = ['id="topics"', 'id="language"', 'id="card-language"', 'id="hand"', 'id="theme"', 'id="code-theme"', 'data-module="saved"', 'id="account-group"', 'id="export"', 'id="import"', 'id="install-group"', 'id="show-onboarding"', 'id="show-review"', 'id="show-whatsnew"', 'class="about"', 'id="reset"'];
   const at = order.map((mark) => settings.indexOf(mark));
   assert.ok(at.every((index) => index >= 0), 'every part is there');
   assert.deepEqual(at, [...at].sort((a, b) => a - b));

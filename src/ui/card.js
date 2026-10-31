@@ -1,5 +1,6 @@
 import { INTERVALS, answerQuiz, grade, signal, toggleLike, toggleSaved } from '#learning';
 import { tagOf } from '#feed';
+import { highlight } from '#highlight';
 import { bindSheetDrag } from '#ds/sheet';
 import { $, el, ui, state, pool, t, apply, render } from '#ui/context';
 import { icon } from '#ui/controls';
@@ -46,6 +47,19 @@ const options = (card, chosen) =>
     }),
   );
 
+// The code of a snippet in the colours of its syntax (CARD-8): a plain part is a text node.
+const codeNode = (card) =>
+  el(
+    'pre',
+    { className: 'feed-card-code' },
+    highlight(card.code, card.syntax).map(({ type, text }) => {
+      if (type === 'plain') return text;
+      const node = el('span', { className: 'feed-card-token', textContent: text });
+      node.dataset.token = type;
+      return node;
+    }),
+  );
+
 const pill = (text, className = 'pill') => el('span', { className, textContent: text });
 
 // The text of a card is in the card language (I18N-7), or in English where it has no translation.
@@ -78,7 +92,7 @@ export const cardNode = (card, entry = null, { preview = false, hint = false } =
   const parts = [meta];
   if (hint) parts.push(el('p', { className: 'feed-card-hint', textContent: t('card.hint') }));
   parts.push(el('h2', { className: 'feed-card-title', textContent: card.title }));
-  if (card.kind === 'snippet') parts.push(el('pre', { className: 'feed-card-code', textContent: card.code }));
+  if (card.kind === 'snippet') parts.push(codeNode(card));
   if (card.kind === 'quiz') parts.push(options(card, chosen));
   if (card.kind === 'quiz' && chosen) {
     const result = el('p', { className: 'feed-card-result', textContent: t(chosen.correct ? 'card.right' : 'card.wrong') });

@@ -29,6 +29,7 @@ const SHELL = [
   './src/particles.js',
   './src/onboarding.js',
   './src/cards.js',
+  './src/highlight.js',
   './src/learning.js',
   './src/feed.js',
   './src/install.js',

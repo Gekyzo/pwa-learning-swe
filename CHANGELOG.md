@@ -4,7 +4,8 @@ User-visible changes, newest first.
 
 ## Unreleased
 
-No change.
+- Code highlight (CARD-8): new pure module `src/highlight.js` (`SYNTAXES` `js`, `sql`, `sh`; `TOKENS`; `highlight(code, syntax)`), a small sticky-regex scanner per syntax whose tokens join back into the code. A snippet may carry `syntax`, kept by `normalizeCard` when known (CARD-2); the six snippets of `content/` have one. `codeNode` of `src/ui/card.js` builds `feed-card-token` spans with `data-token`; new part `feed-card-token`.
+- Code theme (SET-3): preference `pwa-learning-swe.codeTheme` (`CODE_THEMES`, `loadCodeTheme`, `saveCodeTheme`; `auto` with no key), `codeTheme` and `setCodeTheme` in `src/ui/context.js`, `data-code-theme` on the root. Settings row `#code-theme` after `#theme`; keys `settings.codeTheme` and `settings.codeTheme.<theme>`, new wording of `settings.preferencesNote`. Tokens `--code-bg|text|keyword|string|number|comment|function`: GitHub Light/Dark through `light-dark()` for Automatic, fixed values for Nord, Darcula, Monokai Dimmed, Dracula, One Dark and Solarized Light. `feed-card-code` takes `--code-bg` in place of `--surface-2`.
 
 ## 0.5.0 - 2026-10-31
 

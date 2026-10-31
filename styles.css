@@ -36,6 +36,76 @@
     --ledger-col: 46px;
     /* The least height of a topic tile of the walkthrough. */
     --tile-height: 104px;
+    /* The code theme (SET-3): the ground, the text and one colour for each token type of
+       src/highlight.js. Automatic is GitHub Light or GitHub Dark, by the theme of the app. */
+    --code-bg: light-dark(#f6f8fa, #161b22);
+    --code-text: light-dark(#1f2328, #e6edf3);
+    --code-keyword: light-dark(#cf222e, #ff7b72);
+    --code-string: light-dark(#0a3069, #a5d6ff);
+    --code-number: light-dark(#0550ae, #79c0ff);
+    --code-comment: light-dark(#6e7781, #8b949e);
+    --code-function: light-dark(#8250df, #d2a8ff);
+  }
+
+  /* A chosen code theme has the same colours in the light and the dark theme of the app. */
+  :root[data-code-theme="nord"] {
+    --code-bg: #2e3440;
+    --code-text: #d8dee9;
+    --code-keyword: #81a1c1;
+    --code-string: #a3be8c;
+    --code-number: #b48ead;
+    --code-comment: #7b88a1;
+    --code-function: #88c0d0;
+  }
+
+  :root[data-code-theme="darcula"] {
+    --code-bg: #2b2b2b;
+    --code-text: #a9b7c6;
+    --code-keyword: #cc7832;
+    --code-string: #6a8759;
+    --code-number: #6897bb;
+    --code-comment: #808080;
+    --code-function: #ffc66d;
+  }
+
+  :root[data-code-theme="monokai-dimmed"] {
+    --code-bg: #1e1e1e;
+    --code-text: #c5c8c6;
+    --code-keyword: #9872a2;
+    --code-string: #9aa83a;
+    --code-number: #6089b4;
+    --code-comment: #9a9b99;
+    --code-function: #ce6700;
+  }
+
+  :root[data-code-theme="dracula"] {
+    --code-bg: #282a36;
+    --code-text: #f8f8f2;
+    --code-keyword: #ff79c6;
+    --code-string: #f1fa8c;
+    --code-number: #bd93f9;
+    --code-comment: #6272a4;
+    --code-function: #50fa7b;
+  }
+
+  :root[data-code-theme="one-dark"] {
+    --code-bg: #282c34;
+    --code-text: #abb2bf;
+    --code-keyword: #c678dd;
+    --code-string: #98c379;
+    --code-number: #d19a66;
+    --code-comment: #7f848e;
+    --code-function: #61afef;
+  }
+
+  :root[data-code-theme="solarized-light"] {
+    --code-bg: #fdf6e3;
+    --code-text: #657b83;
+    --code-keyword: #859900;
+    --code-string: #2aa198;
+    --code-number: #d33682;
+    --code-comment: #839496;
+    --code-function: #268bd2;
   }
 }
 
@@ -564,7 +634,8 @@
      @summary One card of the feed: its topic, kind and level, its title, its content, then its actions. The text is English in every language of the screen.
      @part feed-card-meta     The topic, the kind and the level, with a pill for a review, an update or a retired card.
      @part feed-card-title    The title, or the question of a quiz.
-     @part feed-card-code     The code of a snippet. It scrolls on its own, sideways.
+     @part feed-card-code     The code of a snippet, in the colours of the code theme (SET-3). It scrolls on its own, sideways.
+     @part feed-card-token    A colored part of the code: data-token is keyword, string, number, comment or function (CARD-8).
      @part feed-card-options  The answers of a quiz, one button each.
      @part feed-card-option   One answer. After the answer, data-result="right" or "wrong" marks it.
      @part feed-card-result   The line that says if the answer was right, with data-result.
@@ -574,7 +645,7 @@
      @part feed-card-note     A muted line, such as when the card comes back.
      @part feed-card-actions  The buttons: like, save, then the review or I knew this, then more.
      @part feed-card-more     The button that opens the other signals of the card.
-     @example <li class="feed-card" style="list-style: none"><p class="feed-card-meta">Git · Code · Intro<span class="pill">Review</span></p><h2 class="feed-card-title">See the shape of the history</h2><pre class="feed-card-code">git log --oneline --graph</pre><p class="feed-card-body">One line per commit.</p><div class="cluster feed-card-actions"><button class="button icon toggle" type="button" aria-label="Like" aria-pressed="true"><svg class="icon" aria-hidden="true"><use href="icons.svg#heart"/></svg></button><button class="button tonal" type="button">I knew this</button><button class="button icon feed-card-more" type="button" aria-label="More"><svg class="icon" aria-hidden="true"><use href="icons.svg#more"/></svg></button></div></li> */
+     @example <li class="feed-card" style="list-style: none"><p class="feed-card-meta">Git · Code · Intro<span class="pill">Review</span></p><h2 class="feed-card-title">See the shape of the history</h2><pre class="feed-card-code"><span class="feed-card-token" data-token="function">git</span> log <span class="feed-card-token" data-token="keyword">--oneline</span> <span class="feed-card-token" data-token="keyword">--graph</span></pre><p class="feed-card-body">One line per commit.</p><div class="cluster feed-card-actions"><button class="button icon toggle" type="button" aria-label="Like" aria-pressed="true"><svg class="icon" aria-hidden="true"><use href="icons.svg#heart"/></svg></button><button class="button tonal" type="button">I knew this</button><button class="button icon feed-card-more" type="button" aria-label="More"><svg class="icon" aria-hidden="true"><use href="icons.svg#more"/></svg></button></div></li> */
   .feed-card {
     display: flex;
     flex-direction: column;
@@ -605,10 +676,32 @@
     margin: 0;
     padding: var(--space-3);
     overflow-x: auto;
-    background: var(--surface-2);
+    background: var(--code-bg);
+    color: var(--code-text);
     border-radius: var(--radius-inner);
     font: var(--text-s)/1.5 var(--font-mono);
     white-space: pre;
+  }
+
+  .feed-card-token[data-token="keyword"] {
+    color: var(--code-keyword);
+  }
+
+  .feed-card-token[data-token="string"] {
+    color: var(--code-string);
+  }
+
+  .feed-card-token[data-token="number"] {
+    color: var(--code-number);
+  }
+
+  .feed-card-token[data-token="comment"] {
+    color: var(--code-comment);
+    font-style: italic;
+  }
+
+  .feed-card-token[data-token="function"] {
+    color: var(--code-function);
   }
 
   .feed-card-options {

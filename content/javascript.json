@@ -41,6 +41,7 @@
       "title": "Group an array without a reduce",
       "body": "Object.groupBy (ES2024) returns an object with one array for each key. Map.groupBy does the same with a Map, for keys that are not strings.",
       "code": "const byTopic = Object.groupBy(cards, (card) => card.topic);\n// { git: [...], http: [...] }",
+      "syntax": "js",
       "translations": {
         "es": {
           "title": "Agrupar un array sin reduce",

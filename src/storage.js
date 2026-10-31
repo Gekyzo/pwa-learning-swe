@@ -173,6 +173,31 @@ export const saveTheme = (storage, theme) => {
   }
 };
 
+// The colours of the code of a snippet (SET-3): a theme of CODE_THEMES, or `auto` for the GitHub
+// colours of the theme of the app. A preference of the device, as the theme is.
+export const CODE_THEME_KEY = keyOf('codeTheme');
+export const CODE_THEMES = ['nord', 'darcula', 'monokai-dimmed', 'dracula', 'one-dark', 'solarized-light'];
+
+export const loadCodeTheme = (storage) => {
+  try {
+    const theme = storage.getItem(CODE_THEME_KEY);
+    return CODE_THEMES.includes(theme) ? theme : 'auto';
+  } catch {
+    return 'auto';
+  }
+};
+
+// `auto` is the code theme of an app with no choice: it removes the key.
+export const saveCodeTheme = (storage, theme) => {
+  try {
+    if (CODE_THEMES.includes(theme)) storage.setItem(CODE_THEME_KEY, theme);
+    else storage.removeItem(CODE_THEME_KEY);
+    return true;
+  } catch {
+    return false;
+  }
+};
+
 // The modules that the user turned off (MOD-2). A preference of the device, as the theme is.
 export const MODULES_KEY = keyOf('modules');
 

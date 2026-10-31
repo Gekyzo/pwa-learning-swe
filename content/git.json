@@ -41,6 +41,7 @@
       "title": "See the shape of the history",
       "body": "One line per commit, with the branch graph and every ref name. Add a path at the end to see only the commits that touched it.",
       "code": "git log --oneline --graph --decorate --all",
+      "syntax": "sh",
       "translations": {
         "es": {
           "title": "Ver la forma del historial",

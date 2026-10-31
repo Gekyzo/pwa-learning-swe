@@ -59,6 +59,14 @@ test('a snippet needs its code, kept as written', () => {
   assert.equal(normalizeCard(concept({ kind: 'snippet', code: '  ' }), 'git'), null);
 });
 
+test('a snippet keeps a known syntax and drops an unknown one', () => {
+  const snippet = (syntax) => normalizeCard(concept({ kind: 'snippet', code: 'git log', syntax }), 'git');
+  assert.equal(snippet('sh').syntax, 'sh');
+  assert.equal('syntax' in snippet('cobol'), false);
+  assert.equal('syntax' in snippet(undefined), false);
+  assert.equal('syntax' in normalizeCard(concept({ syntax: 'sh' }), 'git'), false);
+});
+
 test('a quiz needs two to four options and the index of the answer', () => {
   const card = normalizeCard(quiz({ options: [' Yes ', 'No'] }), 'git');
   assert.deepEqual([card.options, card.answer], [['Yes', 'No'], 1]);

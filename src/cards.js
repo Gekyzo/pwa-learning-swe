@@ -1,3 +1,5 @@
+import { SYNTAXES } from '#highlight';
+
 // The content of the feed: cards in packs, one pack for each topic (CARD-1 to CARD-6). The packs
 // are the JSON files of content/; this module only validates them.
 export const KINDS = ['concept', 'snippet', 'pitfall', 'quiz', 'resource'];
@@ -34,7 +36,9 @@ const httpsUrl = (value) => {
 const KIND_FIELDS = {
   concept: () => ({}),
   pitfall: () => ({}),
-  snippet: ({ code }) => (typeof code === 'string' && code.trim() && code.length <= MAX_CODE ? { code } : null),
+  // A syntax that the highlight does not know is dropped: the code shows plain (CARD-8).
+  snippet: ({ code, syntax }) =>
+    typeof code === 'string' && code.trim() && code.length <= MAX_CODE ? { code, ...(SYNTAXES.includes(syntax) ? { syntax } : {}) } : null,
   quiz: ({ options, answer }) => {
     if (!Array.isArray(options) || options.length < 2 || options.length > 4) return null;
     const clean = options.map((option) => text(option, MAX_TITLE));

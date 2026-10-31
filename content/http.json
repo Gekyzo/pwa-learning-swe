@@ -41,6 +41,7 @@
       "title": "See the headers of a request and its response",
       "body": "-v prints the request and response headers, and -o /dev/null drops the body. Add -L to follow redirects.",
       "code": "curl -sv -o /dev/null https://example.com",
+      "syntax": "sh",
       "translations": {
         "es": {
           "title": "Ver las cabeceras de una petición y de su respuesta",

@@ -14,7 +14,8 @@
 | `src/modules.js` | The modules that Settings turns off, and the visible sections | `sections` |
 | `src/storage.js` | Load, save, validation hook, export, import, device preferences | `config`, `modules` |
 | `src/install.js` | The install offer state machine | nothing |
-| `src/cards.js` | The validation of a card and a pack of `content/`, and the pool of cards in a language (CARD-1 to CARD-5, CARD-7) | nothing |
+| `src/highlight.js` | The tokens of the code of a snippet in its syntax (CARD-8) | nothing |
+| `src/cards.js` | The validation of a card and a pack of `content/`, and the pool of cards in a language (CARD-1 to CARD-5, CARD-7) | `highlight` |
 | `src/learning.js` | The learning doc: the record of a seen card, its review box, the signals and the save (LRN-1 to LRN-8) | `config` |
 | `src/feed.js` | The order of the feed, the seen cards again, the due count, the saved cards and the topics that are off (FEED-1 to FEED-5, FEED-14) | `cards`, `learning` |
 | `src/particles.js` | The particles of a picture and their place in time (optional) | nothing |
@@ -24,7 +25,7 @@
 | `src/ui/update.js` | The version line, the check, the refresh and the update toast | `version`, `i18n`, `ui/context` |
 | `src/ui/install.js` | The Install button | `install`, `ui/context` |
 | `src/ui/nav.js` | The navigation, the change and the slide of a section | `sections`, `modules`, `ui/context`, `ui/update`, `ui/dust` |
-| `src/ui/card.js` | One card of the feed or of Saved, its actions, and the sheet of its other signals (FEED-9 to FEED-12) | `learning`, `feed`, `ds/sheet`, `ui/context`, `ui/controls` |
+| `src/ui/card.js` | One card of the feed or of Saved, its actions, and the sheet of its other signals (FEED-9 to FEED-12) | `learning`, `feed`, `highlight`, `ds/sheet`, `ui/context`, `ui/controls` |
 | `src/ui/feed.js` | The Feed section: the load of the packs, the next cards as the list scrolls, the seen cards, the due line and the switch of a topic (FEED-6 to FEED-8, FEED-14) | `cards`, `feed`, `learning`, `ui/context`, `ui/card` |
 | `src/ui/saved.js` | The Saved section (FEED-13) | `feed`, `ui/context`, `ui/card`, `ui/nav` |
 | `src/ui/settings.js` | Settings, Delete all data (SET-2), the Topics group (FEED-15), and the text of the page in its language | `learning`, `storage`, `i18n`, `modules`, `ui/context`, `ui/update`, `ui/feed`, `ui/account` |
@@ -66,7 +67,7 @@
 ## Storage keys
 
 The doc keys are in [09-feed.md](09-feed.md). The device preferences are `pwa-learning-swe.lang`, `pwa-learning-swe.cardLang`,
-`pwa-learning-swe.hand`, `pwa-learning-swe.theme`, `pwa-learning-swe.modules`, `pwa-learning-swe.topics` and `pwa-learning-swe.onboarded`. The account keeps `pwa-learning-swe.session` (ACC-5) and
+`pwa-learning-swe.hand`, `pwa-learning-swe.theme`, `pwa-learning-swe.codeTheme`, `pwa-learning-swe.modules`, `pwa-learning-swe.topics` and `pwa-learning-swe.onboarded`. The account keeps `pwa-learning-swe.session` (ACC-5) and
 `pwa-learning-swe.offline` (ACC-10), and `pwa-learning-swe.oauth` in `sessionStorage` for the time of a Google redirect (ACC-4).
 
 ## Change guide
@@ -89,6 +90,7 @@ The doc keys are in [09-feed.md](09-feed.md). The device preferences are `pwa-le
 | Test file | Covers |
 |---|---|
 | `tests/cards.test.js` | The validation of a card and a pack, their translations, and the pool (CARD-1 to CARD-5, CARD-7) |
+| `tests/highlight.test.js` | The tokens of each syntax and the plain code of an unknown one (CARD-8) |
 | `tests/learning.test.js` | The learning doc, the review boxes, the signals and the validation of the doc (LRN-1 to LRN-8) |
 | `tests/feed.test.js` | The order of the feed, its end, the seen cards again, the due count, the saved cards and the topics that are off (FEED-1 to FEED-5, FEED-14) |
 | `tests/content.test.js` | The packs of `content/`: each one valid, listed, translated and in `SHELL` (CARD-6) |

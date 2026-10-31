@@ -4,7 +4,7 @@ What changes for you in each version of the app. The newest version is first.
 
 ## Unreleased
 
-No change.
+- The code of the examples is now in colour. **Settings › Preferences › Code theme** chooses the colours: **Automatic** (follows the theme of the app), Nord, Darcula, Monokai Dimmed, Dracula, One Dark or Solarized Light.
 
 ## 0.5.0 - 2026-10-31
 

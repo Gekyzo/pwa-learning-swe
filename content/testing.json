@@ -41,6 +41,7 @@
       "title": "A unit test with no dependency",
       "body": "Node has a test runner since version 18. node --test finds the test files and runs them; --watch runs them again on each save.",
       "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\n\ntest('adds', () => {\n  assert.equal(add(2, 3), 5);\n});",
+      "syntax": "js",
       "translations": {
         "es": {
           "title": "Una prueba unitaria sin dependencias",

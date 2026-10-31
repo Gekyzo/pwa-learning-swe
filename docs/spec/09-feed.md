@@ -12,7 +12,7 @@ for review on a spaced schedule. Rules of `src/cards.js` and the packs of `conte
 - **CARD-2** `normalizeCard` accepts a card whose `id` is lowercase, starts with the id of its
   pack and a hyphen, and whose title (at most 120 characters) and body (at most 600) are not
   blank. It trims the texts and drops the fields that the kind does not have. A `snippet` keeps
-  its `code` as written, at most 800 characters.
+  its `code` as written, at most 800 characters, and its `syntax` when it is one of CARD-8.
 - **CARD-3** A `quiz` has two to four options, each a text of at most 120 characters, and the
   index of the right one. A `resource` has an `https` URL, a medium (`article`, `docs`, `video`,
   `course`, `book`, `repo`) and a whole number of minutes from 1 to 600. The body of a quiz is
@@ -33,6 +33,11 @@ for review on a spaced schedule. Rules of `src/cards.js` and the packs of `conte
   `buildPool(packs, lang)` gives each card and each topic the texts of `lang` where it has them,
   else the English ones, and its `lang`: the language of its text. The code, the answer, the URL
   and the state of a card are the same in every language.
+- **CARD-8** The `syntax` of a snippet is `js`, `sql` or `sh`. `highlight(code, syntax)` of
+  `src/highlight.js` cuts the code into tokens `{ type, text }` whose texts join back into the code:
+  `keyword`, `string`, `number`, `comment`, `function` (a call in `js` and `sql`, the command of a
+  line or of a step of a pipeline in `sh`) and `plain`. An unclosed string or comment runs to the
+  end. A snippet with no syntax, or one that is not known, is one `plain` token.
 
 ## Learning
 
@@ -109,7 +114,7 @@ Rules of `src/ui/feed.js`, `src/ui/card.js` and `src/ui/saved.js`.
   The topics of the new cards are `feed.topics`, for the topics that are on. The line is empty only until the packs load.
 - **FEED-9** A card shows its topic, kind and level; a pill by the reason it came: **Review** (in the data hue) for a due
   card, **New** for a new or explore card, and none for a card shown again; **Updated** when it was updated (LRN-7) as it came in, and **Retired** when it is retired.
-  Then its title, the code of a snippet, and its body. A resource has a button that opens its URL
+  Then its title, the code of a snippet in the colours of its tokens (CARD-8, SET-3), and its body. A resource has a button that opens its URL
   in a new tab, with the medium and the minutes. The text of a card is in English (`lang="en"`).
 - **FEED-10** A quiz shows its options. A tap answers it (LRN-5): the options lock, the right one
   is marked, a wrong choice is marked too, and `card.right` or `card.wrong` shows above the

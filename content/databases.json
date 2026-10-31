@@ -41,6 +41,7 @@
       "title": "Ask PostgreSQL what a query really did",
       "body": "EXPLAIN shows the plan; ANALYZE runs the query and adds the real times and row counts. A Seq Scan on a large table where you expected an Index Scan is the first thing to look for.",
       "code": "EXPLAIN (ANALYZE, BUFFERS)\nSELECT * FROM orders WHERE customer_id = 42;",
+      "syntax": "sql",
       "translations": {
         "es": {
           "title": "Pregunta a PostgreSQL qué hizo de verdad una consulta",

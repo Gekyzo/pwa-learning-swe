@@ -41,6 +41,7 @@
       "title": "A strategy is often just a map of functions",
       "body": "In a language with first-class functions, the strategy pattern needs no class hierarchy. A new rule is a new entry.",
       "code": "const PRICE = {\n  standard: (base) => base,\n  member: (base) => base * 0.9,\n  staff: () => 0,\n};\nconst total = PRICE[customer.kind](base);",
+      "syntax": "js",
       "translations": {
         "es": {
           "title": "Una estrategia suele ser solo un mapa de funciones",
