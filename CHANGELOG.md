@@ -4,6 +4,10 @@ User-visible changes, newest first.
 
 ## Unreleased
 
+No change.
+
+## 0.5.0 - 2026-10-31
+
 - Card language (I18N-7, CARD-7): packs and cards carry `translations: { es: … }` (pack `title`; card `title`, `body`, quiz `options`), validated by `normalizePack` and `normalizeCard`; `buildPool(packs, lang)` swaps the texts and sets `lang` on each card and topic; `SOURCE_LANG` in `src/cards.js`. The 42 cards and six pack titles have Spanish text. Preference `pwa-learning-swe.cardLang` (`loadCardLanguage`, `saveCardLanguage`; `app` or a language, `en` with no key), `resolveCardLanguage` in `src/i18n.js`, `cardChoice`, `cardLang` and `setCardLanguage` in `src/ui/context.js`, `localizePool` in `src/ui/feed.js`. Settings row `#card-language` after `#language`; keys `settings.cardLanguage|cardLanguageApp`, new wording of `settings.preferencesNote`. Card nodes, topic tiles, topic switches and the ledger take the `lang` of their text in place of `en`.
 
 ## 0.4.0 - 2026-10-31
