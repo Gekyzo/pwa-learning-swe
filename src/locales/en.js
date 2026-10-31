@@ -62,6 +62,7 @@ export default {
   'card.knew': 'I knew this',
   'card.remembered': 'Remembered',
   'card.forgot': 'Forgot',
+  'card.hint': 'Swipe for the next one · ♥ asks for more of this topic.',
   'card.more': 'More',
   'card.right': 'Right.',
   'card.wrong': 'Not quite.',

@@ -4,6 +4,7 @@ Lo que cambia para ti en cada versión de la app. La versión más nueva va prim
 
 ## Unreleased
 
+- En el primer arranque, las dos primeras tarjetas del feed muestran una línea que dice cómo pasar a la siguiente y qué hace el corazón.
 - Ajustes pone **Temas** primero, con cuántas tarjetas tiene cada uno, y **Borrar** al final. El interruptor de Guardadas está en **Preferencias**, la cuenta y la copia van juntas, y la ayuda está en **Aplicación**.
 - La introducción es ahora una sola página: elige tus temas en unas fichas que dicen cuántas tarjetas tiene cada uno, y **Ver cómo funciona el repaso** explica cuándo vuelve una tarjeta. **Ajustes › Aplicación** también lo muestra.
 - Iniciar sesión pone **Empezar sin cuenta** primero, con las cifras de la app y una tarjeta de muestra. Desde Ajustes, **Continuar con Google** va primero y el otro botón dice **Ahora no**.

@@ -71,7 +71,7 @@ export let topicsOff = storage ? loadTopics(storage) : [];
 export const textOf = ({ key, params }) => t(key, params);
 
 // Read before the doc. A stored doc, valid or not, means that the install is not new.
-const firstStart = storage ? shouldShow({ seen: loadOnboarded(storage), hasState: hasStoredDoc(storage, FEED_KEY) }) : false;
+export const firstStart = storage ? shouldShow({ seen: loadOnboarded(storage), hasState: hasStoredDoc(storage, FEED_KEY) }) : false;
 
 const DOC = { key: FEED_KEY, normalize: normalizeLearning, empty: emptyLearning };
 export let state = storage ? loadDoc(storage, DOC) : emptyLearning();

@@ -1,7 +1,7 @@
 import { normalizePack, buildPool } from '#cards';
 import { nextCards, seenAgain, dueBars, newCount, stateCounts, topicLedger, sessionDone, greetingOf, hiddenTopics, switchTopic } from '#feed';
 import { markSeen, isUpdated } from '#learning';
-import { $, el, ui, state, pool, lang, t, scroller, topicsOff, setPool, setTopics, commit, render } from '#ui/context';
+import { $, el, ui, state, pool, lang, firstStart, t, scroller, topicsOff, setPool, setTopics, commit, render } from '#ui/context';
 import { cardOf, cardNode } from '#ui/card';
 
 // The Feed section: the packs, the cards that come in as the user scrolls, and the seen ones
@@ -81,16 +81,20 @@ const seenObserver = new IntersectionObserver(
 // A node of a card stays while what it shows does not change, so a seen card is not built again.
 const nodes = new Map();
 
-const keyOf = (id) => {
+const keyOf = (id, hint) => {
   const record = state.records[id];
-  return JSON.stringify([lang, record?.liked, record?.saved, record?.box, ui.answers[id], ui.graded[id], ui.knew[id]]);
+  return JSON.stringify([lang, record?.liked, record?.saved, record?.box, ui.answers[id], ui.graded[id], ui.knew[id], hint]);
 };
 
+// The first two entries of the feed show the gesture hint on a first start (FEED-19).
+const HINTED = 2;
+
 const nodeFor = (entry, card) => {
-  const key = keyOf(card.id);
+  const hint = firstStart && ui.feed.indexOf(entry) < HINTED;
+  const key = keyOf(card.id, hint);
   const cached = nodes.get(card.id);
   if (cached?.key === key) return cached.node;
-  const node = cardNode(card, entry);
+  const node = cardNode(card, entry, { hint });
   nodes.set(card.id, { key, node });
   if (!ui.seen.has(card.id)) seenObserver.observe(node);
   return node;

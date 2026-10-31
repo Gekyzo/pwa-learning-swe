@@ -62,6 +62,7 @@ export default {
   'card.knew': 'Ya lo sabía',
   'card.remembered': 'Lo recordaba',
   'card.forgot': 'Lo olvidé',
+  'card.hint': 'Desliza para la siguiente · ♥ pide más de este tema.',
   'card.more': 'Más',
   'card.right': 'Correcto.',
   'card.wrong': 'No exactamente.',

@@ -570,6 +570,7 @@
      @part feed-card-result   The line that says if the answer was right, with data-result.
      @part feed-card-body     The text, or the explanation of a quiz once it is answered.
      @part feed-card-link     The button of a resource that opens its URL in a new tab, as wide as its text.
+     @part feed-card-hint     One faint line under the tags of the first two cards of a first start.
      @part feed-card-note     A muted line, such as when the card comes back.
      @part feed-card-actions  The buttons: like, save, then the review or I knew this, then more.
      @part feed-card-more     The button that opens the other signals of the card.
@@ -648,6 +649,12 @@
 
   .feed-card-link {
     align-self: flex-start;
+  }
+
+  .feed-card-hint {
+    margin: 0;
+    color: var(--faint);
+    font-size: var(--text-s);
   }
 
   .feed-card-note {

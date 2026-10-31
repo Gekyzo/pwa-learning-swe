@@ -139,3 +139,7 @@ Rules of `src/ui/feed.js`, `src/ui/card.js` and `src/ui/saved.js`.
   panels stands in the list after the third card, or at the end of a shorter list, and moves
   when the width changes, so the cards keep their nodes (FEED-12). The data hue is only on the
   bar of today and the progress of **Hoy**.
+- **FEED-19** On a first start (ONB-1), the first two entries of the feed show one line, `card.hint`,
+  under the tags of their card: `feed-card-hint`, in `--faint` and `--text-s`, with no data hue. Nothing
+  is stored, so the line goes with the next start. A preview card never shows it. The hint is part of
+  the key of the node (FEED-12), so no card node is built again for it.

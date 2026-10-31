@@ -63,8 +63,8 @@ const previewNode = (card, parts) => {
 };
 
 // `entry` is the place of the card in the feed, { reason, updated }, or null in Saved.
-// With `preview` the node has no actions and is inert: the sample of Sign in and of the walkthrough.
-export const cardNode = (card, entry = null, { preview = false } = {}) => {
+// With `hint` the card shows the gesture line (FEED-19). With `preview` the node has no actions and is inert: the sample of Sign in and of the walkthrough.
+export const cardNode = (card, entry = null, { preview = false, hint = false } = {}) => {
   const record = state.records[card.id];
   const chosen = ui.answers[card.id] ?? null;
   const topic = pool.topics.find((one) => one.id === card.topic)?.title ?? card.topic;
@@ -75,7 +75,9 @@ export const cardNode = (card, entry = null, { preview = false } = {}) => {
   if (entry?.updated) meta.append(pill(t('card.updated')));
   if (card.retired) meta.append(el('span', { className: 'pill ghost', textContent: t('card.retired') }));
 
-  const parts = [meta, el('h2', { className: 'feed-card-title', textContent: card.title })];
+  const parts = [meta];
+  if (hint) parts.push(el('p', { className: 'feed-card-hint', textContent: t('card.hint') }));
+  parts.push(el('h2', { className: 'feed-card-title', textContent: card.title }));
   if (card.kind === 'snippet') parts.push(el('pre', { className: 'feed-card-code', textContent: card.code }));
   if (card.kind === 'quiz') parts.push(options(card, chosen));
   if (card.kind === 'quiz' && chosen) {
