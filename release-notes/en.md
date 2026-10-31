@@ -4,6 +4,10 @@ What changes for you in each version of the app. The newest version is first.
 
 ## Unreleased
 
+No change.
+
+## 0.4.0 - 2026-10-31
+
 - On a first start, the first two cards of the feed show a line that says how to reach the next one and what the heart does.
 - Settings puts **Topics** first, with how many cards each one has, and **Erase** last. The Saved switch is in **Preferences**, the account and the backup go together, and the help is in **Application**.
 - The introduction is now one page: choose your topics on tiles that say how many cards each one has, and **See how review works** tells you when a card comes back. **Settings › Application** shows it too.
