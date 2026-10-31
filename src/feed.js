@@ -1,5 +1,5 @@
 import { LEVELS } from '#cards';
-import { isDue } from '#learning';
+import { DAY, isDue, stateOf } from '#learning';
 
 // The order of the feed (FEED-1 to FEED-5) and the topics that are off (FEED-14). The random source is a parameter, so a test can fix it.
 // A draw below DUE_SHARE takes a due card, below NEW_SHARE a new card, and else it explores.
@@ -71,6 +71,48 @@ export const seenAgain = (pool, state, { exclude = [], off = [], count }) =>
     .map((card) => ({ card, reason: 'again' }));
 
 export const dueCount = (pool, state, now, off = []) => eligible(pool, state, [], off).filter((card) => isDue(state.records[card.id], now)).length;
+
+// The cards that fall due in each of the next `days` windows of 24 hours: bar 0 is the cards due now (FEED-16).
+export const dueBars = (pool, state, now, off = [], days = 7) => {
+  const bars = Array.from({ length: days }, () => 0);
+  for (const card of eligible(pool, state, [], off)) {
+    const record = state.records[card.id];
+    if (!record) continue;
+    const bar = isDue(record, now) ? 0 : Math.ceil((record.due - now) / DAY);
+    if (bar < days) bars[bar] += 1;
+  }
+  return bars;
+};
+
+// The cards that may show and have no record (FEED-17).
+export const newCount = (pool, state, off = []) => eligible(pool, state, [], off).filter((card) => !state.records[card.id]).length;
+
+// The seen cards that may show, by state: learning, known and mastered (FEED-17).
+export const stateCounts = (pool, state, off = []) => {
+  const counts = { learning: 0, known: 0, mastered: 0 };
+  for (const card of eligible(pool, state, [], off)) {
+    const name = stateOf(state.records[card.id]);
+    if (name in counts) counts[name] += 1;
+  }
+  return counts;
+};
+
+// One row for each topic that is on, in pack order: its seen, due and new cards that may show (FEED-17).
+export const topicLedger = (pool, state, now, off = []) => {
+  const cards = eligible(pool, state, [], off);
+  return pool.topics
+    .filter(({ id }) => !off.includes(id))
+    .map(({ id, title }) => {
+      const own = cards.filter((card) => card.topic === id);
+      return {
+        id,
+        title,
+        seen: own.filter((card) => state.records[card.id]).length,
+        due: own.filter((card) => isDue(state.records[card.id], now)).length,
+        fresh: own.filter((card) => !state.records[card.id]).length,
+      };
+    });
+};
 
 // The saved cards of the pool, the last saved first. A retired card stays (FEED-5).
 export const savedCards = (pool, state) =>

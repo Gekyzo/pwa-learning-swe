@@ -72,6 +72,14 @@ Rules of `src/feed.js`. The random source is a parameter; the screen passes `Mat
   show, the least recently seen first.
 - **FEED-5** The due count is the due cards that may show. The saved cards are the cards of the
   packs whose record is saved, the last saved first; a retired card stays among them.
+- **FEED-16** The due bars count the cards that may show (not retired, not suspended, topic on)
+  for each of the next 7 days, in windows of 24 hours from the moment of the count. Bar 0, today,
+  is the cards due now (LRN-3). Bar k, from 1, is the cards due after `now + (k-1)` days and up to
+  `now + k` days. A card due later than 7 days is in no bar.
+- **FEED-17** The new count is the cards that may show and have no record. The state counts are
+  the seen cards that may show, in the groups of LRN-2: learning, known and mastered. The ledger
+  has one row for each topic that is on, in pack order, with its seen, due and new cards that may
+  show. The rows add up to the due bar 0, the new count and the state counts.
 
 ## Screen
 

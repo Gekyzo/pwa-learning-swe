@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { DUE_SHARE, NEW_SHARE, nextCard, nextCards, seenAgain, dueCount, savedCards, hiddenTopics, switchTopic } from '#feed';
+import { DUE_SHARE, NEW_SHARE, nextCard, nextCards, seenAgain, dueCount, savedCards, hiddenTopics, switchTopic, dueBars, newCount, stateCounts, topicLedger } from '#feed';
 import { DAY } from '#learning';
 
 const NOW = Date.UTC(2026, 9, 30, 12);
@@ -163,4 +163,60 @@ test('switchTopic does not turn off the last topic that is on', () => {
 
 test('switchTopic of an unknown id changes nothing', () => {
   assert.deepEqual(switchTopic(TOPICS, ['git'], 'nope', false), ['git']);
+});
+
+test('counts of an empty doc are zero', () => {
+  const cards = [card('git-a', 'git'), card('git-b', 'git'), card('http-a', 'http')];
+  const input = [pool(cards), doc(), NOW];
+  assert.deepEqual(dueBars(...input), [0, 0, 0, 0, 0, 0, 0]);
+  assert.equal(newCount(pool(cards), doc()), 3);
+  assert.deepEqual(stateCounts(pool(cards), doc()), { learning: 0, known: 0, mastered: 0 });
+  assert.deepEqual(topicLedger(...input), [
+    { id: 'git', title: 'git', seen: 0, due: 0, fresh: 2 },
+    { id: 'http', title: 'http', seen: 0, due: 0, fresh: 1 },
+  ]);
+});
+
+test('dueBars puts a record in the window that holds its due time', () => {
+  const ids = ['a', 'b', 'c', 'd', 'e', 'f', 'g'].map((one) => `git-${one}`);
+  const cards = ids.map((id) => card(id, 'git'));
+  const dues = [NOW - DAY, NOW, NOW + 1, NOW + DAY, NOW + DAY + 1, NOW + 8 * DAY, NOW + 6 * DAY];
+  const records = Object.fromEntries(ids.map((id, index) => [id, record({ due: dues[index] })]));
+  assert.deepEqual(dueBars(pool(cards), doc(records), NOW), [2, 2, 1, 0, 0, 0, 1]);
+  assert.equal(dueBars(pool(cards), doc(records), NOW, [], 3).length, 3);
+});
+
+test('counts leave out suspended, retired and off-topic cards', () => {
+  const cards = [card('git-a', 'git'), card('git-b', 'git'), card('git-c', 'git', 'intro', { retired: true }), card('http-a', 'http')];
+  const records = {
+    'git-a': record({ due: NOW, suspended: true }),
+    'git-c': record({ due: NOW }),
+    'http-a': record({ due: NOW }),
+  };
+  const off = ['http'];
+  assert.deepEqual(dueBars(pool(cards), doc(records), NOW, off), [0, 0, 0, 0, 0, 0, 0]);
+  assert.equal(newCount(pool(cards), doc(records), off), 1);
+  assert.deepEqual(stateCounts(pool(cards), doc(records), off), { learning: 0, known: 0, mastered: 0 });
+  assert.deepEqual(topicLedger(pool(cards), doc(records), NOW, off), [{ id: 'git', title: 'git', seen: 0, due: 0, fresh: 1 }]);
+});
+
+test('stateCounts groups the boxes', () => {
+  const cards = [0, 1, 2, 3, 4].map((box) => card(`git-${box}`, 'git'));
+  const records = Object.fromEntries(cards.map(({ id }, box) => [id, record({ box })]));
+  assert.deepEqual(stateCounts(pool(cards), doc(records)), { learning: 2, known: 2, mastered: 1 });
+});
+
+test('the ledger sums to the totals', () => {
+  const cards = [card('git-a', 'git'), card('git-b', 'git'), card('http-a', 'http'), card('http-b', 'http'), card('http-c', 'http')];
+  const records = {
+    'git-a': record({ due: NOW - DAY, box: 0 }),
+    'http-a': record({ due: NOW, box: 3 }),
+    'http-b': record({ due: NOW + 2 * DAY, box: 4 }),
+  };
+  const sum = (rows, key) => rows.reduce((total, row) => total + row[key], 0);
+  const rows = topicLedger(pool(cards), doc(records), NOW);
+  const states = stateCounts(pool(cards), doc(records));
+  assert.equal(sum(rows, 'due'), dueBars(pool(cards), doc(records), NOW)[0]);
+  assert.equal(sum(rows, 'fresh'), newCount(pool(cards), doc(records)));
+  assert.equal(sum(rows, 'seen'), states.learning + states.known + states.mastered);
 });
