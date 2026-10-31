@@ -118,8 +118,6 @@ export const topicLedger = (pool, state, now, off = []) => {
 export const savedCards = (pool, state) =>
   pool.cards.filter((card) => state.records[card.id]?.saved).sort((a, b) => state.records[b.id].savedAt - state.records[a.id].savedAt);
 
-// The topics that are off. A list that covers every topic of the packs counts as none, so the
-// feed is never empty by choice (FEED-14).
 // The ids that show the gesture hint: the first `limit` cards that came into the feed in a start (FEED-19).
 export const hintIds = (current, ids, limit) => {
   const next = new Set(current);
@@ -127,6 +125,8 @@ export const hintIds = (current, ids, limit) => {
   return next;
 };
 
+// The topics that are off. A list that covers every topic of the packs counts as none, so the
+// feed is never empty by choice (FEED-14).
 export const hiddenTopics = (topics, off) => (topics.every(({ id }) => off.includes(id)) ? [] : off);
 
 // The topics that are off after a switch of `id`. The last topic that is on stays on, and the ids

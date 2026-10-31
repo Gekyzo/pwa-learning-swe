@@ -1,5 +1,5 @@
 import { normalizePack, buildPool } from '#cards';
-import { nextCards, seenAgain, dueBars, newCount, stateCounts, topicLedger, sessionDone, greetingOf, hiddenTopics, switchTopic } from '#feed';
+import { nextCards, seenAgain, dueBars, newCount, stateCounts, topicLedger, sessionDone, greetingOf, hiddenTopics, hintIds, switchTopic } from '#feed';
 import { markSeen, isUpdated } from '#learning';
 import { $, el, ui, state, pool, lang, firstStart, t, scroller, topicsOff, setPool, setTopics, commit, render } from '#ui/context';
 import { cardOf, cardNode } from '#ui/card';
