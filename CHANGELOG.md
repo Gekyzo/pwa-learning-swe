@@ -4,6 +4,10 @@ User-visible changes, newest first.
 
 ## Unreleased
 
+No change.
+
+## 0.6.4 - 2026-11-25
+
 - Card rich text (CARD-10): a card `body` is a Markdown subset: a blank line starts a paragraph, one `\n` is a line break, `**text**` is bold and `*text*` is italic; a stray `*` stays text. New pure module `src/richtext.js` (`parseRich`, `plainText`, `richStats`, `bodyIssues`, `MIN_PARAGRAPHS` 2, `MAX_PARAGRAPHS` 4, `MAX_BOLD` 3, `MAX_BOLD_LENGTH` 60). The body limit of CARD-2 counts the visible text: `MAX_BODY` 600, and `MAX_BODY_SOURCE` 800 for the raw body with its markup. `bodyNode` of `src/ui/card.js` builds `<p>`, `<strong>`, `<em>` and `<br>` nodes; part `feed-card-strong`. New script `npm run check:bodies [pack...]` prints the style issues of each body. The 132 cards of `content/` are rewritten in English and Spanish to 2 to 4 paragraphs with bold and italic; each `rev` is unchanged: the facts are the same, so no review restarts.
 - Deploy gate: the content test `each body follows the style rules, in each language (CARD-10)` applies `bodyIssues` to each body and translation. `.github/workflows/pages.yml` has a `test` job (`npm test` on Node 22), and `build` needs it, so a release tag with a failed test deploys nothing (VER-9).
 

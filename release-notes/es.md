@@ -4,6 +4,10 @@ Lo que cambia para ti en cada versión de la app. La versión más nueva va prim
 
 ## Unreleased
 
+No change.
+
+## 0.6.4 - 2026-11-25
+
 - Las tarjetas se leen mejor: párrafos cortos, con la idea clave en negrita.
 
 ## 0.6.3 - 2026-11-25

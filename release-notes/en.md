@@ -4,6 +4,10 @@ What changes for you in each version of the app. The newest version is first.
 
 ## Unreleased
 
+No change.
+
+## 0.6.4 - 2026-11-25
+
 - Cards are easier to read: short paragraphs, with the key idea in bold.
 
 ## 0.6.3 - 2026-11-25
