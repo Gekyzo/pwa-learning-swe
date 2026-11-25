@@ -4,7 +4,7 @@ What changes for you in each version of the app. The newest version is first.
 
 ## Unreleased
 
-No change.
+- A new topic, LLMs in a web app, with 30 cards: the server proxy, streaming, retries, timeouts and cost limits. 13 of the cards have a diagram.
 
 ## 0.6.4 - 2026-11-25
 

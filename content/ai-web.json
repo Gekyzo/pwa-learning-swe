@@ -1,0 +1,590 @@
+{
+  "id": "ai-web",
+  "version": 1,
+  "title": "LLMs in a web app",
+  "translations": {
+    "es": {
+      "title": "LLMs en una aplicación web"
+    }
+  },
+  "cards": [
+    {
+      "id": "ai-web-proxy",
+      "kind": "concept",
+      "level": "intro",
+      "title": "The API key stays on the server: the browser calls your endpoint, not the model",
+      "body": "Any key in the JavaScript you ship is readable in DevTools, in the bundle and in the network tab. **Never call the model API from the browser.**\n\nThe page calls *your* route, such as /api/chat. The route reads the key from the server environment and calls the model.\n\nThat route is also the place for **auth, rate limits, cost caps and logs**: every request passes one point you control.",
+      "diagram": {
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 200\" role=\"img\"><defs><marker id=\"ai-web-proxy-head\" viewBox=\"0 0 8 8\" refX=\"7\" refY=\"4\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path class=\"d-head\" d=\"M0 0L8 4L0 8z\"/></marker></defs><rect class=\"d-box\" x=\"96\" y=\"8\" width=\"128\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"160\" y=\"22\">SPA</text><path class=\"d-arrow\" marker-end=\"url(#ai-web-proxy-head)\" d=\"M160 36V62\"/><text class=\"d-note d-start\" x=\"168\" y=\"49\">POST /api/chat</text><rect class=\"d-hi\" x=\"8\" y=\"64\" width=\"304\" height=\"72\" rx=\"6\"/><text class=\"d-text d-on-hi\" x=\"160\" y=\"78\">/api/chat</text><rect class=\"d-box\" x=\"16\" y=\"96\" width=\"92\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"62\" y=\"110\">auth</text><rect class=\"d-box\" x=\"114\" y=\"96\" width=\"92\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"160\" y=\"110\">rate limit</text><rect class=\"d-box\" x=\"212\" y=\"96\" width=\"92\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"258\" y=\"110\">logs</text><path class=\"d-arrow\" marker-end=\"url(#ai-web-proxy-head)\" d=\"M160 136V162\"/><text class=\"d-note d-start\" x=\"168\" y=\"149\">API_KEY</text><rect class=\"d-box\" x=\"96\" y=\"164\" width=\"128\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"160\" y=\"178\">model API</text></svg>",
+        "alt": "The SPA sends POST /api/chat to your route, highlighted. Inside the route are three boxes: auth, rate limit and logs. Only the route holds the API_KEY and calls the model API."
+      },
+      "translations": {
+        "es": {
+          "title": "La API key se queda en el servidor: el navegador llama a tu endpoint, no al modelo",
+          "body": "Cualquier clave en el JavaScript que publicas se puede leer en DevTools, en el bundle y en la pestaña de red. **Nunca llames a la API del modelo desde el navegador.**\n\nLa página llama a *tu* ruta, como /api/chat. La ruta lee la clave del entorno del servidor y llama al modelo.\n\nEsa ruta es también el sitio para **auth, rate limits, topes de coste y logs**: cada petición pasa por un punto que tú controlas.",
+          "diagram": {
+            "alt": "La SPA envía POST /api/chat a tu ruta, resaltada. Dentro de la ruta hay tres cajas: auth, rate limit y logs. Solo la ruta tiene la API_KEY y llama a la API del modelo."
+          }
+        }
+      }
+    },
+    {
+      "id": "ai-web-streaming",
+      "kind": "concept",
+      "level": "intro",
+      "title": "Stream the answer so the user reads while the model writes",
+      "body": "Two numbers set how fast a chat feels: the *time to first token* (TTFT) and the tokens per second.\n\nWithout streaming, the user sees nothing until the last token. With streaming, **a first token at 0.5 s feels fast** even when the whole answer takes 10 s.\n\nThe total time stays the same. **Streaming changes the wait, not the work.**",
+      "diagram": {
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 144\" role=\"img\"><text class=\"d-note d-start\" x=\"16\" y=\"12\">stream: false</text><path class=\"d-line d-dash\" d=\"M16 34H286\"/><rect class=\"d-box\" x=\"288\" y=\"22\" width=\"24\" height=\"24\" rx=\"4\"/><text class=\"d-note d-start\" x=\"16\" y=\"64\">stream: true</text><path class=\"d-line d-dash\" d=\"M16 86H29\"/><rect class=\"d-hi\" x=\"31\" y=\"74\" width=\"281\" height=\"24\" rx=\"4\"/><text class=\"d-text d-on-hi\" x=\"172\" y=\"86\">tokens/s</text><text class=\"d-note d-start\" x=\"34\" y=\"110\">TTFT 0.5 s</text><path class=\"d-line\" d=\"M16 122H312\"/><text class=\"d-note d-start\" x=\"16\" y=\"136\">0 s</text><text class=\"d-note d-end\" x=\"312\" y=\"136\">10 s</text></svg>",
+        "alt": "Two timelines from 0 to 10 s. With stream: false, a dashed wait runs to 10 s and all the text arrives at the end. With stream: true, the wait ends at 0.5 s, the TTFT, and a highlighted bar of tokens runs from there to 10 s."
+      },
+      "translations": {
+        "es": {
+          "title": "Haz streaming de la respuesta para que el usuario lea mientras el modelo escribe",
+          "body": "Dos números deciden lo rápido que parece un chat: el *time to first token* (TTFT) y los tokens por segundo.\n\nSin streaming, el usuario no ve nada hasta el último token. Con streaming, **un primer token a los 0,5 s parece rápido** aunque la respuesta completa tarde 10 s.\n\nEl tiempo total es el mismo. **El streaming cambia la espera, no el trabajo.**",
+          "diagram": {
+            "alt": "Dos líneas de tiempo de 0 a 10 s. Con stream: false, una espera discontinua llega a 10 s y todo el texto llega al final. Con stream: true, la espera acaba a los 0,5 s, el TTFT, y una barra resaltada de tokens va desde ahí hasta los 10 s."
+          }
+        }
+      }
+    },
+    {
+      "id": "ai-web-sse",
+      "kind": "concept",
+      "level": "intro",
+      "title": "Server-sent events carry a token stream over one plain HTTP response",
+      "body": "*Server-sent events* (SSE) are one HTTP response that stays open. The server sends Content-Type: text/event-stream and writes text as it goes.\n\nEach event is one or more data: lines, and **a blank line ends the event**. The browser handles each event as it arrives.\n\nThe flow goes **one direction only**, from server to browser. The EventSource API of the browser reconnects for you, but it sends GET only, with no body.",
+      "diagram": {
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 172\" role=\"img\"><defs><marker id=\"ai-web-sse-head\" viewBox=\"0 0 8 8\" refX=\"7\" refY=\"4\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path class=\"d-head\" d=\"M0 0L8 4L0 8z\"/></marker></defs><rect class=\"d-box\" x=\"8\" y=\"16\" width=\"88\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"52\" y=\"30\">/api/chat</text><rect class=\"d-box\" x=\"224\" y=\"16\" width=\"88\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"268\" y=\"30\">fetch</text><path class=\"d-arrow\" marker-end=\"url(#ai-web-sse-head)\" d=\"M96 30H222\"/><text class=\"d-note\" x=\"160\" y=\"12\">text/event-stream</text><rect class=\"d-box\" x=\"40\" y=\"64\" width=\"168\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"124\" y=\"78\">data: Hel</text><rect class=\"d-hi\" x=\"216\" y=\"64\" width=\"64\" height=\"28\" rx=\"6\"/><text class=\"d-text d-on-hi\" x=\"248\" y=\"78\">\\n\\n</text><rect class=\"d-box\" x=\"40\" y=\"100\" width=\"168\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"124\" y=\"114\">data: lo</text><rect class=\"d-hi\" x=\"216\" y=\"100\" width=\"64\" height=\"28\" rx=\"6\"/><text class=\"d-text d-on-hi\" x=\"248\" y=\"114\">\\n\\n</text><rect class=\"d-box\" x=\"40\" y=\"136\" width=\"168\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"124\" y=\"150\">data: !</text><rect class=\"d-hi\" x=\"216\" y=\"136\" width=\"64\" height=\"28\" rx=\"6\"/><text class=\"d-text d-on-hi\" x=\"248\" y=\"150\">\\n\\n</text></svg>",
+        "alt": "Your route /api/chat sends a text/event-stream response to fetch in the browser, in one direction only. Below are three events: data: Hel, data: lo and data: !. Each one ends with a highlighted pair of newlines."
+      },
+      "translations": {
+        "es": {
+          "title": "Los server-sent events llevan un flujo de tokens en una sola respuesta HTTP normal",
+          "body": "Los *server-sent events* (SSE) son una respuesta HTTP que se queda abierta. El servidor envía Content-Type: text/event-stream y escribe texto según avanza.\n\nCada evento es una o más líneas data:, y **una línea en blanco cierra el evento**. El navegador procesa cada evento al llegar.\n\nEl flujo va **en una sola dirección**, del servidor al navegador. La API EventSource del navegador reconecta sola, pero solo envía GET, sin body.",
+          "diagram": {
+            "alt": "Tu ruta /api/chat envía una respuesta text/event-stream a fetch en el navegador, en una sola dirección. Debajo hay tres eventos: data: Hel, data: lo y data: !. Cada uno acaba con un par de saltos de línea resaltado."
+          }
+        }
+      }
+    },
+    {
+      "id": "ai-web-fetch-stream",
+      "kind": "snippet",
+      "level": "intro",
+      "title": "Read a streamed response with fetch and a reader",
+      "body": "res.body is a *ReadableStream* of bytes. getReader() gives you each chunk as the server sends it.\n\nDecode with the stream flag: **a UTF-8 character can split across two chunks**, and { stream: true } keeps the first half for the next call.\n\nAdd each piece to the page **as text, never as HTML**.",
+      "code": "const res = await fetch('/api/chat', {\n  method: 'POST',\n  headers: { 'Content-Type': 'application/json' },\n  body: JSON.stringify({ prompt }),\n});\nconst reader = res.body.getReader();\nconst decoder = new TextDecoder();\nfor (;;) {\n  const { done, value } = await reader.read();\n  if (done) break;\n  out.append(decoder.decode(value, { stream: true }));\n}",
+      "syntax": "js",
+      "translations": {
+        "es": {
+          "title": "Lee una respuesta en streaming con fetch y un reader",
+          "body": "res.body es un *ReadableStream* de bytes. getReader() te da cada chunk según lo envía el servidor.\n\nDecodifica con el flag de stream: **un carácter UTF-8 se puede partir entre dos chunks**, y { stream: true } guarda la primera mitad para la siguiente llamada.\n\nAñade cada trozo a la página **como texto, nunca como HTML**."
+        }
+      }
+    },
+    {
+      "id": "ai-web-abort",
+      "kind": "snippet",
+      "level": "intro",
+      "title": "A stop button is an AbortController",
+      "body": "Create an *AbortController* for each request and pass its signal to fetch. A click on stop calls abort().\n\nThe pending fetch, or the read of its body, rejects with an AbortError. **Treat AbortError as a normal end**, not as an error to show.\n\nThis stops the browser only. **The server must cancel its own call** to the model, or it keeps paying.",
+      "code": "let ctrl;\nasync function ask(prompt) {\n  ctrl = new AbortController();\n  try {\n    const res = await fetch('/api/chat',\n    { method: 'POST', body: prompt, signal: ctrl.signal });\n    await render(res.body);\n  } catch (err) {\n    if (err.name !== 'AbortError') throw err;\n  }\n}\nstopButton.onclick = () => ctrl?.abort();",
+      "syntax": "js",
+      "translations": {
+        "es": {
+          "title": "Un botón de parar es un AbortController",
+          "body": "Crea un *AbortController* para cada petición y pasa su signal a fetch. Un clic en parar llama a abort().\n\nEl fetch pendiente, o la lectura de su body, se rechaza con un AbortError. **Trata AbortError como un final normal**, no como un error que mostrar.\n\nEsto solo para el navegador. **El servidor debe cancelar su propia llamada** al modelo, o sigue pagando."
+        }
+      }
+    },
+    {
+      "id": "ai-web-render-untrusted",
+      "kind": "pitfall",
+      "level": "intro",
+      "title": "Model output is untrusted text: never put it into innerHTML",
+      "body": "The trap: you render the answer with innerHTML because the model writes Markdown and you want it formatted.\n\nThe symptom: a *prompt injection* in a retrieved page makes the model write <img src=x onerror=...>, and **the script runs in the session of your user**.\n\nThe fix: set textContent, or use a Markdown renderer that **escapes raw HTML**, and sanitise what it returns.",
+      "translations": {
+        "es": {
+          "title": "La salida del modelo es texto no fiable: nunca la metas en innerHTML",
+          "body": "La trampa: pintas la respuesta con innerHTML porque el modelo escribe Markdown y la quieres con formato.\n\nEl síntoma: una *prompt injection* en una página recuperada hace que el modelo escriba <img src=x onerror=...>, y **el script se ejecuta en la sesión de tu usuario**.\n\nLa solución: usa textContent, o un renderizador de Markdown que **escape el HTML crudo**, y sanea lo que devuelve."
+        }
+      }
+    },
+    {
+      "id": "ai-web-quiz-key",
+      "kind": "quiz",
+      "level": "intro",
+      "title": "Where can the model API key live in a single-page app?",
+      "body": "Only **the server can keep a secret**. Your route holds the key and calls the model; the page calls your route.\n\nA *build-time* variable is the tempting answer: the bundler copies its value into the JavaScript, so it ships to every visitor. localStorage and an obfuscated string ship too.\n\n**If the browser can read it, a user can read it.**",
+      "options": [
+        "In a build-time environment variable, such as VITE_API_KEY",
+        "In localStorage, set after the user logs in",
+        "On your server, behind your own API route",
+        "In the bundle, as an obfuscated string"
+      ],
+      "answer": 2,
+      "translations": {
+        "es": {
+          "title": "¿Dónde puede estar la API key del modelo en una single-page app?",
+          "body": "Solo **el servidor puede guardar un secreto**. Tu ruta tiene la clave y llama al modelo; la página llama a tu ruta.\n\nUna variable *de build* es la respuesta tentadora: el bundler copia su valor en el JavaScript, así que llega a cada visitante. localStorage y una cadena ofuscada también llegan.\n\n**Si el navegador lo puede leer, un usuario lo puede leer.**",
+          "options": [
+            "En una variable de entorno de build, como VITE_API_KEY",
+            "En localStorage, guardada después del login",
+            "En tu servidor, detrás de tu propia ruta de API",
+            "En el bundle, como una cadena ofuscada"
+          ]
+        }
+      }
+    },
+    {
+      "id": "ai-web-quiz-sse",
+      "kind": "quiz",
+      "level": "intro",
+      "title": "Which line ends one server-sent event?",
+      "body": "An event ends at **a blank line**: two newlines in a row. The browser then hands the event to your code.\n\ndata: [DONE] is *a convention of some APIs*, sent as an ordinary event; SSE gives it no meaning. event: end only names the type of an event.\n\nA closed connection ends the whole stream, and EventSource then **reconnects on its own**.",
+      "options": [
+        "data: [DONE]",
+        "A blank line",
+        "event: end",
+        "None: the server closes the connection"
+      ],
+      "answer": 1,
+      "translations": {
+        "es": {
+          "title": "¿Qué línea cierra un server-sent event?",
+          "body": "Un evento acaba en **una línea en blanco**: dos saltos de línea seguidos. Entonces el navegador entrega el evento a tu código.\n\ndata: [DONE] es *una convención de algunas API*, enviada como un evento normal; SSE no le da ningún significado. event: end solo da nombre al tipo de un evento.\n\nUna conexión cerrada acaba todo el flujo, y EventSource **vuelve a conectar por su cuenta**.",
+          "options": [
+            "data: [DONE]",
+            "Una línea en blanco",
+            "event: end",
+            "Ninguna: el servidor cierra la conexión"
+          ]
+        }
+      }
+    },
+    {
+      "id": "ai-web-res-mdn-sse",
+      "kind": "resource",
+      "level": "intro",
+      "title": "MDN: Server-sent events",
+      "body": "The MDN guide to *server-sent events*: the EventSource API, **the text/event-stream format** with its data, event, id and retry fields, and a server example.\n\nRead the format section before you parse a stream by hand.\n\n**The reference for the wire format of a token stream.**",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events",
+      "media": "docs",
+      "minutes": 20,
+      "translations": {
+        "es": {
+          "title": "MDN: Server-sent events",
+          "body": "La guía de MDN sobre los *server-sent events*, en inglés: la API EventSource, **el formato text/event-stream** con sus campos data, event, id y retry, y un ejemplo de servidor.\n\nLee la sección del formato antes de parsear un flujo a mano.\n\n**La referencia del formato de un flujo de tokens.**"
+        }
+      }
+    },
+    {
+      "id": "ai-web-429",
+      "kind": "concept",
+      "level": "intermediate",
+      "title": "A 429 means slow down: wait the time the server names, then retry",
+      "body": "A *429 Too Many Requests* means you hit a rate limit. Model APIs count **requests per minute and tokens per minute**, often per key or per organisation.\n\nRead the Retry-After header when it is present: it gives the seconds to wait. Without it, back off with jitter.\n\nDo not retry at once: **an immediate retry hits the same limit** and only adds load.",
+      "translations": {
+        "es": {
+          "title": "Un 429 significa que vayas más despacio: espera el tiempo que dice el servidor y reintenta",
+          "body": "Un *429 Too Many Requests* significa que has llegado a un rate limit. Las API de modelos cuentan **peticiones por minuto y tokens por minuto**, a menudo por clave o por organización.\n\nLee la cabecera Retry-After cuando está: da los segundos que hay que esperar. Sin ella, espera con backoff y jitter.\n\nNo reintentes enseguida: **un reintento inmediato choca con el mismo límite** y solo añade carga."
+        }
+      }
+    },
+    {
+      "id": "ai-web-timeouts",
+      "kind": "concept",
+      "level": "intermediate",
+      "title": "Set two timeouts: one for the first token, one for the whole answer",
+      "body": "A stream fails in two ways. A *stuck queue* sends nothing; a *runaway answer* never stops.\n\nA **first-token timeout of about 10 s** catches the first. A **total timeout**, such as 60 s, caps the second.\n\nOne timeout cannot do both. 10 s for everything cuts long, good answers. 60 s for everything leaves the user in front of an empty box for a minute.",
+      "diagram": {
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 148\" role=\"img\"><path class=\"d-data-line d-dash\" d=\"M72 22V124\"/><path class=\"d-data-line d-dash\" d=\"M288 22V124\"/><text class=\"d-note\" x=\"72\" y=\"12\">10 s</text><text class=\"d-note\" x=\"288\" y=\"12\">60 s</text><path class=\"d-line d-dash\" d=\"M24 40H72\"/><text class=\"d-text\" x=\"84\" y=\"40\">✗</text><path class=\"d-line d-dash\" d=\"M24 76H44\"/><rect class=\"d-box\" x=\"44\" y=\"66\" width=\"200\" height=\"20\" rx=\"4\"/><text class=\"d-text\" x=\"258\" y=\"76\">✓</text><path class=\"d-line d-dash\" d=\"M24 112H48\"/><rect class=\"d-box\" x=\"48\" y=\"102\" width=\"240\" height=\"20\" rx=\"4\"/><text class=\"d-text\" x=\"300\" y=\"112\">✗</text><text class=\"d-note\" x=\"72\" y=\"138\">TTFT</text><text class=\"d-note\" x=\"288\" y=\"138\">total</text></svg>",
+        "alt": "A timeline with two highlighted dashed limits: TTFT at 10 s and total at 60 s. A request that sends nothing stops at 10 s with a cross. A normal answer starts early and ends before 60 s with a check. A runaway answer reaches 60 s and stops with a cross."
+      },
+      "translations": {
+        "es": {
+          "title": "Pon dos timeouts: uno para el primer token y otro para la respuesta completa",
+          "body": "Un stream falla de dos formas. Una *cola atascada* no envía nada; una *respuesta desbocada* no para nunca.\n\nUn **timeout de primer token de unos 10 s** detecta lo primero. Un **timeout total**, como 60 s, limita lo segundo.\n\nUn solo timeout no puede hacer las dos cosas. 10 s para todo corta respuestas largas y buenas. 60 s para todo deja al usuario ante una caja vacía durante un minuto.",
+          "diagram": {
+            "alt": "Una línea de tiempo con dos límites discontinuos resaltados: TTFT a los 10 s y total a los 60 s. Una petición que no envía nada se para a los 10 s con una cruz. Una respuesta normal empieza pronto y acaba antes de 60 s con una marca de correcto. Una respuesta desbocada llega a 60 s y se para con una cruz."
+          }
+        }
+      }
+    },
+    {
+      "id": "ai-web-token-budget",
+      "kind": "concept",
+      "level": "intermediate",
+      "title": "Cap output tokens per request and tokens per user per day",
+      "body": "Cost is *input plus output tokens*, and an output token usually costs more than an input token.\n\nSet two caps. **max_tokens on every request** stops one prompt from writing pages. **A daily token quota per user** stops one account, or one script, from spending the month.\n\nAdd up the tokens the API reports in each response, store them per user, and answer 429 when the quota is spent.",
+      "diagram": {
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 136\" role=\"img\"><text class=\"d-note\" x=\"264\" y=\"10\">max_tokens</text><rect class=\"d-box\" x=\"8\" y=\"22\" width=\"160\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"88\" y=\"36\">input</text><rect class=\"d-hi\" x=\"168\" y=\"22\" width=\"96\" height=\"28\" rx=\"6\"/><text class=\"d-text d-on-hi\" x=\"216\" y=\"36\">output</text><path class=\"d-line\" d=\"M264 16V56\"/><text class=\"d-note\" x=\"252\" y=\"76\">24 h · user_id</text><rect class=\"d-box\" x=\"8\" y=\"92\" width=\"36\" height=\"28\" rx=\"4\"/><rect class=\"d-box\" x=\"48\" y=\"92\" width=\"36\" height=\"28\" rx=\"4\"/><rect class=\"d-box\" x=\"88\" y=\"92\" width=\"36\" height=\"28\" rx=\"4\"/><rect class=\"d-box\" x=\"128\" y=\"92\" width=\"36\" height=\"28\" rx=\"4\"/><rect class=\"d-box\" x=\"168\" y=\"92\" width=\"36\" height=\"28\" rx=\"4\"/><rect class=\"d-box\" x=\"208\" y=\"92\" width=\"36\" height=\"28\" rx=\"4\"/><path class=\"d-line\" d=\"M252 88V128\"/><text class=\"d-text\" x=\"284\" y=\"106\">429</text></svg>",
+        "alt": "Top: one request, an input bar followed by a highlighted output bar that ends at the max_tokens line. Bottom: six requests of one user_id in 24 h fill the daily quota; the next request past the line gets a 429."
+      },
+      "translations": {
+        "es": {
+          "title": "Limita los tokens de salida por petición y los tokens por usuario y día",
+          "body": "El coste son los *tokens de entrada más los de salida*, y un token de salida suele costar más que uno de entrada.\n\nPon dos límites. **max_tokens en cada petición** impide que un prompt escriba páginas. **Una cuota diaria de tokens por usuario** impide que una cuenta, o un script, gaste el mes.\n\nSuma los tokens que la API indica en cada respuesta, guárdalos por usuario y responde 429 cuando la cuota se acaba.",
+          "diagram": {
+            "alt": "Arriba: una petición, una barra de entrada seguida de una barra de salida resaltada que acaba en la línea de max_tokens. Abajo: seis peticiones de un user_id en 24 h llenan la cuota diaria; la siguiente petición, pasada la línea, recibe un 429."
+          }
+        }
+      }
+    },
+    {
+      "id": "ai-web-partial-json",
+      "kind": "concept",
+      "level": "intermediate",
+      "title": "Streamed JSON is invalid until the last brace arrives",
+      "body": "With structured output on a stream, each chunk adds a fragment: {\"city\":\"Pa. **JSON.parse throws on every prefix but the last.**\n\nFor logic, **wait for the end of the stream**, then parse and validate once.\n\nFor display, use a *tolerant parser* that closes the open strings and brackets of the prefix. Treat its result as a preview: a field can still change until the end.",
+      "diagram": {
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 132\" role=\"img\"><text class=\"d-note\" x=\"268\" y=\"10\">JSON.parse</text><rect class=\"d-box\" x=\"8\" y=\"24\" width=\"232\" height=\"28\" rx=\"6\"/><text class=\"d-text d-start\" x=\"16\" y=\"38\"><tspan>{&quot;city&quot;:</tspan><tspan>&quot;Pa</tspan></text><text class=\"d-text\" x=\"276\" y=\"38\">✗</text><rect class=\"d-box\" x=\"8\" y=\"60\" width=\"232\" height=\"28\" rx=\"6\"/><text class=\"d-text d-start\" x=\"16\" y=\"74\"><tspan>{&quot;city&quot;:</tspan><tspan>&quot;Paris&quot;,</tspan><tspan>&quot;te</tspan></text><text class=\"d-text\" x=\"276\" y=\"74\">✗</text><rect class=\"d-hi\" x=\"8\" y=\"96\" width=\"232\" height=\"28\" rx=\"6\"/><text class=\"d-text d-on-hi d-start\" x=\"16\" y=\"110\"><tspan>{&quot;city&quot;:</tspan><tspan>&quot;Paris&quot;,</tspan><tspan>&quot;temp&quot;:21}</tspan></text><text class=\"d-text\" x=\"276\" y=\"110\">✓</text></svg>",
+        "alt": "Three prefixes of one streamed JSON object. JSON.parse fails on the first two, which end in the middle of a string, and succeeds only on the last, highlighted, which ends with the closing brace."
+      },
+      "translations": {
+        "es": {
+          "title": "El JSON en streaming no es válido hasta que llega la última llave",
+          "body": "Con structured output en un stream, cada chunk añade un fragmento: {\"city\":\"Pa. **JSON.parse falla en cada prefijo menos el último.**\n\nPara la lógica, **espera al final del stream** y parsea y valida una vez.\n\nPara mostrarlo, usa un *parser tolerante* que cierra las cadenas y los corchetes abiertos del prefijo. Trata su resultado como una vista previa: un campo puede cambiar hasta el final.",
+          "diagram": {
+            "alt": "Tres prefijos de un mismo objeto JSON en streaming. JSON.parse falla en los dos primeros, que acaban en mitad de una cadena, y solo funciona en el último, resaltado, que acaba con la llave de cierre."
+          }
+        }
+      }
+    },
+    {
+      "id": "ai-web-sse-parse",
+      "kind": "snippet",
+      "level": "intermediate",
+      "title": "Parse server-sent events by hand when you must POST",
+      "body": "EventSource sends GET only, and a chat request needs a POST with a body. So **read the fetch stream and parse the events yourself**.\n\nAppend each decoded chunk to a buffer and split on a blank line. *The last piece may be partial*: keep it in the buffer for the next chunk.\n\nFrom each event, **join its data: lines** and strip one leading space.",
+      "code": "const dataOf = (ev) => ev.split('\\n')\n  .filter((l) => l.startsWith('data:'))\n  .map((l) => l.slice(5).replace(/^ /, '')).join('\\n');\nconst reader = res.body\n  .pipeThrough(new TextDecoderStream()).getReader();\nlet buf = '';\nfor (let r; !(r = await reader.read()).done; ) {\n  const events = (buf += r.value).split('\\n\\n');\n  buf = events.pop(); // the last one may be partial\n  for (const ev of events) onData(dataOf(ev));\n}",
+      "syntax": "js",
+      "translations": {
+        "es": {
+          "title": "Parsea los server-sent events a mano cuando necesitas POST",
+          "body": "EventSource solo envía GET, y una petición de chat necesita un POST con body. Así que **lee el stream de fetch y parsea tú los eventos**.\n\nAñade cada chunk decodificado a un buffer y divide por las líneas en blanco. *El último trozo puede estar incompleto*: déjalo en el buffer para el siguiente chunk.\n\nDe cada evento, **une sus líneas data:** y quita un espacio inicial."
+        }
+      }
+    },
+    {
+      "id": "ai-web-backoff",
+      "kind": "snippet",
+      "level": "intermediate",
+      "title": "Retry with exponential backoff and full jitter",
+      "body": "*Full jitter* waits a random time between 0 and base × 2^i. The upper bound grows with each try, and the random pick spreads the clients apart.\n\nRetry **only 429 and 5xx**, with 3 tries in all. When the server sends Retry-After in seconds, **wait exactly that long**.\n\ncall is a function, so each try sends a new request.",
+      "code": "const sleep = (ms) => new Promise((r) => setTimeout(r, ms));\nconst retryable = (s) => s === 429 || s >= 500;\nasync function withRetry(call, tries = 3, base = 500) {\n  for (let i = 1; ; i++) {\n    const res = await call();\n    if (res.ok || i >= tries) return res;\n    if (!retryable(res.status)) return res;\n    const after = Number(res.headers.get('Retry-After'));\n    const jitter = Math.random() * base * 2 ** i;\n    await sleep(after > 0 ? after * 1000 : jitter);\n  }\n}",
+      "syntax": "js",
+      "translations": {
+        "es": {
+          "title": "Reintenta con backoff exponencial y full jitter",
+          "body": "El *full jitter* espera un tiempo aleatorio entre 0 y base × 2^i. El límite superior crece en cada intento, y la elección aleatoria separa a los clientes.\n\nReintenta **solo 429 y 5xx**, con 3 intentos en total. Cuando el servidor envía Retry-After en segundos, **espera exactamente ese tiempo**.\n\ncall es una función, así que cada intento envía una petición nueva."
+        }
+      }
+    },
+    {
+      "id": "ai-web-sse-route",
+      "kind": "snippet",
+      "level": "intermediate",
+      "title": "A Node route that relays the model stream as SSE",
+      "body": "The route is a *relay*: it sets text/event-stream and Cache-Control: no-cache, then writes each upstream chunk as one event. X-Accel-Buffering: no asks nginx not to hold the chunks.\n\n**Encode each chunk with JSON.stringify**: a newline in the text would end the event too early.\n\nmodel.stream stands for the streaming call of your SDK. **Abort it when the client leaves** before you go to production.",
+      "code": "app.post('/api/chat', async (req, res) => {\n  res.writeHead(200, {\n    'Content-Type': 'text/event-stream',\n    'Cache-Control': 'no-cache',\n    'X-Accel-Buffering': 'no',\n  });\n  const stream = await model.stream(req.body.messages);\n  for await (const c of stream) {\n    res.write('data: ' + JSON.stringify(c.text) + '\\n\\n');\n  }\n  res.end();\n});",
+      "syntax": "js",
+      "translations": {
+        "es": {
+          "title": "Una ruta de Node que reenvía el stream del modelo como SSE",
+          "body": "La ruta es un *relé*: fija text/event-stream y Cache-Control: no-cache, y escribe cada chunk del modelo como un evento. X-Accel-Buffering: no le pide a nginx que no retenga los chunks.\n\n**Codifica cada chunk con JSON.stringify**: un salto de línea en el texto cerraría el evento antes de tiempo.\n\nmodel.stream representa la llamada en streaming de tu SDK. **Abórtala cuando el cliente se va** antes de pasar a producción."
+        }
+      }
+    },
+    {
+      "id": "ai-web-abort-upstream",
+      "kind": "pitfall",
+      "level": "intermediate",
+      "title": "The user pressed stop, and the server still pays for the whole answer",
+      "body": "The trap: the browser aborts its fetch, and you expect the model call to stop with it.\n\nThe symptom: the connection to the browser closes, but **your route keeps reading the model** to the last token. You pay for an answer nobody reads.\n\nThe fix: create an *AbortController* per request and pass its signal to the model call. **Abort it when the response closes before it ends**: res.on('close') with res.writableEnded still false.",
+      "diagram": {
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 156\" role=\"img\"><path class=\"d-line d-dash\" d=\"M160 12V148\"/><rect class=\"d-box\" x=\"8\" y=\"20\" width=\"88\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"52\" y=\"34\">fetch</text><path class=\"d-line\" d=\"M104 34H154\"/><text class=\"d-text\" x=\"172\" y=\"34\">✗</text><rect class=\"d-box\" x=\"8\" y=\"68\" width=\"88\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"52\" y=\"82\">/api/chat</text><path class=\"d-line\" d=\"M104 82H312\"/><rect class=\"d-box\" x=\"8\" y=\"116\" width=\"88\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"52\" y=\"130\">LLM API</text><rect class=\"d-box\" x=\"104\" y=\"120\" width=\"56\" height=\"20\" rx=\"4\"/><rect class=\"d-hi\" x=\"160\" y=\"120\" width=\"152\" height=\"20\" rx=\"4\"/><text class=\"d-text d-on-hi\" x=\"236\" y=\"130\">tokens</text></svg>",
+        "alt": "Three rows on one timeline: fetch, /api/chat and LLM API. A dashed vertical line marks the moment the user presses stop. The fetch row ends there with a cross. The /api/chat row and the LLM API tokens go on to the end; the tokens after the stop are highlighted."
+      },
+      "translations": {
+        "es": {
+          "title": "El usuario pulsó parar, y el servidor sigue pagando la respuesta completa",
+          "body": "La trampa: el navegador aborta su fetch, y esperas que la llamada al modelo pare con él.\n\nEl síntoma: la conexión con el navegador se cierra, pero **tu ruta sigue leyendo el modelo** hasta el último token. Pagas una respuesta que nadie lee.\n\nLa solución: crea un *AbortController* por petición y pasa su signal a la llamada al modelo. **Abórtalo cuando la respuesta se cierra antes de acabar**: res.on('close') con res.writableEnded todavía en false.",
+          "diagram": {
+            "alt": "Tres filas en una línea de tiempo: fetch, /api/chat y LLM API. Una línea vertical discontinua marca el momento en que el usuario pulsa parar. La fila de fetch acaba ahí con una cruz. La fila de /api/chat y los tokens de LLM API siguen hasta el final; los tokens posteriores a la parada están resaltados."
+          }
+        }
+      }
+    },
+    {
+      "id": "ai-web-retry-storm",
+      "kind": "pitfall",
+      "level": "intermediate",
+      "title": "Retries without jitter turn one outage into a stampede",
+      "body": "The trap: every client retries after exactly 1 s, 2 s and 4 s.\n\nThe symptom: the API has a short outage, and **1000 clients retry at the same instant**, in waves. Each wave hits the limit again, so the API cannot recover.\n\nThe fix: add *jitter*, a random part of the delay, so the retries spread out. **Cap the retries**, and stop after a few failures in a row.",
+      "diagram": {
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 160\" role=\"img\"><text class=\"d-note d-start\" x=\"8\" y=\"12\">delay = 2ⁿ</text><rect class=\"d-ink\" x=\"46\" y=\"24\" width=\"8\" height=\"48\"/><rect class=\"d-ink\" x=\"80\" y=\"24\" width=\"8\" height=\"48\"/><rect class=\"d-ink\" x=\"148\" y=\"24\" width=\"8\" height=\"48\"/><rect class=\"d-ink\" x=\"284\" y=\"24\" width=\"8\" height=\"48\"/><path class=\"d-line\" d=\"M16 72H312\"/><text class=\"d-note\" x=\"50\" y=\"84\">1 s</text><text class=\"d-note\" x=\"84\" y=\"84\">2 s</text><text class=\"d-note\" x=\"152\" y=\"84\">4 s</text><text class=\"d-note\" x=\"288\" y=\"84\">8 s</text><text class=\"d-note d-start\" x=\"8\" y=\"104\">delay = random(0, 2ⁿ)</text><rect class=\"d-hi\" x=\"20\" y=\"144\" width=\"8\" height=\"8\"/><rect class=\"d-hi\" x=\"32\" y=\"140\" width=\"8\" height=\"12\"/><rect class=\"d-hi\" x=\"44\" y=\"146\" width=\"8\" height=\"6\"/><rect class=\"d-hi\" x=\"56\" y=\"142\" width=\"8\" height=\"10\"/><rect class=\"d-hi\" x=\"68\" y=\"138\" width=\"8\" height=\"14\"/><rect class=\"d-hi\" x=\"80\" y=\"145\" width=\"8\" height=\"7\"/><rect class=\"d-hi\" x=\"92\" y=\"141\" width=\"8\" height=\"11\"/><rect class=\"d-hi\" x=\"104\" y=\"143\" width=\"8\" height=\"9\"/><rect class=\"d-hi\" x=\"116\" y=\"139\" width=\"8\" height=\"13\"/><rect class=\"d-hi\" x=\"128\" y=\"146\" width=\"8\" height=\"6\"/><rect class=\"d-hi\" x=\"140\" y=\"142\" width=\"8\" height=\"10\"/><rect class=\"d-hi\" x=\"152\" y=\"140\" width=\"8\" height=\"12\"/><rect class=\"d-hi\" x=\"164\" y=\"144\" width=\"8\" height=\"8\"/><rect class=\"d-hi\" x=\"176\" y=\"138\" width=\"8\" height=\"14\"/><rect class=\"d-hi\" x=\"188\" y=\"145\" width=\"8\" height=\"7\"/><rect class=\"d-hi\" x=\"200\" y=\"143\" width=\"8\" height=\"9\"/><rect class=\"d-hi\" x=\"212\" y=\"141\" width=\"8\" height=\"11\"/><rect class=\"d-hi\" x=\"224\" y=\"146\" width=\"8\" height=\"6\"/><rect class=\"d-hi\" x=\"236\" y=\"139\" width=\"8\" height=\"13\"/><rect class=\"d-hi\" x=\"248\" y=\"142\" width=\"8\" height=\"10\"/><rect class=\"d-hi\" x=\"260\" y=\"144\" width=\"8\" height=\"8\"/><rect class=\"d-hi\" x=\"272\" y=\"140\" width=\"8\" height=\"12\"/><rect class=\"d-hi\" x=\"284\" y=\"145\" width=\"8\" height=\"7\"/><rect class=\"d-hi\" x=\"296\" y=\"143\" width=\"8\" height=\"9\"/><path class=\"d-line\" d=\"M16 152H312\"/></svg>",
+        "alt": "Two histograms of retries over time. With delay = 2ⁿ, all retries land in tall spikes at 1, 2, 4 and 8 s. With delay = random(0, 2ⁿ), the same retries spread into many small highlighted bars."
+      },
+      "translations": {
+        "es": {
+          "title": "Los reintentos sin jitter convierten una caída en una estampida",
+          "body": "La trampa: cada cliente reintenta exactamente a 1 s, 2 s y 4 s.\n\nEl síntoma: la API tiene una caída corta, y **1000 clientes reintentan en el mismo instante**, en oleadas. Cada oleada vuelve a chocar con el límite, así que la API no se recupera.\n\nLa solución: añade *jitter*, una parte aleatoria del retardo, para repartir los reintentos. **Limita los reintentos** y para después de unos pocos fallos seguidos.",
+          "diagram": {
+            "alt": "Dos histogramas de reintentos en el tiempo. Con delay = 2ⁿ, todos los reintentos caen en picos altos a 1, 2, 4 y 8 s. Con delay = random(0, 2ⁿ), los mismos reintentos se reparten en muchas barras pequeñas resaltadas."
+          }
+        }
+      }
+    },
+    {
+      "id": "ai-web-proxy-buffering",
+      "kind": "pitfall",
+      "level": "intermediate",
+      "title": "A buffering proxy turns a stream into one late block",
+      "body": "The trap: the stream works on localhost, then you deploy behind nginx, a CDN or a compression middleware.\n\nThe symptom: **all the text appears at once, at the end**. The proxy *buffers* the response, or gzip waits for a full block before it sends.\n\nThe fix: send X-Accel-Buffering: no, or set proxy_buffering off for the route, and **do not compress the stream**.",
+      "diagram": {
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 116\" role=\"img\"><defs><marker id=\"ai-web-proxy-buffering-head\" viewBox=\"0 0 8 8\" refX=\"7\" refY=\"4\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path class=\"d-head\" d=\"M0 0L8 4L0 8z\"/></marker></defs><text class=\"d-note d-start\" x=\"8\" y=\"10\">proxy_buffering on</text><rect class=\"d-box\" x=\"8\" y=\"20\" width=\"72\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"44\" y=\"34\">LLM</text><rect class=\"d-box\" x=\"124\" y=\"20\" width=\"72\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"160\" y=\"34\">nginx</text><rect class=\"d-box\" x=\"240\" y=\"20\" width=\"72\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"276\" y=\"34\">fetch</text><path class=\"d-arrow\" marker-end=\"url(#ai-web-proxy-buffering-head)\" d=\"M80 34H122\"/><path class=\"d-arrow\" marker-end=\"url(#ai-web-proxy-buffering-head)\" d=\"M196 34H238\"/><circle class=\"d-ink\" cx=\"86\" cy=\"26\" r=\"4\"/><circle class=\"d-ink\" cx=\"98\" cy=\"26\" r=\"4\"/><circle class=\"d-ink\" cx=\"110\" cy=\"26\" r=\"4\"/><rect class=\"d-ink\" x=\"200\" y=\"22\" width=\"32\" height=\"8\" rx=\"4\"/><text class=\"d-note d-start\" x=\"8\" y=\"70\">X-Accel-Buffering: no</text><rect class=\"d-box\" x=\"8\" y=\"80\" width=\"72\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"44\" y=\"94\">LLM</text><rect class=\"d-box\" x=\"124\" y=\"80\" width=\"72\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"160\" y=\"94\">nginx</text><rect class=\"d-box\" x=\"240\" y=\"80\" width=\"72\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"276\" y=\"94\">fetch</text><path class=\"d-arrow\" marker-end=\"url(#ai-web-proxy-buffering-head)\" d=\"M80 94H122\"/><path class=\"d-arrow\" marker-end=\"url(#ai-web-proxy-buffering-head)\" d=\"M196 94H238\"/><circle class=\"d-ink\" cx=\"86\" cy=\"86\" r=\"4\"/><circle class=\"d-ink\" cx=\"98\" cy=\"86\" r=\"4\"/><circle class=\"d-ink\" cx=\"110\" cy=\"86\" r=\"4\"/><circle class=\"d-dot\" cx=\"206\" cy=\"86\" r=\"4\"/><circle class=\"d-dot\" cx=\"218\" cy=\"86\" r=\"4\"/><circle class=\"d-dot\" cx=\"230\" cy=\"86\" r=\"4\"/></svg>",
+        "alt": "Two rows, each from LLM to nginx to fetch. With proxy_buffering on, small tokens enter nginx and leave as one late block. With X-Accel-Buffering: no, the tokens pass through one by one, highlighted."
+      },
+      "translations": {
+        "es": {
+          "title": "Un proxy con buffer convierte un stream en un solo bloque tardío",
+          "body": "La trampa: el stream funciona en localhost, y luego despliegas detrás de nginx, una CDN o un middleware de compresión.\n\nEl síntoma: **todo el texto aparece de golpe, al final**. El proxy *acumula* la respuesta en un buffer, o gzip espera un bloque completo antes de enviar.\n\nLa solución: envía X-Accel-Buffering: no, o pon proxy_buffering off en la ruta, y **no comprimas el stream**.",
+          "diagram": {
+            "alt": "Dos filas, cada una de LLM a nginx y a fetch. Con proxy_buffering on, tokens pequeños entran en nginx y salen como un solo bloque tardío. Con X-Accel-Buffering: no, los tokens pasan uno a uno, resaltados."
+          }
+        }
+      }
+    },
+    {
+      "id": "ai-web-quiz-cors",
+      "kind": "quiz",
+      "level": "intermediate",
+      "title": "Your AI endpoint allows only your origin in CORS. Can a script on another server still call it?",
+      "body": "Yes. *CORS* is a rule that **browsers enforce** on pages from other origins. curl, a Python script or another server ignores it and can send any Origin header, or none.\n\n\"No, the server rejects them\" is the tempting answer. The server answers every request; only a browser hides the response from the page.\n\nProtect the route with **auth and rate limits per user**, not with CORS.",
+      "options": [
+        "Yes: CORS is enforced by browsers, and curl ignores it",
+        "No: the server rejects requests from other origins",
+        "Only if the script forges the Origin header",
+        "Only after a successful preflight request"
+      ],
+      "answer": 0,
+      "translations": {
+        "es": {
+          "title": "Tu endpoint de IA solo permite tu origen en CORS. ¿Puede llamarlo un script desde otro servidor?",
+          "body": "Sí. *CORS* es una regla que **aplican los navegadores** a las páginas de otros orígenes. curl, un script de Python u otro servidor la ignoran y pueden enviar cualquier cabecera Origin, o ninguna.\n\n\"No, el servidor las rechaza\" es la respuesta tentadora. El servidor responde a todas las peticiones; solo un navegador oculta la respuesta a la página.\n\nProtege la ruta con **auth y rate limits por usuario**, no con CORS.",
+          "options": [
+            "Sí: CORS lo aplican los navegadores, y curl lo ignora",
+            "No: el servidor rechaza las peticiones de otros orígenes",
+            "Solo si el script falsifica la cabecera Origin",
+            "Solo después de una petición preflight correcta"
+          ]
+        }
+      }
+    },
+    {
+      "id": "ai-web-quiz-retry",
+      "kind": "quiz",
+      "level": "intermediate",
+      "title": "Which responses should an LLM client retry?",
+      "body": "A 429 and a 503 are *transient*: they depend on the load of the server, so the same request can succeed later. **Retry them, with backoff.**\n\nA 400, 401, 403 or 422 depends on the request itself. **The same request gets the same error**, so a retry costs time and quota. Fix the request, the key or the input.\n\nRetrying every response that is not 2xx is the tempting answer, and the wrong one.",
+      "options": [
+        "400 and 422",
+        "401 and 403",
+        "Every response that is not 2xx",
+        "429 and 503"
+      ],
+      "answer": 3,
+      "translations": {
+        "es": {
+          "title": "¿Qué respuestas debe reintentar un cliente de LLM?",
+          "body": "Un 429 y un 503 son *transitorios*: dependen de la carga del servidor, así que la misma petición puede funcionar más tarde. **Reintenta, con backoff.**\n\nUn 400, 401, 403 o 422 depende de la propia petición. **La misma petición recibe el mismo error**, así que un reintento gasta tiempo y cuota. Corrige la petición, la clave o la entrada.\n\nReintentar toda respuesta que no sea 2xx es la respuesta tentadora, y la incorrecta.",
+          "options": [
+            "400 y 422",
+            "401 y 403",
+            "Toda respuesta que no sea 2xx",
+            "429 y 503"
+          ]
+        }
+      }
+    },
+    {
+      "id": "ai-web-quiz-ttft",
+      "kind": "quiz",
+      "level": "intermediate",
+      "title": "The chat feels slow: the first token arrives at 5.5 s, the last at 6 s. What do you look at first?",
+      "body": "The output takes 0.5 s, so **the time goes before the first token**. Look at what runs first: a long prompt the model must read, a slow retrieval step, a queue at the provider.\n\nA shorter answer is the tempting fix, but *output length* can save at most 0.5 s.\n\n**Measure TTFT and total time separately**, for each step.",
+      "options": [
+        "The length of the answer",
+        "What runs before the model starts: prompt size, retrieval, a queue",
+        "The tokens per second of the model",
+        "The compression of the response"
+      ],
+      "answer": 1,
+      "diagram": {
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 120\" role=\"img\"><text class=\"d-note d-start\" x=\"8\" y=\"32\">0 s</text><text class=\"d-note d-end\" x=\"284\" y=\"32\">5.5 s</text><text class=\"d-note d-end\" x=\"312\" y=\"32\">6 s</text><rect class=\"d-hi\" x=\"8\" y=\"42\" width=\"279\" height=\"32\" rx=\"4\"/><text class=\"d-text d-on-hi\" x=\"147\" y=\"58\">TTFT</text><rect class=\"d-box\" x=\"287\" y=\"42\" width=\"25\" height=\"32\" rx=\"4\"/><text class=\"d-note d-end\" x=\"312\" y=\"88\">output 0.5 s</text></svg>",
+        "alt": "A bar from 0 to 6 s. The first 5.5 s, highlighted, are the TTFT. The output takes only the last 0.5 s."
+      },
+      "translations": {
+        "es": {
+          "title": "El chat parece lento: el primer token llega a los 5,5 s y el último a los 6 s. ¿Qué miras primero?",
+          "body": "La salida tarda 0,5 s, así que **el tiempo se va antes del primer token**. Mira lo que se ejecuta primero: un prompt largo que el modelo debe leer, un paso de retrieval lento, una cola en el proveedor.\n\nUna respuesta más corta es el arreglo tentador, pero la *longitud de la salida* ahorra como mucho 0,5 s.\n\n**Mide por separado el TTFT y el tiempo total**, en cada paso.",
+          "options": [
+            "La longitud de la respuesta",
+            "Lo que pasa antes de que empiece el modelo: tamaño del prompt, retrieval, una cola",
+            "Los tokens por segundo del modelo",
+            "La compresión de la respuesta"
+          ],
+          "diagram": {
+            "alt": "Una barra de 0 a 6 s. Los primeros 5,5 s, resaltados, son el TTFT. La salida ocupa solo los últimos 0,5 s."
+          }
+        }
+      }
+    },
+    {
+      "id": "ai-web-res-mdn-streams",
+      "kind": "resource",
+      "level": "intermediate",
+      "title": "MDN: Streams API",
+      "body": "The MDN guide to the *Streams API*: ReadableStream, readers, TransformStream, pipeThrough and backpressure.\n\nIt explains what res.body is and **how to transform a stream while it flows**, for example with TextDecoderStream.\n\n**Read it before you write a stream parser.**",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/API/Streams_API",
+      "media": "docs",
+      "minutes": 30,
+      "translations": {
+        "es": {
+          "title": "MDN: Streams API",
+          "body": "La guía de MDN sobre la *Streams API*, en inglés: ReadableStream, readers, TransformStream, pipeThrough y backpressure.\n\nExplica qué es res.body y **cómo transformar un stream mientras fluye**, por ejemplo con TextDecoderStream.\n\n**Léela antes de escribir un parser de streams.**"
+        }
+      }
+    },
+    {
+      "id": "ai-web-response-cache",
+      "kind": "concept",
+      "level": "advanced",
+      "title": "Cache an answer by a hash of the model, the prompt and the parameters",
+      "body": "An *exact-match cache* returns the stored answer when the same request comes again. It is safe because the key covers everything that shapes the output.\n\n**Hash the model id**, the messages, the tools and the sampling parameters. Leave out the model id, and a model change serves old answers.\n\nIt pays off on repeated requests, such as a summary of the same page. **Never share an entry between users** when the prompt holds private data.",
+      "translations": {
+        "es": {
+          "title": "Cachea una respuesta por un hash del modelo, el prompt y los parámetros",
+          "body": "Una *caché de coincidencia exacta* devuelve la respuesta guardada cuando llega otra vez la misma petición. Es segura porque la clave cubre todo lo que da forma a la salida.\n\n**Haz el hash del id del modelo**, los mensajes, las tools y los parámetros de sampling. Si dejas fuera el id del modelo, un cambio de modelo sirve respuestas viejas.\n\nCompensa con peticiones repetidas, como el resumen de una misma página. **Nunca compartas una entrada entre usuarios** cuando el prompt tiene datos privados."
+        }
+      }
+    },
+    {
+      "id": "ai-web-stream-tool-calls",
+      "kind": "concept",
+      "level": "advanced",
+      "title": "A streamed tool call arrives in fragments: join them before you parse",
+      "body": "When the model calls a tool on a stream, the arguments arrive as *partial JSON strings*, a few characters per chunk. Each fragment carries the index of its tool call.\n\n**Append each fragment to a buffer by its index.** Parallel calls each get their own buffer.\n\n**Parse a call only when it is complete**: its block ends, or the message ends. Then validate the arguments against the schema of the tool.",
+      "diagram": {
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 124\" role=\"img\"><defs><marker id=\"ai-web-stream-tool-calls-head\" viewBox=\"0 0 8 8\" refX=\"7\" refY=\"4\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path class=\"d-head\" d=\"M0 0L8 4L0 8z\"/></marker></defs><rect class=\"d-box\" x=\"8\" y=\"8\" width=\"40\" height=\"24\" rx=\"6\"/><text class=\"d-text\" x=\"28\" y=\"20\">0</text><rect class=\"d-box\" x=\"56\" y=\"8\" width=\"136\" height=\"24\" rx=\"6\"/><text class=\"d-text\" x=\"124\" y=\"20\">{&quot;ci</text><path class=\"d-arrow\" marker-end=\"url(#ai-web-stream-tool-calls-head)\" d=\"M192 20H202V34H214\"/><rect class=\"d-box\" x=\"8\" y=\"36\" width=\"40\" height=\"24\" rx=\"6\"/><text class=\"d-text\" x=\"28\" y=\"48\">0</text><rect class=\"d-box\" x=\"56\" y=\"36\" width=\"136\" height=\"24\" rx=\"6\"/><text class=\"d-text\" x=\"124\" y=\"48\"><tspan>ty&quot;:&quot;Paris</tspan><tspan>&quot;}</tspan></text><path class=\"d-arrow\" marker-end=\"url(#ai-web-stream-tool-calls-head)\" d=\"M192 48H202V34H214\"/><rect class=\"d-box\" x=\"8\" y=\"64\" width=\"40\" height=\"24\" rx=\"6\"/><text class=\"d-text\" x=\"28\" y=\"76\">1</text><rect class=\"d-box\" x=\"56\" y=\"64\" width=\"136\" height=\"24\" rx=\"6\"/><text class=\"d-text\" x=\"124\" y=\"76\"><tspan>{&quot;q&quot;:&quot;r</tspan><tspan>a</tspan></text><path class=\"d-arrow\" marker-end=\"url(#ai-web-stream-tool-calls-head)\" d=\"M192 76H202V90H214\"/><rect class=\"d-box\" x=\"8\" y=\"92\" width=\"40\" height=\"24\" rx=\"6\"/><text class=\"d-text\" x=\"28\" y=\"104\">1</text><rect class=\"d-box\" x=\"56\" y=\"92\" width=\"136\" height=\"24\" rx=\"6\"/><text class=\"d-text\" x=\"124\" y=\"104\">in&quot;}</text><path class=\"d-arrow\" marker-end=\"url(#ai-web-stream-tool-calls-head)\" d=\"M192 104H202V90H214\"/><rect class=\"d-hi\" x=\"216\" y=\"8\" width=\"96\" height=\"52\" rx=\"6\"/><text class=\"d-text d-on-hi\" x=\"264\" y=\"24\">args[0]</text><text class=\"d-note\" x=\"264\" y=\"44\">JSON.parse</text><rect class=\"d-box\" x=\"216\" y=\"64\" width=\"96\" height=\"52\" rx=\"6\"/><text class=\"d-text\" x=\"264\" y=\"80\">args[1]</text><text class=\"d-note\" x=\"264\" y=\"100\">…</text></svg>",
+        "alt": "Four fragments with their index: 0 with {\"ci, 0 with ty\":\"Paris\"}, 1 with {\"q\":\"ra and 1 with in\"}. Arrows join the index 0 fragments into args[0], highlighted and ready for JSON.parse, and the index 1 fragments into args[1], still open."
+      },
+      "translations": {
+        "es": {
+          "title": "Una tool call en streaming llega en fragmentos: únelos antes de parsear",
+          "body": "Cuando el modelo llama a una tool en un stream, los argumentos llegan como *cadenas de JSON parciales*, unos pocos caracteres por chunk. Cada fragmento lleva el índice de su tool call.\n\n**Añade cada fragmento a un buffer según su índice.** Las llamadas en paralelo tienen cada una su buffer.\n\n**Parsea una llamada solo cuando está completa**: acaba su bloque, o acaba el mensaje. Después valida los argumentos contra el schema de la tool.",
+          "diagram": {
+            "alt": "Cuatro fragmentos con su índice: 0 con {\"ci, 0 con ty\":\"Paris\"}, 1 con {\"q\":\"ra y 1 con in\"}. Las flechas unen los fragmentos del índice 0 en args[0], resaltado y listo para JSON.parse, y los del índice 1 en args[1], todavía abierto."
+          }
+        }
+      }
+    },
+    {
+      "id": "ai-web-fallback",
+      "kind": "concept",
+      "level": "advanced",
+      "title": "A fallback model keeps the feature up when the main provider fails",
+      "body": "A *circuit breaker* counts the failures of the main model. After N failures in a row, such as 5, it opens and **routes requests to a second model** for a while, then tries the main one again.\n\nThe fallback is a different model with a different behaviour. **Run your evals on the fallback prompts too**, and keep one prompt per model.\n\nWithout a breaker, every user waits for a timeout before the switch.",
+      "diagram": {
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 184\" role=\"img\"><defs><marker id=\"ai-web-fallback-head\" viewBox=\"0 0 8 8\" refX=\"7\" refY=\"4\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path class=\"d-head\" d=\"M0 0L8 4L0 8z\"/></marker><marker id=\"ai-web-fallback-dhead\" viewBox=\"0 0 8 8\" refX=\"7\" refY=\"4\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path class=\"d-data-head\" d=\"M0 0L8 4L0 8z\"/></marker></defs><rect class=\"d-box\" x=\"96\" y=\"8\" width=\"128\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"160\" y=\"22\">/api/chat</text><path class=\"d-arrow\" marker-end=\"url(#ai-web-fallback-head)\" d=\"M160 36V62\"/><rect class=\"d-hi\" x=\"96\" y=\"64\" width=\"128\" height=\"40\" rx=\"6\"/><text class=\"d-text d-on-hi\" x=\"160\" y=\"77\">breaker</text><text class=\"d-note\" x=\"160\" y=\"93\">5 ✗ → open</text><path class=\"d-arrow d-dash\" marker-end=\"url(#ai-web-fallback-head)\" d=\"M128 104V124H64V146\"/><text class=\"d-note d-end\" x=\"56\" y=\"135\">✗</text><path class=\"d-data-line\" marker-end=\"url(#ai-web-fallback-dhead)\" d=\"M192 104V124H256V146\"/><text class=\"d-note d-start\" x=\"264\" y=\"135\">✓</text><rect class=\"d-box\" x=\"8\" y=\"148\" width=\"112\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"64\" y=\"162\">LLM A</text><rect class=\"d-box\" x=\"200\" y=\"148\" width=\"112\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"256\" y=\"162\">LLM B</text></svg>",
+        "alt": "/api/chat goes into a highlighted circuit breaker that opens after 5 failures. The dashed arrow to LLM A is marked with a cross. The highlighted arrow to LLM B is marked with a check."
+      },
+      "translations": {
+        "es": {
+          "title": "Un modelo de respaldo mantiene la función en marcha cuando falla el proveedor principal",
+          "body": "Un *circuit breaker* cuenta los fallos del modelo principal. Tras N fallos seguidos, por ejemplo 5, se abre y **envía las peticiones a un segundo modelo** durante un tiempo, y luego vuelve a probar el principal.\n\nEl respaldo es otro modelo con otro comportamiento. **Pasa tus evals también por los prompts de respaldo**, y mantén un prompt por modelo.\n\nSin breaker, cada usuario espera un timeout antes del cambio.",
+          "diagram": {
+            "alt": "/api/chat entra en un circuit breaker resaltado que se abre tras 5 fallos. La flecha discontinua a LLM A está marcada con una cruz. La flecha resaltada a LLM B está marcada como correcta."
+          }
+        }
+      }
+    },
+    {
+      "id": "ai-web-semantic-cache",
+      "kind": "pitfall",
+      "level": "advanced",
+      "title": "A semantic cache answers a different question that only looked close",
+      "body": "The trap: you cache answers by the embedding of the question, and serve a hit when the cosine similarity is above 0.90.\n\nThe symptom: \"Cancel my order\" gets the cached answer to \"Can I cancel my order?\". The vectors are *near*; **the intents are not**. And the answer for user A can reach user B.\n\nThe fix: **a high threshold and one cache per user**, on FAQ-like routes only, where the answer does not depend on the user.",
+      "diagram": {
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 168\" role=\"img\"><circle class=\"d-line d-dash\" cx=\"160\" cy=\"100\" r=\"56\"/><circle class=\"d-line d-dash\" cx=\"160\" cy=\"100\" r=\"20\"/><text class=\"d-note\" x=\"160\" y=\"36\">0.90</text><text class=\"d-note\" x=\"160\" y=\"72\">0.98</text><circle class=\"d-ink\" cx=\"160\" cy=\"100\" r=\"4\"/><text class=\"d-note d-end\" x=\"153\" y=\"100\">q1</text><circle class=\"d-dot\" cx=\"188\" cy=\"112\" r=\"4\"/><text class=\"d-note d-start\" x=\"196\" y=\"112\">q2</text><text class=\"d-note d-start\" x=\"228\" y=\"112\">cos 0.93</text></svg>",
+        "alt": "Two queries in vector space. q1, the cached query, is at the centre of two dashed circles: threshold 0.98, small, and 0.90, large. q2, highlighted, at cos 0.93 from q1, is inside the 0.90 circle but outside the 0.98 circle."
+      },
+      "translations": {
+        "es": {
+          "title": "Una caché semántica responde a otra pregunta que solo parecía cercana",
+          "body": "La trampa: cacheas respuestas por el embedding de la pregunta y das un acierto cuando la similitud coseno pasa de 0,90.\n\nEl síntoma: \"Cancela mi pedido\" recibe la respuesta cacheada de \"¿Puedo cancelar mi pedido?\". Los vectores están *cerca*; **las intenciones no**. Y la respuesta del usuario A puede llegar al usuario B.\n\nLa solución: **un umbral alto y una caché por usuario**, solo en rutas tipo FAQ, donde la respuesta no depende del usuario.",
+          "diagram": {
+            "alt": "Dos consultas en el espacio vectorial. q1, la consulta cacheada, está en el centro de dos círculos discontinuos: umbral 0,98, pequeño, y 0,90, grande. q2, resaltada, a cos 0,93 de q1, cae dentro del círculo de 0,90 pero fuera del de 0,98."
+          }
+        }
+      }
+    },
+    {
+      "id": "ai-web-pii-logs",
+      "kind": "pitfall",
+      "level": "advanced",
+      "title": "Log every prompt, and you log every secret your users typed",
+      "body": "The trap: you store full prompts and answers to debug and to build eval sets.\n\nThe symptom: the logs hold emails, phone numbers, API tokens and health data. **The log store becomes your largest store of personal data**, with weaker access control than the database.\n\nThe fix: **redact before you write**, keep a short *retention*, restrict who reads the logs, and log ids and token counts where you do not need the text.",
+      "translations": {
+        "es": {
+          "title": "Si guardas cada prompt en los logs, guardas cada secreto que tus usuarios escribieron",
+          "body": "La trampa: guardas los prompts y las respuestas completos para depurar y para crear sets de evals.\n\nEl síntoma: los logs tienen emails, teléfonos, tokens de API y datos de salud. **Los logs pasan a ser tu mayor almacén de datos personales**, con un control de acceso más débil que la base de datos.\n\nLa solución: **anonimiza antes de escribir**, usa una *retención* corta, limita quién lee los logs y guarda ids y recuentos de tokens donde no necesitas el texto."
+        }
+      }
+    },
+    {
+      "id": "ai-web-quiz-abort-cost",
+      "kind": "quiz",
+      "level": "advanced",
+      "title": "A user stops after 50 tokens of an 800-token answer. With no upstream cancel, how many output tokens do you pay for?",
+      "body": "**About 800.** The browser closed its connection, but the route kept reading the model to the end. The model wrote, and *billed*, every token.\n\n50 is the tempting answer: it is what the user saw, not what the model produced.\n\nThe fix: **abort the upstream call when the client connection closes**.",
+      "options": [
+        "About 50",
+        "About 400",
+        "About 800",
+        "None: the request was cancelled"
+      ],
+      "answer": 2,
+      "translations": {
+        "es": {
+          "title": "Un usuario para tras 50 de 800 tokens de respuesta. Sin cancelar la llamada al modelo, ¿cuántos tokens de salida pagas?",
+          "body": "**Unos 800.** El navegador cerró su conexión, pero la ruta siguió leyendo el modelo hasta el final. El modelo escribió, y *facturó*, cada token.\n\n50 es la respuesta tentadora: es lo que vio el usuario, no lo que produjo el modelo.\n\nLa solución: **aborta la llamada al modelo al cerrarse la conexión**.",
+          "options": [
+            "Unos 50",
+            "Unos 400",
+            "Unos 800",
+            "Ninguno: la petición se canceló"
+          ]
+        }
+      }
+    },
+    {
+      "id": "ai-web-res-rfc6585",
+      "kind": "resource",
+      "level": "advanced",
+      "title": "RFC 6585: Additional HTTP Status Codes (429 Too Many Requests)",
+      "body": "The RFC that defines *429 Too Many Requests*, together with 428, 431 and 511.\n\nIt is short. It says a 429 **may include a Retry-After header**, and it does not define how a server identifies a client or counts its requests.\n\n**The source for what a 429 promises, and what it does not.**",
+      "url": "https://www.rfc-editor.org/rfc/rfc6585",
+      "media": "docs",
+      "minutes": 15,
+      "translations": {
+        "es": {
+          "title": "RFC 6585: Additional HTTP Status Codes (429 Too Many Requests)",
+          "body": "La RFC que define el *429 Too Many Requests*, junto con el 428, el 431 y el 511. En inglés.\n\nEs corta. Dice que un 429 **puede incluir una cabecera Retry-After**, y no define cómo identifica un servidor a un cliente ni cómo cuenta sus peticiones.\n\n**La fuente de lo que promete un 429, y de lo que no.**"
+        }
+      }
+    }
+  ]
+}
