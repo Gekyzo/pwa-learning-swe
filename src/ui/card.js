@@ -2,6 +2,7 @@ import { INTERVALS, answerQuiz, grade, signal, toggleLike, toggleSaved } from '#
 import { tagOf } from '#feed';
 import { highlight } from '#highlight';
 import { parseDiagram } from '#diagram';
+import { parseRich } from '#richtext';
 import { bindSheetDrag } from '#ds/sheet';
 import { $, el, ui, state, pool, t, apply, render } from '#ui/context';
 import { icon, diagramSvg } from '#ui/controls';
@@ -61,6 +62,16 @@ const codeNode = (card) =>
     }),
   );
 
+// The body of a card as rich text (CARD-10): one paragraph each, with bold, italic and breaks.
+const tokenNode = ({ type, text }) => {
+  if (type === 'break') return el('br');
+  if (type === 'bold') return el('strong', { className: 'feed-card-strong', textContent: text });
+  if (type === 'italic') return el('em', { textContent: text });
+  return document.createTextNode(text);
+};
+const bodyNode = (text) =>
+  el('div', { className: 'feed-card-body' }, parseRich(text).map((paragraph) => el('p', {}, paragraph.map(tokenNode))));
+
 // The diagram of a card, named by its alt text in the card language.
 const diagramNode = (card) => {
   const tree = parseDiagram(card.diagram.svg, card.id);
@@ -109,7 +120,7 @@ export const cardNode = (card, entry = null, { preview = false, hint = false } =
     result.dataset.result = chosen.correct ? 'right' : 'wrong';
     parts.push(result);
   }
-  if (card.kind !== 'quiz' || chosen) parts.push(el('p', { className: 'feed-card-body', textContent: card.body }));
+  if (card.kind !== 'quiz' || chosen) parts.push(bodyNode(card.body));
   if (card.kind === 'resource') {
     const label = t('card.open', { media: t(`media.${card.media}`), minutes: card.minutes });
     parts.push(el('a', { className: 'button tonal feed-card-link', href: card.url, target: '_blank', rel: 'noopener', textContent: label }));

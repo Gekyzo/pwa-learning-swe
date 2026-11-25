@@ -150,7 +150,7 @@ Rules of `src/ui/feed.js`, `src/ui/card.js` and `src/ui/saved.js`.
   The topics of the new cards are `feed.topics`, for the topics that are on. The line is empty only until the packs load.
 - **FEED-9** A card shows its topic, kind and level; a pill by the reason it came: **Review** (in the data hue) for a due
   card, **New** for a new or explore card, and none for a card shown again; **Updated** when it was updated (LRN-7) as it came in, and **Retired** when it is retired.
-  Then its title, its diagram (CARD-9), the code of a snippet in the colours of its tokens (CARD-8, SET-3), and its body. A resource has a button that opens its URL
+  Then its title, its diagram (CARD-9), the code of a snippet in the colours of its tokens (CARD-8, SET-3), and its body, with its paragraphs, line breaks, bold and italic (CARD-10). A resource has a button that opens its URL
   in a new tab, with the medium and the minutes. The text of a card is in English (`lang="en"`).
 - **FEED-10** A quiz shows its options. A tap answers it (LRN-5): the options lock, the right one
   is marked, a wrong choice is marked too, and `card.right` or `card.wrong` shows above the

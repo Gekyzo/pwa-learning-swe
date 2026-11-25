@@ -642,13 +642,14 @@
      @part feed-card-options  The answers of a quiz, one button each.
      @part feed-card-option   One answer. After the answer, data-result="right" or "wrong" marks it.
      @part feed-card-result   The line that says if the answer was right, with data-result.
-     @part feed-card-body     The text, or the explanation of a quiz once it is answered.
+     @part feed-card-body     The text in paragraphs, with bold and italic (CARD-10), or the explanation of a quiz once it is answered.
+     @part feed-card-strong   A bold run of the body, in the strong weight.
      @part feed-card-link     The button of a resource that opens its URL in a new tab, as wide as its text.
      @part feed-card-hint     One faint line under the tags of the first two cards of a first start.
      @part feed-card-note     A muted line, such as when the card comes back.
      @part feed-card-actions  The buttons: like, save, then the review or I knew this, then more.
      @part feed-card-more     The button that opens the other signals of the card.
-     @example <li class="feed-card" style="list-style: none"><p class="feed-card-meta">Git · Code · Intro<span class="pill">Review</span></p><h2 class="feed-card-title">See the shape of the history</h2><pre class="feed-card-code"><span class="feed-card-token" data-token="function">git</span> log <span class="feed-card-token" data-token="keyword">--oneline</span> <span class="feed-card-token" data-token="keyword">--graph</span></pre><p class="feed-card-body">One line per commit.</p><div class="cluster feed-card-actions"><button class="button icon toggle" type="button" aria-label="Like" aria-pressed="true"><svg class="icon" aria-hidden="true"><use href="icons.svg#heart"/></svg></button><button class="button tonal" type="button">I knew this</button><button class="button icon feed-card-more" type="button" aria-label="More"><svg class="icon" aria-hidden="true"><use href="icons.svg#more"/></svg></button></div></li> */
+     @example <li class="feed-card" style="list-style: none"><p class="feed-card-meta">Git · Code · Intro<span class="pill">Review</span></p><h2 class="feed-card-title">See the shape of the history</h2><pre class="feed-card-code"><span class="feed-card-token" data-token="function">git</span> log <span class="feed-card-token" data-token="keyword">--oneline</span> <span class="feed-card-token" data-token="keyword">--graph</span></pre><div class="feed-card-body"><p>One line per commit, with <strong class="feed-card-strong">the graph</strong> on the left.</p><p>Add <em>--all</em> to see every branch.</p></div><div class="cluster feed-card-actions"><button class="button icon toggle" type="button" aria-label="Like" aria-pressed="true"><svg class="icon" aria-hidden="true"><use href="icons.svg#heart"/></svg></button><button class="button tonal" type="button">I knew this</button><button class="button icon feed-card-more" type="button" aria-label="More"><svg class="icon" aria-hidden="true"><use href="icons.svg#more"/></svg></button></div></li> */
   .feed-card {
     display: flex;
     flex-direction: column;
@@ -748,7 +749,17 @@
   }
 
   .feed-card-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .feed-card-body > * {
     margin: 0;
+  }
+
+  .feed-card-strong {
+    font-weight: var(--weight-strong);
   }
 
   .feed-card-link {
