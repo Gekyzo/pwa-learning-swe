@@ -1,4 +1,6 @@
-const CACHE = 'pwa-learning-swe-shell-v1';
+// v2: a v1 cache can hold a page stored under a query (the sign-in return), which a match with
+// ignoreSearch answered in place of the page of the current deploy. Activate deletes v1.
+const CACHE = 'pwa-learning-swe-shell-v2';
 
 const SHELL = [
   './',
@@ -94,10 +96,19 @@ self.addEventListener('activate', (event) => {
   );
 });
 
+// The URL without its query: one cache entry for each file. An entry for each query (the
+// `code` and `state` of a sign-in return) is never refreshed, and a match that ignores the query
+// can answer with it long after a deploy.
+const cacheKey = (url) => {
+  const key = new URL(url);
+  key.search = '';
+  return key.href;
+};
+
 // Fetches a fresh copy past the HTTP cache and stores it for the next launch.
 const refresh = async (cache, request) => {
   const response = await fetch(request.url, { cache: 'no-cache' });
-  if (response.ok) await cache.put(request.url, response.clone());
+  if (response.ok) await cache.put(cacheKey(request.url), response.clone());
   return response;
 };
 
@@ -105,7 +116,7 @@ const refresh = async (cache, request) => {
 const respond = async (event) => {
   const { request } = event;
   const cache = await caches.open(CACHE);
-  const cached = await cache.match(request.url, { ignoreSearch: true });
+  const cached = await cache.match(cacheKey(request.url));
   const fresh = refresh(cache, request);
   if (cached) {
     event.waitUntil(fresh.catch(() => {}));

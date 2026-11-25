@@ -6,8 +6,9 @@ import { LANGUAGES } from '#i18n';
 
 // sw.js is a classic script: run it with a stub `self` and return its pure functions.
 const source = readFileSync(new URL('../sw.js', import.meta.url), 'utf8');
-const { localizeManifest, SHELL } = vm.runInNewContext(`${source}\n;({ localizeManifest, SHELL })`, {
+const { localizeManifest, SHELL, cacheKey } = vm.runInNewContext(`${source}\n;({ localizeManifest, SHELL, cacheKey })`, {
   self: { addEventListener: () => {} },
+  URL,
 });
 
 // An object of the vm realm has another Object.prototype: compare a plain copy.
@@ -56,4 +57,14 @@ test('localizeManifest does not change its input', () => {
 
 test('SHELL has the release notes of each language, so they show offline (VER-21)', () => {
   for (const lang of LANGUAGES) assert.ok(SHELL.includes(`./release-notes/${lang}.md`), lang);
+});
+
+test('cacheKey drops the query, so a sign-in return is stored as the page itself', () => {
+  assert.equal(cacheKey('https://host/app/?code=x&state=y'), 'https://host/app/');
+  assert.equal(cacheKey('https://host/app/src/cards.js?v=2'), 'https://host/app/src/cards.js');
+});
+
+test('cacheKey keeps a URL with no query as it is', () => {
+  assert.equal(cacheKey('https://host/app/'), 'https://host/app/');
+  assert.equal(cacheKey('https://host/app/index.html'), 'https://host/app/index.html');
 });
