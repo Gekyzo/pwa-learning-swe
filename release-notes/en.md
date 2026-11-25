@@ -4,6 +4,10 @@ What changes for you in each version of the app. The newest version is first.
 
 ## Unreleased
 
+No change.
+
+## 0.6.3 - 2026-11-25
+
 - Fixed: after the last update, the app showed a blank screen if you had signed in. If it is still blank, close the app and open it again.
 
 ## 0.6.1 - 2026-11-25

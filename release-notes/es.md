@@ -4,6 +4,10 @@ Lo que cambia para ti en cada versión de la app. La versión más nueva va prim
 
 ## Unreleased
 
+No change.
+
+## 0.6.3 - 2026-11-25
+
 - Corregido: tras la última actualización, la app salía en blanco si habías iniciado sesión. Si sigue en blanco, cierra la app y vuelve a abrirla.
 
 ## 0.6.1 - 2026-11-25

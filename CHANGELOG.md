@@ -4,6 +4,10 @@ User-visible changes, newest first.
 
 ## Unreleased
 
+No change.
+
+## 0.6.3 - 2026-11-25
+
 - Blank screen after an update for a signed-in user (SW-4, SW-6): `respond` of `sw.js` matched with `ignoreSearch`, and the oldest entry won, the page stored under the sign-in return `./?code=…&state=…`, which `refresh` never replaced. That page of an old deploy had no `#diagram` in its import map, so the modules of 0.6.1 did not resolve. New `cacheKey(url)` drops the query for each `put` and `match`; the cache is `pwa-learning-swe-shell-v2`, so activation deletes the v1 entries.
 
 ## 0.6.1 - 2026-11-25
