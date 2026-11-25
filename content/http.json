@@ -1,6 +1,6 @@
 {
   "id": "http",
-  "version": 1,
+  "version": 2,
   "title": "HTTP and the web",
   "translations": {
     "es": {
@@ -13,11 +13,11 @@
       "kind": "concept",
       "level": "intro",
       "title": "Idempotent is not the same as safe",
-      "body": "A safe method changes nothing on the server: GET, HEAD, OPTIONS. An idempotent method gives the same result when sent once or ten times: the safe ones plus PUT and DELETE. POST is neither, so a client must not retry it blindly.",
+      "body": "A *safe* method changes nothing on the server: GET, HEAD, OPTIONS. An *idempotent* method gives the same result when sent once or ten times: **the safe ones plus PUT and DELETE**.\n\nPOST is neither, so **a client must not retry it blindly**. A timeout on a POST does not tell you whether the server already acted.",
       "translations": {
         "es": {
           "title": "Idempotente no es lo mismo que seguro",
-          "body": "Un método seguro no cambia nada en el servidor: GET, HEAD, OPTIONS. Un método idempotente da el mismo resultado si se envía una vez o diez: los seguros más PUT y DELETE. POST no es ninguna de las dos cosas, así que un cliente no debe reintentarlo a ciegas."
+          "body": "Un método *seguro* no cambia nada en el servidor: GET, HEAD, OPTIONS. Un método *idempotente* da el mismo resultado si se envía una vez o diez: **los seguros más PUT y DELETE**.\n\nPOST no es ninguna de las dos cosas, así que **un cliente no debe reintentarlo a ciegas**. Un timeout en un POST no te dice si el servidor ya actuó."
         }
       }
     },
@@ -26,11 +26,11 @@
       "kind": "concept",
       "level": "intermediate",
       "title": "no-cache does not mean do not cache",
-      "body": "Cache-Control: no-cache lets a cache store the response but makes it revalidate with the server before each use. no-store is the directive that forbids storing it at all.",
+      "body": "Cache-Control: no-cache lets a cache store the response but makes it **revalidate with the server before each use**. no-store is the directive that *forbids* storing it at all.\n\nUse no-cache for HTML that must stay current, and **no-store for private data** such as a bank statement.",
       "translations": {
         "es": {
           "title": "no-cache no significa no guardar en caché",
-          "body": "Cache-Control: no-cache deja que una caché guarde la respuesta, pero la obliga a validarla con el servidor antes de cada uso. La directiva que prohíbe guardarla es no-store."
+          "body": "Cache-Control: no-cache deja que una caché guarde la respuesta, pero la obliga a **validarla con el servidor antes de cada uso**. La directiva que *prohíbe* guardarla es no-store.\n\nUsa no-cache para el HTML que debe estar al día y **no-store para datos privados**, como un extracto bancario."
         }
       }
     },
@@ -39,13 +39,13 @@
       "kind": "snippet",
       "level": "intro",
       "title": "See the headers of a request and its response",
-      "body": "-v prints the request and response headers, and -o /dev/null drops the body. Add -L to follow redirects.",
+      "body": "-v prints **the request and response headers**, and -o /dev/null drops the body. Add -L to *follow* redirects.\n\nThe -s flag hides the progress bar, so only the headers remain. Lines that start with > are what you sent; **lines that start with < are what came back**.",
       "code": "curl -sv -o /dev/null https://example.com",
       "syntax": "sh",
       "translations": {
         "es": {
           "title": "Ver las cabeceras de una petición y de su respuesta",
-          "body": "-v muestra las cabeceras de la petición y de la respuesta, y -o /dev/null descarta el cuerpo. Añade -L para seguir las redirecciones."
+          "body": "-v muestra **las cabeceras de la petición y de la respuesta**, y -o /dev/null descarta el cuerpo. Añade -L para *seguir* las redirecciones.\n\nLa opción -s oculta la barra de progreso, así que solo quedan las cabeceras. Las líneas que empiezan por > son lo que enviaste; **las que empiezan por < son lo que volvió**."
         }
       }
     },
@@ -54,11 +54,11 @@
       "kind": "pitfall",
       "level": "intermediate",
       "title": "CORS protects the user, not your API",
-      "body": "CORS is enforced by the browser. A script on another origin cannot read your response without the right Access-Control-Allow-Origin header, but curl or a server can call the API freely. Authenticate and authorise on the server.",
+      "body": "CORS is enforced by *the browser*. A script on another origin cannot read your response without the right Access-Control-Allow-Origin header.\n\nBut curl or a server can call the API freely: **CORS is not access control**. **Authenticate and authorise on the server.**",
       "translations": {
         "es": {
           "title": "CORS protege al usuario, no a tu API",
-          "body": "Es el navegador quien aplica CORS. Un script de otro origen no puede leer tu respuesta sin la cabecera Access-Control-Allow-Origin correcta, pero curl o un servidor pueden llamar a la API sin límite. Autentica y autoriza en el servidor."
+          "body": "Es *el navegador* quien aplica CORS. Un script de otro origen no puede leer tu respuesta sin la cabecera Access-Control-Allow-Origin correcta.\n\nPero curl o un servidor pueden llamar a la API sin límite: **CORS no es control de acceso**. **Autentica y autoriza en el servidor.**"
         }
       }
     },
@@ -74,11 +74,11 @@
         "400 Bad Request"
       ],
       "answer": 1,
-      "body": "401 means the request is not authenticated. 403 means the server knows who you are and refuses. Some APIs answer 404 instead, so as not to reveal that the resource exists.",
+      "body": "**403 Forbidden** is right: the server knows who you are and refuses. Some APIs answer 404 instead, so as not to reveal that the resource exists.\n\n401 is the tempting wrong one. Despite its name, *Unauthorized*, it means **the request is not authenticated**: the token is missing or invalid.",
       "translations": {
         "es": {
           "title": "Una petición trae un token válido, pero el usuario no puede ver el recurso. ¿Qué código corresponde?",
-          "body": "401 significa que la petición no está autenticada. 403 significa que el servidor sabe quién eres y se niega. Algunas API responden 404 para no revelar que el recurso existe.",
+          "body": "**403 Forbidden** es la correcta: el servidor sabe quién eres y se niega. Algunas API responden 404 para no revelar que el recurso existe.\n\n401 es la trampa. Pese a su nombre, *Unauthorized*, significa que **la petición no está autenticada**: falta el token o no es válido.",
           "options": [
             "401 Unauthorized",
             "403 Forbidden",
@@ -100,11 +100,11 @@
         "412 Precondition Failed"
       ],
       "answer": 2,
-      "body": "A matching ETag means the cached copy is still current, so the server sends 304 with no body. 412 is the answer to a failed If-Match, used for safe concurrent updates.",
+      "body": "A matching ETag means the cached copy is still current, so the server sends **304 with no body**. The client reuses its copy and saves the download.\n\n412 is the tempting wrong one: it answers a *failed* If-Match, used for **safe concurrent updates**.",
       "translations": {
         "es": {
           "title": "Un cliente envía If-None-Match con el ETag actual. ¿Qué responde el servidor?",
-          "body": "Si el ETag coincide, la copia en caché sigue al día, así que el servidor envía 304 sin cuerpo. 412 es la respuesta a un If-Match que falla, para actualizaciones concurrentes seguras.",
+          "body": "Si el ETag coincide, la copia en caché sigue al día, así que el servidor envía **304 sin cuerpo**. El cliente reutiliza su copia y se ahorra la descarga.\n\n412 es la trampa: responde a un If-Match que *falla*, para **actualizaciones concurrentes seguras**.",
           "options": [
             "200 con el cuerpo completo",
             "204 No Content",
@@ -119,14 +119,14 @@
       "kind": "resource",
       "level": "intro",
       "title": "MDN: An overview of HTTP",
-      "body": "The reference that most web developers return to: messages, sessions, caching, CORS and the evolution from HTTP/1.1 to HTTP/3.",
+      "body": "The reference that **most web developers return to**: messages, sessions, caching, CORS and the evolution from HTTP/1.1 to HTTP/3.\n\nRead the *overview* first. Then keep the pages on headers and status codes open as a lookup while you debug.",
       "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Overview",
       "media": "docs",
       "minutes": 20,
       "translations": {
         "es": {
           "title": "MDN: Generalidades del protocolo HTTP",
-          "body": "La referencia a la que vuelve la mayoría de desarrolladores web: mensajes, sesiones, caché, CORS y la evolución de HTTP/1.1 a HTTP/3."
+          "body": "La referencia a la que **vuelve la mayoría de desarrolladores web**: mensajes, sesiones, caché, CORS y la evolución de HTTP/1.1 a HTTP/3.\n\nLee primero la *visión general*. Luego deja abiertas las páginas de cabeceras y códigos de estado como consulta mientras depuras."
         }
       }
     }
