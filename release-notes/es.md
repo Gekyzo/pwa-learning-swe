@@ -5,6 +5,7 @@ Lo que cambia para ti en cada versión de la app. La versión más nueva va prim
 ## Unreleased
 
 - Un tema nuevo, LLMs en una aplicación web, con 30 tarjetas: el proxy en el servidor, el streaming, los reintentos, los timeouts y los límites de coste. 13 de las tarjetas tienen un diagrama.
+- Un tema nuevo, Agentes, herramientas y MCP, con 30 tarjetas: el bucle del agente, la ingeniería de contexto, los servidores MCP y la seguridad de los agentes. 11 de las tarjetas tienen un diagrama.
 
 ## 0.6.4 - 2026-11-25
 
