@@ -58,6 +58,7 @@ const SHELL = [
   './content/rag.json',
   './content/ai-web.json',
   './content/agents.json',
+  './content/evals.json',
   './release-notes/en.md',
   './release-notes/es.md',
   './icons/icon-192.png',

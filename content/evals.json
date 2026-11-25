@@ -1,0 +1,569 @@
+{
+  "id": "evals",
+  "version": 1,
+  "title": "Evals and observability",
+  "translations": {
+    "es": {
+      "title": "Evals y observabilidad"
+    }
+  },
+  "cards": [
+    {
+      "id": "evals-why",
+      "kind": "concept",
+      "level": "intro",
+      "title": "An eval is a test suite for behaviour you cannot assert exactly",
+      "body": "A model gives a different good answer each time, so an exact assertEquals does not work. An *eval* is the replacement: **fixed inputs, a grader for each case and a pass rate**.\n\nThe grader decides if one output is good enough. The pass rate over all cases is the number you track.\n\nIt replaces \"it looked fine in the playground\" with **a score you can compare** after each change.",
+      "translations": {
+        "es": {
+          "title": "Una eval es una batería de tests para un comportamiento que no puedes comprobar con exactitud",
+          "body": "Un modelo da una respuesta buena distinta cada vez, así que un assertEquals exacto no sirve. Una *eval* lo sustituye: **entradas fijas, un evaluador por caso y una tasa de aciertos**.\n\nEl evaluador decide si una salida es bastante buena. La tasa de aciertos sobre todos los casos es el número que sigues.\n\nCambia \"en el playground parecía bien\" por **una puntuación que puedes comparar** después de cada cambio."
+        }
+      }
+    },
+    {
+      "id": "evals-golden-set",
+      "kind": "concept",
+      "level": "intro",
+      "title": "Start with 30 real inputs and the outcome you expect for each",
+      "body": "A *golden set* is a list of inputs, each with the outcome you expect: a value, a rule, or a rubric. **Thirty real cases** are enough to start.\n\nTake them from logs and support tickets, not from imagination. Real users write typos, half questions and requests you never planned for.\n\nThe set grows with the product: **every bug you fix becomes a new case**.",
+      "translations": {
+        "es": {
+          "title": "Empieza con 30 entradas reales y el resultado que esperas para cada una",
+          "body": "Un *golden set* es una lista de entradas, cada una con el resultado que esperas: un valor, una regla o una rúbrica. **Treinta casos reales** bastan para empezar.\n\nSácalos de los logs y de los tickets de soporte, no de tu imaginación. Los usuarios reales escriben con erratas, preguntas a medias y peticiones que nunca planeaste.\n\nEl conjunto crece con el producto: **cada bug que corriges se convierte en un caso nuevo**."
+        }
+      }
+    },
+    {
+      "id": "evals-graders",
+      "kind": "concept",
+      "level": "intro",
+      "title": "Grade with code first, a model second, a person last",
+      "body": "A *code grader* checks a format, a value or a rule. It is exact, free and runs in milliseconds.\n\nAn LLM judge grades open-ended text that code cannot check, such as tone or relevance. It costs tokens and makes its own errors.\n\nA person is slow and costly, so **use people to calibrate the other two**, not to grade every run. **Use the cheapest grader that can decide** each check.",
+      "diagram": {
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 120\" role=\"img\"><text class=\"d-note\" x=\"14\" y=\"22\">1</text><rect class=\"d-hi\" x=\"28\" y=\"8\" width=\"128\" height=\"28\" rx=\"6\"/><text class=\"d-text d-on-hi\" x=\"92\" y=\"22\">assert</text><text class=\"d-note\" x=\"200\" y=\"22\">ms</text><text class=\"d-note\" x=\"272\" y=\"22\">$0</text><text class=\"d-note\" x=\"14\" y=\"62\">2</text><rect class=\"d-box\" x=\"28\" y=\"48\" width=\"128\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"92\" y=\"62\">LLM judge</text><text class=\"d-note\" x=\"200\" y=\"62\">s</text><text class=\"d-note\" x=\"272\" y=\"62\">$</text><text class=\"d-note\" x=\"14\" y=\"102\">3</text><rect class=\"d-box\" x=\"28\" y=\"88\" width=\"128\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"92\" y=\"102\">manual</text><text class=\"d-note\" x=\"200\" y=\"102\">h</text><text class=\"d-note\" x=\"272\" y=\"102\">$$$</text></svg>",
+        "alt": "Three graders ranked 1 to 3: code, highlighted, with latency in milliseconds and no cost; an LLM judge with latency in seconds and some cost; a human with latency in hours and the highest cost."
+      },
+      "translations": {
+        "es": {
+          "title": "Evalúa primero con código, después con un modelo y por último con una persona",
+          "body": "Un *evaluador de código* comprueba un formato, un valor o una regla. Es exacto, gratis y tarda milisegundos.\n\nUn LLM como juez evalúa texto abierto que el código no puede comprobar, como el tono o la relevancia. Cuesta tokens y comete sus propios errores.\n\nUna persona es lenta y cara, así que **usa personas para calibrar a los otros dos**, no para evaluar cada ejecución. **Usa el evaluador más barato que pueda decidir** cada comprobación.",
+          "diagram": {
+            "alt": "Tres evaluadores ordenados del 1 al 3: código, resaltado, con latencia de milisegundos y sin coste; un LLM como juez con latencia de segundos y algo de coste; una persona con latencia de horas y el coste más alto."
+          }
+        }
+      }
+    },
+    {
+      "id": "evals-regression",
+      "kind": "concept",
+      "level": "intro",
+      "title": "Run the eval on every prompt change, like a unit test",
+      "body": "A prompt is code: a one-word change can break a case that worked. So **run the eval in CI on every prompt change**, and on every change of model or settings.\n\nCompare the pass rate with the *baseline* of the main branch. **A drop blocks the change**, the same way a failing test blocks a merge.\n\nKeep the run fast: the cheap code graders on each commit, the slow judge before a release.",
+      "diagram": {
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 136\" role=\"img\"><defs><marker id=\"evals-regression-head\" viewBox=\"0 0 8 8\" refX=\"7\" refY=\"4\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path class=\"d-head\" d=\"M0 0L8 4L0 8z\"/></marker></defs><rect class=\"d-box\" x=\"8\" y=\"20\" width=\"88\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"52\" y=\"34\">prompt v2</text><rect class=\"d-hi\" x=\"116\" y=\"20\" width=\"88\" height=\"28\" rx=\"6\"/><text class=\"d-text d-on-hi\" x=\"160\" y=\"34\">eval</text><rect class=\"d-box\" x=\"224\" y=\"20\" width=\"88\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"268\" y=\"34\">pass rate</text><path class=\"d-arrow\" marker-end=\"url(#evals-regression-head)\" d=\"M96 34H114\"/><path class=\"d-arrow\" marker-end=\"url(#evals-regression-head)\" d=\"M204 34H222\"/><path class=\"d-arrow\" marker-end=\"url(#evals-regression-head)\" d=\"M248 48V74H160V98\"/><text class=\"d-note\" x=\"204\" y=\"66\">≥ 0.92</text><path class=\"d-arrow\" marker-end=\"url(#evals-regression-head)\" d=\"M276 48V98\"/><text class=\"d-note d-end\" x=\"269\" y=\"86\">&lt; 0.92</text><rect class=\"d-box\" x=\"116\" y=\"100\" width=\"88\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"160\" y=\"114\">merge ✓</text><rect class=\"d-box\" x=\"224\" y=\"100\" width=\"88\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"268\" y=\"114\">merge ✗</text></svg>",
+        "alt": "A changed prompt goes into the eval, highlighted, which gives a pass rate. A pass rate of 0.92 or more leads to merge; below 0.92 leads to block."
+      },
+      "translations": {
+        "es": {
+          "title": "Lanza la eval en cada cambio del prompt, como un test unitario",
+          "body": "Un prompt es código: cambiar una palabra puede romper un caso que funcionaba. Así que **lanza la eval en CI en cada cambio del prompt**, y en cada cambio de modelo o de parámetros.\n\nCompara la tasa de aciertos con la *línea base* de la rama principal. **Una bajada bloquea el cambio**, igual que un test que falla bloquea un merge.\n\nMantén la ejecución rápida: los evaluadores de código, baratos, en cada commit; el juez, lento, antes de una release.",
+          "diagram": {
+            "alt": "Un prompt modificado entra en la eval, resaltada, que da una tasa de aciertos. Con 0.92 o más se hace merge; por debajo de 0.92 se bloquea."
+          }
+        }
+      }
+    },
+    {
+      "id": "evals-code-grader",
+      "kind": "snippet",
+      "level": "intro",
+      "title": "A code grader checks shape before meaning",
+      "body": "Most failures are *structural*: no JSON, a missing field, a bad date. **Check the shape with code first**: it is exact and free.\n\nReturn a reason with each failure. A list of reasons tells you **which rule breaks most often**, not only that the score dropped.",
+      "code": "const grade = (output) => {\n  let data;\n  try { data = JSON.parse(output); }\n  catch { return { pass: false, why: 'not JSON' }; }\n  if (typeof data.title !== 'string')\n    return { pass: false, why: 'no title' };\n  if (Number.isNaN(Date.parse(data.date)))\n    return { pass: false, why: 'bad date' };\n  if (/as an ai/i.test(data.summary ?? ''))\n    return { pass: false, why: 'forbidden phrase' };\n  return { pass: true, why: 'ok' };\n};",
+      "syntax": "js",
+      "translations": {
+        "es": {
+          "title": "Un evaluador de código comprueba la forma antes que el significado",
+          "body": "La mayoría de los fallos son *estructurales*: no hay JSON, falta un campo, una fecha es incorrecta. **Comprueba la forma primero con código**: es exacto y gratis.\n\nDevuelve un motivo con cada fallo. Una lista de motivos te dice **qué regla falla más a menudo**, no solo que la puntuación bajó."
+        }
+      }
+    },
+    {
+      "id": "evals-vibes",
+      "kind": "pitfall",
+      "level": "intro",
+      "title": "Ten good chats in the playground are not an eval",
+      "body": "The trap: you try a new prompt in the playground, ten answers look good, and you ship it.\n\nThe symptom: users find failures in a week. You tested only the inputs you thought of, and *each one once*, with a model that samples.\n\nThe fix: **a fixed set of cases, several runs per case**, and a score you **compare over time**.",
+      "translations": {
+        "es": {
+          "title": "Diez buenas conversaciones en el playground no son una eval",
+          "body": "La trampa: pruebas un prompt nuevo en el playground, diez respuestas parecen buenas y lo publicas.\n\nEl síntoma: los usuarios encuentran fallos en una semana. Probaste solo las entradas que se te ocurrieron, y *cada una una vez*, con un modelo que hace muestreo.\n\nLa solución: **un conjunto fijo de casos, varias ejecuciones por caso**, y una puntuación que **comparas en el tiempo**."
+        }
+      }
+    },
+    {
+      "id": "evals-easy-cases",
+      "kind": "pitfall",
+      "level": "intro",
+      "title": "An eval set of easy cases always passes",
+      "body": "The trap: the set holds the clear, polite questions you wrote while you built the feature.\n\nThe symptom: the score is 100% on every version, so it cannot tell a good change from a bad one. A score that *never moves* measures nothing.\n\nThe fix: **add the hard, ambiguous and adversarial cases** that failed in production. **Aim for a score well below 100%**, so there is room to see a change.",
+      "translations": {
+        "es": {
+          "title": "Un conjunto de eval con casos fáciles siempre pasa",
+          "body": "La trampa: el conjunto tiene las preguntas claras y educadas que escribiste mientras construías la funcionalidad.\n\nEl síntoma: la puntuación es del 100 % en cada versión, así que no distingue un cambio bueno de uno malo. Una puntuación que *nunca se mueve* no mide nada.\n\nLa solución: **añade los casos difíciles, ambiguos y adversarios** que fallaron en producción. **Busca una puntuación claramente por debajo del 100 %**, para tener margen y ver un cambio."
+        }
+      }
+    },
+    {
+      "id": "evals-quiz-grader",
+      "kind": "quiz",
+      "level": "intro",
+      "title": "The output must be valid JSON with an ISO date field. Which grader do you use?",
+      "body": "Both rules are *exact*: the text parses or it does not, the date matches the format or it does not. **A code check decides them with no error**, in a millisecond, for free.\n\nAn LLM judge is the tempting answer, but it is slower, costs tokens and **can be wrong on a rule that code checks exactly**. Keep the judge for open-ended text.",
+      "options": [
+        "An LLM judge with a rubric",
+        "A code check: parse the JSON, test the date format",
+        "A person who reads a sample",
+        "A second model that rewrites the output"
+      ],
+      "answer": 1,
+      "translations": {
+        "es": {
+          "title": "La salida debe ser JSON válido con un campo de fecha ISO. ¿Qué evaluador usas?",
+          "body": "Las dos reglas son *exactas*: el texto se analiza o no, la fecha cumple el formato o no. **Una comprobación con código las decide sin error**, en un milisegundo y gratis.\n\nUn LLM como juez es la respuesta tentadora, pero es más lento, cuesta tokens y **puede fallar en una regla que el código comprueba**. Guarda el juez para el texto abierto.",
+          "options": [
+            "Un LLM como juez con una rúbrica",
+            "Una comprobación con código: analiza el JSON y prueba el formato de fecha",
+            "Una persona que lee una muestra",
+            "Un segundo modelo que reescribe la salida"
+          ]
+        }
+      }
+    },
+    {
+      "id": "evals-res-promptfoo",
+      "kind": "resource",
+      "level": "intro",
+      "title": "Repo: promptfoo, test and evaluate LLM prompts",
+      "body": "An open-source CLI that runs a set of *test cases* against one or more prompts and models, and shows the results side by side.\n\nRead it for the shape of a config: **cases, assertions and providers in one file**, and how it **runs in CI** to block a regression.",
+      "url": "https://github.com/promptfoo/promptfoo",
+      "media": "repo",
+      "minutes": 30,
+      "translations": {
+        "es": {
+          "title": "Repo: promptfoo, prueba y evalúa prompts de LLM",
+          "body": "Una CLI de código abierto que lanza un conjunto de *casos de prueba* contra uno o más prompts y modelos, y muestra los resultados lado a lado.\n\nLéelo por la forma de la configuración: **casos, aserciones y proveedores en un solo fichero**, y por cómo **se ejecuta en CI** para bloquear una regresión."
+        }
+      }
+    },
+    {
+      "id": "evals-variance",
+      "kind": "concept",
+      "level": "intermediate",
+      "title": "Run each case several times: one run of a sampled model is an anecdote",
+      "body": "A model *samples* its output, so the same case can pass now and fail on the next run. One pass or one fail tells you little.\n\nRun each case 5 to 10 times and **report the pass rate per case**. A case at 10/10 is solid, at 7/10 it is *flaky*, at 2/10 it is broken.\n\nThe flaky cases are where a prompt change shows first. **Track them by rate, not by one result**.",
+      "diagram": {
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 128\" role=\"img\"><text class=\"d-note\" x=\"142\" y=\"12\">n = 10</text><rect class=\"d-hi\" x=\"36\" y=\"54\" width=\"212\" height=\"28\" rx=\"6\"/><text class=\"d-note\" x=\"20\" y=\"32\">c1</text><rect class=\"d-ink\" x=\"44\" y=\"24\" width=\"16\" height=\"16\" rx=\"3\"/><rect class=\"d-ink\" x=\"64\" y=\"24\" width=\"16\" height=\"16\" rx=\"3\"/><rect class=\"d-ink\" x=\"84\" y=\"24\" width=\"16\" height=\"16\" rx=\"3\"/><rect class=\"d-ink\" x=\"104\" y=\"24\" width=\"16\" height=\"16\" rx=\"3\"/><rect class=\"d-ink\" x=\"124\" y=\"24\" width=\"16\" height=\"16\" rx=\"3\"/><rect class=\"d-ink\" x=\"144\" y=\"24\" width=\"16\" height=\"16\" rx=\"3\"/><rect class=\"d-ink\" x=\"164\" y=\"24\" width=\"16\" height=\"16\" rx=\"3\"/><rect class=\"d-ink\" x=\"184\" y=\"24\" width=\"16\" height=\"16\" rx=\"3\"/><rect class=\"d-ink\" x=\"204\" y=\"24\" width=\"16\" height=\"16\" rx=\"3\"/><rect class=\"d-ink\" x=\"224\" y=\"24\" width=\"16\" height=\"16\" rx=\"3\"/><text class=\"d-note\" x=\"276\" y=\"32\">10/10</text><text class=\"d-note\" x=\"20\" y=\"68\">c2</text><rect class=\"d-ink\" x=\"44\" y=\"60\" width=\"16\" height=\"16\" rx=\"3\"/><rect class=\"d-ink\" x=\"64\" y=\"60\" width=\"16\" height=\"16\" rx=\"3\"/><rect class=\"d-box\" x=\"84\" y=\"60\" width=\"16\" height=\"16\" rx=\"3\"/><rect class=\"d-ink\" x=\"104\" y=\"60\" width=\"16\" height=\"16\" rx=\"3\"/><rect class=\"d-ink\" x=\"124\" y=\"60\" width=\"16\" height=\"16\" rx=\"3\"/><rect class=\"d-box\" x=\"144\" y=\"60\" width=\"16\" height=\"16\" rx=\"3\"/><rect class=\"d-ink\" x=\"164\" y=\"60\" width=\"16\" height=\"16\" rx=\"3\"/><rect class=\"d-ink\" x=\"184\" y=\"60\" width=\"16\" height=\"16\" rx=\"3\"/><rect class=\"d-box\" x=\"204\" y=\"60\" width=\"16\" height=\"16\" rx=\"3\"/><rect class=\"d-ink\" x=\"224\" y=\"60\" width=\"16\" height=\"16\" rx=\"3\"/><text class=\"d-note\" x=\"276\" y=\"68\">7/10</text><text class=\"d-note\" x=\"20\" y=\"104\">c3</text><rect class=\"d-box\" x=\"44\" y=\"96\" width=\"16\" height=\"16\" rx=\"3\"/><rect class=\"d-box\" x=\"64\" y=\"96\" width=\"16\" height=\"16\" rx=\"3\"/><rect class=\"d-ink\" x=\"84\" y=\"96\" width=\"16\" height=\"16\" rx=\"3\"/><rect class=\"d-box\" x=\"104\" y=\"96\" width=\"16\" height=\"16\" rx=\"3\"/><rect class=\"d-box\" x=\"124\" y=\"96\" width=\"16\" height=\"16\" rx=\"3\"/><rect class=\"d-box\" x=\"144\" y=\"96\" width=\"16\" height=\"16\" rx=\"3\"/><rect class=\"d-box\" x=\"164\" y=\"96\" width=\"16\" height=\"16\" rx=\"3\"/><rect class=\"d-ink\" x=\"184\" y=\"96\" width=\"16\" height=\"16\" rx=\"3\"/><rect class=\"d-box\" x=\"204\" y=\"96\" width=\"16\" height=\"16\" rx=\"3\"/><rect class=\"d-box\" x=\"224\" y=\"96\" width=\"16\" height=\"16\" rx=\"3\"/><text class=\"d-note\" x=\"276\" y=\"104\">2/10</text></svg>",
+        "alt": "Three cases with ten runs each. Case c1 passes all 10 runs, case c2, highlighted, passes 7 of 10, and case c3 passes 2 of 10."
+      },
+      "translations": {
+        "es": {
+          "title": "Lanza cada caso varias veces: una ejecución de un modelo que muestrea es una anécdota",
+          "body": "Un modelo *muestrea* su salida, así que el mismo caso puede pasar ahora y fallar en la siguiente ejecución. Un acierto o un fallo sueltos dicen poco.\n\nLanza cada caso de 5 a 10 veces e **informa de la tasa de aciertos por caso**. Un caso con 10/10 es sólido, con 7/10 es *inestable*, con 2/10 está roto.\n\nLos casos inestables son donde un cambio del prompt se nota primero. **Síguelos por su tasa, no por un resultado**.",
+          "diagram": {
+            "alt": "Tres casos con diez ejecuciones cada uno. El caso c1 pasa las 10, el caso c2, resaltado, pasa 7 de 10, y el caso c3 pasa 2 de 10."
+          }
+        }
+      }
+    },
+    {
+      "id": "evals-trace",
+      "kind": "concept",
+      "level": "intermediate",
+      "title": "A trace records every step of one request: prompts, tool calls, tokens and time",
+      "body": "A *trace* is the record of one request. Each step is a *span*: an embedding call, a search, a model call, a tool call. Each span stores its input, output, tokens and duration.\n\n**One trace per request, one span per step.** The spans nest, so you see which step called which.\n\nWhen an answer is slow, costly or wrong, the trace shows **which step caused it**.",
+      "diagram": {
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 212\" role=\"img\"><text class=\"d-note d-start\" x=\"8\" y=\"22\">/ask</text><rect class=\"d-box\" x=\"88\" y=\"8\" width=\"224\" height=\"28\" rx=\"3\"/><text class=\"d-text\" x=\"200\" y=\"22\">4.0 s</text><text class=\"d-note d-start\" x=\"8\" y=\"56\">embed</text><rect class=\"d-box\" x=\"88\" y=\"42\" width=\"11\" height=\"28\" rx=\"3\"/><text class=\"d-note d-start\" x=\"8\" y=\"90\">kNN</text><rect class=\"d-box\" x=\"99\" y=\"76\" width=\"17\" height=\"28\" rx=\"3\"/><text class=\"d-note d-start\" x=\"8\" y=\"124\">LLM</text><rect class=\"d-box\" x=\"116\" y=\"110\" width=\"45\" height=\"28\" rx=\"3\"/><text class=\"d-note\" x=\"138.5\" y=\"124\">0.8 s</text><text class=\"d-note d-start\" x=\"8\" y=\"158\">tool</text><rect class=\"d-hi\" x=\"161\" y=\"144\" width=\"106\" height=\"28\" rx=\"3\"/><text class=\"d-text d-on-hi\" x=\"214\" y=\"158\">1.9 s</text><text class=\"d-note d-start\" x=\"8\" y=\"192\">LLM</text><rect class=\"d-box\" x=\"267\" y=\"178\" width=\"45\" height=\"28\" rx=\"3\"/><text class=\"d-note\" x=\"289.5\" y=\"192\">0.8 s</text></svg>",
+        "alt": "A request to /ask of 4.0 seconds split into spans on a time line: embed, a kNN search, an LLM call of 0.8 seconds, a tool call of 1.9 seconds, highlighted, and a second LLM call of 0.8 seconds."
+      },
+      "translations": {
+        "es": {
+          "title": "Una traza registra cada paso de una petición: prompts, llamadas a herramientas, tokens y tiempo",
+          "body": "Una *traza* es el registro de una petición. Cada paso es un *span*: una llamada de embedding, una búsqueda, una llamada al modelo, una llamada a una herramienta. Cada span guarda su entrada, su salida, sus tokens y su duración.\n\n**Una traza por petición, un span por paso.** Los spans se anidan, así que ves qué paso llamó a cuál.\n\nCuando una respuesta es lenta, cara o incorrecta, la traza muestra **qué paso la causó**.",
+          "diagram": {
+            "alt": "Una petición a /ask de 4,0 segundos dividida en spans sobre una línea de tiempo: embed, una búsqueda kNN, una llamada al LLM de 0,8 segundos, una llamada a una herramienta de 1,9 segundos, resaltada, y una segunda llamada al LLM de 0,8 segundos."
+          }
+        }
+      }
+    },
+    {
+      "id": "evals-offline-online",
+      "kind": "concept",
+      "level": "intermediate",
+      "title": "Offline evals gate a release; online metrics catch what the set missed",
+      "body": "*Offline* evals run a fixed set before you deploy. They are repeatable, so they **block a known regression**.\n\n*Online* metrics come from real traffic after you deploy: ratings, retries, abandoned sessions. They find the failures **your set does not contain yet**.\n\nYou need both. Offline alone misses new inputs; online alone finds a problem only after users meet it.",
+      "diagram": {
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 152\" role=\"img\"><text class=\"d-label\" x=\"8\" y=\"12\">OFFLINE</text><text class=\"d-label\" x=\"176\" y=\"12\">ONLINE</text><rect class=\"d-box\" x=\"8\" y=\"20\" width=\"136\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"76\" y=\"34\">eval set</text><rect class=\"d-box\" x=\"8\" y=\"60\" width=\"136\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"76\" y=\"74\">graders</text><rect class=\"d-box\" x=\"8\" y=\"100\" width=\"136\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"76\" y=\"114\">pass rate</text><rect class=\"d-box\" x=\"176\" y=\"20\" width=\"136\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"244\" y=\"34\">feedback</text><rect class=\"d-box\" x=\"176\" y=\"60\" width=\"136\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"244\" y=\"74\">retry %</text><rect class=\"d-box\" x=\"176\" y=\"100\" width=\"136\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"244\" y=\"114\">abandon %</text><path class=\"d-data-line\" d=\"M160 20V128\"/><text class=\"d-note\" x=\"160\" y=\"142\">deploy</text></svg>",
+        "alt": "A highlighted deploy line splits two columns. Offline, before deploy: eval set, graders, pass rate. Online, after deploy: rating, retries, abandon rate."
+      },
+      "translations": {
+        "es": {
+          "title": "Las evals offline frenan una release; las métricas online detectan lo que el conjunto no tenía",
+          "body": "Las evals *offline* lanzan un conjunto fijo antes del despliegue. Son repetibles, así que **bloquean una regresión conocida**.\n\nLas métricas *online* salen del tráfico real después del despliegue: valoraciones, reintentos, sesiones abandonadas. Encuentran los fallos **que tu conjunto aún no contiene**.\n\nNecesitas las dos. Solo offline no ve entradas nuevas; solo online encuentra un problema cuando los usuarios ya lo han sufrido.",
+          "diagram": {
+            "alt": "Una línea de despliegue resaltada separa dos columnas. Offline, antes del despliegue: conjunto de eval, evaluadores, tasa de aciertos. Online, después del despliegue: valoración, reintentos, tasa de abandono."
+          }
+        }
+      }
+    },
+    {
+      "id": "evals-user-feedback",
+      "kind": "concept",
+      "level": "intermediate",
+      "title": "A thumbs-down is a label: route it into the eval set",
+      "body": "A negative rating is a free *label* on a real input. Store it with the trace ID, so you can see the exact prompt, context and output.\n\nReview each one: some are model errors, some are bad retrieval, some are users who wanted something else. **Each real error becomes a new case** with its expected outcome.\n\nFix the prompt, and **keep the case as a regression test**.",
+      "diagram": {
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 136\" role=\"img\"><defs><marker id=\"evals-user-feedback-head\" viewBox=\"0 0 8 8\" refX=\"7\" refY=\"4\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path class=\"d-head\" d=\"M0 0L8 4L0 8z\"/></marker></defs><rect class=\"d-box\" x=\"8\" y=\"20\" width=\"88\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"52\" y=\"34\">output</text><rect class=\"d-box\" x=\"116\" y=\"20\" width=\"88\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"160\" y=\"34\">feedback ✗</text><rect class=\"d-box\" x=\"224\" y=\"20\" width=\"88\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"268\" y=\"34\">trace</text><rect class=\"d-box\" x=\"224\" y=\"100\" width=\"88\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"268\" y=\"114\">triage</text><rect class=\"d-hi\" x=\"116\" y=\"100\" width=\"88\" height=\"28\" rx=\"6\"/><text class=\"d-text d-on-hi\" x=\"160\" y=\"114\">eval set</text><rect class=\"d-box\" x=\"8\" y=\"100\" width=\"88\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"52\" y=\"114\">prompt</text><path class=\"d-arrow\" marker-end=\"url(#evals-user-feedback-head)\" d=\"M96 34H114\"/><path class=\"d-arrow\" marker-end=\"url(#evals-user-feedback-head)\" d=\"M204 34H222\"/><path class=\"d-arrow\" marker-end=\"url(#evals-user-feedback-head)\" d=\"M268 48V98\"/><path class=\"d-arrow\" marker-end=\"url(#evals-user-feedback-head)\" d=\"M224 114H206\"/><path class=\"d-arrow\" marker-end=\"url(#evals-user-feedback-head)\" d=\"M116 114H98\"/><path class=\"d-arrow\" marker-end=\"url(#evals-user-feedback-head)\" d=\"M52 100V50\"/></svg>",
+        "alt": "A loop of six steps: output, a negative rating, its trace, a review, a new case in the eval set, highlighted, and a fix to the prompt, which gives the next output."
+      },
+      "translations": {
+        "es": {
+          "title": "Un pulgar abajo es una etiqueta: llévalo al conjunto de eval",
+          "body": "Una valoración negativa es una *etiqueta* gratis sobre una entrada real. Guárdala con el ID de la traza, para ver el prompt, el contexto y la salida exactos.\n\nRevisa cada una: unas son errores del modelo, otras una mala recuperación, otras usuarios que querían otra cosa. **Cada error real se convierte en un caso nuevo** con su resultado esperado.\n\nCorrige el prompt y **conserva el caso como test de regresión**.",
+          "diagram": {
+            "alt": "Un ciclo de seis pasos: salida, una valoración negativa, su traza, una revisión, un caso nuevo en el conjunto de eval, resaltado, y una corrección del prompt, que da la siguiente salida."
+          }
+        }
+      }
+    },
+    {
+      "id": "evals-runner",
+      "kind": "snippet",
+      "level": "intermediate",
+      "title": "An eval runner fits in a dozen lines",
+      "body": "Each case runs *n* times, because one run of a sampled model is an anecdote. The runner **prints the pass rate per case** and returns the overall rate.\n\ngenerate calls your prompt; grade is a code check or a judge. **Keep the runner dumb**: all the logic lives in the cases and the graders.",
+      "code": "async function runEvals(cases, generate, grade, n = 5) {\n  let total = 0;\n  for (const c of cases) {\n    let passed = 0;\n    for (let i = 0; i < n; i++) {\n      const out = await generate(c.input);\n      if ((await grade(out, c)).pass) passed += 1;\n    }\n    console.log(c.id, `${passed}/${n}`);\n    total += passed;\n  }\n  return total / (cases.length * n);\n}",
+      "syntax": "js",
+      "translations": {
+        "es": {
+          "title": "Un ejecutor de evals cabe en una docena de líneas",
+          "body": "Cada caso se ejecuta *n* veces, porque una ejecución de un modelo que muestrea es una anécdota. El ejecutor **imprime la tasa de aciertos por caso** y devuelve la tasa global.\n\ngenerate llama a tu prompt; grade es una comprobación con código o un juez. **Mantén el ejecutor simple**: toda la lógica está en los casos y en los evaluadores."
+        }
+      }
+    },
+    {
+      "id": "evals-trace-sql",
+      "kind": "snippet",
+      "level": "intermediate",
+      "title": "Find the slow and costly routes in your traces",
+      "body": "Store one row per request, with its route, duration and tokens. Then a plain query finds where to look first.\n\n**Use p95, not the average**: a few slow requests hide in a mean. percentile_cont is an *ordered-set aggregate*, so it takes WITHIN GROUP (ORDER BY ...). Sort by p95 and **open the traces of the top route**.",
+      "code": "SELECT route,\n  percentile_cont(0.95) WITHIN GROUP\n    (ORDER BY duration_ms) AS p95_ms,\n  round(avg(total_tokens)) AS avg_tokens,\n  count(*) AS requests\nFROM traces\nWHERE started_at > now() - interval '7 days'\nGROUP BY route\nORDER BY p95_ms DESC;",
+      "syntax": "sql",
+      "translations": {
+        "es": {
+          "title": "Encuentra las rutas lentas y caras en tus trazas",
+          "body": "Guarda una fila por petición, con su ruta, su duración y sus tokens. Después, una consulta sencilla te dice dónde mirar primero.\n\n**Usa el p95, no la media**: unas pocas peticiones lentas se esconden en una media. percentile_cont es un *agregado de conjunto ordenado*, así que lleva WITHIN GROUP (ORDER BY ...). Ordena por p95 y **abre las trazas de la primera ruta**."
+        }
+      }
+    },
+    {
+      "id": "evals-cost-sql",
+      "kind": "snippet",
+      "level": "intermediate",
+      "title": "Cost per feature is tokens times a rate table",
+      "body": "Log the tokens of each call with its feature and model. Keep the prices in a *rates* table, per million input and output tokens, **never in the code**.\n\nThe join turns tokens into money per feature per day. When a price changes, **update one row**, not a deploy. Add a valid_from column to keep old days at their old price.",
+      "code": "SELECT u.feature,\n  date_trunc('day', u.created_at) AS day,\n  sum(u.input_tokens * r.input_per_mtok\n    + u.output_tokens * r.output_per_mtok)\n    / 1e6 AS cost\nFROM token_usage u\nJOIN rates r ON r.model = u.model\nGROUP BY 1, 2\nORDER BY day DESC, cost DESC;",
+      "syntax": "sql",
+      "translations": {
+        "es": {
+          "title": "El coste por funcionalidad son los tokens por una tabla de tarifas",
+          "body": "Registra los tokens de cada llamada con su funcionalidad y su modelo. Guarda los precios en una tabla de *tarifas*, por millón de tokens de entrada y de salida, **nunca en el código**.\n\nEl join convierte tokens en dinero por funcionalidad y por día. Cuando un precio cambia, **actualizas una fila**, no despliegas. Añade una columna valid_from para que los días antiguos mantengan su precio."
+        }
+      }
+    },
+    {
+      "id": "evals-overfit-set",
+      "kind": "pitfall",
+      "level": "intermediate",
+      "title": "A prompt tuned on the eval set scores well on the eval set only",
+      "body": "The trap: you tweak the prompt for a week, each time to fix one failing case of the same 50.\n\nThe symptom: the score climbs from 70% to 96%, but users see no change. The prompt *fits those cases*, with rules that help nowhere else.\n\nThe fix: **keep a holdout set you never tune on**. Read its score only before a release. If the two scores split, **the gain is overfit**.",
+      "diagram": {
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 152\" role=\"img\"><text class=\"d-label\" x=\"8\" y=\"12\">EVAL SET</text><text class=\"d-label\" x=\"8\" y=\"86\">HOLDOUT</text><text class=\"d-note\" x=\"24\" y=\"30\">v1</text><rect class=\"d-box\" x=\"40\" y=\"20\" width=\"140\" height=\"20\" rx=\"3\"/><text class=\"d-note d-start\" x=\"186\" y=\"30\">70%</text><text class=\"d-note\" x=\"24\" y=\"56\">v8</text><rect class=\"d-box\" x=\"40\" y=\"46\" width=\"192\" height=\"20\" rx=\"3\"/><text class=\"d-note d-start\" x=\"238\" y=\"56\">96%</text><text class=\"d-note\" x=\"24\" y=\"104\">v1</text><rect class=\"d-box\" x=\"40\" y=\"94\" width=\"140\" height=\"20\" rx=\"3\"/><text class=\"d-note d-start\" x=\"186\" y=\"104\">70%</text><text class=\"d-note\" x=\"24\" y=\"130\">v8</text><rect class=\"d-hi\" x=\"40\" y=\"120\" width=\"144\" height=\"20\" rx=\"3\"/><text class=\"d-note d-start\" x=\"190\" y=\"130\">72%</text></svg>",
+        "alt": "Two groups of bars. On the eval set, version v1 scores 70% and version v8 scores 96%. On the holdout set, v1 scores 70% and v8, highlighted, scores 72%."
+      },
+      "translations": {
+        "es": {
+          "title": "Un prompt ajustado con el conjunto de eval solo puntúa bien en ese conjunto",
+          "body": "La trampa: retocas el prompt durante una semana, cada vez para arreglar un caso que falla de los mismos 50.\n\nEl síntoma: la puntuación sube del 70 % al 96 %, pero los usuarios no notan nada. El prompt *se ajusta a esos casos*, con reglas que no ayudan en ningún otro.\n\nLa solución: guarda un conjunto reservado (*holdout*): **nunca lo uses para ajustar**. Mira su puntuación solo antes de una release. Si las dos puntuaciones se separan, **la mejora es sobreajuste**.",
+          "diagram": {
+            "alt": "Dos grupos de barras. En el conjunto de eval, la versión v1 saca un 70 % y la v8 un 96 %. En el conjunto reservado, v1 saca un 70 % y v8, resaltada, un 72 %."
+          }
+        }
+      }
+    },
+    {
+      "id": "evals-model-drift",
+      "kind": "pitfall",
+      "level": "intermediate",
+      "title": "The provider updated the model, and your scores moved",
+      "body": "The trap: your code asks for a model *alias*, such as \"latest\". The provider points the alias to a new model.\n\nThe symptom: nothing changed in your repo, but the output format shifts, a refusal appears, or the scores drop overnight.\n\nThe fix: **pin a dated model ID** in config. To move to a new model, change the ID in a branch and **run the evals before you merge**, like any other change.",
+      "translations": {
+        "es": {
+          "title": "El proveedor actualizó el modelo y tus puntuaciones se movieron",
+          "body": "La trampa: tu código pide un *alias* de modelo, como \"latest\". El proveedor hace que el alias apunte a un modelo nuevo.\n\nEl síntoma: nada cambió en tu repo, pero el formato de salida varía, aparece un rechazo o las puntuaciones bajan de un día para otro.\n\nLa solución: **fija un ID de modelo con fecha** en la configuración. Para pasar a un modelo nuevo, cambia el ID en una rama y **lanza las evals antes del merge**, como con cualquier otro cambio."
+        }
+      }
+    },
+    {
+      "id": "evals-quiz-runs",
+      "kind": "quiz",
+      "level": "intermediate",
+      "title": "A case passes 7 of 10 runs. What does that tell you?",
+      "body": "Each run samples a new output, so 7 of 10 is an estimate of the rate: **about 3 users in 10 get a failure** on this input.\n\n\"It passes\" and \"it is broken\" both read the case as pass or fail. It is *flaky*: **report the rate**, and track it across prompt versions.",
+      "options": [
+        "It passes: 7 is a majority",
+        "It is broken: one failure is enough",
+        "It fails about 30% of the time for users",
+        "The grader is wrong and needs a fix"
+      ],
+      "answer": 2,
+      "translations": {
+        "es": {
+          "title": "Un caso pasa 7 de 10 ejecuciones. ¿Qué te dice eso?",
+          "body": "Cada ejecución muestrea una salida nueva, así que 7 de 10 es una estimación de la tasa: **unos 3 usuarios de cada 10 ven un fallo** con esta entrada.\n\n\"Pasa\" y \"está roto\" leen el caso como acierto o fallo. Es *inestable*: **informa de la tasa** y síguela entre versiones del prompt.",
+          "options": [
+            "Pasa: 7 es mayoría",
+            "Está roto: basta con un fallo",
+            "Falla para los usuarios en torno al 30 % de las veces",
+            "El evaluador está mal y hay que corregirlo"
+          ]
+        }
+      }
+    },
+    {
+      "id": "evals-quiz-holdout",
+      "kind": "quiz",
+      "level": "intermediate",
+      "title": "You tuned a prompt for a week on 50 cases and reached 96%. What do you do before you ship?",
+      "body": "A week of fixes on the same 50 cases can *fit* those cases only. **Run the prompt on a holdout set it never saw.** If it also scores near 96%, the gain is real.\n\nMore instructions is the tempting answer, but it **tunes the prompt to the same 50 cases** again and makes the overfit worse.",
+      "options": [
+        "Run it on a holdout set it never saw",
+        "Add more instructions for the 2 failing cases",
+        "Ship it: 96% is above the target",
+        "Run the same 50 cases one more time"
+      ],
+      "answer": 0,
+      "translations": {
+        "es": {
+          "title": "Ajustaste un prompt durante una semana con 50 casos y llegaste al 96 %. ¿Qué haces antes de publicarlo?",
+          "body": "Una semana de arreglos sobre los mismos 50 casos puede *ajustarse* solo a esos casos. **Lanza el prompt sobre un conjunto reservado que nunca vio.** Si también saca cerca de un 96 %, la mejora es real.\n\nMás instrucciones es la respuesta tentadora, pero **ajusta el prompt otra vez a los mismos 50 casos** y empeora el sobreajuste.",
+          "options": [
+            "Lanzarlo sobre un conjunto reservado que nunca vio",
+            "Añadir más instrucciones para los 2 casos que fallan",
+            "Publicarlo: el 96 % supera el objetivo",
+            "Lanzar los mismos 50 casos una vez más"
+          ]
+        }
+      }
+    },
+    {
+      "id": "evals-quiz-trace",
+      "kind": "quiz",
+      "level": "intermediate",
+      "title": "One request took 14 s. Which data shows the slow step?",
+      "body": "Only the *trace* breaks one request into steps: **one span per step, each with its own duration**. The longest span is the slow step.\n\nThe average latency mixes this request with all the others. The error log is empty if nothing failed. The token count hints at a long output, but **not at a slow tool call** or a retry.",
+      "options": [
+        "The average latency of the route",
+        "The error log",
+        "The token count of the request",
+        "The trace, with a span per step and its duration"
+      ],
+      "answer": 3,
+      "translations": {
+        "es": {
+          "title": "Una petición tardó 14 s. ¿Qué datos muestran el paso lento?",
+          "body": "Solo la *traza* divide una petición en pasos: **un span por paso, cada uno con su duración**. El span más largo es el paso lento.\n\nLa latencia media mezcla esta petición con todas las demás. El log de errores está vacío si nada falló. El número de tokens apunta a una salida larga, pero **no a una herramienta lenta** ni a un reintento.",
+          "options": [
+            "La latencia media de la ruta",
+            "El log de errores",
+            "El número de tokens de la petición",
+            "La traza, con un span por paso y su duración"
+          ]
+        }
+      }
+    },
+    {
+      "id": "evals-res-otel-genai",
+      "kind": "resource",
+      "level": "intermediate",
+      "title": "OpenTelemetry: semantic conventions for generative AI",
+      "body": "The standard names for the spans and attributes of a model call: the operation, the model, *input and output tokens*, the finish reason.\n\nRead it before you design your trace schema. **Standard attribute names** let any OpenTelemetry backend show your model calls **without custom code**.",
+      "url": "https://opentelemetry.io/docs/specs/semconv/gen-ai/",
+      "media": "docs",
+      "minutes": 30,
+      "translations": {
+        "es": {
+          "title": "OpenTelemetry: convenciones semánticas para IA generativa",
+          "body": "Los nombres estándar de los spans y los atributos de una llamada a un modelo: la operación, el modelo, los *tokens de entrada y de salida*, el motivo de parada.\n\nLéelo antes de diseñar el esquema de tus trazas. **Los nombres de atributo estándar** permiten que cualquier backend de OpenTelemetry muestre tus llamadas al modelo **sin código propio**."
+        }
+      }
+    },
+    {
+      "id": "evals-pass-at-k",
+      "kind": "concept",
+      "level": "advanced",
+      "title": "pass@k asks if any of k tries succeeds; pass^k asks if all of them do",
+      "body": "Let *p* be the chance that one try passes, with independent tries.\n*pass@k* = 1 − (1 − p)^k: at least one of k tries passes.\n*pass^k* = p^k: all k tries pass.\n\nWith p = 0.8: **pass@3 = 0.992, but pass^3 = 0.512**.\n\nA user who retries until it works sees pass@k. An agent that must succeed every time, or a user who trusts one answer, sees pass^k. **Pick the metric that matches the use.**",
+      "diagram": {
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 120\" role=\"img\"><text class=\"d-note\" x=\"128\" y=\"12\">k=1</text><text class=\"d-note\" x=\"200\" y=\"12\">k=2</text><text class=\"d-note\" x=\"272\" y=\"12\">k=3</text><text class=\"d-text\" x=\"48\" y=\"38\">pass@k</text><rect class=\"d-box\" x=\"96\" y=\"24\" width=\"64\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"128\" y=\"38\">0.8</text><rect class=\"d-box\" x=\"168\" y=\"24\" width=\"64\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"200\" y=\"38\">0.96</text><rect class=\"d-box\" x=\"240\" y=\"24\" width=\"64\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"272\" y=\"38\">0.992</text><text class=\"d-text\" x=\"48\" y=\"78\">pass^k</text><rect class=\"d-box\" x=\"96\" y=\"64\" width=\"64\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"128\" y=\"78\">0.8</text><rect class=\"d-box\" x=\"168\" y=\"64\" width=\"64\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"200\" y=\"78\">0.64</text><rect class=\"d-hi\" x=\"240\" y=\"64\" width=\"64\" height=\"28\" rx=\"6\"/><text class=\"d-text d-on-hi\" x=\"272\" y=\"78\">0.512</text><text class=\"d-note\" x=\"200\" y=\"108\">p = 0.8</text></svg>",
+        "alt": "A table for p = 0.8 and k from 1 to 3. pass@k grows: 0.8, 0.96, 0.992. pass^k falls: 0.8, 0.64, and 0.512, highlighted."
+      },
+      "translations": {
+        "es": {
+          "title": "pass@k pregunta si alguno de k intentos acierta; pass^k pregunta si aciertan todos",
+          "body": "Sea *p* la probabilidad de que un intento acierte, con intentos independientes.\n*pass@k* = 1 − (1 − p)^k: acierta al menos uno de k intentos.\n*pass^k* = p^k: aciertan los k intentos.\n\nCon p = 0,8: **pass@3 = 0,992, pero pass^3 = 0,512**.\n\nUn usuario que reintenta hasta que funciona ve pass@k. Un agente que debe acertar siempre, o un usuario que se fía de una respuesta, ve pass^k. **Elige la métrica que corresponde al uso.**",
+          "diagram": {
+            "alt": "Una tabla para p = 0,8 y k de 1 a 3. pass@k sube: 0,8, 0,96, 0,992. pass^k baja: 0,8, 0,64 y 0,512, resaltado."
+          }
+        }
+      }
+    },
+    {
+      "id": "evals-guardrails",
+      "kind": "concept",
+      "level": "advanced",
+      "title": "A guardrail checks the input or the output at run time, outside the model",
+      "body": "A *guardrail* is a check that runs on every request, in your code: before the model on the input, after it on the output. A rule or a small classifier **blocks, redacts or rewrites**.\n\nExamples: reject a prompt injection pattern, strip a card number, refuse an answer with no citation.\n\nAn instruction in the prompt is a request the model may ignore. **A guardrail is code you test** with its own eval set.",
+      "diagram": {
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 136\" role=\"img\"><defs><marker id=\"evals-guardrails-head\" viewBox=\"0 0 8 8\" refX=\"7\" refY=\"4\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path class=\"d-head\" d=\"M0 0L8 4L0 8z\"/></marker></defs><rect class=\"d-box\" x=\"8\" y=\"20\" width=\"72\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"44\" y=\"34\">input</text><rect class=\"d-hi\" x=\"116\" y=\"20\" width=\"88\" height=\"28\" rx=\"6\"/><text class=\"d-text d-on-hi\" x=\"160\" y=\"34\">guard</text><rect class=\"d-box\" x=\"240\" y=\"20\" width=\"72\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"276\" y=\"34\">LLM</text><rect class=\"d-box\" x=\"8\" y=\"100\" width=\"72\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"44\" y=\"114\">output</text><rect class=\"d-hi\" x=\"116\" y=\"100\" width=\"88\" height=\"28\" rx=\"6\"/><text class=\"d-text d-on-hi\" x=\"160\" y=\"114\">guard</text><path class=\"d-arrow\" marker-end=\"url(#evals-guardrails-head)\" d=\"M80 34H114\"/><path class=\"d-arrow\" marker-end=\"url(#evals-guardrails-head)\" d=\"M204 34H238\"/><path class=\"d-arrow\" marker-end=\"url(#evals-guardrails-head)\" d=\"M276 48V114H206\"/><path class=\"d-arrow\" marker-end=\"url(#evals-guardrails-head)\" d=\"M116 114H82\"/><path class=\"d-arrow d-dash\" marker-end=\"url(#evals-guardrails-head)\" d=\"M160 48V72\"/><text class=\"d-note\" x=\"160\" y=\"84\">✗</text></svg>",
+        "alt": "The input passes through a guard, highlighted, before the LLM. The LLM output passes through a second guard, highlighted, before it reaches the user. A dashed arrow marked with a cross shows that a guard can block."
+      },
+      "translations": {
+        "es": {
+          "title": "Un guardrail comprueba la entrada o la salida en tiempo de ejecución, fuera del modelo",
+          "body": "Un *guardrail* es una comprobación que se ejecuta en cada petición, en tu código: antes del modelo sobre la entrada, después sobre la salida. Una regla o un clasificador pequeño **bloquea, oculta o reescribe**.\n\nEjemplos: rechazar un patrón de prompt injection, quitar un número de tarjeta, rechazar una respuesta sin cita.\n\nUna instrucción en el prompt es una petición que el modelo puede ignorar. **Un guardrail es código que pruebas** con su propio conjunto de eval.",
+          "diagram": {
+            "alt": "La entrada pasa por un guard, resaltado, antes del LLM. La salida del LLM pasa por un segundo guard, resaltado, antes de llegar al usuario. Una flecha discontinua marcada con una cruz indica que un guard puede bloquear."
+          }
+        }
+      }
+    },
+    {
+      "id": "evals-ab-compare",
+      "kind": "snippet",
+      "level": "advanced",
+      "title": "Compare two prompts on the same cases: wins, losses and ties",
+      "body": "Run prompt A and prompt B on *the same cases*. A *win* is a case B passes and A fails; a *loss* is the reverse.\n\nTwo pass rates can be equal while B fixed 5 cases and broke 5 others. **The list of changed cases** is what you read: **a loss is a regression** even when the total goes up.",
+      "code": "async function compare(cases, runA, runB, grade) {\n  const tally = { win: 0, loss: 0, tie: 0 };\n  for (const c of cases) {\n    const a = (await grade(await runA(c.input), c)).pass;\n    const b = (await grade(await runB(c.input), c)).pass;\n    const r = a === b ? 'tie' : b ? 'win' : 'loss';\n    tally[r] += 1;\n    if (r !== 'tie') console.log(r, c.id);\n  }\n  return tally;\n}",
+      "syntax": "js",
+      "translations": {
+        "es": {
+          "title": "Compara dos prompts sobre los mismos casos: victorias, derrotas y empates",
+          "body": "Lanza el prompt A y el prompt B sobre *los mismos casos*. Una *victoria* es un caso que B pasa y A falla; una *derrota* es lo contrario.\n\nDos tasas de aciertos pueden ser iguales aunque B arregle 5 casos y rompa otros 5. **La lista de casos que cambian** es lo que lees: **una derrota es una regresión** aunque el total suba."
+        }
+      }
+    },
+    {
+      "id": "evals-mean-hides",
+      "kind": "pitfall",
+      "level": "advanced",
+      "title": "An average score hides the category that broke",
+      "body": "The trap: you report one pass rate for the whole set. A new prompt moves it from 91% to 92%, and you ship.\n\nThe symptom: refund requests fail all week. They are *20 of 200 cases*: their rate fell from 90% to 60%, while shipping rose and hid the loss.\n\nThe fix: **tag each case with a category** and **report the rate per category**. Block a release when any category drops.",
+      "diagram": {
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 172\" role=\"img\"><rect class=\"d-box\" x=\"88\" y=\"6\" width=\"12\" height=\"10\" rx=\"2\"/><text class=\"d-note d-start\" x=\"104\" y=\"11\">v1</text><rect class=\"d-ink\" x=\"136\" y=\"6\" width=\"12\" height=\"10\" rx=\"2\"/><text class=\"d-note d-start\" x=\"152\" y=\"11\">v2</text><text class=\"d-note d-start\" x=\"8\" y=\"39\">total</text><rect class=\"d-box\" x=\"88\" y=\"28\" width=\"146\" height=\"10\" rx=\"2\"/><rect class=\"d-ink\" x=\"88\" y=\"40\" width=\"147\" height=\"10\" rx=\"2\"/><text class=\"d-note d-start\" x=\"243\" y=\"39\">91 → 92</text><text class=\"d-note d-start\" x=\"8\" y=\"75\">#shipping</text><rect class=\"d-box\" x=\"88\" y=\"64\" width=\"142\" height=\"10\" rx=\"2\"/><rect class=\"d-ink\" x=\"88\" y=\"76\" width=\"155\" height=\"10\" rx=\"2\"/><text class=\"d-note d-start\" x=\"251\" y=\"75\">89 → 97</text><text class=\"d-note d-start\" x=\"8\" y=\"111\">#billing</text><rect class=\"d-box\" x=\"88\" y=\"100\" width=\"150\" height=\"10\" rx=\"2\"/><rect class=\"d-ink\" x=\"88\" y=\"112\" width=\"150\" height=\"10\" rx=\"2\"/><text class=\"d-note d-start\" x=\"246\" y=\"111\">94 → 94</text><text class=\"d-note d-start\" x=\"8\" y=\"147\">#refunds</text><rect class=\"d-box\" x=\"88\" y=\"136\" width=\"144\" height=\"10\" rx=\"2\"/><rect class=\"d-hi\" x=\"88\" y=\"148\" width=\"96\" height=\"10\" rx=\"2\"/><text class=\"d-note d-start\" x=\"240\" y=\"147\">90 → 60</text></svg>",
+        "alt": "Pass rates before and after a prompt change, per category. All: 91 to 92. Shipping: 89 to 97. Billing: 94 to 94. Refunds, highlighted: 90 to 60."
+      },
+      "translations": {
+        "es": {
+          "title": "Una puntuación media oculta la categoría que se rompió",
+          "body": "La trampa: informas de una sola tasa de aciertos para todo el conjunto. Un prompt nuevo la sube del 91 % al 92 % y lo publicas.\n\nEl síntoma: las peticiones de reembolso fallan toda la semana. Son *20 de 200 casos*: su tasa bajó del 90 % al 60 %, mientras que los envíos subieron y ocultaron la pérdida.\n\nLa solución: **etiqueta cada caso con una categoría** e **informa de la tasa por categoría**. Bloquea una release cuando baje cualquier categoría.",
+          "diagram": {
+            "alt": "Tasas de aciertos antes y después de un cambio del prompt, por categoría. Todas: de 91 a 92. Envíos: de 89 a 97. Facturación: de 94 a 94. Reembolsos, resaltada: de 90 a 60."
+          }
+        }
+      }
+    },
+    {
+      "id": "evals-contamination",
+      "kind": "pitfall",
+      "level": "advanced",
+      "title": "A public benchmark may be in the model's training data",
+      "body": "The trap: you pick a model because it has a high score on a well-known public benchmark.\n\nThe symptom: it does worse on your task than a model with a lower score. The benchmark questions and answers are on the web, so they can be *in the training data*: **a high score can be memory, not skill**.\n\nThe fix: **build your own cases from your own data** and keep them private.",
+      "translations": {
+        "es": {
+          "title": "Un benchmark público puede estar en los datos de entrenamiento del modelo",
+          "body": "La trampa: eliges un modelo porque tiene una puntuación alta en un benchmark público conocido.\n\nEl síntoma: rinde peor en tu tarea que un modelo con menos puntuación. Las preguntas y respuestas del benchmark están en la web, así que pueden estar *en los datos de entrenamiento*: **una puntuación alta puede ser memoria, no habilidad**.\n\nLa solución: **crea tus propios casos a partir de tus propios datos** y mantenlos en privado."
+        }
+      }
+    },
+    {
+      "id": "evals-quiz-pass-at-k",
+      "kind": "quiz",
+      "level": "advanced",
+      "title": "Each try succeeds with p = 0.5, and tries are independent. What is pass@3?",
+      "body": "Use the *complement*: all 3 tries fail with probability 0.5³ = 0.125, so **pass@3 = 1 − 0.125 = 0.875**.\n\n1.5 adds the probabilities, which counts the overlaps twice: a probability cannot exceed 1. **0.125 is pass^3**, the chance that all three succeed.",
+      "options": [
+        "1.5",
+        "0.875",
+        "0.125",
+        "0.5"
+      ],
+      "answer": 1,
+      "translations": {
+        "es": {
+          "title": "Cada intento acierta con p = 0,5 y los intentos son independientes. ¿Cuánto vale pass@3?",
+          "body": "Usa el *complemento*: los 3 intentos fallan con probabilidad 0,5³ = 0,125, así que **pass@3 = 1 − 0,125 = 0,875**.\n\n1,5 suma las probabilidades, lo que cuenta dos veces los solapamientos: una probabilidad no puede pasar de 1. **0,125 es pass^3**, la probabilidad de que acierten los tres.",
+          "options": [
+            "1,5",
+            "0,875",
+            "0,125",
+            "0,5"
+          ]
+        }
+      }
+    },
+    {
+      "id": "evals-quiz-sample-size",
+      "kind": "quiz",
+      "level": "advanced",
+      "title": "Prompt A passes 41 of 50 cases, prompt B passes 44 of 50. Is B better?",
+      "body": "Not shown yet. With 50 cases, a pass rate near 85% has a 95% margin of about **±10 points**. A gap of 3 cases, 6 points, is *inside the noise*, and reruns move it too.\n\n\"Yes, +6 points\" reads noise as a result. **Look at the changed cases**: B may fix 5 and break 2. Then add cases or runs until the gap is clear.",
+      "options": [
+        "Yes: +6 points is a clear win",
+        "No: A is better on the cases that matter",
+        "Not shown yet: 3 cases of 50 is inside the noise",
+        "Yes, if B also has the shorter prompt"
+      ],
+      "answer": 2,
+      "translations": {
+        "es": {
+          "title": "El prompt A pasa 41 de 50 casos y el prompt B pasa 44 de 50. ¿Es mejor B?",
+          "body": "Aún no está demostrado. Con 50 casos, una tasa de aciertos cerca del 85 % tiene un margen al 95 % de unos **±10 puntos**. Una diferencia de 3 casos, 6 puntos, está *dentro del ruido*, y las repeticiones también la mueven.\n\n\"Sí, +6 puntos\" lee el ruido como un resultado. **Mira los casos que cambian**: B puede arreglar 5 y romper 2. Después añade casos o ejecuciones hasta que la diferencia sea clara.",
+          "options": [
+            "Sí: +6 puntos es una victoria clara",
+            "No: A es mejor en los casos que importan",
+            "Aún no está demostrado: 3 casos de 50 están dentro del ruido",
+            "Sí, si B además tiene el prompt más corto"
+          ]
+        }
+      }
+    },
+    {
+      "id": "evals-res-helm",
+      "kind": "resource",
+      "level": "advanced",
+      "title": "Paper: Holistic Evaluation of Language Models (HELM)",
+      "body": "Evaluates many models on many scenarios, and on *several metrics per scenario*: accuracy, calibration, robustness, fairness, bias, toxicity and efficiency.\n\nRead it for the method: **one accuracy number is not enough**, and **a score means little without its scenario**.",
+      "url": "https://arxiv.org/abs/2211.09110",
+      "media": "article",
+      "minutes": 60,
+      "translations": {
+        "es": {
+          "title": "Artículo: Holistic Evaluation of Language Models (HELM)",
+          "body": "Evalúa muchos modelos en muchos escenarios, y con *varias métricas por escenario*: precisión, calibración, robustez, equidad, sesgo, toxicidad y eficiencia.\n\nLéelo por el método: **un solo número de precisión no basta**, y **una puntuación significa poco sin su escenario**."
+        }
+      }
+    }
+  ]
+}
