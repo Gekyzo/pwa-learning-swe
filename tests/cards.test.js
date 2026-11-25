@@ -1,6 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { KINDS, LEVELS, MEDIA, MAX_TITLE, MAX_ALT, SOURCE_LANG, normalizeCard, normalizePack, buildPool } from '#cards';
+import { KINDS, LEVELS, MEDIA, MAX_TITLE, MAX_BODY, MAX_BODY_SOURCE, MAX_ALT, SOURCE_LANG, normalizeCard, normalizePack, buildPool } from '#cards';
+import { plainText } from '#richtext';
 
 const concept = (over = {}) => ({ id: 'git-a', kind: 'concept', level: 'intro', title: 'Title', body: 'Body.', ...over });
 const quiz = (over = {}) => concept({ id: 'git-q', kind: 'quiz', options: ['Yes', 'No'], answer: 1, ...over });
@@ -50,6 +51,37 @@ test('a card with a bad id, kind, level, title or body is null', () => {
     assert.equal(normalizeCard(concept(bad), 'git'), null, JSON.stringify(bad));
   }
   assert.equal(normalizeCard(null, 'git'), null);
+});
+
+// A body with `runs` marked runs of `run` characters after a plain prefix of `prefix` characters.
+const marked = (prefix, runs, run, marker = '*') =>
+  ['p'.repeat(prefix), ...Array.from({ length: runs }, () => `${marker}${'a'.repeat(run)}${marker}`)].join(' ');
+
+test('the body limit counts the visible text, with a cap on the raw text', () => {
+  assert.equal(MAX_BODY, 600);
+  assert.equal(MAX_BODY_SOURCE, 800);
+  const fits = marked(65, 25, 20);
+  assert.deepEqual([plainText(fits).length, fits.length], [590, 640]);
+  assert.equal(normalizeCard(concept({ body: fits }), 'git').body, fits);
+  const es = normalizeCard(concept({ translations: { es: { title: 'Título', body: fits } } }), 'git');
+  assert.equal(es.translations.es.body, fits);
+
+  const long = marked(76, 25, 20);
+  assert.equal(plainText(long).length, 601);
+  assert.equal(normalizeCard(concept({ body: long }), 'git'), null);
+  assert.equal(normalizeCard(concept({ translations: { es: { title: 'T', body: long } } }), 'git').translations, undefined);
+
+  const raw = marked(201, 100, 1, '**');
+  assert.deepEqual([plainText(raw).length < MAX_BODY, raw.length], [true, 801]);
+  assert.equal(normalizeCard(concept({ body: raw }), 'git'), null);
+  assert.equal(normalizeCard(concept({ body: raw.slice(1) }), 'git').body, raw.slice(1));
+});
+
+test('a body made only of markers is kept as text, a blank one is null', () => {
+  assert.equal(normalizeCard(concept({ body: '****' }), 'git').body, '****');
+  assert.equal(normalizeCard(concept({ body: '\n\n' }), 'git'), null);
+  assert.equal(normalizeCard(concept({ body: 'x'.repeat(MAX_BODY) }), 'git').body.length, MAX_BODY);
+  assert.equal(normalizeCard(concept({ body: 'x'.repeat(MAX_BODY + 1) }), 'git'), null);
 });
 
 test('a snippet needs its code, kept as written', () => {

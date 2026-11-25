@@ -10,8 +10,10 @@ for review on a spaced schedule. Rules of `src/cards.js` and the packs of `conte
   `intro`, `intermediate` or `advanced`, and a `title` and a `body`. Its `rev`, 1 when absent,
   goes up when its text changes. A card with `retired: true` never shows in the feed.
 - **CARD-2** `normalizeCard` accepts a card whose `id` is lowercase, starts with the id of its
-  pack and a hyphen, and whose title (at most 120 characters) and body (at most 600) are not
-  blank. It trims the texts and drops the fields that the kind does not have. A `snippet` keeps
+  pack and a hyphen, and whose title (at most 120 characters) and body are not blank. The body
+  limit counts the visible text of CARD-10, at most 600 characters, so markup costs no content;
+  the raw body, markup included, is at most 800. It trims the texts, keeps the body as written
+  with its markup, and drops the fields that the kind does not have. A `snippet` keeps
   its `code` as written, at most 800 characters, and its `syntax` when it is one of CARD-8.
 - **CARD-3** A `quiz` has two to four options, each a text of at most 120 characters, and the
   index of the right one. A `resource` has an `https` URL, a medium (`article`, `docs`, `video`,
@@ -28,7 +30,8 @@ for review on a spaced schedule. Rules of `src/cards.js` and the packs of `conte
   unique, and that each pack and each card has a valid translation for each other language.
 - **CARD-7** A pack and a card may have `translations`: `{ [lang]: texts }`, with a lowercase
   two-letter code other than `en`. The texts of a pack are its `title`; those of a card are its
-  `title` and `body`, with the limits of CARD-2, the `diagram.alt` of a card with a diagram (CARD-9), and for a quiz its `options`, as many as the quiz
+  `title` and `body`, with the limits of CARD-2 (the body limit counts the visible text, with
+  the raw cap of 800), the `diagram.alt` of a card with a diagram (CARD-9), and for a quiz its `options`, as many as the quiz
   has, in the same order. A translation that is not valid is dropped and its card stays.
   `buildPool(packs, lang)` gives each card and each topic the texts of `lang` where it has them,
   else the English ones, and its `lang`: the language of its text. The code, the answer, the URL

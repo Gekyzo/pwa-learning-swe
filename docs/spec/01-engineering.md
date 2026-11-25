@@ -17,7 +17,7 @@
 | `src/highlight.js` | The tokens of the code of a snippet in its syntax (CARD-8) | nothing |
 | `src/diagram.js` | The strict parse of the SVG diagram of a card into a tree (CARD-9) | nothing |
 | `src/richtext.js` | The parse of the rich text of a card body, its visible text and its style rules (CARD-10) | nothing |
-| `src/cards.js` | The validation of a card and a pack of `content/`, and the pool of cards in a language (CARD-1 to CARD-5, CARD-7, CARD-9) | `highlight`, `diagram` |
+| `src/cards.js` | The validation of a card and a pack of `content/`, and the pool of cards in a language (CARD-1 to CARD-5, CARD-7, CARD-9, CARD-10) | `highlight`, `diagram`, `richtext` |
 | `src/learning.js` | The learning doc: the record of a seen card, its review box, the signals and the save (LRN-1 to LRN-8) | `config` |
 | `src/feed.js` | The order of the feed, the seen cards again, the due count, the saved cards and the topics that are off (FEED-1 to FEED-5, FEED-14) | `cards`, `learning` |
 | `src/particles.js` | The particles of a picture and their place in time (optional) | nothing |

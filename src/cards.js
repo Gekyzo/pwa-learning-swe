@@ -1,5 +1,6 @@
 import { SYNTAXES } from '#highlight';
 import { parseDiagram } from '#diagram';
+import { plainText } from '#richtext';
 
 // The content of the feed: cards in packs, one pack for each topic (CARD-1 to CARD-6). The packs
 // are the JSON files of content/; this module only validates them.
@@ -7,7 +8,9 @@ export const KINDS = ['concept', 'snippet', 'pitfall', 'quiz', 'resource'];
 export const LEVELS = ['intro', 'intermediate', 'advanced'];
 export const MEDIA = ['article', 'docs', 'video', 'course', 'book', 'repo'];
 export const MAX_TITLE = 120;
+// The body limit counts the visible text; the raw text, markup included, has its own cap (CARD-10).
 export const MAX_BODY = 600;
+export const MAX_BODY_SOURCE = 800;
 export const MAX_CODE = 800;
 export const MAX_MINUTES = 600;
 export const MAX_ALT = 400;
@@ -24,6 +27,15 @@ const text = (value, max) => {
   if (typeof value !== 'string') return null;
   const clean = value.trim();
   return clean && clean.length <= max ? clean : null;
+};
+
+// The trimmed body as written, markup included, or null when it is blank, longer than
+// MAX_BODY_SOURCE, or when its visible text is empty or longer than MAX_BODY (CARD-2).
+const body = (value) => {
+  const clean = text(value, MAX_BODY_SOURCE);
+  if (!clean) return null;
+  const visible = plainText(clean).length;
+  return visible >= 1 && visible <= MAX_BODY ? clean : null;
 };
 
 const httpsUrl = (value) => {
@@ -89,10 +101,10 @@ const altOf = (card, texts) => {
 // a diagram.
 const cardTexts = (card) => (texts) => {
   const title = text(texts.title, MAX_TITLE);
-  const body = text(texts.body, MAX_BODY);
+  const clean = body(texts.body);
   const options = card.kind === 'quiz' ? optionsOf(card, texts) : {};
   const diagram = card.diagram ? altOf(card, texts) : {};
-  return title && body && options && diagram ? { title, body, ...options, ...diagram } : null;
+  return title && clean && options && diagram ? { title, body: clean, ...options, ...diagram } : null;
 };
 
 const packTexts = (texts) => {
@@ -107,10 +119,10 @@ export const normalizeCard = (data, packId) => {
   if (typeof id !== 'string' || !ID.test(id) || !id.startsWith(`${packId}-`)) return null;
   if (!isCount(rev) || !KINDS.includes(kind) || !LEVELS.includes(level)) return null;
   const title = text(data.title, MAX_TITLE);
-  const body = text(data.body, MAX_BODY);
+  const clean = body(data.body);
   const extra = KIND_FIELDS[kind](data);
-  if (!title || !body || !extra) return null;
-  const card = { id, rev, kind, level, title, body, ...extra, ...diagramOf(data.diagram, id), ...(data.retired === true ? { retired: true } : {}) };
+  if (!title || !clean || !extra) return null;
+  const card = { id, rev, kind, level, title, body: clean, ...extra, ...diagramOf(data.diagram, id), ...(data.retired === true ? { retired: true } : {}) };
   return { ...card, ...withTranslations(translationsOf(data.translations, cardTexts(card))) };
 };
 
