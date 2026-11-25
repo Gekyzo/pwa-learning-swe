@@ -4,7 +4,7 @@ What changes for you in each version of the app. The newest version is first.
 
 ## Unreleased
 
-No change.
+- Three new themes in Settings: Nord, Nord Light and Monokai Dimmed. With the code theme on Automatic, the code of a card takes the matching colours.
 
 ## 0.6.5 - 2026-11-26
 

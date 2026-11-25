@@ -19,6 +19,7 @@ import {
   loadHand,
   saveHand,
   THEME_KEY,
+  THEMES,
   loadTheme,
   saveTheme,
   CODE_THEME_KEY,
@@ -211,9 +212,9 @@ test('the hand functions do not throw when the storage does', () => {
   assert.equal(saveHand(brokenStorage(), 'right'), false);
 });
 
-test('loadTheme returns the stored theme', () => {
-  assert.equal(loadTheme(fakeStorage({ [THEME_KEY]: 'light' })), 'light');
-  assert.equal(loadTheme(fakeStorage({ [THEME_KEY]: 'dark' })), 'dark');
+test('loadTheme returns each stored theme', () => {
+  assert.deepEqual(THEMES, ['light', 'dark', 'nord', 'nord-light', 'monokai-dimmed']);
+  for (const theme of THEMES) assert.equal(loadTheme(fakeStorage({ [THEME_KEY]: theme })), theme);
 });
 
 test('loadTheme returns system for no value and for an unknown value', () => {
@@ -222,12 +223,14 @@ test('loadTheme returns system for no value and for an unknown value', () => {
   assert.equal(loadTheme(fakeStorage({ [THEME_KEY]: '' })), 'system');
 });
 
-test('saveTheme stores light and dark and system removes the key', () => {
+test('saveTheme stores each theme and system removes the key', () => {
   const storage = fakeStorage();
   assert.equal(saveTheme(storage, 'dark'), true);
   assert.equal(storage.getItem(THEME_KEY), 'dark');
   assert.equal(saveTheme(storage, 'light'), true);
   assert.equal(storage.getItem(THEME_KEY), 'light');
+  assert.equal(saveTheme(storage, 'nord-light'), true);
+  assert.equal(storage.getItem(THEME_KEY), 'nord-light');
   assert.equal(saveTheme(storage, 'system'), true);
   assert.equal(storage.getItem(THEME_KEY), null);
 });

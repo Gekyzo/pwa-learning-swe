@@ -49,8 +49,81 @@
     --code-function: light-dark(#8250df, #d2a8ff);
   }
 
-  /* A chosen code theme has the same colours in the light and the dark theme of the app. */
-  :root[data-code-theme="nord"] {
+  /* The app themes of Nord and Monokai Dimmed (SET-4): fixed colours, each with its colour scheme, so
+     the light-dark() tokens of the design system take the matching side. --data is the one hue. */
+  :root[data-theme="nord"] {
+    color-scheme: dark;
+    --bg: #2e3440;
+    --surface: #3b4252;
+    --surface-2: #434c5e;
+    --text: #eceff4;
+    --muted: #d8dee9;
+    --faint: #b8c0ce;
+    --line: #434c5e;
+    --control: #6b768c;
+    --primary: #eceff4;
+    --on-primary: #2e3440;
+    --ink: #eceff4;
+    --on-ink: #2e3440;
+    --secondary: #4c566a;
+    --data: #88c0d0;
+    --data-soft: #3a4f5e;
+    --on-data-soft: #8fd0e0;
+    --done-soft: #434c5e;
+    --done: #eceff4;
+    --on-done: #2e3440;
+  }
+
+  :root[data-theme="nord-light"] {
+    color-scheme: light;
+    --bg: #e5e9f0;
+    --surface: #eceff4;
+    --surface-2: #d8dee9;
+    --text: #2e3440;
+    --muted: #434c5e;
+    --faint: #4c566a;
+    --line: #d8dee9;
+    --control: #9aa5b8;
+    --primary: #2e3440;
+    --on-primary: #eceff4;
+    --ink: #2e3440;
+    --on-ink: #eceff4;
+    --secondary: #d8dee9;
+    --data: #5e81ac;
+    --data-soft: #d3deec;
+    --on-data-soft: #3f5f87;
+    --done-soft: #d8dee9;
+    --done: #2e3440;
+    --on-done: #eceff4;
+  }
+
+  :root[data-theme="monokai-dimmed"] {
+    color-scheme: dark;
+    --bg: #1e1e1e;
+    --surface: #272727;
+    --surface-2: #353535;
+    --text: #e3e3dd;
+    --muted: #c5c8c6;
+    --faint: #a3a4a2;
+    --line: #303030;
+    --control: #5a5a5a;
+    --primary: #e3e3dd;
+    --on-primary: #1e1e1e;
+    --ink: #e3e3dd;
+    --on-ink: #1e1e1e;
+    --secondary: #404040;
+    --data: #e58520;
+    --data-soft: #3d2c1a;
+    --on-data-soft: #e58520;
+    --done-soft: #404040;
+    --done: #e3e3dd;
+    --on-done: #1e1e1e;
+  }
+
+  /* A chosen code theme has the same colours in the light and the dark theme of the app.
+     Automatic takes the code theme of the Nord and Monokai Dimmed app themes. */
+  :root[data-code-theme="nord"],
+  :root[data-theme^="nord"][data-code-theme="auto"] {
     --code-bg: #2e3440;
     --code-text: #d8dee9;
     --code-keyword: #81a1c1;
@@ -70,7 +143,8 @@
     --code-function: #ffc66d;
   }
 
-  :root[data-code-theme="monokai-dimmed"] {
+  :root[data-code-theme="monokai-dimmed"],
+  :root[data-theme="monokai-dimmed"][data-code-theme="auto"] {
     --code-bg: #1e1e1e;
     --code-text: #c5c8c6;
     --code-keyword: #9872a2;

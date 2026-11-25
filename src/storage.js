@@ -150,9 +150,9 @@ export const saveHand = (storage, hand) => {
 // The colours of the app: `light`, `dark`, or `system` to follow the phone. A preference of the
 // device, as the hand is.
 export const THEME_KEY = keyOf('theme');
-const THEMES = ['light', 'dark'];
+export const THEMES = ['light', 'dark', 'nord', 'nord-light', 'monokai-dimmed'];
 
-// The stored theme when it is `light` or `dark`, else `system`.
+// The stored theme when it is one of THEMES (SET-4), else `system`.
 export const loadTheme = (storage) => {
   try {
     const theme = storage.getItem(THEME_KEY);

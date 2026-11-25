@@ -8,6 +8,7 @@ import {
   saveCardLanguage,
   loadHand,
   saveHand,
+  THEMES,
   loadTheme,
   saveTheme,
   CODE_THEMES,
@@ -205,7 +206,7 @@ export const setHand = (value) => {
 };
 
 export const setTheme = (value) => {
-  theme = ['light', 'dark'].includes(value) ? value : 'system';
+  theme = THEMES.includes(value) ? value : 'system';
   if (storage) saveTheme(storage, theme);
   document.documentElement.dataset.theme = theme;
 };

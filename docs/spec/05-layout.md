@@ -36,7 +36,7 @@ cards in each class; this app has no `pane` layout (LAY-3).
 - **SET-1** Settings is a column of groups, each a `settings-group`: a `list-group-head` with an
   optional muted line, above a `list-group` of settings rows. The order is **Temas** (FEED-15, with the
   line `settings.topicsNote`: topics on of all, and the cards of the topics on), **Preferencias**
-  (**Language**, **Card language** (I18N-7), **Hand**, **Theme**, **Code theme** (SET-3), then the switch of Saved, MOD-1; line `settings.preferencesNote`),
+  (**Language**, **Card language** (I18N-7), **Hand**, **Theme** (SET-4), **Code theme** (SET-3), then the switch of Saved, MOD-1; line `settings.preferencesNote`),
   **Cuenta y copia** (the account rows, ACC-8, then **Export** and **Import**), **Aplicación**
   (**Install** only when INS-2 shows it, **Show the introduction**, **How review works**, **What's new**,
   then the version lines, VER-4) and **Borrar** (SET-2; line `settings.eraseNote`). A row of Preferences
@@ -51,10 +51,16 @@ cards in each class; this app has no `pane` layout (LAY-3).
   has no Undo. When the removal fails, `error.resetFailed` shows and nothing else changes. The
   caches of the worker stay.
 - **SET-3** **Code theme** sets the colours of the code of a snippet (CARD-8) and nothing else:
-  **Automatic** (GitHub Light or GitHub Dark, by the theme of the app), **Nord**, **Darcula**,
+  **Automatic** (GitHub Light or GitHub Dark, by the theme of the app; Nord with the Nord and Nord
+  Light themes, Monokai Dimmed with the Monokai Dimmed theme), **Nord**, **Darcula**,
   **Monokai Dimmed**, **Dracula**, **One Dark** or **Solarized Light**. A chosen theme looks the same
   in the light and the dark theme. The choice is `pwa-learning-swe.codeTheme`, with no key for
   **Automatic**, and `data-code-theme` on the root element.
+- **SET-4** **Theme** sets the colours of the whole app: **Automatic** (light or dark, by the phone),
+  **Light**, **Dark**, **Nord** (Polar Night), **Nord Light** (Snow Storm) or **Monokai Dimmed** (the
+  VS Code theme). Nord, Nord Light and Monokai Dimmed take fixed colours from their official palettes,
+  each with a light or dark colour scheme; text keeps a contrast of 4.5:1 on its ground. The choice
+  is `pwa-learning-swe.theme`, with no key for **Automatic**, and `data-theme` on the root element.
 
 ## Walkthrough
 

@@ -4,7 +4,7 @@ User-visible changes, newest first.
 
 ## Unreleased
 
-No change.
+- App themes Nord, Nord Light and Monokai Dimmed (SET-4): `THEMES` of `src/storage.js` is `light`, `dark`, `nord`, `nord-light` and `monokai-dimmed`; `setTheme` and the Theme select take it, labels `settings.theme.<value>` (they replace `settings.themeLight` and `settings.themeDark`). `styles.css` sets the colour tokens and `color-scheme` of each from the official Nord palette and the VS Code `dimmed-monokai-color-theme.json`; text has 4.5:1 or more on its ground. Code theme Automatic (SET-3) takes Nord with `nord` and `nord-light`, and Monokai Dimmed with `monokai-dimmed`; a chosen code theme still wins.
 
 ## 0.6.5 - 2026-11-26
 

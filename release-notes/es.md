@@ -4,7 +4,7 @@ Lo que cambia para ti en cada versión de la app. La versión más nueva va prim
 
 ## Unreleased
 
-No change.
+- Tres temas nuevos en Ajustes: Nord, Nord claro y Monokai Dimmed. Con el tema del código en Automático, el código de una tarjeta toma los colores a juego.
 
 ## 0.6.5 - 2026-11-26
 

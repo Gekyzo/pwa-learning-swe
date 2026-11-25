@@ -1,5 +1,5 @@
 import { normalizeLearning } from '#learning';
-import { CODE_THEMES, exportJson, exportFilename, importJson, resetAll } from '#storage';
+import { THEMES, CODE_THEMES, exportJson, exportFilename, importJson, resetAll } from '#storage';
 import { LANGUAGES, LANGUAGE_NAMES } from '#i18n';
 import { switchModule } from '#modules';
 import {
@@ -70,8 +70,7 @@ export const applyLanguage = () => {
   const themeOption = (value, key) => el('option', { value, textContent: t(key), selected: value === theme });
   $('theme').replaceChildren(
     themeOption('system', 'settings.automatic'),
-    themeOption('light', 'settings.themeLight'),
-    themeOption('dark', 'settings.themeDark'),
+    ...THEMES.map((value) => themeOption(value, `settings.theme.${value}`)),
   );
   const codeOption = (value, key) => el('option', { value, textContent: t(key), selected: value === codeTheme });
   $('code-theme').replaceChildren(
