@@ -1,0 +1,569 @@
+{
+  "id": "browser-ai",
+  "version": 1,
+  "title": "AI in the browser",
+  "translations": {
+    "es": {
+      "title": "IA en el navegador"
+    }
+  },
+  "cards": [
+    {
+      "id": "browser-ai-why",
+      "kind": "concept",
+      "level": "intro",
+      "title": "A model in the browser works offline and keeps the data on the device",
+      "body": "An *on-device* model runs inside the page. After the first download, each call needs **no network and no server**, and the input never leaves the device.\n\nYou pay no cost per call, and the feature also works on a plane.\n\nThe price: **a large first download and a weaker model** than a hosted one. Use it where a small model is good enough.",
+      "diagram": {
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 132\" role=\"img\"><defs><marker id=\"browser-ai-why-head\" viewBox=\"0 0 8 8\" refX=\"7\" refY=\"4\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path class=\"d-head\" d=\"M0 0L8 4L0 8z\"/></marker></defs><text class=\"d-label\" x=\"8\" y=\"12\">ONLINE</text><rect class=\"d-box\" x=\"8\" y=\"20\" width=\"64\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"40\" y=\"34\">data</text><rect class=\"d-box\" x=\"248\" y=\"20\" width=\"64\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"280\" y=\"34\">LLM</text><path class=\"d-arrow\" marker-end=\"url(#browser-ai-why-head)\" d=\"M72 34H246\"/><text class=\"d-note\" x=\"160\" y=\"27\">HTTP</text><text class=\"d-note\" x=\"280\" y=\"62\">$ / call</text><text class=\"d-label\" x=\"8\" y=\"88\">OFFLINE</text><rect class=\"d-box\" x=\"8\" y=\"96\" width=\"64\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"40\" y=\"110\">data</text><rect class=\"d-hi\" x=\"128\" y=\"96\" width=\"64\" height=\"28\" rx=\"6\"/><text class=\"d-text d-on-hi\" x=\"160\" y=\"110\">model</text><rect class=\"d-box\" x=\"248\" y=\"96\" width=\"64\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"280\" y=\"110\">output</text><path class=\"d-arrow\" marker-end=\"url(#browser-ai-why-head)\" d=\"M72 110H126\"/><path class=\"d-arrow\" marker-end=\"url(#browser-ai-why-head)\" d=\"M192 110H246\"/></svg>",
+        "alt": "Two rows. Online: the data goes over HTTP to a hosted LLM, and each call has a cost. Offline: the data goes to a highlighted model inside the browser, which writes the output with no network."
+      },
+      "translations": {
+        "es": {
+          "title": "Un modelo en el navegador funciona offline y deja los datos en el dispositivo",
+          "body": "Un modelo *en el dispositivo* se ejecuta dentro de la página. Tras la primera descarga, cada llamada **no necesita red ni servidor**, y la entrada nunca sale del dispositivo.\n\nNo pagas por llamada, y la función también sirve en un avión.\n\nEl precio: **una primera descarga grande y un modelo más débil** que uno alojado. Úsalo donde un modelo pequeño basta.",
+          "diagram": {
+            "alt": "Dos filas. Online: los datos van por HTTP a un LLM alojado, y cada llamada tiene un coste. Offline: los datos van a un modelo resaltado dentro del navegador, que escribe la salida sin red."
+          }
+        }
+      }
+    },
+    {
+      "id": "browser-ai-small-models",
+      "kind": "concept",
+      "level": "intro",
+      "title": "A browser runs small models: millions of parameters, not hundreds of billions",
+      "body": "Two limits decide what fits: the **download size** and the *memory* of the device. Each visitor downloads the model, and the whole model must fit in RAM or GPU memory while it runs.\n\nA model of 100 MB is reasonable on a phone. A model of 4 GB is not: it takes minutes on mobile data and can use all the memory of the tab.\n\n**Pick the smallest model that does your task well**, not the largest one that loads.",
+      "translations": {
+        "es": {
+          "title": "Un navegador ejecuta modelos pequeños: millones de parámetros, no cientos de miles de millones",
+          "body": "Dos límites deciden qué cabe: el **tamaño de la descarga** y la *memoria* del dispositivo. Cada visitante descarga el modelo, y el modelo entero debe caber en la RAM o en la memoria de la GPU mientras se ejecuta.\n\nUn modelo de 100 MB es razonable en un móvil. Uno de 4 GB no: tarda minutos con datos móviles y puede usar toda la memoria de la pestaña.\n\n**Elige el modelo más pequeño que hace bien tu tarea**, no el más grande que llega a cargar."
+        }
+      }
+    },
+    {
+      "id": "browser-ai-model-size",
+      "kind": "concept",
+      "level": "intro",
+      "title": "Model size in bytes is parameters times bytes per weight",
+      "body": "Each *parameter* is one weight. Its format sets its size: 4 bytes in fp32, 2 in fp16, 1 in int8 and half a byte in 4 bits.\n\nA model of 500 M parameters is **2 GB in fp32, 1 GB in fp16 and 250 MB in 4 bits**.\n\nDo this sum before you pick a model: **the download and the memory both start from it**. The tokenizer files and the runtime buffers add a little more.",
+      "diagram": {
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 164\" role=\"img\"><defs><marker id=\"browser-ai-model-size-head\" viewBox=\"0 0 8 8\" refX=\"7\" refY=\"4\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path class=\"d-head\" d=\"M0 0L8 4L0 8z\"/></marker></defs><text class=\"d-label\" x=\"8\" y=\"12\">500 M PARAMS</text><text class=\"d-note d-end\" x=\"60\" y=\"36\">fp32</text><rect class=\"d-box\" x=\"72\" y=\"24\" width=\"200\" height=\"24\" rx=\"4\"/><text class=\"d-note d-start\" x=\"280\" y=\"36\">2 GB</text><text class=\"d-note d-end\" x=\"60\" y=\"72\">fp16</text><rect class=\"d-box\" x=\"72\" y=\"60\" width=\"100\" height=\"24\" rx=\"4\"/><text class=\"d-note d-start\" x=\"180\" y=\"72\">1 GB</text><text class=\"d-note d-end\" x=\"60\" y=\"108\">int8</text><rect class=\"d-box\" x=\"72\" y=\"96\" width=\"50\" height=\"24\" rx=\"4\"/><text class=\"d-note d-start\" x=\"130\" y=\"108\">500 MB</text><text class=\"d-note d-end\" x=\"60\" y=\"144\">4-bit</text><rect class=\"d-hi\" x=\"72\" y=\"132\" width=\"25\" height=\"24\" rx=\"4\"/><text class=\"d-note d-start\" x=\"105\" y=\"144\">250 MB</text></svg>",
+        "alt": "Bars for one model of 500 million parameters in four formats: fp32 is 2 GB, fp16 is 1 GB, int8 is 500 MB, and 4-bit, the highlighted shortest bar, is 250 MB."
+      },
+      "translations": {
+        "es": {
+          "title": "El tamaño de un modelo en bytes es parámetros por bytes por peso",
+          "body": "Cada *parámetro* es un peso. Su formato fija su tamaño: 4 bytes en fp32, 2 en fp16, 1 en int8 y medio byte en 4 bits.\n\nUn modelo de 500 M de parámetros ocupa **2 GB en fp32, 1 GB en fp16 y 250 MB en 4 bits**.\n\nHaz esta cuenta antes de elegir un modelo: **la descarga y la memoria parten de ella**. Los archivos del tokenizer y los búferes del runtime añaden un poco más.",
+          "diagram": {
+            "alt": "Barras para un modelo de 500 millones de parámetros en cuatro formatos: fp32 ocupa 2 GB, fp16 1 GB, int8 500 MB, y 4 bits, la barra resaltada más corta, 250 MB."
+          }
+        }
+      }
+    },
+    {
+      "id": "browser-ai-tasks",
+      "kind": "concept",
+      "level": "intro",
+      "title": "Embeddings, classification and short summaries fit a browser; long reasoning does not",
+      "body": "A small model does a *narrow* task well: an embedding for search, a label for a text, the names in a sentence (NER), a short summary.\n\nOpen-ended chat, agents and **multi-step reasoning need a large model**, and a large model needs a server.\n\nDesign the feature around the narrow task. **Give the browser model the part it does well**, not the whole job.",
+      "diagram": {
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 176\" role=\"img\"><defs><marker id=\"browser-ai-tasks-head\" viewBox=\"0 0 8 8\" refX=\"7\" refY=\"4\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path class=\"d-head\" d=\"M0 0L8 4L0 8z\"/></marker></defs><text class=\"d-note\" x=\"80\" y=\"12\">~100 M</text><text class=\"d-note\" x=\"240\" y=\"12\">~100 B</text><rect class=\"d-hi\" x=\"16\" y=\"22\" width=\"128\" height=\"124\" rx=\"8\"/><rect class=\"d-box\" x=\"32\" y=\"32\" width=\"96\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"80\" y=\"46\">embedding</text><rect class=\"d-box\" x=\"32\" y=\"70\" width=\"96\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"80\" y=\"84\">classifier</text><rect class=\"d-box\" x=\"32\" y=\"108\" width=\"96\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"80\" y=\"122\">NER</text><rect class=\"d-box\" x=\"192\" y=\"32\" width=\"96\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"240\" y=\"46\">chat</text><rect class=\"d-box\" x=\"192\" y=\"70\" width=\"96\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"240\" y=\"84\">agent</text><rect class=\"d-box\" x=\"192\" y=\"108\" width=\"96\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"240\" y=\"122\">CoT</text><text class=\"d-text d-on-hi\" x=\"80\" y=\"162\">✓</text><text class=\"d-text\" x=\"240\" y=\"162\">✗</text></svg>",
+        "alt": "Two columns. A small model of about 100 million parameters, highlighted, handles embeddings, classification and named-entity recognition. A model of about 100 billion parameters handles chat, agents and chain-of-thought reasoning."
+      },
+      "translations": {
+        "es": {
+          "title": "Embeddings, clasificación y resúmenes cortos caben en un navegador; el razonamiento largo no",
+          "body": "Un modelo pequeño hace bien una tarea *acotada*: un embedding para buscar, una etiqueta para un texto, los nombres de una frase (NER), un resumen corto.\n\nEl chat abierto, los agentes y el **razonamiento en varios pasos necesitan un modelo grande**, y un modelo grande necesita un servidor.\n\nDiseña la función alrededor de la tarea acotada. **Dale al modelo del navegador la parte que hace bien**, no todo el trabajo.",
+          "diagram": {
+            "alt": "Dos columnas. Un modelo pequeño de unos 100 millones de parámetros, resaltado, hace embeddings, clasificación y reconocimiento de entidades. Un modelo de unos 100 000 millones de parámetros hace chat, agentes y razonamiento paso a paso."
+          }
+        }
+      }
+    },
+    {
+      "id": "browser-ai-detect-webgpu",
+      "kind": "snippet",
+      "level": "intro",
+      "title": "Check for WebGPU before you load a model",
+      "body": "An *adapter* is the GPU that the browser gives to the page. navigator.gpu exists only where the browser supports WebGPU, and even then requestAdapter() can return null: no usable GPU, or a blocked driver.\n\n**Treat a null adapter like a missing API** and use WASM. Choose the device once, at start, and **pass it to the runtime** that loads the model.",
+      "code": "async function pickDevice() {\n  if (!('gpu' in navigator)) return 'wasm';\n  try {\n    const adapter = await navigator.gpu.requestAdapter();\n    return adapter ? 'webgpu' : 'wasm';\n  } catch {\n    return 'wasm';\n  }\n}\n\nconst device = await pickDevice(); // 'webgpu' | 'wasm'",
+      "syntax": "js",
+      "translations": {
+        "es": {
+          "title": "Comprueba WebGPU antes de cargar un modelo",
+          "body": "Un *adapter* es la GPU que el navegador da a la página. navigator.gpu solo existe donde el navegador soporta WebGPU, e incluso entonces requestAdapter() puede devolver null: no hay una GPU usable, o el driver está bloqueado.\n\n**Trata un adapter null como una API que falta** y usa WASM. Elige el dispositivo una vez, al inicio, y **pásalo al runtime** que carga el modelo."
+        }
+      }
+    },
+    {
+      "id": "browser-ai-first-load",
+      "kind": "pitfall",
+      "level": "intro",
+      "title": "The first visit downloads the whole model: show the size and ask first",
+      "body": "The trap: the page loads a 300 MB model **as soon as it opens**.\n\nThe symptom: on mobile data the user loses part of a monthly plan, and the page looks frozen with *no sign* of progress.\n\nThe fix: **show the size, start on a tap, and show the progress**. Offer to wait for Wi-Fi, and keep the rest of the app usable while the download runs.",
+      "translations": {
+        "es": {
+          "title": "La primera visita descarga el modelo entero: muestra el tamaño y pregunta antes",
+          "body": "La trampa: la página carga un modelo de 300 MB **en cuanto se abre**.\n\nEl síntoma: con datos móviles el usuario gasta parte de su tarifa del mes, y la página parece congelada *sin ninguna señal* de progreso.\n\nLa solución: **muestra el tamaño y el progreso, y empieza con un toque**. Ofrece esperar a la wifi, y deja el resto de la app usable mientras dura la descarga."
+        }
+      }
+    },
+    {
+      "id": "browser-ai-quiz-size",
+      "kind": "quiz",
+      "level": "intro",
+      "title": "A model has 1 billion parameters stored in fp16. About how large is the download?",
+      "body": "fp16 uses 2 bytes per weight, so **1 billion × 2 bytes = 2 GB**.\n\n1 GB is the size in *int8*, 1 byte per weight: 16 is the number of bits, not of bytes. 4 GB is the size in fp32.\n\n**Multiply by bytes, not by bits**: divide the bit count by 8 first.",
+      "options": [
+        "About 500 MB",
+        "About 1 GB",
+        "About 2 GB",
+        "About 4 GB"
+      ],
+      "answer": 2,
+      "translations": {
+        "es": {
+          "title": "Un modelo tiene 1000 millones de parámetros guardados en fp16. ¿Cuánto ocupa la descarga, más o menos?",
+          "body": "fp16 usa 2 bytes por peso, así que **1000 millones × 2 bytes = 2 GB**.\n\n1 GB es el tamaño en *int8*, 1 byte por peso: 16 es el número de bits, no de bytes. 4 GB es el tamaño en fp32.\n\n**Multiplica por bytes, no por bits**: divide antes el número de bits entre 8.",
+          "options": [
+            "Unos 500 MB",
+            "Unos 1 GB",
+            "Unos 2 GB",
+            "Unos 4 GB"
+          ]
+        }
+      }
+    },
+    {
+      "id": "browser-ai-quiz-offline",
+      "kind": "quiz",
+      "level": "intro",
+      "title": "The model is cached. Which feature still works with no network?",
+      "body": "The cached model and the notes are both on the device, so **search needs no network**: embed the query and compare it with the stored vectors.\n\nToday's news is *not* in the model: its weights stop at its training data. A hosted model and a sync both need a connection.\n\n**Offline means a local model and local data.**",
+      "options": [
+        "Semantic search over the notes stored on the device",
+        "Answers about today's news",
+        "A call to a hosted model with a short timeout",
+        "A sync of the notes to a second device"
+      ],
+      "answer": 0,
+      "translations": {
+        "es": {
+          "title": "El modelo está en caché. ¿Qué función sigue funcionando sin red?",
+          "body": "El modelo en caché y las notas están los dos en el dispositivo, así que **la búsqueda no necesita red**: calcula el embedding de la consulta y compáralo con los vectores guardados.\n\nLas noticias de hoy *no* están en el modelo: sus pesos acaban en sus datos de entrenamiento. Un modelo alojado y una sincronización necesitan conexión.\n\n**Offline significa un modelo local y datos locales.**",
+          "options": [
+            "La búsqueda semántica en las notas guardadas en el dispositivo",
+            "Respuestas sobre las noticias de hoy",
+            "Una llamada a un modelo alojado con un timeout corto",
+            "Sincronizar las notas con un segundo dispositivo"
+          ]
+        }
+      }
+    },
+    {
+      "id": "browser-ai-res-transformers-js",
+      "kind": "resource",
+      "level": "intro",
+      "title": "Repo: Transformers.js runs Hugging Face models in the browser",
+      "body": "The JavaScript version of the Hugging Face *transformers* library. It runs ONNX models in the page, on WebGPU or WASM.\n\n**One pipeline() call loads a model for a task**: embeddings, classification, translation, speech to text.\n\nRead the README and run one example: **it is the fastest way to test a model** on your own device.",
+      "url": "https://github.com/huggingface/transformers.js",
+      "media": "repo",
+      "minutes": 30,
+      "translations": {
+        "es": {
+          "title": "Repo: Transformers.js ejecuta modelos de Hugging Face en el navegador",
+          "body": "La versión en JavaScript de la librería *transformers* de Hugging Face. Ejecuta modelos ONNX en la página, con WebGPU o WASM.\n\n**Una llamada a pipeline() carga un modelo para una tarea**: embeddings, clasificación, traducción, voz a texto.\n\nLee el README y ejecuta un ejemplo: **es la forma más rápida de probar un modelo** en tu propio dispositivo."
+        }
+      }
+    },
+    {
+      "id": "browser-ai-webgpu",
+      "kind": "concept",
+      "level": "intermediate",
+      "title": "WebGPU gives a page the GPU for compute; WASM is the CPU fallback",
+      "body": "*WebGPU* is a browser API for the GPU. Besides graphics, it runs *compute shaders*: small programs that do the matrix work of a model on thousands of cores at once.\n\nFor a model, **WebGPU is often many times faster** than the CPU. WebAssembly runs everywhere, with SIMD and threads, but it is slower.\n\nShip both paths: **WebGPU when there is an adapter, WASM otherwise**.",
+      "diagram": {
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 172\" role=\"img\"><defs><marker id=\"browser-ai-webgpu-head\" viewBox=\"0 0 8 8\" refX=\"7\" refY=\"4\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path class=\"d-head\" d=\"M0 0L8 4L0 8z\"/></marker></defs><rect class=\"d-box\" x=\"120\" y=\"8\" width=\"80\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"160\" y=\"22\">model</text><path class=\"d-arrow\" marker-end=\"url(#browser-ai-webgpu-head)\" d=\"M144 36V52H80V70\"/><path class=\"d-arrow\" marker-end=\"url(#browser-ai-webgpu-head)\" d=\"M176 36V52H240V70\"/><rect class=\"d-hi\" x=\"24\" y=\"72\" width=\"112\" height=\"28\" rx=\"6\"/><text class=\"d-text d-on-hi\" x=\"80\" y=\"86\">WebGPU</text><rect class=\"d-box\" x=\"184\" y=\"72\" width=\"112\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"240\" y=\"86\">WASM</text><path class=\"d-arrow\" marker-end=\"url(#browser-ai-webgpu-head)\" d=\"M80 100V130\"/><path class=\"d-arrow\" marker-end=\"url(#browser-ai-webgpu-head)\" d=\"M240 100V130\"/><text class=\"d-note d-start\" x=\"86\" y=\"116\">shaders</text><text class=\"d-note d-start\" x=\"246\" y=\"116\">SIMD</text><rect class=\"d-box\" x=\"40\" y=\"132\" width=\"80\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"80\" y=\"146\">GPU</text><rect class=\"d-box\" x=\"200\" y=\"132\" width=\"80\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"240\" y=\"146\">CPU</text></svg>",
+        "alt": "A model goes to one of two back ends. WebGPU, highlighted, runs it as shaders on the GPU. WASM runs it with SIMD on the CPU."
+      },
+      "translations": {
+        "es": {
+          "title": "WebGPU da a una página la GPU para calcular; WASM es la alternativa en la CPU",
+          "body": "*WebGPU* es una API del navegador para la GPU. Además de gráficos, ejecuta *compute shaders*: programas pequeños que hacen el trabajo de matrices de un modelo en miles de núcleos a la vez.\n\nPara un modelo, **WebGPU suele ser muchas veces más rápido** que la CPU. WebAssembly funciona en todas partes, con SIMD e hilos, pero es más lento.\n\nIncluye los dos caminos: **WebGPU cuando hay un adapter, WASM si no**.",
+          "diagram": {
+            "alt": "Un modelo va a uno de dos back ends. WebGPU, resaltado, lo ejecuta como shaders en la GPU. WASM lo ejecuta con SIMD en la CPU."
+          }
+        }
+      }
+    },
+    {
+      "id": "browser-ai-worker",
+      "kind": "concept",
+      "level": "intermediate",
+      "title": "Run inference in a Web Worker so the page stays responsive",
+      "body": "The JavaScript of a page runs on one *main thread*, which also handles taps, scroll and rendering. A 400 ms inference there **freezes the page for 400 ms**.\n\nA *Web Worker* is a second thread. Load the model in it and send it the input with postMessage; the result comes back as a message event.\n\nThe main thread only sends and receives, so **the page keeps scrolling while the model runs**.",
+      "diagram": {
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 140\" role=\"img\"><defs><marker id=\"browser-ai-worker-head\" viewBox=\"0 0 8 8\" refX=\"7\" refY=\"4\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path class=\"d-head\" d=\"M0 0L8 4L0 8z\"/></marker></defs><rect class=\"d-box\" x=\"8\" y=\"20\" width=\"64\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"40\" y=\"34\">main</text><rect class=\"d-box\" x=\"88\" y=\"20\" width=\"40\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"108\" y=\"34\">UI</text><rect class=\"d-box\" x=\"136\" y=\"20\" width=\"40\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"156\" y=\"34\">UI</text><rect class=\"d-box\" x=\"184\" y=\"20\" width=\"40\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"204\" y=\"34\">UI</text><rect class=\"d-box\" x=\"232\" y=\"20\" width=\"80\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"272\" y=\"34\">render</text><rect class=\"d-box\" x=\"8\" y=\"100\" width=\"64\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"40\" y=\"114\">worker</text><rect class=\"d-hi\" x=\"104\" y=\"100\" width=\"136\" height=\"28\" rx=\"6\"/><text class=\"d-text d-on-hi\" x=\"172\" y=\"114\">inference</text><path class=\"d-arrow\" marker-end=\"url(#browser-ai-worker-head)\" d=\"M112 48V98\"/><path class=\"d-arrow\" marker-end=\"url(#browser-ai-worker-head)\" d=\"M240 114H272V50\"/><text class=\"d-note d-start\" x=\"118\" y=\"74\">postMessage</text><text class=\"d-note d-end\" x=\"266\" y=\"82\">onmessage</text></svg>",
+        "alt": "Two lanes. The main thread keeps running short UI tasks. It sends the input with postMessage to a worker, which runs the highlighted inference, and the result comes back by onmessage before the main thread renders it."
+      },
+      "translations": {
+        "es": {
+          "title": "Ejecuta la inferencia en un Web Worker para que la página siga respondiendo",
+          "body": "El JavaScript de una página se ejecuta en un *hilo principal*, que también atiende los toques, el scroll y el renderizado. Una inferencia de 400 ms ahí **congela la página 400 ms**.\n\nUn *Web Worker* es un segundo hilo. Carga el modelo en él y envíale la entrada con postMessage; el resultado vuelve como un evento message.\n\nEl hilo principal solo envía y recibe, así que **la página sigue haciendo scroll mientras el modelo trabaja**.",
+          "diagram": {
+            "alt": "Dos carriles. El hilo principal sigue ejecutando tareas cortas de UI. Envía la entrada con postMessage a un worker, que ejecuta la inferencia resaltada, y el resultado vuelve por onmessage antes de que el hilo principal lo renderice."
+          }
+        }
+      }
+    },
+    {
+      "id": "browser-ai-cache-weights",
+      "kind": "concept",
+      "level": "intermediate",
+      "title": "Download the weights once and keep them in the Cache API or OPFS",
+      "body": "The HTTP cache is not enough: the browser can drop a large response at any time. Store the weights yourself.\n\nThe *Cache API* keeps a response by URL. *OPFS*, the origin private file system, keeps files that you write in parts. **Put the version in the key**, as in model-v2.onnx, so a new model never mixes with the old one.\n\nAt start, look in the store first. **A hit loads from disk, with no network.**",
+      "diagram": {
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 152\" role=\"img\"><defs><marker id=\"browser-ai-cache-weights-head\" viewBox=\"0 0 8 8\" refX=\"7\" refY=\"4\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path class=\"d-head\" d=\"M0 0L8 4L0 8z\"/></marker></defs><text class=\"d-label\" x=\"8\" y=\"12\">MISS</text><rect class=\"d-box\" x=\"8\" y=\"20\" width=\"64\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"40\" y=\"34\">model</text><rect class=\"d-box\" x=\"128\" y=\"20\" width=\"64\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"160\" y=\"34\">HTTP</text><path class=\"d-arrow\" marker-end=\"url(#browser-ai-cache-weights-head)\" d=\"M72 34H126\"/><path class=\"d-arrow\" marker-end=\"url(#browser-ai-cache-weights-head)\" d=\"M192 34H246\"/><text class=\"d-note\" x=\"100\" y=\"26\">fetch</text><text class=\"d-note\" x=\"220\" y=\"26\">put</text><text class=\"d-label\" x=\"8\" y=\"76\">HIT</text><rect class=\"d-box\" x=\"8\" y=\"84\" width=\"64\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"40\" y=\"98\">model</text><path class=\"d-arrow\" marker-end=\"url(#browser-ai-cache-weights-head)\" d=\"M72 98H246\"/><text class=\"d-note\" x=\"160\" y=\"90\">match</text><rect class=\"d-hi\" x=\"248\" y=\"20\" width=\"64\" height=\"92\" rx=\"6\"/><text class=\"d-text d-on-hi\" x=\"280\" y=\"66\">cache</text><text class=\"d-note\" x=\"160\" y=\"140\">key = URL + v2</text></svg>",
+        "alt": "Two rows. On a miss, the model is fetched over HTTP and put into the highlighted cache. On a hit, the model comes from the cache with match and no HTTP request. The cache key is the URL plus the version."
+      },
+      "translations": {
+        "es": {
+          "title": "Descarga los pesos una vez y guárdalos en la Cache API o en OPFS",
+          "body": "La caché HTTP no basta: el navegador puede descartar una respuesta grande en cualquier momento. Guarda tú los pesos.\n\nLa *Cache API* guarda una respuesta por URL. *OPFS*, el sistema de archivos privado del origen, guarda archivos que escribes por partes. **Pon la versión en la clave**, como en model-v2.onnx, para que un modelo nuevo nunca se mezcle con el anterior.\n\nAl inicio, mira primero en el almacén. **Un acierto carga del disco, sin red.**",
+          "diagram": {
+            "alt": "Dos filas. En un fallo, el modelo se descarga por HTTP y se guarda en la caché resaltada. En un acierto, el modelo sale de la caché con match y sin petición HTTP. La clave de la caché es la URL más la versión."
+          }
+        }
+      }
+    },
+    {
+      "id": "browser-ai-onnx",
+      "kind": "concept",
+      "level": "intermediate",
+      "title": "ONNX is the portable model format that a web runtime loads",
+      "body": "*ONNX* is an open file format for the graph of a model and its weights. Training frameworks such as PyTorch export to it.\n\nThe usual path: train, then **export to ONNX, quantise and run with ONNX Runtime Web** on WebGPU or WASM. Transformers.js uses this runtime too.\n\nMany models are already published in ONNX. **Look for an ONNX version before you export one yourself.**",
+      "diagram": {
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 184\" role=\"img\"><defs><marker id=\"browser-ai-onnx-head\" viewBox=\"0 0 8 8\" refX=\"7\" refY=\"4\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path class=\"d-head\" d=\"M0 0L8 4L0 8z\"/></marker></defs><rect class=\"d-box\" x=\"8\" y=\"20\" width=\"88\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"52\" y=\"34\">PyTorch</text><rect class=\"d-hi\" x=\"116\" y=\"20\" width=\"88\" height=\"28\" rx=\"6\"/><text class=\"d-text d-on-hi\" x=\"160\" y=\"34\">ONNX</text><rect class=\"d-box\" x=\"224\" y=\"20\" width=\"88\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"268\" y=\"34\">int8 / q4</text><path class=\"d-arrow\" marker-end=\"url(#browser-ai-onnx-head)\" d=\"M96 34H114\"/><path class=\"d-arrow\" marker-end=\"url(#browser-ai-onnx-head)\" d=\"M204 34H222\"/><path class=\"d-arrow\" marker-end=\"url(#browser-ai-onnx-head)\" d=\"M268 48V98H206\"/><rect class=\"d-box\" x=\"116\" y=\"84\" width=\"88\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"160\" y=\"98\">ORT Web</text><path class=\"d-arrow\" marker-end=\"url(#browser-ai-onnx-head)\" d=\"M148 112V130H88V146\"/><path class=\"d-arrow\" marker-end=\"url(#browser-ai-onnx-head)\" d=\"M172 112V130H232V146\"/><rect class=\"d-box\" x=\"40\" y=\"148\" width=\"96\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"88\" y=\"162\">WebGPU</text><rect class=\"d-box\" x=\"184\" y=\"148\" width=\"96\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"232\" y=\"162\">WASM</text></svg>",
+        "alt": "A PyTorch model is exported to the highlighted ONNX format, then quantised to int8 or 4 bits. ONNX Runtime Web loads it and runs it on WebGPU or on WASM."
+      },
+      "translations": {
+        "es": {
+          "title": "ONNX es el formato de modelo portable que carga un runtime web",
+          "body": "*ONNX* es un formato de archivo abierto para el grafo de un modelo y sus pesos. Los frameworks de entrenamiento como PyTorch exportan a él.\n\nEl camino habitual: entrena y luego **exporta a ONNX, cuantiza y ejecuta con ONNX Runtime Web** sobre WebGPU o WASM. Transformers.js también usa este runtime.\n\nMuchos modelos ya están publicados en ONNX. **Busca una versión ONNX antes de exportarla tú.**",
+          "diagram": {
+            "alt": "Un modelo de PyTorch se exporta al formato ONNX resaltado y luego se cuantiza a int8 o 4 bits. ONNX Runtime Web lo carga y lo ejecuta sobre WebGPU o sobre WASM."
+          }
+        }
+      }
+    },
+    {
+      "id": "browser-ai-embed-pipeline",
+      "kind": "snippet",
+      "level": "intermediate",
+      "title": "Embed text in the browser with Transformers.js",
+      "body": "The first pipeline() call downloads the model, and the library keeps the files in the Cache API. The device option picks WebGPU; without it, the model runs on WASM.\n\n*Mean pooling* averages the token vectors into one vector per text. With normalize: true the vectors have length 1, so **the dot product equals the cosine**.\n\nout.data is one flat Float32Array of 2 × 384 values: **store it as it is** for a local search.",
+      "code": "import { pipeline } from '@huggingface/transformers';\n\nconst extract = await pipeline(\n  'feature-extraction',\n  'onnx-community/all-MiniLM-L6-v2-ONNX',\n  { device: 'webgpu' },\n);\nconst out = await extract(['offline first', 'PWA'], {\n  pooling: 'mean',\n  normalize: true,\n});\nout.dims; // [2, 384]",
+      "syntax": "js",
+      "translations": {
+        "es": {
+          "title": "Calcula embeddings de texto en el navegador con Transformers.js",
+          "body": "La primera llamada a pipeline() descarga el modelo, y la librería guarda los archivos en la Cache API. La opción device elige WebGPU; sin ella, el modelo se ejecuta en WASM.\n\nEl *mean pooling* promedia los vectores de los tokens en un vector por texto. Con normalize: true los vectores tienen longitud 1, así que **el producto escalar es igual al coseno**.\n\nout.data es un único Float32Array plano de 2 × 384 valores: **guárdalo tal cual** para una búsqueda local."
+        }
+      }
+    },
+    {
+      "id": "browser-ai-worker-msg",
+      "kind": "snippet",
+      "level": "intermediate",
+      "title": "A worker protocol with progress, result and error messages",
+      "body": "Each request gets an *id*. The page keeps a Map from the id to the two callbacks of its promise, and the worker answers with the same id.\n\nThree message types are enough: **progress while the model loads, result and error**. The worker catches each error and posts it, so no promise waits forever.\n\nWith this, **run(input) is an ordinary async function** for the rest of the app.",
+      "code": "const worker = new Worker('ai.js', { type: 'module' });\nconst pending = new Map(); let seq = 0;\nexport const run = (input) => new Promise((ok, fail) => {\n  pending.set(++seq, { ok, fail });\n  worker.postMessage({ type: 'run', id: seq, input });\n});\nworker.onmessage = ({ data: { type, id, ...msg } }) => {\n  if (type === 'progress') return showProgress(msg);\n  const p = pending.get(id);\n  pending.delete(id);\n  if (type === 'error') p.fail(new Error(msg.message));\n  else p.ok(msg.result);\n};",
+      "syntax": "js",
+      "translations": {
+        "es": {
+          "title": "Un protocolo de worker con mensajes de progreso, resultado y error",
+          "body": "Cada petición recibe un *id*. La página guarda un Map del id a los dos callbacks de su promesa, y el worker responde con el mismo id.\n\nBastan tres tipos de mensaje: **progreso mientras carga el modelo, resultado y error**. El worker captura cada error y lo envía, así que ninguna promesa espera para siempre.\n\nAsí, **run(input) es una función async normal** para el resto de la app."
+        }
+      }
+    },
+    {
+      "id": "browser-ai-storage-estimate",
+      "kind": "snippet",
+      "level": "intermediate",
+      "title": "Ask for persistent storage before you cache a model",
+      "body": "estimate() returns the *quota* and the usage of the origin, in bytes. Both are approximate, so keep a margin: 20% here.\n\npersist() asks the browser to keep the storage of the origin. The browser can grant it, ask the user or refuse. **Without it, the browser can evict the model** under storage pressure.\n\n**Check before the download**, not after a 300 MB fetch fails.",
+      "code": "async function prepareStorage(bytes) {\n  const { storage } = navigator;\n  const { quota, usage } = await storage.estimate();\n  if (quota - usage < bytes * 1.2) return 'no-space';\n  const kept = (await storage.persisted())\n    || (await storage.persist());\n  return kept ? 'persistent' : 'best-effort';\n}\n\nawait prepareStorage(300e6); // a 300 MB model",
+      "syntax": "js",
+      "translations": {
+        "es": {
+          "title": "Pide almacenamiento persistente antes de guardar un modelo en caché",
+          "body": "estimate() devuelve la *cuota* y el uso del origen, en bytes. Los dos son aproximados, así que deja un margen: aquí, un 20 %.\n\npersist() pide al navegador que conserve el almacenamiento del origen. El navegador puede concederlo, preguntar al usuario o negarlo. **Sin él, el navegador puede borrar el modelo** cuando falta espacio.\n\n**Comprueba antes de la descarga**, no después de que falle una descarga de 300 MB."
+        }
+      }
+    },
+    {
+      "id": "browser-ai-mobile-memory",
+      "kind": "pitfall",
+      "level": "intermediate",
+      "title": "A model that runs on a laptop can crash a tab on a phone",
+      "body": "The trap: you test on a laptop with 16 GB of RAM and **ship the same model to every device**.\n\nThe symptom: on a phone the tab reloads or shows a crash page. The system kills it for memory, and *no error* reaches your code.\n\nThe fix: **choose the model per device**. Load a smaller or more quantised model where memory is low (navigator.deviceMemory gives a hint in some browsers), and test on a real low-end phone.",
+      "translations": {
+        "es": {
+          "title": "Un modelo que funciona en un portátil puede tumbar una pestaña en un móvil",
+          "body": "La trampa: pruebas en un portátil con 16 GB de RAM y **envías el mismo modelo a todos los dispositivos**.\n\nEl síntoma: en un móvil la pestaña se recarga o muestra una página de error. El sistema la cierra por memoria, y *ningún error* llega a tu código.\n\nLa solución: **elige el modelo según el dispositivo**. Carga un modelo más pequeño o más cuantizado donde hay poca memoria (navigator.deviceMemory da una pista en algunos navegadores), y prueba en un móvil modesto real."
+        }
+      }
+    },
+    {
+      "id": "browser-ai-eviction",
+      "kind": "pitfall",
+      "level": "intermediate",
+      "title": "The browser can delete cached weights unless the storage is persistent",
+      "body": "The trap: you cache 300 MB of weights in *best-effort* storage, the default.\n\nThe symptom: under storage pressure the browser deletes the data of the origin, and one day **the app downloads the whole model again**.\n\nThe fix: call navigator.storage.persist() before you cache, and **check the cache at each start**. Treat a miss as normal: show the size and ask again before the download.",
+      "translations": {
+        "es": {
+          "title": "El navegador puede borrar los pesos en caché si el almacenamiento no es persistente",
+          "body": "La trampa: guardas 300 MB de pesos en almacenamiento *best-effort*, el que hay por defecto.\n\nEl síntoma: cuando falta espacio, el navegador borra los datos del origen, y un día **la app vuelve a descargar el modelo entero**.\n\nLa solución: llama a navigator.storage.persist() antes de guardar, y **comprueba la caché en cada inicio**. Trata un fallo como algo normal: muestra el tamaño y vuelve a preguntar antes de la descarga."
+        }
+      }
+    },
+    {
+      "id": "browser-ai-shader-warmup",
+      "kind": "pitfall",
+      "level": "intermediate",
+      "title": "The first WebGPU run is slow because the shaders compile on first use",
+      "body": "The trap: the **first request of the user** is also the first WebGPU run of the model.\n\nThe symptom: that call takes seconds, the next ones take milliseconds. WebGPU compiles the *shaders* and builds its pipelines on first use.\n\nThe fix: **run a warm-up call on a short input after the load**, while the progress bar is still on screen. Measure the latency only after it.",
+      "translations": {
+        "es": {
+          "title": "La primera ejecución en WebGPU es lenta porque los shaders se compilan al primer uso",
+          "body": "La trampa: la **primera petición del usuario** es también la primera ejecución del modelo en WebGPU.\n\nEl síntoma: esa llamada tarda segundos, y las siguientes, milisegundos. WebGPU compila los *shaders* y crea sus pipelines al primer uso.\n\nLa solución: **calienta el modelo con una entrada corta tras la carga**, mientras la barra de progreso sigue en pantalla. Mide la latencia solo después."
+        }
+      }
+    },
+    {
+      "id": "browser-ai-quiz-worker",
+      "kind": "quiz",
+      "level": "intermediate",
+      "title": "Inference takes 400 ms and the page stutters while it runs. What fixes the stutter?",
+      "body": "A Web Worker runs on its own thread, so **the main thread stays free** for scroll, taps and rendering while the model runs.\n\nA *faster* model is tempting, but it only shortens the freeze: the work still blocks the main thread. An async function and a requestAnimationFrame callback run on the main thread too.\n\n**Move the work, do not only shrink it.**",
+      "options": [
+        "Use a smaller, faster model",
+        "Wrap the call in an async function",
+        "Run the call inside requestAnimationFrame",
+        "Move inference to a Web Worker"
+      ],
+      "answer": 3,
+      "translations": {
+        "es": {
+          "title": "La inferencia tarda 400 ms y la página se entrecorta mientras se ejecuta. ¿Qué lo arregla?",
+          "body": "Un Web Worker se ejecuta en su propio hilo, así que **el hilo principal queda libre** para el scroll, los toques y el renderizado mientras el modelo trabaja.\n\nUn modelo *más rápido* es tentador, pero solo acorta el bloqueo: el trabajo sigue bloqueando el hilo principal. Una función async y un callback de requestAnimationFrame también se ejecutan en el hilo principal.\n\n**Mueve el trabajo, no solo lo reduzcas.**",
+          "options": [
+            "Usar un modelo más pequeño y rápido",
+            "Envolver la llamada en una función async",
+            "Ejecutar la llamada dentro de requestAnimationFrame",
+            "Mover la inferencia a un Web Worker"
+          ]
+        }
+      }
+    },
+    {
+      "id": "browser-ai-quiz-int4",
+      "kind": "quiz",
+      "level": "intermediate",
+      "title": "You quantise a 2 GB fp16 model to 4 bits per weight. About what size is it now?",
+      "body": "fp16 uses 16 bits per weight, and 4 bits is a quarter of that, so **2 GB becomes about 500 MB**.\n\n1 GB is the size in *int8*, 8 bits per weight. 250 MB would need 2 bits per weight.\n\nThe real file is a little larger: some layers stay in higher precision, and **each block of weights keeps a scale**.",
+      "options": [
+        "About 250 MB",
+        "About 500 MB",
+        "About 1 GB",
+        "About 2 GB: the file keeps its size"
+      ],
+      "answer": 1,
+      "translations": {
+        "es": {
+          "title": "Cuantizas un modelo fp16 de 2 GB a 4 bits por peso. ¿Cuánto ocupa ahora, más o menos?",
+          "body": "fp16 usa 16 bits por peso, y 4 bits es una cuarta parte, así que **2 GB pasan a ser unos 500 MB**.\n\n1 GB es el tamaño en *int8*, 8 bits por peso. 250 MB necesitaría 2 bits por peso.\n\nEl archivo real es algo mayor: algunas capas se quedan con más precisión, y **cada bloque de pesos guarda una escala**.",
+          "options": [
+            "Unos 250 MB",
+            "Unos 500 MB",
+            "Unos 1 GB",
+            "Unos 2 GB: el archivo no cambia de tamaño"
+          ]
+        }
+      }
+    },
+    {
+      "id": "browser-ai-quiz-no-webgpu",
+      "kind": "quiz",
+      "level": "intermediate",
+      "title": "navigator.gpu is undefined on the phone of a user. What do you do?",
+      "body": "A missing API is a normal case, not an error. **WASM runs the same model on the CPU**, only slower. For a large model, a server can run it, if the user accepts that the input leaves the device.\n\nAn error *stops* a feature that could still work, and asking for another browser loses most users.\n\n**Detect, then degrade**: pick the best path that exists.",
+      "options": [
+        "Show an error: the device is not supported",
+        "Load the WebGPU build anyway",
+        "Fall back to WASM, or to a server model if the user agrees",
+        "Ask the user to install another browser"
+      ],
+      "answer": 2,
+      "diagram": {
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 180\" role=\"img\"><defs><marker id=\"browser-ai-quiz-no-webgpu-head\" viewBox=\"0 0 8 8\" refX=\"7\" refY=\"4\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path class=\"d-head\" d=\"M0 0L8 4L0 8z\"/></marker></defs><rect class=\"d-box\" x=\"96\" y=\"8\" width=\"128\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"160\" y=\"22\">navigator.gpu</text><path class=\"d-arrow\" marker-end=\"url(#browser-ai-quiz-no-webgpu-head)\" d=\"M144 36V56H80V78\"/><path class=\"d-arrow\" marker-end=\"url(#browser-ai-quiz-no-webgpu-head)\" d=\"M176 36V56H240V78\"/><text class=\"d-note d-end\" x=\"74\" y=\"66\">adapter</text><text class=\"d-note d-start\" x=\"246\" y=\"66\">undefined</text><rect class=\"d-box\" x=\"24\" y=\"80\" width=\"112\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"80\" y=\"94\">WebGPU</text><rect class=\"d-hi\" x=\"184\" y=\"80\" width=\"112\" height=\"28\" rx=\"6\"/><text class=\"d-text d-on-hi\" x=\"240\" y=\"94\">WASM</text><path class=\"d-arrow d-dash\" marker-end=\"url(#browser-ai-quiz-no-webgpu-head)\" d=\"M240 108V142\"/><text class=\"d-note d-start\" x=\"246\" y=\"125\">opt-in</text><rect class=\"d-box\" x=\"184\" y=\"144\" width=\"112\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"240\" y=\"158\">LLM API</text></svg>",
+        "alt": "A check of navigator.gpu has two branches. With an adapter, the model runs on WebGPU. When it is undefined, the model runs on WASM, highlighted, and an optional dashed path, after the user opts in, goes to a hosted LLM API."
+      },
+      "translations": {
+        "es": {
+          "title": "navigator.gpu es undefined en el móvil de un usuario. ¿Qué haces?",
+          "body": "Que falte una API es un caso normal, no un error. **WASM ejecuta el mismo modelo en la CPU**, solo que más lento. Para un modelo grande, puede ejecutarlo un servidor, si el usuario acepta que la entrada salga del dispositivo.\n\nUn error *detiene* una función que aún podría funcionar, y pedir otro navegador pierde a la mayoría de usuarios.\n\n**Detecta y luego degrada**: elige el mejor camino que existe.",
+          "options": [
+            "Mostrar un error: el dispositivo no es compatible",
+            "Cargar igualmente la versión para WebGPU",
+            "Pasar a WASM, o a un modelo en un servidor si el usuario acepta",
+            "Pedir al usuario que instale otro navegador"
+          ],
+          "diagram": {
+            "alt": "Una comprobación de navigator.gpu tiene dos ramas. Con un adapter, el modelo se ejecuta en WebGPU. Cuando es undefined, el modelo se ejecuta en WASM, resaltado, y un camino opcional discontinuo, si el usuario acepta, va a una API de LLM alojada."
+          }
+        }
+      }
+    },
+    {
+      "id": "browser-ai-res-mdn-webgpu",
+      "kind": "resource",
+      "level": "intermediate",
+      "title": "MDN: WebGPU API",
+      "body": "The MDN reference for *WebGPU*: adapters, devices, buffers and compute pipelines, with a table of browser support.\n\nRead the overview and the compute example. **You rarely write shaders yourself**, but you debug the runtime that does.\n\n**Check the support table** before you plan a feature that needs WebGPU.",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/API/WebGPU_API",
+      "media": "docs",
+      "minutes": 30,
+      "translations": {
+        "es": {
+          "title": "MDN: la API WebGPU",
+          "body": "La referencia de MDN para *WebGPU*: adapters, dispositivos, búferes y pipelines de cálculo, con una tabla de compatibilidad de navegadores.\n\nLee la introducción y el ejemplo de cálculo. **Rara vez escribirás shaders tú**, pero depurarás el runtime que lo hace.\n\n**Mira la tabla de compatibilidad** antes de planificar una función que necesite WebGPU."
+        }
+      }
+    },
+    {
+      "id": "browser-ai-hybrid",
+      "kind": "concept",
+      "level": "advanced",
+      "title": "Route easy requests to the device and hard ones to the server",
+      "body": "A *router* decides where each request runs. A small local model classifies the request, or answers it, with a confidence score.\n\nAbove a threshold, **keep the request on the device**: no cost per call, no network wait, no data sent. Below it, send the request to a large hosted model.\n\n**Tune the threshold on real requests**, and tell the user when the input leaves the device.",
+      "diagram": {
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 236\" role=\"img\"><defs><marker id=\"browser-ai-hybrid-head\" viewBox=\"0 0 8 8\" refX=\"7\" refY=\"4\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path class=\"d-head\" d=\"M0 0L8 4L0 8z\"/></marker></defs><rect class=\"d-box\" x=\"128\" y=\"8\" width=\"64\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"160\" y=\"22\">query</text><path class=\"d-arrow\" marker-end=\"url(#browser-ai-hybrid-head)\" d=\"M160 36V62\"/><rect class=\"d-hi\" x=\"104\" y=\"64\" width=\"112\" height=\"28\" rx=\"6\"/><text class=\"d-text d-on-hi\" x=\"160\" y=\"78\">classifier</text><path class=\"d-arrow\" marker-end=\"url(#browser-ai-hybrid-head)\" d=\"M136 92V120H72V132\"/><path class=\"d-arrow\" marker-end=\"url(#browser-ai-hybrid-head)\" d=\"M184 92V120H248V132\"/><text class=\"d-note\" x=\"100\" y=\"107\">p ≥ 0.9</text><text class=\"d-note\" x=\"220\" y=\"107\">p &lt; 0.9</text><rect class=\"d-box\" x=\"24\" y=\"134\" width=\"96\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"72\" y=\"148\">WebGPU</text><rect class=\"d-box\" x=\"200\" y=\"134\" width=\"96\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"248\" y=\"148\">LLM API</text><path class=\"d-arrow\" marker-end=\"url(#browser-ai-hybrid-head)\" d=\"M72 162V210H126\"/><path class=\"d-arrow\" marker-end=\"url(#browser-ai-hybrid-head)\" d=\"M248 162V210H194\"/><rect class=\"d-box\" x=\"128\" y=\"196\" width=\"64\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"160\" y=\"210\">output</text></svg>",
+        "alt": "A query goes to a highlighted classifier. With a confidence p of at least 0.9, the device answers it on WebGPU; below 0.9, it goes to a hosted LLM API. Both paths end in the output."
+      },
+      "translations": {
+        "es": {
+          "title": "Envía las peticiones fáciles al dispositivo y las difíciles al servidor",
+          "body": "Un *router* decide dónde se ejecuta cada petición. Un modelo local pequeño clasifica la petición, o la responde, con una puntuación de confianza.\n\nPor encima de un umbral, **resuelve la petición en el dispositivo**: sin coste por llamada, sin esperar a la red, sin enviar datos. Por debajo, envíala a un modelo grande alojado.\n\n**Ajusta el umbral con peticiones reales**, y avisa al usuario cuando la entrada sale del dispositivo.",
+          "diagram": {
+            "alt": "Una consulta va a un clasificador resaltado. Con una confianza p de al menos 0,9, el dispositivo la responde con WebGPU; por debajo de 0,9, va a una API de LLM alojada. Los dos caminos acaban en la salida."
+          }
+        }
+      }
+    },
+    {
+      "id": "browser-ai-built-in",
+      "kind": "concept",
+      "level": "advanced",
+      "title": "Some browsers ship a built-in model: detect the API, never assume it",
+      "body": "Some browsers now include a model and give pages a JavaScript API for it. These APIs are *new*: their names, options and support differ between browsers and versions.\n\nTreat it like any optional feature: **check that the API exists**, then **check that the model is available** on this device. When the browser must download the model first, show the download state.\n\n**Keep your own path as the fallback**: a model that you ship, or a server.",
+      "translations": {
+        "es": {
+          "title": "Algunos navegadores incluyen un modelo propio: detecta la API, nunca la des por hecha",
+          "body": "Algunos navegadores ya incluyen un modelo y dan a las páginas una API de JavaScript para usarlo. Estas API son *nuevas*: sus nombres, opciones y compatibilidad cambian entre navegadores y versiones.\n\nTrátala como cualquier función opcional: **comprueba que la API existe** y luego **que el modelo está disponible** en este dispositivo. Cuando el navegador debe descargar antes el modelo, muestra el estado de la descarga.\n\n**Mantén tu propio camino como alternativa**: un modelo que tú envías, o un servidor."
+        }
+      }
+    },
+    {
+      "id": "browser-ai-local-search",
+      "kind": "snippet",
+      "level": "advanced",
+      "title": "Offline semantic search over a Float32Array",
+      "body": "Keep all the vectors in *one flat* Float32Array: row r starts at r × dim. One block of memory scans fast and stores as one blob.\n\nThe vectors are unit vectors, so **the dot product is the cosine**. 20 000 notes of 384 dimensions take about 31 MB, and **a full scan stays in the tens of milliseconds**.\n\nAbove tens of thousands of rows, keep the top k in a heap, or move to an ANN index.",
+      "code": "// vectors: Float32Array, n rows of dim, unit length\nfunction search(vectors, dim, query, k = 5) {\n  const scores = [];\n  for (let row = 0; row * dim < vectors.length; row++) {\n    let score = 0;\n    for (let i = 0; i < dim; i++) {\n      score += vectors[row * dim + i] * query[i];\n    }\n    scores.push({ row, score });\n  }\n  return scores.sort((a, b) => b.score - a.score)\n    .slice(0, k);\n}",
+      "syntax": "js",
+      "translations": {
+        "es": {
+          "title": "Búsqueda semántica offline sobre un Float32Array",
+          "body": "Guarda todos los vectores en *un único* Float32Array plano: la fila r empieza en r × dim. Un solo bloque de memoria se recorre rápido y se guarda como un blob.\n\nLos vectores son unitarios, así que **el producto escalar es el coseno**. 20 000 notas de 384 dimensiones ocupan unos 31 MB, y **un recorrido completo tarda decenas de milisegundos**.\n\nPor encima de decenas de miles de filas, guarda el top-k en un heap o pasa a un índice ANN."
+        }
+      }
+    },
+    {
+      "id": "browser-ai-sw-precache",
+      "kind": "pitfall",
+      "level": "advanced",
+      "title": "A service worker that precaches the model blocks its install on a 300 MB download",
+      "body": "The trap: you add the model file to the *precache* list of the service worker.\n\nThe symptom: the install event waits for every precached file. On a slow network **the new version does not install** until 300 MB arrive, and one failed fetch fails the whole install.\n\nThe fix: **precache the app shell only**. Cache the model at run time, after a user action, in its own cache, such as model-v1.",
+      "diagram": {
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 176\" role=\"img\"><defs><marker id=\"browser-ai-sw-precache-head\" viewBox=\"0 0 8 8\" refX=\"7\" refY=\"4\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path class=\"d-head\" d=\"M0 0L8 4L0 8z\"/></marker></defs><text class=\"d-label\" x=\"8\" y=\"12\">PRECACHE ✗</text><rect class=\"d-box\" x=\"8\" y=\"20\" width=\"64\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"40\" y=\"34\">install</text><path class=\"d-arrow\" marker-end=\"url(#browser-ai-sw-precache-head)\" d=\"M72 34H86\"/><rect class=\"d-box\" x=\"88\" y=\"20\" width=\"56\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"116\" y=\"34\">shell</text><rect class=\"d-box\" x=\"152\" y=\"20\" width=\"160\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"232\" y=\"34\">model 300 MB</text><text class=\"d-label\" x=\"8\" y=\"76\">PRECACHE ✓</text><rect class=\"d-box\" x=\"8\" y=\"84\" width=\"64\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"40\" y=\"98\">install</text><path class=\"d-arrow\" marker-end=\"url(#browser-ai-sw-precache-head)\" d=\"M72 98H86\"/><rect class=\"d-box\" x=\"88\" y=\"84\" width=\"56\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"116\" y=\"98\">shell</text><text class=\"d-label\" x=\"8\" y=\"132\">RUNTIME</text><rect class=\"d-box\" x=\"8\" y=\"140\" width=\"64\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"40\" y=\"154\">fetch</text><path class=\"d-arrow\" marker-end=\"url(#browser-ai-sw-precache-head)\" d=\"M72 154H150\"/><rect class=\"d-hi\" x=\"152\" y=\"140\" width=\"160\" height=\"28\" rx=\"6\"/><text class=\"d-text d-on-hi\" x=\"232\" y=\"154\">model-v1</text></svg>",
+        "alt": "Three rows. With the model in the precache, install waits for the shell and the 300 MB model. With the shell only, install is small. At run time, a fetch puts the model into its own highlighted cache, model-v1."
+      },
+      "translations": {
+        "es": {
+          "title": "Un service worker que precachea el modelo bloquea su instalación con una descarga de 300 MB",
+          "body": "La trampa: añades el archivo del modelo a la lista de *precache* del service worker.\n\nEl síntoma: el evento install espera a todos los archivos precacheados. Con una red lenta **la nueva versión no se instala** hasta que llegan 300 MB, y una descarga fallida hace fallar toda la instalación.\n\nLa solución: **precachea solo el app shell**. Guarda el modelo en tiempo de ejecución, tras una acción del usuario, en su propia caché, como model-v1.",
+          "diagram": {
+            "alt": "Tres filas. Con el modelo en el precache, install espera al shell y al modelo de 300 MB. Solo con el shell, install es pequeño. En tiempo de ejecución, un fetch guarda el modelo en su propia caché resaltada, model-v1."
+          }
+        }
+      }
+    },
+    {
+      "id": "browser-ai-quantised-quality",
+      "kind": "pitfall",
+      "level": "advanced",
+      "title": "A 4-bit model is smaller and worse: measure it on your task",
+      "body": "The trap: you pick the 4-bit version because it is **4 times smaller** than fp16, and you assume that it is as good.\n\nThe symptom: the quality drops, and *unevenly*: a classifier can stay fine while summaries, or a less common language, get worse.\n\nThe fix: **run your eval set on each quantised version** and pick the smallest one that passes your bar. Try int8 too: it often keeps almost all of the quality.",
+      "translations": {
+        "es": {
+          "title": "Un modelo de 4 bits es más pequeño y peor: mídelo en tu tarea",
+          "body": "La trampa: eliges la versión de 4 bits porque es **4 veces más pequeña** que fp16, y das por hecho que es igual de buena.\n\nEl síntoma: la calidad baja, y de forma *desigual*: un clasificador puede seguir bien mientras los resúmenes, o un idioma menos común, empeoran.\n\nLa solución: **pasa tu conjunto de evaluación a cada versión cuantizada** y elige la más pequeña que supere tu listón. Prueba también int8: suele conservar casi toda la calidad."
+        }
+      }
+    },
+    {
+      "id": "browser-ai-quiz-privacy",
+      "kind": "quiz",
+      "level": "advanced",
+      "title": "Which claim about an on-device model is true?",
+      "body": "Inference runs in the page, so **the input stays local unless your code sends it**. An analytics call or a fallback to a server still can.\n\nThe model file is *not* secret: the browser downloads it like any other file, so **anyone can copy the weights**. Never ship a model that you cannot publish.\n\nNo browser blocks the network for model code, and a small model is less accurate than a large one.",
+      "options": [
+        "The input stays on the device unless your code sends it",
+        "The model file is secret: users cannot copy it",
+        "The browser blocks the network for the model code",
+        "It is as accurate as a hosted model of the same family"
+      ],
+      "answer": 0,
+      "translations": {
+        "es": {
+          "title": "¿Qué afirmación sobre un modelo en el dispositivo es cierta?",
+          "body": "La inferencia se ejecuta en la página, así que **la entrada se queda en local salvo que tu código la envíe**. Una llamada de analítica o una alternativa en un servidor aún pueden hacerlo.\n\nEl archivo del modelo *no* es secreto: el navegador lo descarga como cualquier otro archivo, así que **cualquiera puede copiar los pesos**. Nunca envíes un modelo que no puedas publicar.\n\nNingún navegador bloquea la red para el código del modelo, y un modelo pequeño es menos preciso que uno grande.",
+          "options": [
+            "La entrada se queda en el dispositivo salvo que tu código la envíe",
+            "El archivo del modelo es secreto: los usuarios no pueden copiarlo",
+            "El navegador bloquea la red para el código del modelo",
+            "Es tan preciso como un modelo alojado de la misma familia"
+          ]
+        }
+      }
+    },
+    {
+      "id": "browser-ai-res-onnx-web",
+      "kind": "resource",
+      "level": "advanced",
+      "title": "ONNX Runtime Web: tutorials",
+      "body": "The official guides for *ONNX Runtime Web*, the runtime that runs ONNX models in a page.\n\nThey cover the package to import, the WebGPU and WASM back ends, and how to load a model and run a session.\n\n**Read them when Transformers.js does not support your model**, or when you need control over each session option.",
+      "url": "https://onnxruntime.ai/docs/tutorials/web/",
+      "media": "docs",
+      "minutes": 45,
+      "translations": {
+        "es": {
+          "title": "ONNX Runtime Web: tutoriales",
+          "body": "Las guías oficiales de *ONNX Runtime Web*, el runtime que ejecuta modelos ONNX en una página.\n\nExplican el paquete que importar, los back ends WebGPU y WASM, y cómo cargar un modelo y ejecutar una sesión.\n\n**Léelas cuando Transformers.js no soporta tu modelo**, o cuando necesitas controlar cada opción de la sesión."
+        }
+      }
+    }
+  ]
+}
