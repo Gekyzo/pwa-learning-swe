@@ -57,7 +57,8 @@ one, or that the app has none. `pwa-shopping-list` has the reference implementat
 
 ## Release
 
-- [ ] `npm test` passes.
+- [ ] `npm test` passes. The `test` job of `.github/workflows/pages.yml` runs it again on the
+      tag, and a failure stops the deploy.
 - [ ] The UI was checked in a browser at 360×800, 768×1024 and 1280×800.
 - [ ] `npm run hooks` ran in this clone.
 - [ ] The GitHub repository exists, and its Pages source is "GitHub Actions".

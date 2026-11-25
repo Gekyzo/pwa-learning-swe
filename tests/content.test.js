@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync, readdirSync } from 'node:fs';
 import { KINDS, SOURCE_LANG, normalizePack, buildPool } from '#cards';
 import { LANGUAGES } from '#i18n';
+import { bodyIssues } from '#richtext';
 
 // The packs of content/ that the app ships (CARD-6).
 const root = new URL('../', import.meta.url);
@@ -58,6 +59,17 @@ test('each diagram of the packs is valid, in each language (CARD-9)', () => {
       const card = pack.cards.find((one) => one.id === raw.id);
       assert.ok(card.diagram, raw.id);
       for (const lang of Object.keys(raw.translations ?? {})) assert.ok(card.translations?.[lang]?.diagram, `${raw.id} ${lang}`);
+    }
+  }
+});
+
+test('each body follows the style rules, in each language (CARD-10)', () => {
+  for (const { data } of packs) {
+    for (const card of data.cards) {
+      assert.deepEqual(bodyIssues(card.body), [], `${card.id} ${SOURCE_LANG}`);
+      for (const [lang, translation] of Object.entries(card.translations ?? {})) {
+        assert.deepEqual(bodyIssues(translation.body), [], `${card.id} ${lang}`);
+      }
     }
   }
 });

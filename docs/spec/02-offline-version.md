@@ -77,8 +77,9 @@ Rules of `sw.js`, `src/version.js`, `version.json`, `scripts/bump-version.mjs`,
 
 - **VER-9** The app is a static site: the repository root, served over HTTPS at
   the GitHub Pages URL of the repository. A release tag `vX.Y.Z` is a deploy: its push runs
-  `.github/workflows/pages.yml`, which publishes the tagged commit to GitHub Pages. A push to
-  `main` deploys nothing. The Pages source of the repository is GitHub Actions, and its
+  `.github/workflows/pages.yml`. Its `test` job runs `npm test`; only when it passes do the
+  `build` and `deploy` jobs publish the tagged commit to GitHub Pages. A push to `main` deploys
+  nothing. The Pages source of the repository is GitHub Actions, and its
   `github-pages` environment allows the tags `v*`.
 - **VER-10** Each deploy has a new version. `npm run release` makes a release on `main`:
   1. it adds one to the patch of `version.json`, sets the date, and gives the version to

@@ -1,5 +1,6 @@
-# A release tag is a deploy: npm run release tags vX.Y.Z, and its push publishes the tagged
-# commit to GitHub Pages. A push to main deploys nothing (VER-9).
+# A release tag is a deploy: npm run release tags vX.Y.Z, and its push runs the tests, then
+# builds and publishes the tagged commit to GitHub Pages. A failed test deploys nothing.
+# A push to main deploys nothing (VER-9).
 # Repository settings: Pages source "GitHub Actions"; the github-pages environment allows
 # the tags v*.
 name: Deploy to Pages
@@ -18,10 +19,20 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm test
+
   # Two jobs, so "Re-run failed jobs" re-runs only the deploy and finds one artifact.
   # In one job, deploy-pages can query the artifact a second after its upload and miss it,
   # and a re-run then uploads a second "github-pages" artifact that deploy-pages refuses.
   build:
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
