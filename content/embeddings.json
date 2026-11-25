@@ -273,6 +273,26 @@
       }
     },
     {
+      "id": "embeddings-sparse-dense",
+      "kind": "concept",
+      "level": "intermediate",
+      "title": "A sparse vector scores words; a dense vector scores meaning",
+      "body": "A *sparse vector* has one dimension per term of the vocabulary, tens of thousands, and almost all of them are zero. A document gets a weight only for the terms it contains, as in BM25. **It matches exact terms**: an error code, a product name, a rare acronym.\n\nA *dense vector* has a few hundred to a few thousand dimensions, all filled. **It matches meaning**: \"reset my password\" finds \"recover access to my account\".\n\nEach one misses what the other finds; hybrid search runs both.",
+      "diagram": {
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 128\" role=\"img\"><text class=\"d-label\" x=\"8\" y=\"12\">SPARSE</text><text class=\"d-note d-end\" x=\"312\" y=\"12\">30 000 dims</text><text class=\"d-note\" x=\"15\" y=\"39\">0</text><text class=\"d-note\" x=\"30\" y=\"39\">0</text><text class=\"d-note\" x=\"45\" y=\"39\">0</text><rect class=\"d-ink\" x=\"55\" y=\"26\" width=\"10\" height=\"22\"/><text class=\"d-note\" x=\"75\" y=\"39\">0</text><text class=\"d-note\" x=\"90\" y=\"39\">0</text><text class=\"d-note\" x=\"105\" y=\"39\">0</text><text class=\"d-note\" x=\"120\" y=\"39\">0</text><text class=\"d-note\" x=\"135\" y=\"39\">0</text><text class=\"d-note\" x=\"150\" y=\"39\">0</text><text class=\"d-note\" x=\"165\" y=\"39\">0</text><rect class=\"d-ink\" x=\"175\" y=\"34\" width=\"10\" height=\"14\"/><text class=\"d-note\" x=\"195\" y=\"39\">0</text><text class=\"d-note\" x=\"210\" y=\"39\">0</text><text class=\"d-note\" x=\"225\" y=\"39\">0</text><text class=\"d-note\" x=\"240\" y=\"39\">0</text><rect class=\"d-ink\" x=\"250\" y=\"30\" width=\"10\" height=\"18\"/><text class=\"d-note\" x=\"270\" y=\"39\">0</text><text class=\"d-note\" x=\"285\" y=\"39\">0</text><text class=\"d-note\" x=\"300\" y=\"39\">0</text><path class=\"d-line\" d=\"M8 48H312\"/><text class=\"d-label\" x=\"8\" y=\"72\">DENSE</text><text class=\"d-note d-end\" x=\"312\" y=\"72\">768 dims</text><rect class=\"d-hi\" x=\"10\" y=\"94\" width=\"10\" height=\"10\"/><rect class=\"d-hi\" x=\"25\" y=\"104\" width=\"10\" height=\"6\"/><rect class=\"d-hi\" x=\"40\" y=\"90\" width=\"10\" height=\"14\"/><rect class=\"d-hi\" x=\"55\" y=\"100\" width=\"10\" height=\"4\"/><rect class=\"d-hi\" x=\"70\" y=\"104\" width=\"10\" height=\"12\"/><rect class=\"d-hi\" x=\"85\" y=\"96\" width=\"10\" height=\"8\"/><rect class=\"d-hi\" x=\"100\" y=\"104\" width=\"10\" height=\"4\"/><rect class=\"d-hi\" x=\"115\" y=\"88\" width=\"10\" height=\"16\"/><rect class=\"d-hi\" x=\"130\" y=\"104\" width=\"10\" height=\"8\"/><rect class=\"d-hi\" x=\"145\" y=\"98\" width=\"10\" height=\"6\"/><rect class=\"d-hi\" x=\"160\" y=\"92\" width=\"10\" height=\"12\"/><rect class=\"d-hi\" x=\"175\" y=\"104\" width=\"10\" height=\"10\"/><rect class=\"d-hi\" x=\"190\" y=\"101\" width=\"10\" height=\"3\"/><rect class=\"d-hi\" x=\"205\" y=\"104\" width=\"10\" height=\"14\"/><rect class=\"d-hi\" x=\"220\" y=\"95\" width=\"10\" height=\"9\"/><rect class=\"d-hi\" x=\"235\" y=\"104\" width=\"10\" height=\"5\"/><rect class=\"d-hi\" x=\"250\" y=\"93\" width=\"10\" height=\"11\"/><rect class=\"d-hi\" x=\"265\" y=\"97\" width=\"10\" height=\"7\"/><rect class=\"d-hi\" x=\"280\" y=\"104\" width=\"10\" height=\"9\"/><rect class=\"d-hi\" x=\"295\" y=\"91\" width=\"10\" height=\"13\"/><path class=\"d-line\" d=\"M8 104H312\"/></svg>",
+        "alt": "Two rows of 20 sample dimensions. Sparse, out of 30 000 dimensions: three non-zero bars and zeros everywhere else. Dense, 768 dimensions, highlighted: every dimension has a positive or negative value."
+      },
+      "translations": {
+        "es": {
+          "title": "Un vector sparse puntúa palabras; un vector denso puntúa significado",
+          "body": "Un *vector sparse* tiene una dimensión por cada término del vocabulario, decenas de miles, y casi todas valen cero. Un documento solo tiene peso en los términos que contiene, como en BM25. **Encaja con términos exactos**: un código de error, un nombre de producto, una sigla rara.\n\nUn *vector denso* tiene de unos cientos a unos miles de dimensiones, todas con valor. **Encaja con el significado**: \"restablecer mi contraseña\" encuentra \"recuperar el acceso a mi cuenta\".\n\nCada uno pierde lo que el otro encuentra; la búsqueda híbrida usa los dos.",
+          "diagram": {
+            "alt": "Dos filas de 20 dimensiones de muestra. Sparse, de 30 000 dimensiones: tres barras distintas de cero y ceros en todas las demás. Denso, 768 dimensiones, resaltado: cada dimensión tiene un valor positivo o negativo."
+          }
+        }
+      }
+    },
+    {
       "id": "embeddings-normalise-code",
       "kind": "snippet",
       "level": "intermediate",
@@ -345,6 +365,19 @@
           "diagram": {
             "alt": "Dos filas. En producción: la consulta pasa por el modelo v1 hacia el índice v1. Recarga: todos los documentos pasan por el modelo v2 hacia un segundo índice, el índice v2, resaltado, que se construye junto al primero."
           }
+        }
+      }
+    },
+    {
+      "id": "embeddings-query-prefix",
+      "kind": "pitfall",
+      "level": "intermediate",
+      "title": "Some models expect one prefix for queries and another for documents",
+      "body": "The trap: the embedding model was trained with a *task prefix*, such as \"query: \" before a question and \"passage: \" before a document, and you embed the raw text.\n\nThe symptom: **recall drops with no error**. Every call returns a vector of the right size; the results are only worse.\n\nThe fix: **read the model card and apply the prefixes at both ends**, at index time and at query time, in one shared function. A change of prefix later means a re-index.",
+      "translations": {
+        "es": {
+          "title": "Algunos modelos esperan un prefijo para las consultas y otro para los documentos",
+          "body": "La trampa: el modelo de embeddings se entrenó con un *prefijo de tarea*, como \"query: \" delante de una pregunta y \"passage: \" delante de un documento, y tú calculas el embedding del texto sin más.\n\nEl síntoma: **el recall baja sin ningún error**. Cada llamada devuelve un vector del tamaño correcto; solo los resultados son peores.\n\nLa solución: **lee la ficha del modelo y aplica los prefijos en ambos lados**, al indexar y al consultar, en una sola función compartida. Cambiar el prefijo después obliga a reindexar."
         }
       }
     },
@@ -472,6 +505,46 @@
           "body": "Una dimensión float32 ocupa 32 bits. La *cuantización escalar* la convierte en un int8: **4 veces menos, con una pérdida pequeña de recall**.\n\nLa *cuantización binaria* guarda un bit, el signo: 32 veces menos y se compara con una distancia de Hamming rápida, pero es tosca. La *cuantización de producto* codifica grupos de dimensiones como un solo código.\n\nEl patrón habitual: **busca 100 candidatos con los vectores pequeños** y vuelve a puntuarlos con los vectores completos del disco.",
           "diagram": {
             "alt": "Tres barras para un vector de 1536 dimensiones. float32: 6144 bytes. int8, resaltada: 1536 bytes, un cuarto de la barra. 1 bit, resaltada: 192 bytes, una franja fina."
+          }
+        }
+      }
+    },
+    {
+      "id": "embeddings-matryoshka",
+      "kind": "concept",
+      "level": "advanced",
+      "title": "A Matryoshka embedding keeps most of its quality when you cut its tail",
+      "body": "*Matryoshka representation learning* trains a model so that the first dimensions carry the most information. The first 256 of 1024 dimensions still work as an embedding on their own, at a quarter of the storage.\n\nTo use a short vector, **truncate it, then normalise it again**: the cut changes its length, so cosine and dot product need a new unit vector.\n\nA common pattern: **search with the short vectors**, then rescore the top candidates with the full ones. Only a model trained this way allows the cut.",
+      "diagram": {
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 160\" role=\"img\"><defs><marker id=\"embeddings-matryoshka-head\" viewBox=\"0 0 8 8\" refX=\"7\" refY=\"4\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path class=\"d-head\" d=\"M0 0L8 4L0 8z\"/></marker></defs><text class=\"d-label\" x=\"8\" y=\"12\">DIMS</text><rect class=\"d-box\" x=\"8\" y=\"20\" width=\"256\" height=\"20\" rx=\"3\"/><text class=\"d-note d-start\" x=\"272\" y=\"30\">1024</text><rect class=\"d-hi\" x=\"8\" y=\"48\" width=\"64\" height=\"20\" rx=\"3\"/><text class=\"d-note d-start\" x=\"80\" y=\"58\">256</text><rect class=\"d-box\" x=\"8\" y=\"76\" width=\"16\" height=\"20\" rx=\"3\"/><text class=\"d-note d-start\" x=\"32\" y=\"86\">64</text><rect class=\"d-box\" x=\"8\" y=\"120\" width=\"88\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"52\" y=\"134\">v[:256]</text><rect class=\"d-box\" x=\"116\" y=\"120\" width=\"88\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"160\" y=\"134\">‖v‖ = 1</text><rect class=\"d-box\" x=\"224\" y=\"120\" width=\"88\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"268\" y=\"134\">cos θ</text><path class=\"d-arrow\" marker-end=\"url(#embeddings-matryoshka-head)\" d=\"M96 134H114\"/><path class=\"d-arrow\" marker-end=\"url(#embeddings-matryoshka-head)\" d=\"M204 134H222\"/></svg>",
+        "alt": "Three nested bars that start at the same point: 1024 dimensions, the first 256, highlighted, and the first 64. Below, three steps: take v[:256], normalise to length 1, then compute the cosine."
+      },
+      "translations": {
+        "es": {
+          "title": "Un embedding Matryoshka conserva casi toda su calidad cuando le cortas la cola",
+          "body": "El *Matryoshka representation learning* entrena un modelo para que las primeras dimensiones lleven la mayor parte de la información. Las primeras 256 de 1024 dimensiones siguen funcionando solas como embedding, con un cuarto del almacenamiento.\n\nPara usar un vector corto, **trúncalo y vuelve a normalizarlo**: el corte cambia su longitud, así que el coseno y el producto escalar necesitan un vector unitario nuevo.\n\nUn patrón habitual: **busca con los vectores cortos**, y vuelve a puntuar los mejores candidatos con los completos. Solo un modelo entrenado así permite el corte.",
+          "diagram": {
+            "alt": "Tres barras anidadas que empiezan en el mismo punto: 1024 dimensiones, las primeras 256, resaltadas, y las primeras 64. Debajo, tres pasos: tomar v[:256], normalizar a longitud 1 y calcular el coseno."
+          }
+        }
+      }
+    },
+    {
+      "id": "embeddings-binary",
+      "kind": "concept",
+      "level": "advanced",
+      "title": "Binary quantisation keeps one bit per dimension: search with bits, rescore with floats",
+      "body": "*Binary quantisation* keeps only the sign of each dimension: 1 if positive, 0 if not. A float32 vector of 1024 dimensions, 4096 bytes, becomes 128 bytes: **32 times smaller**.\n\nCompare two bit vectors with the *Hamming distance*, the count of bits that differ: an XOR and a popcount, very fast. The ranking is coarse, so **take the top 100 by bits, rescore them with floats** and keep the top 10.\n\nIt works best with many dimensions. Measure recall@10 before you switch.",
+      "diagram": {
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 236\" role=\"img\"><defs><marker id=\"embeddings-binary-head\" viewBox=\"0 0 8 8\" refX=\"7\" refY=\"4\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path class=\"d-head\" d=\"M0 0L8 4L0 8z\"/></marker></defs><rect class=\"d-box\" x=\"8\" y=\"8\" width=\"128\" height=\"40\" rx=\"6\"/><text class=\"d-text\" x=\"72\" y=\"21\">0.4 −1.2 0.7</text><text class=\"d-note\" x=\"72\" y=\"37\">4096 B</text><path class=\"d-arrow\" marker-end=\"url(#embeddings-binary-head)\" d=\"M136 28H174\"/><text class=\"d-note\" x=\"155\" y=\"16\">&gt; 0</text><rect class=\"d-box\" x=\"176\" y=\"8\" width=\"136\" height=\"40\" rx=\"6\"/><text class=\"d-text\" x=\"244\" y=\"21\">1 0 1</text><text class=\"d-note\" x=\"244\" y=\"37\">128 B</text><path class=\"d-arrow\" marker-end=\"url(#embeddings-binary-head)\" d=\"M244 48V92H226\"/><rect class=\"d-hi\" x=\"96\" y=\"72\" width=\"128\" height=\"40\" rx=\"6\"/><text class=\"d-text d-on-hi\" x=\"160\" y=\"85\">Hamming</text><text class=\"d-note\" x=\"160\" y=\"101\">XOR + popcount</text><path class=\"d-arrow\" marker-end=\"url(#embeddings-binary-head)\" d=\"M160 112V134\"/><rect class=\"d-box\" x=\"112\" y=\"136\" width=\"96\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"160\" y=\"150\">top 100</text><path class=\"d-arrow\" marker-end=\"url(#embeddings-binary-head)\" d=\"M160 164V186\"/><rect class=\"d-box\" x=\"96\" y=\"188\" width=\"128\" height=\"40\" rx=\"6\"/><text class=\"d-text\" x=\"160\" y=\"201\">rescore</text><text class=\"d-note\" x=\"160\" y=\"217\">float32</text><path class=\"d-arrow\" marker-end=\"url(#embeddings-binary-head)\" d=\"M72 48V208H94\"/><path class=\"d-arrow\" marker-end=\"url(#embeddings-binary-head)\" d=\"M224 208H238\"/><rect class=\"d-box\" x=\"240\" y=\"194\" width=\"72\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"276\" y=\"208\">top 10</text></svg>",
+        "alt": "A float32 vector of 4096 bytes becomes a bit vector of 128 bytes: 1 where a value is above 0. The bits go to a Hamming search, highlighted, with XOR and popcount, which gives the top 100. The full float32 vectors rescore those 100 and give the top 10."
+      },
+      "translations": {
+        "es": {
+          "title": "La cuantización binaria guarda un bit por dimensión: busca con bits, puntúa con floats",
+          "body": "La *cuantización binaria* guarda solo el signo de cada dimensión: 1 si es positiva, 0 si no. Un vector float32 de 1024 dimensiones, 4096 bytes, pasa a 128 bytes: **32 veces menos**.\n\nCompara dos vectores de bits con la *distancia de Hamming*, el número de bits distintos: un XOR y un popcount, muy rápido. El orden es tosco, así que **toma los 100 primeros por bits y puntúalos con floats**, y quédate con los 10 primeros.\n\nFunciona mejor con muchas dimensiones. Mide el recall@10 antes de cambiar.",
+          "diagram": {
+            "alt": "Un vector float32 de 4096 bytes pasa a un vector de bits de 128 bytes: 1 donde el valor es mayor que 0. Los bits van a una búsqueda de Hamming, resaltada, con XOR y popcount, que da los 100 primeros. Los vectores float32 completos vuelven a puntuar esos 100 y dan los 10 primeros."
           }
         }
       }

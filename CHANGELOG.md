@@ -8,6 +8,7 @@ User-visible changes, newest first.
 - Pack `agents` (CARD-6): `content/agents.json`, 30 cards with Spanish text and 11 diagrams, in `content/index.json` and in `SHELL` of `sw.js`.
 - Pack `evals` (CARD-6): `content/evals.json`, 30 cards with Spanish text and 10 diagrams, in `content/index.json` and in `SHELL` of `sw.js`.
 - Pack `browser-ai` (CARD-6): `content/browser-ai.json`, 30 cards with Spanish text and 10 diagrams, in `content/index.json` and in `SHELL` of `sw.js`.
+- 13 cards for the existing packs, from section 4 of `docs/prompts/ai-cards-catalog.md`: 5 in `content/llm.json`, 4 in `content/embeddings.json` and 4 in `content/rag.json`, each at the end of its level, 9 with a diagram. No existing card changes.
 
 ## 0.6.4 - 2026-11-25
 

@@ -69,6 +69,26 @@
       }
     },
     {
+      "id": "llm-base-vs-instruct",
+      "kind": "concept",
+      "level": "intro",
+      "title": "A base model continues text; an instruction-tuned model follows requests",
+      "body": "*Pretraining* teaches one skill: predict the next token of text from the web, books and code. Ask a base model \"What is the capital of France?\" and it may go on with three more quiz questions.\n\n*Instruction tuning* on example dialogues, then preference training on ranked answers, teaches the assistant behaviour: **answer the request, keep the format, refuse what is unsafe**.\n\n**A chat API serves the tuned model.** A base model fits the completion of a document, not a conversation.",
+      "diagram": {
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 172\" role=\"img\"><defs><marker id=\"llm-base-vs-instruct-head\" viewBox=\"0 0 8 8\" refX=\"7\" refY=\"4\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path class=\"d-head\" d=\"M0 0L8 4L0 8z\"/></marker></defs><rect class=\"d-box\" x=\"104\" y=\"8\" width=\"112\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"160\" y=\"22\">corpus</text><path class=\"d-arrow\" marker-end=\"url(#llm-base-vs-instruct-head)\" d=\"M160 36V70\"/><text class=\"d-note d-start\" x=\"168\" y=\"53\">pretraining</text><rect class=\"d-box\" x=\"104\" y=\"72\" width=\"112\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"160\" y=\"86\">base</text><text class=\"d-note d-start\" x=\"224\" y=\"86\">completion</text><path class=\"d-arrow\" marker-end=\"url(#llm-base-vs-instruct-head)\" d=\"M160 100V134\"/><text class=\"d-note d-start\" x=\"168\" y=\"117\">SFT + RLHF</text><rect class=\"d-hi\" x=\"104\" y=\"136\" width=\"112\" height=\"28\" rx=\"6\"/><text class=\"d-text d-on-hi\" x=\"160\" y=\"150\">instruct</text><text class=\"d-note d-start\" x=\"224\" y=\"150\">chat</text></svg>",
+        "alt": "A vertical flow. A text corpus goes through pretraining and gives a base model, used for completion. The base model goes through SFT and RLHF and gives the instruction-tuned model, highlighted, used for chat."
+      },
+      "translations": {
+        "es": {
+          "title": "Un modelo base continúa el texto; un modelo ajustado con instrucciones atiende peticiones",
+          "body": "El *preentrenamiento* enseña una sola habilidad: predecir el siguiente token de textos de la web, libros y código. Pregunta a un modelo base \"¿Cuál es la capital de Francia?\" y puede seguir con tres preguntas más de un test.\n\nEl *ajuste con instrucciones* sobre diálogos de ejemplo, y después el entrenamiento con preferencias sobre respuestas ordenadas, enseña la conducta de asistente: **seguir la petición y el formato, rechazar lo peligroso**.\n\n**Una API de chat sirve el modelo ajustado.** Un modelo base sirve para completar un documento, no para conversar.",
+          "diagram": {
+            "alt": "Un flujo vertical. Un corpus de texto pasa por el preentrenamiento y da un modelo base, que sirve para completar texto. El modelo base pasa por SFT y RLHF y da el modelo ajustado con instrucciones, resaltado, que sirve para chat."
+          }
+        }
+      }
+    },
+    {
       "id": "llm-messages",
       "kind": "snippet",
       "level": "intro",
@@ -266,6 +286,39 @@
       }
     },
     {
+      "id": "llm-reasoning-tokens",
+      "kind": "concept",
+      "level": "intermediate",
+      "title": "A reasoning model writes hidden tokens before it answers, and you pay for them",
+      "body": "A *reasoning model* first writes a chain of intermediate steps, the *thinking tokens*, then the answer. The API often hides or summarises them, but **they count as output tokens**: in the price, in the latency and in the output limit.\n\nA short answer can sit on top of 5000 thinking tokens. **Set a thinking budget**, and keep reasoning for multi-step problems: maths, planning, code. For a lookup or a classification it adds cost and no accuracy.",
+      "diagram": {
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 104\" role=\"img\"><rect class=\"d-box\" x=\"8\" y=\"8\" width=\"48\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"32\" y=\"22\">text</text><text class=\"d-note d-start\" x=\"64\" y=\"22\">200 tokens</text><rect class=\"d-hi\" x=\"8\" y=\"52\" width=\"248\" height=\"28\" rx=\"6\"/><text class=\"d-text d-on-hi\" x=\"132\" y=\"66\">thinking</text><rect class=\"d-box\" x=\"260\" y=\"52\" width=\"52\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"286\" y=\"66\">text</text><text class=\"d-note\" x=\"132\" y=\"94\">5000 tokens</text><text class=\"d-note\" x=\"286\" y=\"94\">200</text></svg>",
+        "alt": "Two output bars on the same scale. A standard model writes 200 tokens of text. A reasoning model writes 5000 thinking tokens, highlighted, before the same 200 tokens of text."
+      },
+      "translations": {
+        "es": {
+          "title": "Un modelo de razonamiento escribe tokens ocultos antes de responder, y los pagas",
+          "body": "Un *modelo de razonamiento* escribe primero una cadena de pasos intermedios, los *thinking tokens*, y después la respuesta. La API suele ocultarlos o resumirlos, pero **cuentan como tokens de salida**: en el precio, en la latencia y en el límite de salida.\n\nUna respuesta corta puede llevar debajo 5000 thinking tokens. **Fija un presupuesto de razonamiento**, y guárdalo para problemas de varios pasos: matemáticas, planificación, código. Para una búsqueda o una clasificación añade coste y no precisión.",
+          "diagram": {
+            "alt": "Dos barras de salida a la misma escala. Un modelo normal escribe 200 tokens de texto. Un modelo de razonamiento escribe 5000 thinking tokens, resaltados, antes de los mismos 200 tokens de texto."
+          }
+        }
+      }
+    },
+    {
+      "id": "llm-image-tokens",
+      "kind": "concept",
+      "level": "intermediate",
+      "title": "An image costs tokens too, and its size sets the count",
+      "body": "A vision model does not read an image pixel by pixel. It cuts the image into *patches*, small squares of pixels, and **each patch becomes tokens** in the context.\n\nTwice the width and twice the height gives about four times the tokens. A large screenshot can cost more than a page of text, and many APIs downscale it anyway.\n\n**Resize before you send**, to the smallest size where the text or detail you need stays readable. Crop to the region that matters.",
+      "translations": {
+        "es": {
+          "title": "Una imagen también cuesta tokens, y su tamaño fija la cantidad",
+          "body": "Un modelo de visión no lee una imagen píxel a píxel. La corta en *patches*, cuadrados pequeños de píxeles, y **cada patch se convierte en tokens** del contexto.\n\nEl doble de ancho y el doble de alto dan unas cuatro veces más tokens. Una captura de pantalla grande puede costar más que una página de texto, y muchas API la reducen de todos modos.\n\n**Reduce la imagen antes de enviarla**, al tamaño más pequeño en el que el texto o el detalle que necesitas sigue legible. Recorta la zona que importa."
+        }
+      }
+    },
+    {
       "id": "llm-validate-retry",
       "kind": "snippet",
       "level": "intermediate",
@@ -410,6 +463,22 @@
       }
     },
     {
+      "id": "llm-paper-cot",
+      "kind": "resource",
+      "level": "intermediate",
+      "title": "Paper: Chain-of-Thought Prompting Elicits Reasoning in Large Language Models",
+      "body": "The 2022 paper that showed that **a few examples with worked intermediate steps** make a large model better at arithmetic and logic problems. The model copies the pattern: *reasoning* first, answer last.\n\nLook at the plots of accuracy against model size: **the gain appears only in large models**, and small models gain nothing. Reasoning models later moved this idea from the prompt into training.",
+      "url": "https://arxiv.org/abs/2201.11903",
+      "media": "article",
+      "minutes": 40,
+      "translations": {
+        "es": {
+          "title": "Artículo: Chain-of-Thought Prompting Elicits Reasoning in Large Language Models",
+          "body": "El artículo de 2022 que mostró que **unos pocos ejemplos con los pasos intermedios resueltos** hacen que un modelo grande resuelva mejor problemas de aritmética y lógica. El modelo copia el patrón: primero el *razonamiento*, al final la respuesta.\n\nMira los gráficos de precisión según el tamaño del modelo: **la mejora solo aparece en modelos grandes**, y los pequeños no ganan nada. Después, los modelos de razonamiento pasaron esta idea del prompt al entrenamiento."
+        }
+      }
+    },
+    {
       "id": "llm-prompt-caching",
       "kind": "concept",
       "level": "advanced",
@@ -465,6 +534,26 @@
           "body": "La coincidencia exacta falla con texto libre: dos respuestas buenas comparten pocas palabras. Un *LLM como juez* lee la entrada, la salida y una rúbrica, y devuelve una puntuación con un motivo. Es bastante barato para lanzarlo en cada cambio.\n\nPero un juez es un modelo con sus propios errores. **Etiqueta a mano de 50 a 100 casos**, mide cuántas veces coincide el juez contigo y corrige la rúbrica hasta que coincida.\n\nDespués **fíate más de su tendencia que de una puntuación suelta**.",
           "diagram": {
             "alt": "La entrada, la salida y una rúbrica entran en un LLM juez, resaltado, que da una puntuación. Una línea discontinua marcada vs compara esa puntuación con una etiqueta de referencia."
+          }
+        }
+      }
+    },
+    {
+      "id": "llm-lora",
+      "kind": "concept",
+      "level": "advanced",
+      "title": "LoRA fine-tunes a small add-on, not the whole model",
+      "body": "Full fine-tuning updates every weight and stores a full copy of the model for each task. *LoRA*, low-rank adaptation, freezes the weights W and trains two thin matrices per layer: **W' = W + B·A**. A is r × d, B is d × r, and the rank r, often 8 or 16, is much smaller than d.\n\nOnly A and B learn, so **the adapter is megabytes, not gigabytes**. One base model can serve many adapters, one per task or customer. You can also merge an adapter into W, for no added latency.",
+      "diagram": {
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 212\" role=\"img\"><defs><marker id=\"llm-lora-head\" viewBox=\"0 0 8 8\" refX=\"7\" refY=\"4\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path class=\"d-head\" d=\"M0 0L8 4L0 8z\"/></marker></defs><text class=\"d-text\" x=\"160\" y=\"12\">h</text><text class=\"d-note d-start\" x=\"176\" y=\"12\">= Wx + BAx</text><path class=\"d-arrow\" marker-end=\"url(#llm-lora-head)\" d=\"M160 34V22\"/><circle class=\"d-box\" cx=\"160\" cy=\"44\" r=\"10\"/><text class=\"d-text\" x=\"160\" y=\"44\">+</text><rect class=\"d-box\" x=\"24\" y=\"76\" width=\"112\" height=\"72\" rx=\"6\"/><text class=\"d-text\" x=\"80\" y=\"104\">W</text><text class=\"d-note\" x=\"80\" y=\"124\">d × d</text><path class=\"d-arrow\" marker-end=\"url(#llm-lora-head)\" d=\"M80 76V44H148\"/><polygon class=\"d-hi\" points=\"184,76 280,76 248,104 216,104\"/><text class=\"d-text d-on-hi\" x=\"232\" y=\"88\">B</text><polygon class=\"d-hi\" points=\"216,120 248,120 280,148 184,148\"/><text class=\"d-text d-on-hi\" x=\"232\" y=\"136\">A</text><path class=\"d-arrow\" marker-end=\"url(#llm-lora-head)\" d=\"M232 120V106\"/><text class=\"d-note d-start\" x=\"256\" y=\"112\">r ≪ d</text><path class=\"d-arrow\" marker-end=\"url(#llm-lora-head)\" d=\"M232 76V44H172\"/><text class=\"d-text\" x=\"160\" y=\"200\">x</text><path class=\"d-arrow\" marker-end=\"url(#llm-lora-head)\" d=\"M160 190V170H80V150\"/><path class=\"d-arrow\" marker-end=\"url(#llm-lora-head)\" d=\"M160 190V170H232V150\"/></svg>",
+        "alt": "The input x goes two ways. On the left, the frozen d by d weight matrix W. On the right, highlighted, the matrix A narrows x to rank r, much smaller than d, and the matrix B widens it back to d. The two results are added to give h = Wx + BAx."
+      },
+      "translations": {
+        "es": {
+          "title": "LoRA hace fine-tuning de un pequeño añadido, no del modelo entero",
+          "body": "El fine-tuning completo cambia todos los pesos y guarda una copia completa del modelo por cada tarea. *LoRA*, adaptación de rango bajo, congela los pesos W y entrena dos matrices estrechas por capa: **W' = W + B·A**. A es r × d, B es d × r, y el rango r, a menudo 8 o 16, es mucho menor que d.\n\nSolo aprenden A y B, así que **el adaptador ocupa megabytes, no gigabytes**. Un modelo base puede servir muchos adaptadores, uno por tarea o por cliente. También puedes fusionar un adaptador con W, sin latencia añadida.",
+          "diagram": {
+            "alt": "La entrada x va por dos caminos. A la izquierda, la matriz de pesos W, de d por d, congelada. A la derecha, resaltadas, la matriz A estrecha x hasta el rango r, mucho menor que d, y la matriz B la vuelve a ensanchar hasta d. Los dos resultados se suman y dan h = Wx + BAx."
           }
         }
       }

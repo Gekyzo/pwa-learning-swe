@@ -8,6 +8,7 @@ What changes for you in each version of the app. The newest version is first.
 - A new topic, Agents, tools and MCP, with 30 cards: the agent loop, context engineering, MCP servers and the safety of agents. 11 of the cards have a diagram.
 - A new topic, Evals and observability, with 30 cards: eval sets, graders, variance, traces and user feedback. 10 of the cards have a diagram.
 - A new topic, AI in the browser, with 30 cards: WebGPU, Web Workers, model size, cached weights and offline semantic search. 10 of the cards have a diagram.
+- 13 new cards in the topics large language models, embeddings and RAG: reasoning tokens, LoRA, Matryoshka and binary embeddings, HyDE and more. 9 of them have a diagram.
 
 ## 0.6.4 - 2026-11-25
 

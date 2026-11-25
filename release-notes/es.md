@@ -8,6 +8,7 @@ Lo que cambia para ti en cada versión de la app. La versión más nueva va prim
 - Un tema nuevo, Agentes, herramientas y MCP, con 30 tarjetas: el bucle del agente, la ingeniería de contexto, los servidores MCP y la seguridad de los agentes. 11 de las tarjetas tienen un diagrama.
 - Un tema nuevo, Evals y observabilidad, con 30 tarjetas: conjuntos de evals, evaluadores, varianza, trazas y la opinión de los usuarios. 10 de las tarjetas tienen un diagrama.
 - Un tema nuevo, IA en el navegador, con 30 tarjetas: WebGPU, Web Workers, el tamaño del modelo, los pesos en caché y la búsqueda semántica offline. 10 de las tarjetas tienen un diagrama.
+- 13 tarjetas nuevas en los temas modelos de lenguaje, embeddings y RAG: tokens de razonamiento, LoRA, embeddings Matryoshka y binarios, HyDE y más. 9 de ellas tienen un diagrama.
 
 ## 0.6.4 - 2026-11-25
 

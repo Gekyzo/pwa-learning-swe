@@ -299,6 +299,26 @@
       }
     },
     {
+      "id": "rag-parent-child",
+      "kind": "concept",
+      "level": "intermediate",
+      "title": "Search small chunks, then send their parent section to the model",
+      "body": "A small chunk gives a precise embedding, but too little text to answer from. A large chunk gives context, but a blurred embedding.\n\nThe *parent-child* pattern keeps both. Split each section, the *parent*, into small child chunks of about 100 tokens. **Index only the children**, each with the id of its parent.\n\nAt query time, find the top children, then **send their parents to the model**, once each, even when two children share a parent.",
+      "diagram": {
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 160\" role=\"img\"><defs><marker id=\"rag-parent-child-head\" viewBox=\"0 0 8 8\" refX=\"7\" refY=\"4\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path class=\"d-head\" d=\"M0 0L8 4L0 8z\"/></marker></defs><rect class=\"d-box\" x=\"8\" y=\"8\" width=\"304\" height=\"84\" rx=\"6\"/><text class=\"d-note\" x=\"160\" y=\"22\">parent</text><rect class=\"d-box\" x=\"20\" y=\"36\" width=\"60\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"50\" y=\"50\">c1</text><rect class=\"d-hi\" x=\"92\" y=\"36\" width=\"60\" height=\"28\" rx=\"6\"/><text class=\"d-text d-on-hi\" x=\"122\" y=\"50\">c2</text><rect class=\"d-box\" x=\"164\" y=\"36\" width=\"60\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"194\" y=\"50\">c3</text><rect class=\"d-box\" x=\"236\" y=\"36\" width=\"60\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"266\" y=\"50\">c4</text><text class=\"d-note\" x=\"194\" y=\"80\">100 tokens</text><rect class=\"d-box\" x=\"86\" y=\"124\" width=\"72\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"122\" y=\"138\">query</text><path class=\"d-arrow\" marker-end=\"url(#rag-parent-child-head)\" d=\"M122 124V66\"/><text class=\"d-note d-start\" x=\"130\" y=\"108\">top-k</text><path class=\"d-arrow\" marker-end=\"url(#rag-parent-child-head)\" d=\"M272 92V122\"/><rect class=\"d-box\" x=\"232\" y=\"124\" width=\"80\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"272\" y=\"138\">LLM</text></svg>",
+        "alt": "A parent section holds four child chunks of about 100 tokens, c1 to c4. The query finds c2, highlighted, in the top-k. The whole parent section goes to the LLM."
+      },
+      "translations": {
+        "es": {
+          "title": "Busca chunks pequeños y envía al modelo su sección padre",
+          "body": "Un chunk pequeño da un embedding preciso, pero muy poco texto para responder. Un chunk grande da contexto, pero un embedding difuso.\n\nEl patrón *padre-hijo* conserva las dos cosas. Divide cada sección, el *padre*, en chunks hijos pequeños de unos 100 tokens. **Indexa solo los hijos**, cada uno con el id de su padre.\n\nAl consultar, busca los mejores hijos y **envía sus padres al modelo**, una vez cada uno, aunque dos hijos compartan padre.",
+          "diagram": {
+            "alt": "Una sección padre contiene cuatro chunks hijos de unos 100 tokens, de c1 a c4. La consulta encuentra c2, resaltado, en el top-k. La sección padre entera va al LLM."
+          }
+        }
+      }
+    },
+    {
       "id": "rag-sliding-window",
       "kind": "snippet",
       "level": "intermediate",
@@ -378,6 +398,19 @@
           "diagram": {
             "alt": "Dos filas. Origen: doc v1 se actualiza a doc v2. Índice: los chunks de v1 se calcularon a partir de doc v1 y nada los actualiza, así que el índice sigue con los chunks v1, resaltados, junto a doc v2. Esos chunks antiguos van al LLM."
           }
+        }
+      }
+    },
+    {
+      "id": "rag-pdf-extraction",
+      "kind": "pitfall",
+      "level": "intermediate",
+      "title": "PDF text extraction scrambles tables and columns",
+      "body": "The trap: you index the text that a basic PDF extractor returns. A PDF stores *positioned characters*, not paragraphs, so the extractor guesses the reading order.\n\nThe symptom: two columns become interleaved lines, a table becomes loose numbers, and a page header lands in the middle of a sentence. **Retrieval fails on text that looks fine in the viewer.**\n\nThe fix: **use a layout-aware parser**, and read the extracted text of a sample of files before you index them all.",
+      "translations": {
+        "es": {
+          "title": "La extracción de texto de un PDF desordena tablas y columnas",
+          "body": "La trampa: indexas el texto que devuelve un extractor de PDF básico. Un PDF guarda *caracteres con posición*, no párrafos, así que el extractor adivina el orden de lectura.\n\nEl síntoma: dos columnas se convierten en líneas intercaladas, una tabla en números sueltos, y una cabecera de página cae en mitad de una frase. **La recuperación falla con texto que se ve bien en el visor.**\n\nLa solución: **usa un parser que entienda la maquetación**, y lee el texto extraído de una muestra de archivos antes de indexarlos todos."
         }
       }
     },
@@ -485,6 +518,46 @@
           "body": "Un pipeline clásico busca *una vez*, con las palabras del usuario. Algunas preguntas necesitan más: \"compara la política de devoluciones de este año y del anterior\" necesita dos búsquedas, y la segunda puede depender del primer resultado.\n\n**Da al modelo una herramienta de búsqueda.** Escribe una consulta, lee los chunks y busca otra vez o responde.\n\nResuelve preguntas de varios pasos, con un precio: varias llamadas al LLM por respuesta, más latencia y **un bucle que necesita un límite de pasos**.",
           "diagram": {
             "alt": "La consulta entra en el LLM, resaltado. El LLM envía una consulta a una herramienta de búsqueda y recibe chunks, en un bucle que se repite n veces. Después el LLM escribe la salida."
+          }
+        }
+      }
+    },
+    {
+      "id": "rag-contextual-chunks",
+      "kind": "concept",
+      "level": "advanced",
+      "title": "Add a line of context to each chunk before you embed it",
+      "body": "A chunk often depends on text it lost: \"The limit rises to 60 days\" names no product and no year. Its embedding cannot match a query about the 2025 refund policy.\n\n*Contextual chunking* fixes it. **Give an LLM the whole document and the chunk**, and ask for one line that places the chunk: \"From the 2025 refund policy, section 3:\". Prepend the line, then embed.\n\nThe cost is one LLM call per chunk, **once at index time**. Unlike a heading path, the line can name what the headings leave out.",
+      "diagram": {
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 216\" role=\"img\"><defs><marker id=\"rag-contextual-chunks-head\" viewBox=\"0 0 8 8\" refX=\"7\" refY=\"4\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path class=\"d-head\" d=\"M0 0L8 4L0 8z\"/></marker></defs><rect class=\"d-box\" x=\"8\" y=\"8\" width=\"136\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"76\" y=\"22\">doc</text><rect class=\"d-box\" x=\"176\" y=\"8\" width=\"136\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"244\" y=\"22\">chunk</text><path class=\"d-arrow\" marker-end=\"url(#rag-contextual-chunks-head)\" d=\"M76 36V76H102\"/><path class=\"d-arrow\" marker-end=\"url(#rag-contextual-chunks-head)\" d=\"M200 36V60\"/><rect class=\"d-box\" x=\"104\" y=\"62\" width=\"112\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"160\" y=\"76\">LLM</text><path class=\"d-arrow\" marker-end=\"url(#rag-contextual-chunks-head)\" d=\"M120 90V114\"/><path class=\"d-arrow\" marker-end=\"url(#rag-contextual-chunks-head)\" d=\"M248 36V114\"/><rect class=\"d-hi\" x=\"56\" y=\"116\" width=\"96\" height=\"40\"/><text class=\"d-text d-on-hi\" x=\"104\" y=\"136\">2025 §3</text><rect class=\"d-box\" x=\"152\" y=\"116\" width=\"112\" height=\"40\"/><text class=\"d-text\" x=\"208\" y=\"136\">chunk</text><path class=\"d-arrow\" marker-end=\"url(#rag-contextual-chunks-head)\" d=\"M160 156V178\"/><rect class=\"d-box\" x=\"112\" y=\"180\" width=\"96\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"160\" y=\"194\">embed</text></svg>",
+        "alt": "The document and one chunk go to an LLM, which writes a short context line, here 2025 §3, highlighted. The line is put before the chunk, and the two together are embedded."
+      },
+      "translations": {
+        "es": {
+          "title": "Añade una línea de contexto a cada chunk antes de calcular su embedding",
+          "body": "Un chunk depende a menudo de texto que perdió: \"El plazo sube a 60 días\" no nombra ningún producto ni año. Su embedding no encaja con una consulta sobre la política de reembolsos de 2025.\n\nEl *chunking contextual* lo resuelve. **Da a un LLM el documento entero y el chunk**, y pídele una línea que sitúe el chunk: \"De la política de reembolsos de 2025, sección 3:\". Pon la línea delante y calcula el embedding.\n\nCuesta una llamada al LLM por chunk, **una sola vez al indexar**. A diferencia de la ruta de encabezados, la línea puede nombrar lo que los encabezados omiten.",
+          "diagram": {
+            "alt": "El documento y un chunk van a un LLM, que escribe una línea corta de contexto, aquí 2025 §3, resaltada. La línea se pone delante del chunk y se calcula el embedding de los dos juntos."
+          }
+        }
+      }
+    },
+    {
+      "id": "rag-hyde",
+      "kind": "concept",
+      "level": "advanced",
+      "title": "HyDE embeds a draft answer to find the real one",
+      "body": "A question and its answer often look different: \"why does my build fail on ARM?\" shares few words and little shape with the paragraph that answers it.\n\n*HyDE*, hypothetical document embeddings, asks an LLM to write a short draft answer first, even a wrong one. **The draft looks like the documents**, so **search with the vector of the draft**, not of the question.\n\nIt adds one LLM call before each search, and a draft that invents a wrong term pulls the wrong chunks. Measure recall with and without it.",
+      "diagram": {
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 160\" role=\"img\"><defs><marker id=\"rag-hyde-head\" viewBox=\"0 0 8 8\" refX=\"7\" refY=\"4\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path class=\"d-head\" d=\"M0 0L8 4L0 8z\"/></marker></defs><ellipse class=\"d-line d-dash\" cx=\"244\" cy=\"62\" rx=\"40\" ry=\"30\"/><text class=\"d-note\" x=\"244\" y=\"22\">docs</text><circle class=\"d-ink\" cx=\"232\" cy=\"52\" r=\"3\"/><circle class=\"d-ink\" cx=\"250\" cy=\"46\" r=\"3\"/><circle class=\"d-ink\" cx=\"260\" cy=\"64\" r=\"3\"/><circle class=\"d-ink\" cx=\"236\" cy=\"72\" r=\"3\"/><circle class=\"d-ink\" cx=\"222\" cy=\"60\" r=\"3\"/><circle class=\"d-ink\" cx=\"252\" cy=\"80\" r=\"3\"/><circle class=\"d-ink\" cx=\"266\" cy=\"50\" r=\"3\"/><circle class=\"d-box\" cx=\"56\" cy=\"128\" r=\"5\"/><text class=\"d-note\" x=\"56\" y=\"146\">q</text><path class=\"d-arrow\" marker-end=\"url(#rag-hyde-head)\" d=\"M62 124L190 84\"/><text class=\"d-note\" x=\"118\" y=\"92\">LLM</text><circle class=\"d-dot\" cx=\"196\" cy=\"82\" r=\"6\"/><text class=\"d-note\" x=\"190\" y=\"104\">HyDE</text></svg>",
+        "alt": "A cluster of document vectors on the right. The question vector q is far from it, at the bottom left. An LLM turns q into a draft answer, highlighted, whose vector lands next to the cluster."
+      },
+      "translations": {
+        "es": {
+          "title": "HyDE calcula el embedding de una respuesta borrador para encontrar la real",
+          "body": "Una pregunta y su respuesta suelen parecerse poco: \"¿por qué falla mi build en ARM?\" comparte pocas palabras y poca forma con el párrafo que la responde.\n\n*HyDE*, hypothetical document embeddings, pide primero a un LLM una respuesta borrador corta, aunque sea errónea. **El borrador se parece a los documentos**, así que **busca con el vector del borrador**, no con el de la pregunta.\n\nAñade una llamada al LLM antes de cada búsqueda, y un borrador que inventa un término erróneo trae los chunks erróneos. Mide el recall con y sin HyDE.",
+          "diagram": {
+            "alt": "Un grupo de vectores de documentos a la derecha. El vector de la pregunta, q, está lejos, abajo a la izquierda. Un LLM convierte q en una respuesta borrador, resaltada, cuyo vector cae junto al grupo."
           }
         }
       }
