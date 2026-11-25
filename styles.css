@@ -29,6 +29,8 @@
     --choice-max: 22rem;
     --radius-inner: 12px;
     --feed-max: 1138px;
+    /* The widest a diagram of a card grows (CARD-9). */
+    --diagram-max: 32rem;
     --side-gap: 14px;
     --panel-pad: 22px;
     /* The height of the track of a due bar, and the width of a number column of the topic ledger. */
@@ -634,6 +636,7 @@
      @summary One card of the feed: its topic, kind and level, its title, its content, then its actions. The text is English in every language of the screen.
      @part feed-card-meta     The topic, the kind and the level, with a pill for a review, an update or a retired card.
      @part feed-card-title    The title, or the question of a quiz.
+     @part feed-card-diagram  The diagram of a card (CARD-9): an inline SVG on the ground colour, styled only by its d- classes, so it follows the theme.
      @part feed-card-code     The code of a snippet, in the colours of the code theme (SET-3). It scrolls on its own, sideways.
      @part feed-card-token    A colored part of the code: data-token is keyword, string, number, comment or function (CARD-8).
      @part feed-card-options  The answers of a quiz, one button each.
@@ -672,6 +675,14 @@
     line-height: 1.3;
   }
 
+  .feed-card-diagram {
+    margin: 0;
+    padding: var(--space-2);
+    background: var(--bg);
+    border-radius: var(--radius-inner);
+  }
+
+  /* The d- classes of src/diagram.js. A diagram has no colour of its own: each one is a token. */
   .feed-card-code {
     margin: 0;
     padding: var(--space-3);
@@ -762,6 +773,117 @@
 
   .feed-card-more {
     margin-inline-start: auto;
+  }
+
+  /* @component diagram
+     @scope feed
+     @summary The SVG of a diagram of a card (CARD-9), inside feed-card-diagram. Its d- classes are its only styling, and each colour and size is a token, so it follows the theme. Text is centred on its point unless d-start or d-end moves it.
+     @part d-box        A box or a node: the surface, a control border.
+     @part d-hi         The one box or area the card is about, in the data hue.
+     @part d-dot        A point in the data hue.
+     @part d-ink        A solid shape in the text colour.
+     @part d-text       A label in a box.
+     @part d-on-hi      A label inside a d-hi box.
+     @part d-note       A second label: on an arrow, an axis, a second line.
+     @part d-label      The label of a row, left-aligned.
+     @part d-start      Aligns a text to the left of its point.
+     @part d-end        Aligns a text to the right of its point.
+     @part d-line       A plain connector, an axis, a grid line.
+     @part d-arrow      A flow arrow.
+     @part d-data-line  The one highlighted line, in the data hue.
+     @part d-dash       Dashes a line.
+     @part d-head       The head of an arrow, inside its marker.
+     @part d-data-head  The head of a d-data-line.
+     @example <figure class="feed-card-diagram" style="width: 20rem"><svg class="diagram" viewBox="0 0 320 44" role="img" aria-label="Two boxes"><rect class="d-box" x="8" y="8" width="64" height="28" rx="6"/><text class="d-text" x="40" y="22">query</text><path class="d-arrow" d="M72 22H86"/><rect class="d-hi" x="88" y="8" width="64" height="28" rx="6"/><text class="d-text d-on-hi" x="120" y="22">top-k</text></svg></figure> */
+  .diagram {
+    display: block;
+    width: 100%;
+    max-width: var(--diagram-max);
+    height: auto;
+    margin-inline: auto;
+    overflow: visible;
+    text-anchor: middle;
+    dominant-baseline: central;
+  }
+
+  .diagram .d-box {
+    fill: var(--surface);
+    stroke: var(--control);
+    stroke-width: 1;
+  }
+
+  .diagram .d-hi {
+    fill: var(--data-soft);
+    stroke: var(--data);
+    stroke-width: 1.25;
+  }
+
+  .diagram .d-dot {
+    fill: var(--data);
+  }
+
+  .diagram .d-ink {
+    fill: var(--text);
+  }
+
+  .diagram .d-text {
+    fill: var(--text);
+    font-size: var(--text-s);
+    font-weight: 500;
+  }
+
+  .diagram .d-on-hi {
+    fill: var(--on-data-soft);
+  }
+
+  .diagram .d-note {
+    fill: var(--muted);
+    font-size: var(--text-xs);
+  }
+
+  .diagram .d-label {
+    fill: var(--faint);
+    font-size: var(--text-xs);
+    letter-spacing: 0.08em;
+    text-anchor: start;
+  }
+
+  .diagram .d-start {
+    text-anchor: start;
+  }
+
+  .diagram .d-end {
+    text-anchor: end;
+  }
+
+  .diagram .d-line {
+    fill: none;
+    stroke: var(--control);
+    stroke-width: 1;
+  }
+
+  .diagram .d-arrow {
+    fill: none;
+    stroke: var(--muted);
+    stroke-width: 1.25;
+  }
+
+  .diagram .d-data-line {
+    fill: none;
+    stroke: var(--data);
+    stroke-width: 1.5;
+  }
+
+  .diagram .d-dash {
+    stroke-dasharray: 4 3;
+  }
+
+  .diagram .d-head {
+    fill: var(--muted);
+  }
+
+  .diagram .d-data-head {
+    fill: var(--data);
   }
 
   /* @component about

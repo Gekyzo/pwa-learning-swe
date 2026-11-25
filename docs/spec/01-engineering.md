@@ -15,17 +15,18 @@
 | `src/storage.js` | Load, save, validation hook, export, import, device preferences | `config`, `modules` |
 | `src/install.js` | The install offer state machine | nothing |
 | `src/highlight.js` | The tokens of the code of a snippet in its syntax (CARD-8) | nothing |
-| `src/cards.js` | The validation of a card and a pack of `content/`, and the pool of cards in a language (CARD-1 to CARD-5, CARD-7) | `highlight` |
+| `src/diagram.js` | The strict parse of the SVG diagram of a card into a tree (CARD-9) | nothing |
+| `src/cards.js` | The validation of a card and a pack of `content/`, and the pool of cards in a language (CARD-1 to CARD-5, CARD-7, CARD-9) | `highlight`, `diagram` |
 | `src/learning.js` | The learning doc: the record of a seen card, its review box, the signals and the save (LRN-1 to LRN-8) | `config` |
 | `src/feed.js` | The order of the feed, the seen cards again, the due count, the saved cards and the topics that are off (FEED-1 to FEED-5, FEED-14) | `cards`, `learning` |
 | `src/particles.js` | The particles of a picture and their place in time (optional) | nothing |
 | `src/onboarding.js` | The show rule of the walkthrough and `textParts` (optional) | nothing |
 | `src/ui/context.js` | The values that the views share, the pool of cards, the toast, `render`, `commit` and `apply` | `learning`, `storage`, `i18n`, `onboarding` |
-| `src/ui/controls.js` | The icon builder | nothing |
+| `src/ui/controls.js` | The icon builder and the builder of the svg of a diagram (CARD-9) | nothing |
 | `src/ui/update.js` | The version line, the check, the refresh and the update toast | `version`, `i18n`, `ui/context` |
 | `src/ui/install.js` | The Install button | `install`, `ui/context` |
 | `src/ui/nav.js` | The navigation, the change and the slide of a section | `sections`, `modules`, `ui/context`, `ui/update`, `ui/dust` |
-| `src/ui/card.js` | One card of the feed or of Saved, its actions, and the sheet of its other signals (FEED-9 to FEED-12) | `learning`, `feed`, `highlight`, `ds/sheet`, `ui/context`, `ui/controls` |
+| `src/ui/card.js` | One card of the feed or of Saved, its actions, and the sheet of its other signals (FEED-9 to FEED-12) | `learning`, `feed`, `highlight`, `diagram`, `ds/sheet`, `ui/context`, `ui/controls` |
 | `src/ui/feed.js` | The Feed section: the load of the packs, the next cards as the list scrolls, the seen cards, the due line and the switch of a topic (FEED-6 to FEED-8, FEED-14) | `cards`, `feed`, `learning`, `ui/context`, `ui/card` |
 | `src/ui/saved.js` | The Saved section (FEED-13) | `feed`, `ui/context`, `ui/card`, `ui/nav` |
 | `src/ui/settings.js` | Settings, Delete all data (SET-2), the Topics group (FEED-15), and the text of the page in its language | `learning`, `storage`, `i18n`, `modules`, `ui/context`, `ui/update`, `ui/feed`, `ui/account` |
@@ -89,11 +90,12 @@ The doc keys are in [09-feed.md](09-feed.md). The device preferences are `pwa-le
 
 | Test file | Covers |
 |---|---|
-| `tests/cards.test.js` | The validation of a card and a pack, their translations, and the pool (CARD-1 to CARD-5, CARD-7) |
+| `tests/cards.test.js` | The validation of a card and a pack, their translations, their diagrams, and the pool (CARD-1 to CARD-5, CARD-7, CARD-9) |
+| `tests/diagram.test.js` | The parse of a diagram: the allowed elements, attributes, classes and ids, and the markup it refuses (CARD-9) |
 | `tests/highlight.test.js` | The tokens of each syntax and the plain code of an unknown one (CARD-8) |
 | `tests/learning.test.js` | The learning doc, the review boxes, the signals and the validation of the doc (LRN-1 to LRN-8) |
 | `tests/feed.test.js` | The order of the feed, its end, the seen cards again, the due count, the saved cards and the topics that are off (FEED-1 to FEED-5, FEED-14) |
-| `tests/content.test.js` | The packs of `content/`: each one valid, listed, translated and in `SHELL` (CARD-6) |
+| `tests/content.test.js` | The packs of `content/`: each one valid, listed, translated, with valid diagrams, and in `SHELL` (CARD-6, CARD-9) |
 | `tests/pocketbase.test.js` | The client of the account server and its URL (ACC-3, ACC-4, ACC-6) |
 | `tests/session.test.js` | The session, the start route, the offline flag, the pending sign-in and the return URL (ACC-1, ACC-4, ACC-5, ACC-10) |
 | `tests/storage.test.js` | Load, save, the corrupt copy, export, import and the device preferences |

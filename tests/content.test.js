@@ -50,3 +50,14 @@ test('SHELL of sw.js has the index and each pack, so the feed works offline', ()
   const shell = read('sw.js');
   for (const file of ['index', ...index.packs]) assert.ok(shell.includes(`'./content/${file}.json'`), file);
 });
+
+test('each diagram of the packs is valid, in each language (CARD-9)', () => {
+  for (const { data } of packs) {
+    const { pack } = normalizePack(data);
+    for (const raw of data.cards.filter((card) => 'diagram' in card)) {
+      const card = pack.cards.find((one) => one.id === raw.id);
+      assert.ok(card.diagram, raw.id);
+      for (const lang of Object.keys(raw.translations ?? {})) assert.ok(card.translations?.[lang]?.diagram, `${raw.id} ${lang}`);
+    }
+  }
+});

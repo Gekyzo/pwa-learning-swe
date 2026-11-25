@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { KINDS, LEVELS, MEDIA, MAX_TITLE, SOURCE_LANG, normalizeCard, normalizePack, buildPool } from '#cards';
+import { KINDS, LEVELS, MEDIA, MAX_TITLE, MAX_ALT, SOURCE_LANG, normalizeCard, normalizePack, buildPool } from '#cards';
 
 const concept = (over = {}) => ({ id: 'git-a', kind: 'concept', level: 'intro', title: 'Title', body: 'Body.', ...over });
 const quiz = (over = {}) => concept({ id: 'git-q', kind: 'quiz', options: ['Yes', 'No'], answer: 1, ...over });
@@ -180,4 +180,42 @@ test('the pool takes the text of a language and keeps English where a card has n
   assert.equal(buildPool([git], 'en').cards[0].title, 'Title');
   assert.equal(buildPool([git]).topics[0].title, 'Git');
   assert.equal(git.cards[0].title, 'Title');
+});
+
+const DIAGRAM = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 60" role="img"><rect class="d-box" x="8" y="8" width="64" height="28"/></svg>';
+const drawn = (over = {}) => concept({ diagram: { svg: DIAGRAM, alt: ' A box. ' }, ...over });
+
+test('a card keeps a valid diagram with its alt text trimmed (CARD-9)', () => {
+  assert.deepEqual(normalizeCard(drawn(), 'git').diagram, { svg: DIAGRAM, alt: 'A box.' });
+  assert.deepEqual(normalizeCard(drawn({ kind: 'quiz', options: ['a', 'b'], answer: 0 }), 'git').diagram.alt, 'A box.');
+});
+
+test('a diagram that is not valid is dropped and its card stays (CARD-9)', () => {
+  for (const diagram of [
+    'x',
+    { svg: DIAGRAM },
+    { svg: DIAGRAM, alt: ' ' },
+    { svg: DIAGRAM, alt: 'a'.repeat(MAX_ALT + 1) },
+    { svg: DIAGRAM.replace('d-box', 'box'), alt: 'A box.' },
+    { svg: DIAGRAM.replace('<rect', '<script'), alt: 'A box.' },
+  ]) {
+    const card = normalizeCard(drawn({ diagram }), 'git');
+    assert.ok(card, JSON.stringify(diagram));
+    assert.equal('diagram' in card, false, JSON.stringify(diagram));
+  }
+});
+
+test('a translation of a card with a diagram needs its alt text (CARD-9)', () => {
+  const es = { title: 'Título', body: 'Cuerpo.' };
+  const kept = normalizeCard(drawn({ translations: { es: { ...es, diagram: { alt: ' Una caja. ' } } } }), 'git');
+  assert.deepEqual(kept.translations.es, { ...es, diagram: { svg: DIAGRAM, alt: 'Una caja.' } });
+  assert.equal(normalizeCard(drawn({ translations: { es } }), 'git').translations, undefined);
+  assert.deepEqual(normalizeCard(concept({ translations: { es: { ...es, diagram: { alt: 'x' } } } }), 'git').translations.es, es);
+});
+
+test('the pool gives a card the diagram with the alt text of its language (CARD-9)', () => {
+  const card = drawn({ translations: { es: { title: 'Título', body: 'Cuerpo.', diagram: { alt: 'Una caja.' } } } });
+  const { pack: built } = normalizePack(pack([card]));
+  assert.deepEqual(buildPool([built], 'es').cards[0].diagram, { svg: DIAGRAM, alt: 'Una caja.' });
+  assert.deepEqual(buildPool([built], 'en').cards[0].diagram, { svg: DIAGRAM, alt: 'A box.' });
 });

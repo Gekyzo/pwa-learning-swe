@@ -1,9 +1,10 @@
 import { INTERVALS, answerQuiz, grade, signal, toggleLike, toggleSaved } from '#learning';
 import { tagOf } from '#feed';
 import { highlight } from '#highlight';
+import { parseDiagram } from '#diagram';
 import { bindSheetDrag } from '#ds/sheet';
 import { $, el, ui, state, pool, t, apply, render } from '#ui/context';
-import { icon } from '#ui/controls';
+import { icon, diagramSvg } from '#ui/controls';
 
 // One card of the feed or of Saved (FEED-9 to FEED-12), and the sheet of its other signals.
 
@@ -60,6 +61,13 @@ const codeNode = (card) =>
     }),
   );
 
+// The diagram of a card, named by its alt text in the card language.
+const diagramNode = (card) => {
+  const tree = parseDiagram(card.diagram.svg, card.id);
+  if (!tree) return null;
+  return el('figure', { className: 'feed-card-diagram' }, [diagramSvg(tree, card.diagram.alt)]);
+};
+
 const pill = (text, className = 'pill') => el('span', { className, textContent: text });
 
 // The text of a card is in the card language (I18N-7), or in English where it has no translation.
@@ -92,6 +100,8 @@ export const cardNode = (card, entry = null, { preview = false, hint = false } =
   const parts = [meta];
   if (hint) parts.push(el('p', { className: 'feed-card-hint', textContent: t('card.hint') }));
   parts.push(el('h2', { className: 'feed-card-title', textContent: card.title }));
+  const diagram = card.diagram ? diagramNode(card) : null;
+  if (diagram) parts.push(diagram);
   if (card.kind === 'snippet') parts.push(codeNode(card));
   if (card.kind === 'quiz') parts.push(options(card, chosen));
   if (card.kind === 'quiz' && chosen) {

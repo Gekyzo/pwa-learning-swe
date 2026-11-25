@@ -21,3 +21,19 @@ export const symbolNodes = async (name) => {
   const symbol = (await sprite).getElementById(name);
   return symbol ? [...symbol.childNodes].map((node) => node.cloneNode(true)) : [];
 };
+
+// An SVG node of the tree of a diagram (CARD-9), built element by element, never from markup.
+const svgNode = ({ name, attrs, children }) => {
+  const node = document.createElementNS(SVG_NS, name);
+  for (const [key, value] of Object.entries(attrs)) if (key !== 'xmlns') node.setAttribute(key, value);
+  node.append(...children.map((child) => (typeof child === 'string' ? child : svgNode(child))));
+  return node;
+};
+
+// The svg of a diagram, named by its alt text.
+export const diagramSvg = (tree, alt) => {
+  const svg = svgNode(tree);
+  svg.setAttribute('class', 'diagram');
+  svg.setAttribute('aria-label', alt);
+  return svg;
+};

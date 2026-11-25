@@ -28,7 +28,7 @@ for review on a spaced schedule. Rules of `src/cards.js` and the packs of `conte
   unique, and that each pack and each card has a valid translation for each other language.
 - **CARD-7** A pack and a card may have `translations`: `{ [lang]: texts }`, with a lowercase
   two-letter code other than `en`. The texts of a pack are its `title`; those of a card are its
-  `title` and `body`, with the limits of CARD-2, and for a quiz its `options`, as many as the quiz
+  `title` and `body`, with the limits of CARD-2, the `diagram.alt` of a card with a diagram (CARD-9), and for a quiz its `options`, as many as the quiz
   has, in the same order. A translation that is not valid is dropped and its card stays.
   `buildPool(packs, lang)` gives each card and each topic the texts of `lang` where it has them,
   else the English ones, and its `lang`: the language of its text. The code, the answer, the URL
@@ -38,6 +38,19 @@ for review on a spaced schedule. Rules of `src/cards.js` and the packs of `conte
   `keyword`, `string`, `number`, `comment`, `function` (a call in `js` and `sql`, the command of a
   line or of a step of a pipeline in `sh`) and `plain`. An unclosed string or comment runs to the
   end. A snippet with no syntax, or one that is not known, is one `plain` token.
+- **CARD-9** A card of any kind may have a `diagram`: `{ svg, alt }`. `alt` is a text of at most
+  400 characters that names what the diagram shows. `svg` is at most 6000 characters and
+  `parseDiagram(svg, id)` of `src/diagram.js` must accept it: one `svg` root with a `viewBox` and
+  no size; only the elements `g`, `defs`, `marker`, `path`, `rect`, `circle`, `ellipse`, `line`,
+  `polyline`, `polygon`, `text` and `tspan`, each with its own geometry attributes; `class` with the
+  `d-` classes of `CLASSES` only, which give every colour and size; each `id` and each
+  `url(#…)` of a marker starting with the card id and a hyphen; double-quoted values with no
+  colon, quote or angle bracket; text only in `text` and `tspan`, with the five XML entities and
+  numeric ones. No style, colour, link, script, comment or other element. A diagram that is not
+  valid is dropped and its card stays. A translation of a card with a diagram has its
+  `diagram.alt` (CARD-7); the SVG is the same in every language, so its labels are technical terms.
+  The card shows the diagram after its title, in `feed-card-diagram`, built node by node from the
+  tree, with its `alt` as `aria-label`.
 
 ## Learning
 
@@ -114,7 +127,7 @@ Rules of `src/ui/feed.js`, `src/ui/card.js` and `src/ui/saved.js`.
   The topics of the new cards are `feed.topics`, for the topics that are on. The line is empty only until the packs load.
 - **FEED-9** A card shows its topic, kind and level; a pill by the reason it came: **Review** (in the data hue) for a due
   card, **New** for a new or explore card, and none for a card shown again; **Updated** when it was updated (LRN-7) as it came in, and **Retired** when it is retired.
-  Then its title, the code of a snippet in the colours of its tokens (CARD-8, SET-3), and its body. A resource has a button that opens its URL
+  Then its title, its diagram (CARD-9), the code of a snippet in the colours of its tokens (CARD-8, SET-3), and its body. A resource has a button that opens its URL
   in a new tab, with the medium and the minutes. The text of a card is in English (`lang="en"`).
 - **FEED-10** A quiz shows its options. A tap answers it (LRN-5): the options lock, the right one
   is marked, a wrong choice is marked too, and `card.right` or `card.wrong` shows above the

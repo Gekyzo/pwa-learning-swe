@@ -1,4 +1,5 @@
 import { SYNTAXES } from '#highlight';
+import { parseDiagram } from '#diagram';
 
 // The content of the feed: cards in packs, one pack for each topic (CARD-1 to CARD-6). The packs
 // are the JSON files of content/; this module only validates them.
@@ -9,6 +10,7 @@ export const MAX_TITLE = 120;
 export const MAX_BODY = 600;
 export const MAX_CODE = 800;
 export const MAX_MINUTES = 600;
+export const MAX_ALT = 400;
 // The language of the text of the packs; a translation adds another one (CARD-7).
 export const SOURCE_LANG = 'en';
 
@@ -61,16 +63,36 @@ const translationsOf = (data, clean) => {
   return kept.length ? Object.fromEntries(kept) : null;
 };
 
+// `{ diagram }` when the card has a valid diagram and alt text, else nothing: a bad diagram is
+// dropped and its card stays (CARD-9).
+const diagramOf = (data, id) => {
+  if (typeof data !== 'object' || data === null) return {};
+  const alt = text(data.alt, MAX_ALT);
+  return alt && parseDiagram(data.svg, id) ? { diagram: { svg: data.svg.trim(), alt } } : {};
+};
+
 const withTranslations = (translations) => (translations ? { translations } : {});
 
-// The title and the body of a card in another language, and the options of a quiz, as many as it has.
+// The options of a quiz in another language, as many as it has, or null.
+const optionsOf = (card, texts) => {
+  const options = Array.isArray(texts.options) ? texts.options.map((option) => text(option, MAX_TITLE)) : [];
+  return options.length === card.options.length && !options.includes(null) ? { options } : null;
+};
+
+// The diagram of a card with the alt text of another language, or null when it has none (CARD-9).
+const altOf = (card, texts) => {
+  const alt = text(texts.diagram?.alt, MAX_ALT);
+  return alt ? { diagram: { svg: card.diagram.svg, alt } } : null;
+};
+
+// The title and the body of a card in another language, the options of a quiz and the alt text of
+// a diagram.
 const cardTexts = (card) => (texts) => {
   const title = text(texts.title, MAX_TITLE);
   const body = text(texts.body, MAX_BODY);
-  if (!title || !body) return null;
-  if (card.kind !== 'quiz') return { title, body };
-  const options = Array.isArray(texts.options) ? texts.options.map((option) => text(option, MAX_TITLE)) : [];
-  return options.length === card.options.length && !options.includes(null) ? { title, body, options } : null;
+  const options = card.kind === 'quiz' ? optionsOf(card, texts) : {};
+  const diagram = card.diagram ? altOf(card, texts) : {};
+  return title && body && options && diagram ? { title, body, ...options, ...diagram } : null;
 };
 
 const packTexts = (texts) => {
@@ -88,7 +110,7 @@ export const normalizeCard = (data, packId) => {
   const body = text(data.body, MAX_BODY);
   const extra = KIND_FIELDS[kind](data);
   if (!title || !body || !extra) return null;
-  const card = { id, rev, kind, level, title, body, ...extra, ...(data.retired === true ? { retired: true } : {}) };
+  const card = { id, rev, kind, level, title, body, ...extra, ...diagramOf(data.diagram, id), ...(data.retired === true ? { retired: true } : {}) };
   return { ...card, ...withTranslations(translationsOf(data.translations, cardTexts(card))) };
 };
 
