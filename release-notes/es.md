@@ -4,6 +4,10 @@ Lo que cambia para ti en cada versión de la app. La versión más nueva va prim
 
 ## Unreleased
 
+No change.
+
+## 0.6.1 - 2026-11-25
+
 - Tres temas nuevos con 90 tarjetas: modelos de lenguaje, embeddings y búsqueda vectorial, y generación aumentada por recuperación (RAG). 32 de las tarjetas tienen un diagrama.
 
 ## 0.6.0 - 2026-10-31
