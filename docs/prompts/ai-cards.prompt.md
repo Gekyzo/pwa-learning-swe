@@ -41,12 +41,12 @@ A card (these rules are enforced by a validator; a card that breaks one is dropp
 | `kind` | `concept`, `snippet`, `pitfall`, `quiz` or `resource`. |
 | `level` | `intro`, `intermediate` or `advanced`. |
 | `title` | Not blank, **max 120 characters**. For a quiz it is the question. |
-| `body` | Not blank, **max 600 characters**. Aim for 250–450. For a quiz it is the explanation, shown after the answer. |
+| `body` | Not blank, **max 600 visible characters (markup does not count), max 800 with markup**. Aim for 250–450. Formatted as in section 4. For a quiz it is the explanation, shown after the answer. |
 | `code` | `snippet` only. Max 800 characters, kept exactly as written (use `\n`). Max ~12 lines, max ~60 columns: the card is narrow. |
 | `syntax` | `snippet` only, optional: `js`, `sql` or `sh`. Python has no highlight: omit `syntax` for Python (it shows plain). Prefer `js` or `sql` (pgvector) when the idea fits. |
 | `options`, `answer` | `quiz` only. 2 to 4 options, each max 120 characters; `answer` is the 0-based index of the right one. Vary the position of the right answer. |
 | `url`, `media`, `minutes` | `resource` only. `url` is `https`. `media` is `article`, `docs`, `video`, `course`, `book` or `repo`. `minutes` is a whole number from 1 to 600. **Only URLs you are sure exist and are stable**: official docs, papers on arxiv.org, well-known repos. No blog posts you cannot verify. |
-| `diagram` | Optional. `{ "svg": "<svg ...>...</svg>", "alt": "..." }`. Rules in section 4. |
+| `diagram` | Optional. `{ "svg": "<svg ...>...</svg>", "alt": "..." }`. Rules in section 5. |
 | `translations` | Required: `{ "es": { "title", "body", "options"?, "diagram"? } }`. A quiz translates every option, same count, same order. A card with a diagram has `"diagram": { "alt": "..." }` in Spanish. Code, answer, URL and SVG stay the same in every language. |
 
 ## 3. The writing
@@ -65,9 +65,35 @@ Spanish (`translations.es`):
 
 - Neutral Spanish from Spain, `tú`, same register as the English.
 - Keep the field's jargon in English where Spanish developers use it: embedding, chunk, prompt, token, top-k, reranking, fine-tuning, LLM, index stays "índice". Write the rest in plain Spanish.
-- Same limits: title max 120, body max 600 characters. Spanish is ~15% longer; check the count.
+- Same limits: title max 120, body max 600 visible characters. Spanish is ~15% longer; check the count.
 
-## 4. The diagrams
+## 4. Body formatting
+
+A body is a small subset of Markdown. The app shows paragraphs, line breaks, bold and italic. It never reads HTML.
+
+| Write | Shows |
+|---|---|
+| A blank line (`\n\n` in JSON) | A new paragraph |
+| One newline (`\n`) | A line break inside a paragraph |
+| `**text**` | **Bold** |
+| `*text*` | *Italic* |
+| `\*` (`\\*` in JSON) | A literal `*` |
+
+No nesting and no other markup: no headings, lists, links or code spans. A `*` with no closing pair in its line shows as text, but the check reports it as unclosed: escape it as `\*`.
+
+Rules:
+
+- 2 to 3 paragraphs, 4 at most. Each paragraph is one step of the idea: what it is, how it works, what to do or what goes wrong.
+- **Bold**: 1 to 2 runs, 3 at most. The phrase a reader must keep if they read nothing else — the claim, the number, the fix. A phrase, not a sentence.
+- *Italic*: at least 1 run. A term the card defines on first use, or the one word that carries a contrast ("only the *distances* do").
+- A line break (`\n`) for a short sequence inside a paragraph, such as steps or a before/after.
+- No markup inside identifiers, code or numbers with units.
+- The same structure in the translation: same paragraph count, the same ideas in bold and italic.
+- The 600-character limit counts the visible text.
+
+Run `npm run check:bodies <pack>`; it must print `ok`.
+
+## 5. The diagrams
 
 The app builds the SVG **inline** in the card, inside `<figure class="feed-card-diagram">`, as `<svg class="diagram">`. A strict parser checks it first; a diagram that breaks one rule below is dropped. The app's CSS colours it, so it follows the light and the dark theme. You never write a colour.
 
@@ -131,7 +157,7 @@ Use blue (`d-hi`, `d-dot`, `d-data-line`) for **one** thing per diagram: the poi
 
 Pipeline flows (RAG, indexing, reranking stages), vector geometry (cosine angle, nearest neighbours, a query among clusters), HNSW layers, chunk overlap on a strip of text, a context window filling up, lost-in-the-middle as a U-shaped curve, hybrid search merging two ranked lists, a tool-use loop, prompt injection through a retrieved document, temperature as a flatter or sharper distribution, recall@k on a ranked list.
 
-## 5. The reference card
+## 6. The reference card
 
 This card is approved. Match its tone, density and diagram style. It renders like this on a 360 px phone: two labelled rows of boxes, the index and the top-k in blue, elbow arrows into the prompt box.
 
@@ -141,7 +167,7 @@ This card is approved. Match its tone, density and diagram style. It renders lik
   "kind": "concept",
   "level": "intro",
   "title": "RAG looks the answer up before it writes it",
-  "body": "Retrieval-augmented generation has two phases. Offline, split the documents into chunks, embed each chunk and store the vectors in an index. For each query, embed the query, take the k nearest chunks and put them in the prompt next to the query. The model answers from that text, not only from its weights: it can cite its sources and use data newer than its training.",
+  "body": "*Retrieval-augmented generation* has two phases.\nOffline, split the documents into chunks, embed each chunk and store the vectors in an index.\nFor each query, embed the query, take the **k nearest chunks** and put them in the prompt next to the query.\n\nThe model **answers from that text, not only from its weights**: it can cite its sources and use data newer than its training.",
   "diagram": {
     "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 248\" role=\"img\"><defs><marker id=\"rag-pipeline-head\" viewBox=\"0 0 8 8\" refX=\"7\" refY=\"4\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path class=\"d-head\" d=\"M0 0L8 4L0 8z\"/></marker></defs><text class=\"d-label\" x=\"8\" y=\"12\">OFFLINE</text><rect class=\"d-box\" x=\"8\" y=\"20\" width=\"64\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"40\" y=\"34\">docs</text><rect class=\"d-box\" x=\"88\" y=\"20\" width=\"64\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"120\" y=\"34\">chunks</text><rect class=\"d-box\" x=\"168\" y=\"20\" width=\"64\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"200\" y=\"34\">embed</text><rect class=\"d-hi\" x=\"248\" y=\"20\" width=\"64\" height=\"28\" rx=\"6\"/><text class=\"d-text d-on-hi\" x=\"280\" y=\"34\">index</text><path class=\"d-arrow\" marker-end=\"url(#rag-pipeline-head)\" d=\"M72 34H86\"/><path class=\"d-arrow\" marker-end=\"url(#rag-pipeline-head)\" d=\"M152 34H166\"/><path class=\"d-arrow\" marker-end=\"url(#rag-pipeline-head)\" d=\"M232 34H246\"/><text class=\"d-label\" x=\"8\" y=\"84\">ONLINE</text><rect class=\"d-box\" x=\"8\" y=\"92\" width=\"64\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"40\" y=\"106\">query</text><rect class=\"d-box\" x=\"88\" y=\"92\" width=\"64\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"120\" y=\"106\">embed</text><rect class=\"d-hi\" x=\"248\" y=\"92\" width=\"64\" height=\"28\" rx=\"6\"/><text class=\"d-text d-on-hi\" x=\"280\" y=\"106\">top-k</text><path class=\"d-arrow\" marker-end=\"url(#rag-pipeline-head)\" d=\"M72 106H86\"/><path class=\"d-arrow\" marker-end=\"url(#rag-pipeline-head)\" d=\"M152 106H246\"/><path class=\"d-arrow\" marker-end=\"url(#rag-pipeline-head)\" d=\"M280 48V90\"/><text class=\"d-note\" x=\"200\" y=\"99\">vector</text><text class=\"d-note d-start\" x=\"287\" y=\"70\">search</text><rect class=\"d-box\" x=\"88\" y=\"148\" width=\"144\" height=\"40\" rx=\"6\"/><text class=\"d-text\" x=\"160\" y=\"161\">prompt</text><text class=\"d-note\" x=\"160\" y=\"177\">query + top-k chunks</text><path class=\"d-arrow\" marker-end=\"url(#rag-pipeline-head)\" d=\"M40 120V168H86\"/><path class=\"d-arrow\" marker-end=\"url(#rag-pipeline-head)\" d=\"M280 120V168H234\"/><path class=\"d-arrow\" marker-end=\"url(#rag-pipeline-head)\" d=\"M120 188V210\"/><path class=\"d-arrow\" marker-end=\"url(#rag-pipeline-head)\" d=\"M152 226H166\"/><rect class=\"d-box\" x=\"88\" y=\"212\" width=\"64\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"120\" y=\"226\">LLM</text><rect class=\"d-box\" x=\"168\" y=\"212\" width=\"64\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"200\" y=\"226\">output</text></svg>",
     "alt": "Two rows. Offline: documents become chunks, each chunk is embedded, and the vectors go into an index. Online: the query is embedded, a vector search in the index returns the top-k chunks, and the query plus those chunks form the prompt of the LLM, which writes the output."
@@ -149,7 +175,7 @@ This card is approved. Match its tone, density and diagram style. It renders lik
   "translations": {
     "es": {
       "title": "RAG busca la respuesta antes de escribirla",
-      "body": "La generación aumentada por recuperación tiene dos fases. Offline, divide los documentos en chunks, calcula el embedding de cada chunk y guarda los vectores en un índice. En cada consulta, calcula el embedding de la consulta, toma los k chunks más cercanos y ponlos en el prompt junto a la consulta. El modelo responde a partir de ese texto y no solo de sus pesos: puede citar sus fuentes y usar datos más nuevos que su entrenamiento.",
+      "body": "La *generación aumentada por recuperación* tiene dos fases.\nOffline, divide los documentos en chunks, calcula el embedding de cada chunk y guarda los vectores en un índice.\nEn cada consulta, calcula el embedding de la consulta, toma los **k chunks más cercanos** y ponlos en el prompt junto a la consulta.\n\nEl modelo **responde a partir de ese texto y no solo de sus pesos**: puede citar sus fuentes y usar datos más nuevos que su entrenamiento.",
       "diagram": {
         "alt": "Dos filas. Offline: los documentos se dividen en chunks, se calcula el embedding de cada chunk y los vectores van a un índice. Online: se calcula el embedding de la consulta, una búsqueda vectorial en el índice devuelve los k chunks más cercanos, y la consulta más esos chunks forman el prompt del LLM, que escribe la salida."
       }
@@ -160,20 +186,22 @@ This card is approved. Match its tone, density and diagram style. It renders lik
 
 Use `rag-pipeline` as the first card of the `rag` pack, unchanged.
 
-## 6. Check before you answer
+## 7. Check before you answer
 
 For each card, check:
 
 1. The id starts with the pack id and a hyphen, and is unique.
-2. Title ≤ 120, body ≤ 600 characters, in English **and** in Spanish. Count them.
+2. Title ≤ 120, body ≤ 600 visible characters (≤ 800 with markup), in English **and** in Spanish. Count them.
 3. A quiz has 2–4 options, a valid `answer`, and the Spanish options in the same order.
 4. A snippet's code is ≤ 800 characters and fits ~60 columns.
 5. Each resource URL is real and `https`.
 6. Each SVG: width 320, only the allowed elements, attributes and classes, ids prefixed with the card id, one path per arrow, no text overflowing a box, no label in plain English.
 7. Each diagram card has `diagram.alt` in English and `translations.es.diagram.alt` in Spanish.
 8. The JSON parses. Strings escape `"` as `\"`; the SVG is one line.
+9. Each body, in English and in Spanish: 2–4 paragraphs, 1–3 bold runs of at most 60 characters, at least one italic run, no unclosed `*`, no markup inside code or numbers.
+10. The Spanish body has the same paragraph count and the same ideas in bold and italic as the English one. `npm run check:bodies <pack>` prints `ok`.
 
-## 7. Output
+## 8. Output
 
 Give three JSON files, one per pack, each in its own code block headed by its path:
 `content/llm.json`, `content/embeddings.json`, `content/rag.json`. 2-space indent, `version: 1`. Then one short list: the ids of the cards with a diagram, per pack. No other text.

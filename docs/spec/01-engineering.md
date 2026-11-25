@@ -119,6 +119,7 @@ The doc keys are in [09-feed.md](09-feed.md). The device preferences are `pwa-le
 | `tests/png.test.js` | The PNG encoder and decoder of `scripts/png.mjs`, which `npm run icons` uses |
 | `tests/release.test.js` | The release of `scripts/release.mjs`: the bump commit, the tag and the refusals, also a `main` behind `origin` (VER-10 to VER-12) |
 | `tests/changelog.test.js` | The release of `CHANGELOG.md` by `scripts/changelog.mjs` (VER-17) |
+| `tests/check-bodies.test.js` | The report of `scripts/check-bodies.mjs`: one line per failing or dropped body, in each language, and the count of bodies (CARD-10) |
 | `tests/init.test.js` | The arguments of `scripts/init.mjs`, and a run of it in a copy: the new names, no trace of the template, `vendor/` kept as it is, its refusal of a second run (ENG-17) |
 | `tests/spec.test.js` | The facts of this specification that the code can prove (ENG-12) |
 
@@ -159,4 +160,5 @@ npm run icons                     # write the PNG icons again
 npm run hooks                     # enable .githooks/ in this clone
 npm run release                   # bump the version, commit it and tag it vX.Y.Z
 npm run init -- <slug> "<Name>"   # turn a copy of the template into a new app
+npm run check:bodies [pack...]    # check the style rules of the card bodies (CARD-10)
 ```
