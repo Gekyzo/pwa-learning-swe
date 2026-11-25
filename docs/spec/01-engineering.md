@@ -16,6 +16,7 @@
 | `src/install.js` | The install offer state machine | nothing |
 | `src/highlight.js` | The tokens of the code of a snippet in its syntax (CARD-8) | nothing |
 | `src/diagram.js` | The strict parse of the SVG diagram of a card into a tree (CARD-9) | nothing |
+| `src/richtext.js` | The parse of the rich text of a card body, its visible text and its style rules (CARD-10) | nothing |
 | `src/cards.js` | The validation of a card and a pack of `content/`, and the pool of cards in a language (CARD-1 to CARD-5, CARD-7, CARD-9) | `highlight`, `diagram` |
 | `src/learning.js` | The learning doc: the record of a seen card, its review box, the signals and the save (LRN-1 to LRN-8) | `config` |
 | `src/feed.js` | The order of the feed, the seen cards again, the due count, the saved cards and the topics that are off (FEED-1 to FEED-5, FEED-14) | `cards`, `learning` |
@@ -92,6 +93,7 @@ The doc keys are in [09-feed.md](09-feed.md). The device preferences are `pwa-le
 |---|---|
 | `tests/cards.test.js` | The validation of a card and a pack, their translations, their diagrams, and the pool (CARD-1 to CARD-5, CARD-7, CARD-9) |
 | `tests/diagram.test.js` | The parse of a diagram: the allowed elements, attributes, classes and ids, and the markup it refuses (CARD-9) |
+| `tests/richtext.test.js` | The parse of a body: paragraphs, breaks, bold, italic, escaped and unclosed stars, the visible text and the style rules (CARD-10) |
 | `tests/highlight.test.js` | The tokens of each syntax and the plain code of an unknown one (CARD-8) |
 | `tests/learning.test.js` | The learning doc, the review boxes, the signals and the validation of the doc (LRN-1 to LRN-8) |
 | `tests/feed.test.js` | The order of the feed, its end, the seen cards again, the due count, the saved cards and the topics that are off (FEED-1 to FEED-5, FEED-14) |

@@ -51,6 +51,26 @@ for review on a spaced schedule. Rules of `src/cards.js` and the packs of `conte
   `diagram.alt` (CARD-7); the SVG is the same in every language, so its labels are technical terms.
   The card shows the diagram after its title, in `feed-card-diagram`, built node by node from the
   tree, with its `alt` as `aria-label`.
+- **CARD-10** The `body` of a card is rich text, read by `parseRich(text)` of `src/richtext.js`:
+
+  | Source | Result |
+  |---|---|
+  | a blank line (`\n\n`) | a new paragraph |
+  | one `\n` | a line break inside the paragraph |
+  | `**text**` | bold (`<strong>`) |
+  | `*text*` | italic (`<em>`) |
+  | `\*` | a literal `*` |
+
+  `\r\n` counts as `\n`, and three or more newlines as one paragraph break. Spaces at the start
+  and end of each line are trimmed and an empty line is dropped. A marker opens and closes inside
+  one line, with at least one character between; a marker with no closing pair stays as text and
+  counts as unclosed. Bold and italic do not nest: the text inside a run is literal. `parseRich`
+  returns the paragraphs as lists of tokens `{ type, text }`: `text`, `bold`, `italic` and
+  `break`. `plainText(text)` is the visible text, with paragraphs and breaks joined by one space.
+  A plain body with no markup is one paragraph. The style rules of a body, checked by
+  `bodyIssues(text)` on `content/` and never at run time, are: 2 to 4 paragraphs (`paragraphs`),
+  1 to 3 bold runs (`bold`), at least one italic run (`italic`), no unclosed marker
+  (`unclosed`), and no bold run over 60 visible characters (`bold-length`).
 
 ## Learning
 
