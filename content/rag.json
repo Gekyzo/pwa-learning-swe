@@ -1,6 +1,6 @@
 {
   "id": "rag",
-  "version": 1,
+  "version": 2,
   "title": "Retrieval-augmented generation",
   "translations": {
     "es": {
@@ -13,7 +13,7 @@
       "kind": "concept",
       "level": "intro",
       "title": "RAG looks the answer up before it writes it",
-      "body": "Retrieval-augmented generation has two phases. Offline, split the documents into chunks, embed each chunk and store the vectors in an index. For each query, embed the query, take the k nearest chunks and put them in the prompt next to the query. The model answers from that text, not only from its weights: it can cite its sources and use data newer than its training.",
+      "body": "*Retrieval-augmented generation* has two phases.\nOffline, split the documents into chunks, embed each chunk and store the vectors in an index.\nFor each query, embed the query, take the **k nearest chunks** and put them in the prompt next to the query.\n\nThe model **answers from that text, not only from its weights**: it can cite its sources and use data newer than its training.",
       "diagram": {
         "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 248\" role=\"img\"><defs><marker id=\"rag-pipeline-head\" viewBox=\"0 0 8 8\" refX=\"7\" refY=\"4\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path class=\"d-head\" d=\"M0 0L8 4L0 8z\"/></marker></defs><text class=\"d-label\" x=\"8\" y=\"12\">OFFLINE</text><rect class=\"d-box\" x=\"8\" y=\"20\" width=\"64\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"40\" y=\"34\">docs</text><rect class=\"d-box\" x=\"88\" y=\"20\" width=\"64\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"120\" y=\"34\">chunks</text><rect class=\"d-box\" x=\"168\" y=\"20\" width=\"64\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"200\" y=\"34\">embed</text><rect class=\"d-hi\" x=\"248\" y=\"20\" width=\"64\" height=\"28\" rx=\"6\"/><text class=\"d-text d-on-hi\" x=\"280\" y=\"34\">index</text><path class=\"d-arrow\" marker-end=\"url(#rag-pipeline-head)\" d=\"M72 34H86\"/><path class=\"d-arrow\" marker-end=\"url(#rag-pipeline-head)\" d=\"M152 34H166\"/><path class=\"d-arrow\" marker-end=\"url(#rag-pipeline-head)\" d=\"M232 34H246\"/><text class=\"d-label\" x=\"8\" y=\"84\">ONLINE</text><rect class=\"d-box\" x=\"8\" y=\"92\" width=\"64\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"40\" y=\"106\">query</text><rect class=\"d-box\" x=\"88\" y=\"92\" width=\"64\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"120\" y=\"106\">embed</text><rect class=\"d-hi\" x=\"248\" y=\"92\" width=\"64\" height=\"28\" rx=\"6\"/><text class=\"d-text d-on-hi\" x=\"280\" y=\"106\">top-k</text><path class=\"d-arrow\" marker-end=\"url(#rag-pipeline-head)\" d=\"M72 106H86\"/><path class=\"d-arrow\" marker-end=\"url(#rag-pipeline-head)\" d=\"M152 106H246\"/><path class=\"d-arrow\" marker-end=\"url(#rag-pipeline-head)\" d=\"M280 48V90\"/><text class=\"d-note\" x=\"200\" y=\"99\">vector</text><text class=\"d-note d-start\" x=\"287\" y=\"70\">search</text><rect class=\"d-box\" x=\"88\" y=\"148\" width=\"144\" height=\"40\" rx=\"6\"/><text class=\"d-text\" x=\"160\" y=\"161\">prompt</text><text class=\"d-note\" x=\"160\" y=\"177\">query + top-k chunks</text><path class=\"d-arrow\" marker-end=\"url(#rag-pipeline-head)\" d=\"M40 120V168H86\"/><path class=\"d-arrow\" marker-end=\"url(#rag-pipeline-head)\" d=\"M280 120V168H234\"/><path class=\"d-arrow\" marker-end=\"url(#rag-pipeline-head)\" d=\"M120 188V210\"/><path class=\"d-arrow\" marker-end=\"url(#rag-pipeline-head)\" d=\"M152 226H166\"/><rect class=\"d-box\" x=\"88\" y=\"212\" width=\"64\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"120\" y=\"226\">LLM</text><rect class=\"d-box\" x=\"168\" y=\"212\" width=\"64\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"200\" y=\"226\">output</text></svg>",
         "alt": "Two rows. Offline: documents become chunks, each chunk is embedded, and the vectors go into an index. Online: the query is embedded, a vector search in the index returns the top-k chunks, and the query plus those chunks form the prompt of the LLM, which writes the output."
@@ -21,7 +21,7 @@
       "translations": {
         "es": {
           "title": "RAG busca la respuesta antes de escribirla",
-          "body": "La generación aumentada por recuperación tiene dos fases. Offline, divide los documentos en chunks, calcula el embedding de cada chunk y guarda los vectores en un índice. En cada consulta, calcula el embedding de la consulta, toma los k chunks más cercanos y ponlos en el prompt junto a la consulta. El modelo responde a partir de ese texto y no solo de sus pesos: puede citar sus fuentes y usar datos más nuevos que su entrenamiento.",
+          "body": "La *generación aumentada por recuperación* tiene dos fases.\nOffline, divide los documentos en chunks, calcula el embedding de cada chunk y guarda los vectores en un índice.\nEn cada consulta, calcula el embedding de la consulta, toma los **k chunks más cercanos** y ponlos en el prompt junto a la consulta.\n\nEl modelo **responde a partir de ese texto y no solo de sus pesos**: puede citar sus fuentes y usar datos más nuevos que su entrenamiento.",
           "diagram": {
             "alt": "Dos filas. Offline: los documentos se dividen en chunks, se calcula el embedding de cada chunk y los vectores van a un índice. Online: se calcula el embedding de la consulta, una búsqueda vectorial en el índice devuelve los k chunks más cercanos, y la consulta más esos chunks forman el prompt del LLM, que escribe la salida."
           }
@@ -33,11 +33,11 @@
       "kind": "concept",
       "level": "intro",
       "title": "RAG gives a model facts it was never trained on",
-      "body": "A model knows only what was in its training data. It knows nothing about your wiki, your tickets, or last week. Retrieval-augmented generation fixes this at query time: it finds the relevant text and puts it in the prompt. To update the knowledge, update the index. Nobody trains a model, and a deleted document stops being used at once.",
+      "body": "A model knows only what was in its *training data*. It knows nothing about your wiki, your tickets, or last week.\n\nRetrieval-augmented generation fixes this at query time: it finds the relevant text and **puts it in the prompt**.\n\nTo update the knowledge, **update the index**. Nobody trains a model, and a deleted document stops being used at once.",
       "translations": {
         "es": {
           "title": "RAG da al modelo datos con los que nunca se entrenó",
-          "body": "Un modelo solo sabe lo que había en sus datos de entrenamiento. No sabe nada de tu wiki, de tus tickets ni de la semana pasada. La generación aumentada por recuperación lo arregla en cada consulta: busca el texto relevante y lo pone en el prompt. Para actualizar el conocimiento, actualiza el índice. Nadie entrena un modelo, y un documento borrado deja de usarse al momento."
+          "body": "Un modelo solo sabe lo que había en sus *datos de entrenamiento*. No sabe nada de tu wiki, de tus tickets ni de la semana pasada.\n\nLa generación aumentada por recuperación lo arregla en cada consulta: busca el texto relevante y **lo pone en el prompt**.\n\nPara actualizar el conocimiento, **actualiza el índice**. Nadie entrena un modelo, y un documento borrado deja de usarse al momento."
         }
       }
     },
@@ -46,7 +46,7 @@
       "kind": "concept",
       "level": "intro",
       "title": "The chunk is the unit of retrieval: its size decides what you can find",
-      "body": "Retrieval returns whole chunks, never half of one. A small chunk, about 200 tokens, matches a precise question well, but may lose the sentence before it that gives it meaning. A large chunk, about 1600 tokens, keeps the context, but its embedding is an average of many ideas and each one costs more prompt. Start near 300 to 500 tokens, then measure recall on real questions.",
+      "body": "Retrieval returns *whole* chunks, never half of one.\n\nA small chunk, about 200 tokens, matches a precise question well, but may lose the sentence before it that gives it meaning. A large chunk, about 1600 tokens, keeps the context, but its embedding is an average of many ideas and each one costs more prompt.\n\n**Start near 300 to 500 tokens**, then **measure recall on real questions**.",
       "diagram": {
         "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 164\" role=\"img\"><text class=\"d-label\" x=\"8\" y=\"12\">DOC</text><rect class=\"d-box\" x=\"8\" y=\"20\" width=\"304\" height=\"20\" rx=\"4\"/><rect class=\"d-hi\" x=\"88\" y=\"20\" width=\"28\" height=\"20\"/><text class=\"d-label\" x=\"8\" y=\"64\">CHUNK 200 TOKENS</text><rect class=\"d-box\" x=\"8\" y=\"72\" width=\"34\" height=\"24\" rx=\"4\"/><rect class=\"d-box\" x=\"46\" y=\"72\" width=\"34\" height=\"24\" rx=\"4\"/><rect class=\"d-hi\" x=\"84\" y=\"72\" width=\"34\" height=\"24\" rx=\"4\"/><rect class=\"d-box\" x=\"122\" y=\"72\" width=\"34\" height=\"24\" rx=\"4\"/><rect class=\"d-box\" x=\"160\" y=\"72\" width=\"34\" height=\"24\" rx=\"4\"/><rect class=\"d-box\" x=\"198\" y=\"72\" width=\"34\" height=\"24\" rx=\"4\"/><rect class=\"d-box\" x=\"236\" y=\"72\" width=\"34\" height=\"24\" rx=\"4\"/><rect class=\"d-box\" x=\"274\" y=\"72\" width=\"34\" height=\"24\" rx=\"4\"/><text class=\"d-label\" x=\"8\" y=\"120\">CHUNK 1600 TOKENS</text><rect class=\"d-box\" x=\"8\" y=\"128\" width=\"304\" height=\"24\" rx=\"4\"/><rect class=\"d-hi\" x=\"88\" y=\"128\" width=\"28\" height=\"24\"/></svg>",
         "alt": "Three rows. A document as a long bar with one short passage marked. The same document cut into eight chunks of 200 tokens: the passage fills one chunk. The same document as one chunk of 1600 tokens: the passage is a small part of it."
@@ -54,7 +54,7 @@
       "translations": {
         "es": {
           "title": "El chunk es la unidad de recuperación: su tamaño decide qué puedes encontrar",
-          "body": "La recuperación devuelve chunks enteros, nunca medio. Un chunk pequeño, de unos 200 tokens, encaja bien con una pregunta precisa, pero puede perder la frase anterior que le da sentido. Un chunk grande, de unos 1600 tokens, conserva el contexto, pero su embedding es una media de muchas ideas y cada uno gasta más prompt. Empieza entre 300 y 500 tokens y mide el recall con preguntas reales.",
+          "body": "La recuperación devuelve chunks *enteros*, nunca medio.\n\nUn chunk pequeño, de unos 200 tokens, encaja bien con una pregunta precisa, pero puede perder la frase anterior que le da sentido. Un chunk grande, de unos 1600 tokens, conserva el contexto, pero su embedding es una media de muchas ideas y cada uno gasta más prompt.\n\n**Empieza entre 300 y 500 tokens** y **mide el recall con preguntas reales**.",
           "diagram": {
             "alt": "Tres filas. Un documento como una barra larga con un pasaje corto marcado. El mismo documento cortado en ocho chunks de 200 tokens: el pasaje llena un chunk. El mismo documento como un solo chunk de 1600 tokens: el pasaje es una parte pequeña."
           }
@@ -66,7 +66,7 @@
       "kind": "concept",
       "level": "intro",
       "title": "Overlap keeps the sentence that a cut would split",
-      "body": "Fixed-size chunking cuts the text every N tokens, also in the middle of an idea. With overlap, each chunk repeats the end of the one before. A 512-token chunk with 64 tokens of overlap starts every 448 tokens, so a sentence shorter than the overlap is whole in at least one chunk. The price is a larger index: about 14% more chunks here. Keep the overlap near 10 to 20% of the chunk.",
+      "body": "Fixed-size chunking cuts the text every N tokens, also in the middle of an idea. With *overlap*, each chunk repeats the end of the one before.\n\nA 512-token chunk with 64 tokens of overlap starts every 448 tokens, so **a sentence shorter than the overlap is whole** in at least one chunk.\n\nThe price is a larger index: about 14% more chunks here. **Keep the overlap near 10 to 20% of the chunk.**",
       "diagram": {
         "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 148\" role=\"img\"><rect class=\"d-box\" x=\"8\" y=\"20\" width=\"120\" height=\"28\" rx=\"6\"/><rect class=\"d-hi\" x=\"96\" y=\"20\" width=\"32\" height=\"28\"/><text class=\"d-note d-start\" x=\"136\" y=\"34\">chunk 1</text><rect class=\"d-box\" x=\"96\" y=\"56\" width=\"120\" height=\"28\" rx=\"6\"/><rect class=\"d-hi\" x=\"96\" y=\"56\" width=\"32\" height=\"28\"/><rect class=\"d-hi\" x=\"184\" y=\"56\" width=\"32\" height=\"28\"/><text class=\"d-note d-start\" x=\"224\" y=\"70\">chunk 2</text><rect class=\"d-box\" x=\"184\" y=\"92\" width=\"120\" height=\"28\" rx=\"6\"/><rect class=\"d-hi\" x=\"184\" y=\"92\" width=\"32\" height=\"28\"/><text class=\"d-note d-end\" x=\"176\" y=\"106\">chunk 3</text><path class=\"d-line\" d=\"M8 123V129\"/><path class=\"d-line\" d=\"M96 123V129\"/><path class=\"d-line\" d=\"M128 123V129\"/><path class=\"d-line\" d=\"M184 123V129\"/><path class=\"d-line\" d=\"M216 123V129\"/><path class=\"d-line\" d=\"M304 123V129\"/><text class=\"d-note d-start\" x=\"8\" y=\"138\">0</text><text class=\"d-note\" x=\"96\" y=\"138\">448</text><text class=\"d-note\" x=\"128\" y=\"138\">512</text><text class=\"d-note\" x=\"184\" y=\"138\">896</text><text class=\"d-note\" x=\"216\" y=\"138\">960</text><text class=\"d-note d-end\" x=\"304\" y=\"138\">1408</text></svg>",
         "alt": "Three chunks of 512 tokens on a token axis, each one starting 448 tokens after the one before: at 0, 448 and 896. The last 64 tokens of each chunk are marked: they are also the first 64 tokens of the next chunk."
@@ -74,7 +74,7 @@
       "translations": {
         "es": {
           "title": "El solapamiento conserva la frase que un corte partiría",
-          "body": "El chunking de tamaño fijo corta el texto cada N tokens, también en mitad de una idea. Con solapamiento, cada chunk repite el final del anterior. Un chunk de 512 tokens con 64 de solapamiento empieza cada 448 tokens, así que una frase más corta que el solapamiento queda entera en al menos un chunk. El precio es un índice mayor: aquí, un 14 % más de chunks. Mantén el solapamiento entre el 10 y el 20 % del chunk.",
+          "body": "El chunking de tamaño fijo corta el texto cada N tokens, también en mitad de una idea. Con *solapamiento*, cada chunk repite el final del anterior.\n\nUn chunk de 512 tokens con 64 de solapamiento empieza cada 448 tokens, así que **una frase más corta que el solapamiento queda entera** en al menos un chunk.\n\nEl precio es un índice mayor: aquí, un 14 % más de chunks. **Mantén el solapamiento entre el 10 y el 20 % del chunk.**",
           "diagram": {
             "alt": "Tres chunks de 512 tokens sobre un eje de tokens, cada uno empieza 448 tokens después del anterior: en 0, 448 y 896. Los últimos 64 tokens de cada chunk están marcados: son también los primeros 64 del chunk siguiente."
           }
@@ -86,13 +86,13 @@
       "kind": "snippet",
       "level": "intro",
       "title": "Number the chunks so the model can cite them",
-      "body": "Give each chunk a number and ask for that number after each claim. The answer then has citations a user can open and your code can check: a [7] with five sources is a made-up reference. Keep the title of the document with the chunk; it helps the model and the reader.",
+      "body": "**Give each chunk a number and ask for that number** after each claim.\n\nThe answer then has *citations* a user can open and your code can check: a [7] with five sources is a made-up reference.\n\nKeep the title of the document with the chunk; it helps the model and the reader.",
       "code": "const sources = chunks\n  .map((c, i) => `[${i + 1}] ${c.title}\\n${c.text}`)\n  .join('\\n\\n');\n\nconst prompt = `Answer from the sources only.\nCite each claim as [n].\nIf the sources do not say, answer \"not found\".\n\n${sources}\n\nQuestion: ${query}`;",
       "syntax": "js",
       "translations": {
         "es": {
           "title": "Numera los chunks para que el modelo pueda citarlos",
-          "body": "Da un número a cada chunk y pide ese número después de cada afirmación. La respuesta lleva entonces citas que un usuario puede abrir y que tu código puede comprobar: un [7] con cinco fuentes es una referencia inventada. Mantén el título del documento junto al chunk; ayuda al modelo y al lector."
+          "body": "**Da un número a cada chunk y pide ese número** después de cada afirmación.\n\nLa respuesta lleva entonces *citas* que un usuario puede abrir y que tu código puede comprobar: un [7] con cinco fuentes es una referencia inventada.\n\nMantén el título del documento junto al chunk; ayuda al modelo y al lector."
         }
       }
     },
@@ -101,11 +101,11 @@
       "kind": "pitfall",
       "level": "intro",
       "title": "With no way out, the model answers from nothing",
-      "body": "The trap: the retriever always returns k chunks, also when no document has the answer. The symptom: a confident answer built from unrelated text or from the model's memory. The fix: tell the model to say that the sources do not have the answer, and drop the chunks below a similarity score that you chose from real queries. Test it with questions your corpus cannot answer.",
+      "body": "The trap: the retriever **always returns k chunks**, also when no document has the answer.\n\nThe symptom: a confident answer built from unrelated text or from the model's memory.\n\nThe fix: tell the model to say that *the sources do not have the answer*, and **drop the chunks below a similarity score** that you chose from real queries. Test it with questions your corpus cannot answer.",
       "translations": {
         "es": {
           "title": "Sin una salida, el modelo responde a partir de nada",
-          "body": "La trampa: el retriever devuelve siempre k chunks, también cuando ningún documento tiene la respuesta. El síntoma: una respuesta segura, construida con texto sin relación o con la memoria del modelo. La solución: di al modelo que diga que las fuentes no tienen la respuesta, y descarta los chunks por debajo de una puntuación de similitud que hayas elegido con consultas reales. Pruébalo con preguntas que tu corpus no puede responder."
+          "body": "La trampa: el retriever **devuelve siempre k chunks**, también cuando ningún documento tiene la respuesta.\n\nEl síntoma: una respuesta segura, construida con texto sin relación o con la memoria del modelo.\n\nLa solución: di al modelo que diga que *las fuentes no tienen la respuesta*, y **descarta los chunks por debajo de un umbral de similitud** que hayas elegido con consultas reales. Pruébalo con preguntas que tu corpus no puede responder."
         }
       }
     },
@@ -114,7 +114,7 @@
       "kind": "quiz",
       "level": "intro",
       "title": "In a RAG system, what does the vector search return?",
-      "body": "The search compares the embedding of the query with the embedding of each chunk and returns the nearest ones. It returns text, not an answer: the LLM writes the answer from those chunks. An exact word match is keyword search, such as BM25; a vector search can find a chunk that shares no word with the query.",
+      "body": "The search compares the embedding of the query with the embedding of each chunk and **returns the nearest chunks**.\n\nIt returns *text*, not an answer: the LLM writes the answer from those chunks.\n\nAn exact word match is keyword search, such as BM25; **a vector search can find a chunk that shares no word** with the query.",
       "options": [
         "The final answer to the question",
         "The chunks whose embeddings are nearest to the query embedding",
@@ -125,7 +125,7 @@
       "translations": {
         "es": {
           "title": "En un sistema RAG, ¿qué devuelve la búsqueda vectorial?",
-          "body": "La búsqueda compara el embedding de la consulta con el embedding de cada chunk y devuelve los más cercanos. Devuelve texto, no una respuesta: el LLM escribe la respuesta a partir de esos chunks. La coincidencia exacta de palabras es búsqueda por palabras clave, como BM25; una búsqueda vectorial puede encontrar un chunk que no comparte ninguna palabra con la consulta.",
+          "body": "La búsqueda compara el embedding de la consulta con el embedding de cada chunk y **devuelve los chunks más cercanos**.\n\nDevuelve *texto*, no una respuesta: el LLM escribe la respuesta a partir de esos chunks.\n\nLa coincidencia exacta de palabras es búsqueda por palabras clave, como BM25; una búsqueda vectorial **puede encontrar un chunk sin palabras comunes** con la consulta.",
           "options": [
             "La respuesta final a la pregunta",
             "Los chunks cuyos embeddings están más cerca del embedding de la consulta",
@@ -140,7 +140,7 @@
       "kind": "quiz",
       "level": "intro",
       "title": "Chunks of 400 tokens with 100 tokens of overlap: where does the third chunk start?",
-      "body": "Each chunk starts one step after the one before, and the step is the size minus the overlap: 400 − 100 = 300. The chunks start at tokens 0, 300 and 600. Token 800 ignores the overlap. More overlap means a smaller step, so more chunks and a larger index for the same text.",
+      "body": "Each chunk starts one *step* after the one before, and **the step is the size minus the overlap**: 400 − 100 = 300. The chunks start at tokens 0, 300 and 600.\n\nToken 800 ignores the overlap.\n\nMore overlap means a smaller step, so **more chunks and a larger index** for the same text.",
       "options": [
         "Token 800",
         "Token 500",
@@ -151,7 +151,7 @@
       "translations": {
         "es": {
           "title": "Chunks de 400 tokens con 100 tokens de solapamiento: ¿dónde empieza el tercer chunk?",
-          "body": "Cada chunk empieza un paso después del anterior, y el paso es el tamaño menos el solapamiento: 400 − 100 = 300. Los chunks empiezan en los tokens 0, 300 y 600. El token 800 no tiene en cuenta el solapamiento. Más solapamiento significa un paso más corto, es decir, más chunks y un índice mayor para el mismo texto.",
+          "body": "Cada chunk empieza un *paso* después del anterior, y **el paso es el tamaño menos el solapamiento**: 400 − 100 = 300. Los chunks empiezan en los tokens 0, 300 y 600.\n\nEl token 800 no tiene en cuenta el solapamiento.\n\nMás solapamiento significa un paso más corto, es decir, **más chunks y un índice mayor** para el mismo texto.",
           "options": [
             "Token 800",
             "Token 500",
@@ -166,14 +166,14 @@
       "kind": "resource",
       "level": "intro",
       "title": "Paper: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
-      "body": "The 2020 paper by Lewis and others that named RAG. It joins a dense retriever to a generator and shows that the pair beats a model that answers from its weights alone. Read the introduction and the method: the idea is the same in each RAG system built since.",
+      "body": "The 2020 paper by Lewis and others that *named* RAG.\n\nIt joins a dense retriever to a generator and shows that **the pair beats a model that answers from its weights alone**.\n\nRead the introduction and the method: **the idea is the same in each RAG system** built since.",
       "url": "https://arxiv.org/abs/2005.11401",
       "media": "article",
       "minutes": 40,
       "translations": {
         "es": {
           "title": "Artículo: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
-          "body": "El artículo de 2020 de Lewis y otros que dio nombre a RAG. Une un retriever denso con un generador y muestra que la pareja supera a un modelo que responde solo con sus pesos. Lee la introducción y el método: la idea es la misma en todos los sistemas RAG construidos desde entonces."
+          "body": "El artículo de 2020 de Lewis y otros que *dio nombre* a RAG.\n\nUne un retriever denso con un generador y muestra que **la pareja supera a un modelo que responde solo con sus pesos**.\n\nLee la introducción y el método: **la idea es la misma en todos los sistemas RAG** construidos desde entonces."
         }
       }
     },
@@ -182,7 +182,7 @@
       "kind": "concept",
       "level": "intermediate",
       "title": "Hybrid search runs keywords and vectors, then merges the two lists",
-      "body": "Vector search finds meaning: \"reset my password\" matches \"recover account access\". It is weak on exact strings: an error code, a product id, a function name. BM25 keyword search is the opposite. Hybrid search runs both and merges the two ranked lists, often with reciprocal rank fusion (RRF). A chunk that ranks high in both lists goes to the top. Use it when queries contain identifiers.",
+      "body": "Vector search finds *meaning*: \"reset my password\" matches \"recover account access\". It is **weak on exact strings**: an error code, a product id, a function name. BM25 keyword search is the opposite.\n\n*Hybrid search* runs both and merges the two ranked lists, often with reciprocal rank fusion (RRF). A chunk that ranks high in both lists goes to the top.\n\n**Use it when queries contain identifiers.**",
       "diagram": {
         "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 216\" role=\"img\"><defs><marker id=\"rag-hybrid-search-head\" viewBox=\"0 0 8 8\" refX=\"7\" refY=\"4\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path class=\"d-head\" d=\"M0 0L8 4L0 8z\"/></marker></defs><rect class=\"d-box\" x=\"128\" y=\"8\" width=\"64\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"160\" y=\"22\">query</text><path class=\"d-arrow\" marker-end=\"url(#rag-hybrid-search-head)\" d=\"M128 22H84V54\"/><path class=\"d-arrow\" marker-end=\"url(#rag-hybrid-search-head)\" d=\"M192 22H236V54\"/><rect class=\"d-box\" x=\"40\" y=\"56\" width=\"88\" height=\"40\" rx=\"6\"/><text class=\"d-text\" x=\"84\" y=\"69\">BM25</text><text class=\"d-note\" x=\"84\" y=\"85\">sparse</text><rect class=\"d-box\" x=\"192\" y=\"56\" width=\"88\" height=\"40\" rx=\"6\"/><text class=\"d-text\" x=\"236\" y=\"69\">vectors</text><text class=\"d-note\" x=\"236\" y=\"85\">dense</text><path class=\"d-arrow\" marker-end=\"url(#rag-hybrid-search-head)\" d=\"M84 96V142H126\"/><path class=\"d-arrow\" marker-end=\"url(#rag-hybrid-search-head)\" d=\"M236 96V142H194\"/><text class=\"d-note d-end\" x=\"78\" y=\"116\">d3 d1 d7</text><text class=\"d-note d-start\" x=\"242\" y=\"116\">d1 d9 d3</text><rect class=\"d-hi\" x=\"128\" y=\"128\" width=\"64\" height=\"28\" rx=\"6\"/><text class=\"d-text d-on-hi\" x=\"160\" y=\"142\">RRF</text><path class=\"d-arrow\" marker-end=\"url(#rag-hybrid-search-head)\" d=\"M160 156V178\"/><rect class=\"d-box\" x=\"128\" y=\"180\" width=\"64\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"160\" y=\"194\">top-k</text><text class=\"d-note d-start\" x=\"200\" y=\"194\">d1 d3 d9 d7</text></svg>",
         "alt": "The query goes to two searches: BM25, sparse, which ranks d3, d1, d7, and vectors, dense, which ranks d1, d9, d3. Both lists enter RRF, which gives one top-k list: d1, d3, d9, d7."
@@ -190,7 +190,7 @@
       "translations": {
         "es": {
           "title": "La búsqueda híbrida lanza palabras clave y vectores, y luego une las dos listas",
-          "body": "La búsqueda vectorial encuentra significado: \"restablecer mi contraseña\" encaja con \"recuperar el acceso a la cuenta\". Es débil con cadenas exactas: un código de error, un id de producto, el nombre de una función. La búsqueda por palabras clave BM25 es lo contrario. La búsqueda híbrida lanza las dos y une las dos listas ordenadas, a menudo con reciprocal rank fusion (RRF). Un chunk que está alto en ambas listas sube al principio. Úsala cuando las consultas contienen identificadores.",
+          "body": "La búsqueda vectorial encuentra *significado*: \"restablecer mi contraseña\" encaja con \"recuperar el acceso a la cuenta\". Es **débil con cadenas exactas**: un código de error, un id de producto, el nombre de una función. La búsqueda por palabras clave BM25 es lo contrario.\n\nLa *búsqueda híbrida* lanza las dos y une las dos listas ordenadas, a menudo con reciprocal rank fusion (RRF). Un chunk que está alto en ambas listas sube al principio.\n\n**Úsala cuando las consultas contienen identificadores.**",
           "diagram": {
             "alt": "La consulta va a dos búsquedas: BM25, dispersa, que ordena d3, d1, d7, y vectores, densa, que ordena d1, d9, d3. Las dos listas entran en RRF, que da una sola lista top-k: d1, d3, d9, d7."
           }
@@ -202,13 +202,13 @@
       "kind": "snippet",
       "level": "intermediate",
       "title": "Reciprocal rank fusion merges rankings without their scores",
-      "body": "A BM25 score and a cosine similarity have different scales, so you cannot add them. RRF uses only the rank: each list gives a chunk 1 / (k + rank). The constant k, 60 by convention, stops the first place of one list from dominating. It needs no tuning and no normalisation.",
+      "body": "A BM25 score and a cosine similarity have *different scales*, so you cannot add them.\n\nRRF uses **only the rank**: each list gives a chunk 1 / (k + rank). The constant k, 60 by convention, stops the first place of one list from dominating.\n\nIt needs **no tuning and no normalisation**.",
       "code": "// lists: arrays of chunk ids, best first\nconst rrf = (lists, k = 60) => {\n  const score = new Map();\n  for (const list of lists) {\n    list.forEach((id, rank) => {\n      const add = 1 / (k + rank + 1);\n      score.set(id, (score.get(id) ?? 0) + add);\n    });\n  }\n  return [...score.entries()]\n    .sort((a, b) => b[1] - a[1])\n    .map(([id]) => id);\n};",
       "syntax": "js",
       "translations": {
         "es": {
           "title": "Reciprocal rank fusion une rankings sin usar sus puntuaciones",
-          "body": "Una puntuación BM25 y una similitud del coseno tienen escalas distintas, así que no puedes sumarlas. RRF usa solo la posición: cada lista da a un chunk 1 / (k + posición). La constante k, 60 por convenio, evita que el primer puesto de una lista domine. No necesita ajustes ni normalización."
+          "body": "Una puntuación BM25 y una similitud del coseno tienen *escalas distintas*, así que no puedes sumarlas.\n\nRRF usa **solo la posición**: cada lista da a un chunk 1 / (k + posición). La constante k, 60 por convenio, evita que el primer puesto de una lista domine.\n\nNo necesita **ajustes ni normalización**."
         }
       }
     },
@@ -217,7 +217,7 @@
       "kind": "quiz",
       "level": "intermediate",
       "title": "Why does reciprocal rank fusion use ranks and not the scores of each search?",
-      "body": "BM25 scores have no upper bound and depend on the corpus; cosine similarity stays between −1 and 1. A sum of both lets one search decide alone. A rank means the same in each list, so RRF adds 1 / (k + rank). Speed is not the reason: the sort is tiny next to the two searches.",
+      "body": "BM25 scores have no upper bound and depend on the corpus; cosine similarity stays between −1 and 1. **A sum of both lets one search decide alone.**\n\nA *rank* means the same in each list, so RRF adds 1 / (k + rank).\n\nSpeed is not the reason: **the sort is tiny next to the two searches**.",
       "options": [
         "A BM25 score and a cosine similarity are on different scales",
         "Ranks are faster to compute than scores",
@@ -228,7 +228,7 @@
       "translations": {
         "es": {
           "title": "¿Por qué reciprocal rank fusion usa posiciones y no las puntuaciones de cada búsqueda?",
-          "body": "Las puntuaciones BM25 no tienen límite superior y dependen del corpus; la similitud del coseno está entre −1 y 1. Si sumas las dos, una búsqueda decide sola. Una posición significa lo mismo en cada lista, así que RRF suma 1 / (k + posición). La velocidad no es el motivo: la ordenación es mínima al lado de las dos búsquedas.",
+          "body": "Las puntuaciones BM25 no tienen límite superior y dependen del corpus; la similitud del coseno está entre −1 y 1. **Si sumas las dos, una búsqueda decide sola.**\n\nUna *posición* significa lo mismo en cada lista, así que RRF suma 1 / (k + posición).\n\nLa velocidad no es el motivo: **la ordenación es mínima al lado de las dos búsquedas**.",
           "options": [
             "Una puntuación BM25 y una similitud del coseno están en escalas distintas",
             "Las posiciones se calculan más rápido que las puntuaciones",
@@ -243,7 +243,7 @@
       "kind": "concept",
       "level": "intermediate",
       "title": "Retrieve wide, then rerank narrow",
-      "body": "A vector index compares a query with a million chunks in milliseconds, because each chunk was embedded alone, in advance. That speed costs precision. A cross-encoder reads the query and one chunk together and scores the pair, which is more accurate but needs one model pass per pair. So use two stages: take the top 50 from the index, rerank them with the cross-encoder, and send the best 5 to the LLM.",
+      "body": "A vector index compares a query with a million chunks in milliseconds, because each chunk was embedded alone, in advance. **That speed costs precision.**\n\nA *cross-encoder* reads the query and one chunk together and scores the pair, which is more accurate but needs one model pass per pair.\n\nSo use two stages:\ntake the top 50 from the index,\nrerank them with the cross-encoder,\n**send the best 5 to the LLM**.",
       "diagram": {
         "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 256\" role=\"img\"><defs><marker id=\"rag-reranking-head\" viewBox=\"0 0 8 8\" refX=\"7\" refY=\"4\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path class=\"d-head\" d=\"M0 0L8 4L0 8z\"/></marker></defs><rect class=\"d-box\" x=\"40\" y=\"8\" width=\"240\" height=\"40\" rx=\"6\"/><text class=\"d-text\" x=\"160\" y=\"21\">index</text><text class=\"d-note\" x=\"160\" y=\"37\">1 000 000 chunks</text><path class=\"d-arrow\" marker-end=\"url(#rag-reranking-head)\" d=\"M160 48V68\"/><text class=\"d-note d-start\" x=\"168\" y=\"58\">ANN</text><rect class=\"d-box\" x=\"80\" y=\"70\" width=\"160\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"160\" y=\"84\">top-50</text><path class=\"d-arrow\" marker-end=\"url(#rag-reranking-head)\" d=\"M160 98V118\"/><rect class=\"d-hi\" x=\"100\" y=\"120\" width=\"120\" height=\"28\" rx=\"6\"/><text class=\"d-text d-on-hi\" x=\"160\" y=\"134\">cross-encoder</text><path class=\"d-arrow\" marker-end=\"url(#rag-reranking-head)\" d=\"M160 148V168\"/><rect class=\"d-box\" x=\"128\" y=\"170\" width=\"64\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"160\" y=\"184\">top-5</text><path class=\"d-arrow\" marker-end=\"url(#rag-reranking-head)\" d=\"M160 198V218\"/><rect class=\"d-box\" x=\"128\" y=\"220\" width=\"64\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"160\" y=\"234\">LLM</text></svg>",
         "alt": "A funnel from top to bottom. An index of 1 000 000 chunks gives the top 50 through an ANN search. A cross-encoder, highlighted, reranks the 50 and keeps the top 5, which go to the LLM."
@@ -251,7 +251,7 @@
       "translations": {
         "es": {
           "title": "Recupera a lo ancho y luego reordena en estrecho",
-          "body": "Un índice vectorial compara una consulta con un millón de chunks en milisegundos, porque el embedding de cada chunk se calculó por separado y por adelantado. Esa velocidad cuesta precisión. Un cross-encoder lee la consulta y un chunk juntos y puntúa la pareja: es más preciso, pero necesita una pasada del modelo por pareja. Usa dos etapas: toma los 50 primeros del índice, haz reranking con el cross-encoder y envía los 5 mejores al LLM.",
+          "body": "Un índice vectorial compara una consulta con un millón de chunks en milisegundos, porque el embedding de cada chunk se calculó por separado y por adelantado. **Esa velocidad cuesta precisión.**\n\nUn *cross-encoder* lee la consulta y un chunk juntos y puntúa la pareja: es más preciso, pero necesita una pasada del modelo por pareja.\n\nUsa dos etapas:\ntoma los 50 primeros del índice,\nhaz reranking con el cross-encoder,\n**envía los 5 mejores al LLM**.",
           "diagram": {
             "alt": "Un embudo de arriba abajo. Un índice de 1 000 000 de chunks da los 50 primeros con una búsqueda ANN. Un cross-encoder, resaltado, reordena los 50 y se queda con los 5 primeros, que van al LLM."
           }
@@ -263,7 +263,7 @@
       "kind": "concept",
       "level": "intermediate",
       "title": "recall@k: how many of the relevant chunks reached the top k",
-      "body": "For a query with known relevant chunks, recall@k is the share of them inside the first k results. Four chunks are relevant and three are in the top 5: recall@5 is 0.75. It measures the retriever alone, before any LLM. If the right chunk is not retrieved, no prompt can save the answer. Build a set of 50 real questions with their relevant chunks and track recall@k on each change.",
+      "body": "For a query with known relevant chunks, *recall@k* is the share of them inside the first k results. Four chunks are relevant and three are in the top 5: recall@5 is 0.75.\n\nIt measures **the retriever alone**, before any LLM. If the right chunk is not retrieved, **no prompt can save the answer**.\n\nBuild a set of 50 real questions with their relevant chunks and track recall@k on each change.",
       "diagram": {
         "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 124\" role=\"img\"><path class=\"d-line\" d=\"M13 30V24H157V30\"/><text class=\"d-note\" x=\"85\" y=\"13\">k = 5</text><rect class=\"d-hi\" x=\"13\" y=\"36\" width=\"24\" height=\"24\" rx=\"4\"/><text class=\"d-note\" x=\"25\" y=\"72\">1</text><rect class=\"d-box\" x=\"43\" y=\"36\" width=\"24\" height=\"24\" rx=\"4\"/><text class=\"d-note\" x=\"55\" y=\"72\">2</text><rect class=\"d-hi\" x=\"73\" y=\"36\" width=\"24\" height=\"24\" rx=\"4\"/><text class=\"d-note\" x=\"85\" y=\"72\">3</text><rect class=\"d-hi\" x=\"103\" y=\"36\" width=\"24\" height=\"24\" rx=\"4\"/><text class=\"d-note\" x=\"115\" y=\"72\">4</text><rect class=\"d-box\" x=\"133\" y=\"36\" width=\"24\" height=\"24\" rx=\"4\"/><text class=\"d-note\" x=\"145\" y=\"72\">5</text><rect class=\"d-box\" x=\"163\" y=\"36\" width=\"24\" height=\"24\" rx=\"4\"/><text class=\"d-note\" x=\"175\" y=\"72\">6</text><rect class=\"d-box\" x=\"193\" y=\"36\" width=\"24\" height=\"24\" rx=\"4\"/><text class=\"d-note\" x=\"205\" y=\"72\">7</text><rect class=\"d-hi\" x=\"223\" y=\"36\" width=\"24\" height=\"24\" rx=\"4\"/><text class=\"d-note\" x=\"235\" y=\"72\">8</text><rect class=\"d-box\" x=\"253\" y=\"36\" width=\"24\" height=\"24\" rx=\"4\"/><text class=\"d-note\" x=\"265\" y=\"72\">9</text><rect class=\"d-box\" x=\"283\" y=\"36\" width=\"24\" height=\"24\" rx=\"4\"/><text class=\"d-note\" x=\"295\" y=\"72\">10</text><text class=\"d-text\" x=\"160\" y=\"104\">recall@5 = 3 / 4 = 0.75</text></svg>",
         "alt": "A ranked list of 10 results. The relevant ones are at ranks 1, 3, 4 and 8. A bracket marks the first 5 results: it holds 3 of the 4 relevant ones, so recall@5 is 0.75."
@@ -271,7 +271,7 @@
       "translations": {
         "es": {
           "title": "recall@k: cuántos de los chunks relevantes llegaron a los k primeros",
-          "body": "Para una consulta con chunks relevantes conocidos, recall@k es la parte de ellos que está entre los k primeros resultados. Hay cuatro chunks relevantes y tres están entre los 5 primeros: recall@5 es 0,75. Mide solo el retriever, antes de cualquier LLM. Si el chunk correcto no se recupera, ningún prompt salva la respuesta. Prepara un conjunto de 50 preguntas reales con sus chunks relevantes y sigue recall@k en cada cambio.",
+          "body": "Para una consulta con chunks relevantes conocidos, *recall@k* es la parte de ellos que está entre los k primeros resultados. Hay cuatro chunks relevantes y tres están entre los 5 primeros: recall@5 es 0,75.\n\nMide **solo el retriever**, antes de cualquier LLM. Si el chunk correcto no se recupera, **ningún prompt salva la respuesta**.\n\nPrepara un conjunto de 50 preguntas reales con sus chunks relevantes y sigue recall@k en cada cambio.",
           "diagram": {
             "alt": "Una lista ordenada de 10 resultados. Los relevantes están en las posiciones 1, 3, 4 y 8. Un corchete marca los 5 primeros resultados: contiene 3 de los 4 relevantes, así que recall@5 es 0,75."
           }
@@ -283,7 +283,7 @@
       "kind": "concept",
       "level": "intermediate",
       "title": "Rewrite a follow-up into a standalone query before you search",
-      "body": "In a chat, the third question is often \"and how do I disable it?\". Embedded alone, \"it\" matches nothing useful: the subject is two turns back. First ask an LLM to rewrite the last message, with the history, into one complete query, \"how do I disable two-factor login?\", and search with that. The same step can fix typos, expand an acronym or split a double question into two searches.",
+      "body": "In a chat, the third question is often \"and how do I disable it?\". Embedded alone, *it* matches nothing useful: the subject is two turns back.\n\nFirst **ask an LLM to rewrite the last message**, with the history, into one complete query, \"how do I disable two-factor login?\", and **search with that**.\n\nThe same step can fix typos, expand an acronym or split a double question into two searches.",
       "diagram": {
         "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 252\" role=\"img\"><defs><marker id=\"rag-query-rewriting-head\" viewBox=\"0 0 8 8\" refX=\"7\" refY=\"4\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path class=\"d-head\" d=\"M0 0L8 4L0 8z\"/></marker></defs><rect class=\"d-box\" x=\"8\" y=\"8\" width=\"136\" height=\"40\" rx=\"6\"/><text class=\"d-text\" x=\"76\" y=\"21\">history</text><text class=\"d-note\" x=\"76\" y=\"37\">msg 1, msg 2</text><rect class=\"d-box\" x=\"176\" y=\"8\" width=\"136\" height=\"40\" rx=\"6\"/><text class=\"d-text\" x=\"244\" y=\"21\">query</text><text class=\"d-note\" x=\"244\" y=\"37\">msg 3</text><path class=\"d-arrow\" marker-end=\"url(#rag-query-rewriting-head)\" d=\"M76 48V104H102\"/><path class=\"d-arrow\" marker-end=\"url(#rag-query-rewriting-head)\" d=\"M244 48V104H218\"/><rect class=\"d-hi\" x=\"104\" y=\"84\" width=\"112\" height=\"40\" rx=\"6\"/><text class=\"d-text d-on-hi\" x=\"160\" y=\"97\">rewrite</text><text class=\"d-note\" x=\"160\" y=\"113\">LLM</text><path class=\"d-arrow\" marker-end=\"url(#rag-query-rewriting-head)\" d=\"M160 124V150\"/><rect class=\"d-box\" x=\"104\" y=\"152\" width=\"112\" height=\"40\" rx=\"6\"/><text class=\"d-text\" x=\"160\" y=\"165\">query</text><text class=\"d-note\" x=\"160\" y=\"181\">standalone</text><path class=\"d-arrow\" marker-end=\"url(#rag-query-rewriting-head)\" d=\"M160 192V214\"/><rect class=\"d-box\" x=\"104\" y=\"216\" width=\"112\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"160\" y=\"230\">retriever</text></svg>",
         "alt": "The history, messages 1 and 2, and the query, message 3, both enter a rewrite step done by an LLM, highlighted. It gives one standalone query, which goes to the retriever."
@@ -291,7 +291,7 @@
       "translations": {
         "es": {
           "title": "Reescribe una pregunta de seguimiento como consulta autónoma antes de buscar",
-          "body": "En un chat, la tercera pregunta suele ser \"¿y cómo lo desactivo?\". Si calculas su embedding sin más, \"lo\" no encaja con nada útil: el sujeto está dos turnos atrás. Pide primero a un LLM que reescriba el último mensaje, con el historial, como una consulta completa, \"¿cómo desactivo el inicio de sesión en dos pasos?\", y busca con ella. El mismo paso puede corregir erratas, expandir una sigla o dividir una pregunta doble en dos búsquedas.",
+          "body": "En un chat, la tercera pregunta suele ser \"¿y cómo lo desactivo?\". Si calculas su embedding sin más, *lo* no encaja con nada útil: el sujeto está dos turnos atrás.\n\nPide primero **a un LLM que reescriba el último mensaje**, con el historial, como una consulta completa, \"¿cómo desactivo el inicio de sesión en dos pasos?\", y **busca con ella**.\n\nEl mismo paso puede corregir erratas, expandir una sigla o dividir una pregunta doble en dos búsquedas.",
           "diagram": {
             "alt": "El historial, mensajes 1 y 2, y la consulta, mensaje 3, entran en un paso de reescritura que hace un LLM, resaltado. Sale una consulta autónoma, que va al retriever."
           }
@@ -303,13 +303,13 @@
       "kind": "snippet",
       "level": "intermediate",
       "title": "A sliding window is the baseline chunker",
-      "body": "Count tokens, not characters: the limits of the embedding model and of the prompt are in tokens. The break stops a last chunk that would hold only overlap. This baseline ignores structure, so it can cut a sentence or a table. Use it to get a first recall number, then try a splitter that follows headings and paragraphs.",
+      "body": "**Count tokens, not characters**: the limits of the embedding model and of the prompt are in tokens. The break stops a last chunk that would hold only overlap.\n\nThis *baseline* ignores structure, so it can cut a sentence or a table.\n\nUse it to get a first recall number, then **try a splitter that follows headings and paragraphs**.",
       "code": "const chunk = (tokens, size = 512, overlap = 64) => {\n  const step = size - overlap;\n  const chunks = [];\n  for (let i = 0; i < tokens.length; i += step) {\n    chunks.push(tokens.slice(i, i + size));\n    if (i + size >= tokens.length) break;\n  }\n  return chunks;\n};",
       "syntax": "js",
       "translations": {
         "es": {
           "title": "Una ventana deslizante es el chunker de referencia",
-          "body": "Cuenta tokens, no caracteres: los límites del modelo de embeddings y del prompt están en tokens. El break evita un último chunk que solo tendría solapamiento. Esta base no tiene en cuenta la estructura, así que puede cortar una frase o una tabla. Úsala para obtener una primera cifra de recall y luego prueba un divisor que siga los encabezados y los párrafos."
+          "body": "**Cuenta tokens, no caracteres**: los límites del modelo de embeddings y del prompt están en tokens. El break evita un último chunk que solo tendría solapamiento.\n\nEsta *base* no tiene en cuenta la estructura, así que puede cortar una frase o una tabla.\n\nÚsala para obtener una primera cifra de recall y luego **prueba un divisor que siga los encabezados y los párrafos**."
         }
       }
     },
@@ -318,13 +318,13 @@
       "kind": "snippet",
       "level": "intermediate",
       "title": "A content hash lets a re-index touch only what changed",
-      "body": "An embedding call costs money and time, so do not embed the whole corpus again each night. Hash the text of each chunk. Before you embed, read the stored hash and skip the chunk when it is equal. The upsert writes only the rows whose hash changed, and the delete removes the tail of a document that became shorter. Delete all the chunks of a document that no longer exists.",
+      "body": "An embedding call costs money and time, so **do not embed the whole corpus again** each night.\n\n*Hash* the text of each chunk. Before you embed, read the stored hash and **skip the chunk when it is equal**.\n\nThe upsert writes only the rows whose hash changed, and the delete removes the tail of a document that became shorter. Delete all the chunks of a document that no longer exists.",
       "code": "INSERT INTO chunks (doc_id, chunk_no, hash, body, embedding)\nVALUES ($1, $2, $3, $4, $5)\nON CONFLICT (doc_id, chunk_no) DO UPDATE\nSET hash = EXCLUDED.hash,\n    body = EXCLUDED.body,\n    embedding = EXCLUDED.embedding\nWHERE chunks.hash <> EXCLUDED.hash;\n\n-- chunks of a document that is now shorter\nDELETE FROM chunks\nWHERE doc_id = $1 AND chunk_no >= $2;",
       "syntax": "sql",
       "translations": {
         "es": {
           "title": "Un hash del contenido permite reindexar solo lo que ha cambiado",
-          "body": "Una llamada de embedding cuesta dinero y tiempo, así que no calcules cada noche los embeddings de todo el corpus. Calcula un hash del texto de cada chunk. Antes de calcular el embedding, lee el hash guardado y salta el chunk si es igual. El upsert escribe solo las filas cuyo hash ha cambiado, y el delete quita la cola de un documento que ahora es más corto. Borra todos los chunks de un documento que ya no existe."
+          "body": "Una llamada de embedding cuesta dinero y tiempo, así que **no calcules cada noche los embeddings de todo el corpus**.\n\nCalcula un *hash* del texto de cada chunk. Antes de calcular el embedding, lee el hash guardado y **salta el chunk si es igual**.\n\nEl upsert escribe solo las filas cuyo hash ha cambiado, y el delete quita la cola de un documento que ahora es más corto. Borra todos los chunks de un documento que ya no existe."
         }
       }
     },
@@ -333,11 +333,11 @@
       "kind": "pitfall",
       "level": "intermediate",
       "title": "A fixed-size cut separates a table from its heading",
-      "body": "The trap: you split each document every 500 tokens and ignore its structure. The symptom: a chunk holds the second half of a table, or a list of steps with no title, and neither the retriever nor the LLM can tell what it is about. The fix: split on headings, paragraphs and code blocks first, then by size inside a section. Put the document title and the heading path at the start of each chunk.",
+      "body": "The trap: you split each document every 500 tokens and **ignore its structure**.\n\nThe symptom: a chunk holds the second half of a table, or a list of steps with no title, and neither the retriever nor the LLM can tell *what it is about*.\n\nThe fix: **split on headings, paragraphs and code blocks first**, then by size inside a section. Put the document title and the heading path at the start of each chunk.",
       "translations": {
         "es": {
           "title": "Un corte de tamaño fijo separa una tabla de su encabezado",
-          "body": "La trampa: divides cada documento cada 500 tokens sin mirar su estructura. El síntoma: un chunk tiene la segunda mitad de una tabla, o una lista de pasos sin título, y ni el retriever ni el LLM saben de qué trata. La solución: divide primero por encabezados, párrafos y bloques de código, y después por tamaño dentro de una sección. Pon el título del documento y la ruta de encabezados al principio de cada chunk."
+          "body": "La trampa: divides cada documento cada 500 tokens **sin mirar su estructura**.\n\nEl síntoma: un chunk tiene la segunda mitad de una tabla, o una lista de pasos sin título, y ni el retriever ni el LLM saben *de qué trata*.\n\nLa solución: **divide primero por encabezados, párrafos y bloques de código**, y después por tamaño dentro de una sección. Pon el título del documento y la ruta de encabezados al principio de cada chunk."
         }
       }
     },
@@ -346,7 +346,7 @@
       "kind": "pitfall",
       "level": "intermediate",
       "title": "A model reads the start and the end of a long prompt best",
-      "body": "The trap: you put 20 chunks in the prompt in any order. The symptom: the right chunk is there, at position 10, and the answer ignores it. Accuracy against position is a U: high at the start and at the end, low in the middle. The fix: send fewer chunks, rerank them, and put the best ones first or last. Put the question after the chunks, at the end.",
+      "body": "The trap: you put 20 chunks in the prompt in any order.\n\nThe symptom: the right chunk is there, at position 10, and the answer ignores it. Accuracy against position is a *U*: **high at the start and at the end, low in the middle**.\n\nThe fix: send fewer chunks, rerank them, and **put the best ones first or last**. Put the question after the chunks, at the end.",
       "diagram": {
         "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 168\" role=\"img\"><path class=\"d-line\" d=\"M40 20V140H296\"/><text class=\"d-note\" x=\"22\" y=\"24\">✓ %</text><path class=\"d-data-line\" d=\"M48 40C110 150 210 150 272 48\"/><circle class=\"d-dot\" cx=\"48\" cy=\"40\" r=\"4\"/><circle class=\"d-dot\" cx=\"160\" cy=\"123.5\" r=\"4\"/><circle class=\"d-dot\" cx=\"272\" cy=\"48\" r=\"4\"/><text class=\"d-note\" x=\"64\" y=\"153\">chunk 1</text><text class=\"d-note\" x=\"160\" y=\"153\">chunk 10</text><text class=\"d-note\" x=\"264\" y=\"153\">chunk 20</text></svg>",
         "alt": "A U-shaped curve. The horizontal axis is the position of the relevant chunk in the prompt, from chunk 1 to chunk 20. The vertical axis is the share of right answers: high for chunk 1 and chunk 20, lowest near chunk 10."
@@ -354,7 +354,7 @@
       "translations": {
         "es": {
           "title": "Un modelo lee mejor el principio y el final de un prompt largo",
-          "body": "La trampa: pones 20 chunks en el prompt en cualquier orden. El síntoma: el chunk correcto está ahí, en la posición 10, y la respuesta no lo usa. El acierto según la posición tiene forma de U: alto al principio y al final, bajo en el medio. La solución: envía menos chunks, haz reranking y pon los mejores al principio o al final. Pon la pregunta después de los chunks, al final.",
+          "body": "La trampa: pones 20 chunks en el prompt en cualquier orden.\n\nEl síntoma: el chunk correcto está ahí, en la posición 10, y la respuesta no lo usa. El acierto según la posición tiene forma de *U*: **alto al principio y al final, bajo en el medio**.\n\nLa solución: envía menos chunks, haz reranking y **pon los mejores al principio o al final**. Pon la pregunta después de los chunks, al final.",
           "diagram": {
             "alt": "Una curva en forma de U. El eje horizontal es la posición del chunk relevante en el prompt, del chunk 1 al chunk 20. El eje vertical es la parte de respuestas correctas: alta para el chunk 1 y el chunk 20, mínima cerca del chunk 10."
           }
@@ -366,7 +366,7 @@
       "kind": "pitfall",
       "level": "intermediate",
       "title": "The index is a copy, and a copy goes stale",
-      "body": "The trap: you index the documents one time and forget that they change. The symptom: the answer quotes a policy that was replaced last month, or a page that was deleted, with a citation that looks right. The fix: treat the index as a derived store. Re-index a document when it changes, delete its chunks when it is removed, and store the source version and date with each chunk so you can find the old ones.",
+      "body": "The trap: you index the documents one time and forget that they change.\n\nThe symptom: the answer quotes a policy that was replaced last month, or a page that was deleted, with **a citation that looks right**.\n\nThe fix: treat the index as a *derived store*. **Re-index a document when it changes**, delete its chunks when it is removed, and store the source version and date with each chunk so you can find the old ones.",
       "diagram": {
         "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 188\" role=\"img\"><defs><marker id=\"rag-stale-index-head\" viewBox=\"0 0 8 8\" refX=\"7\" refY=\"4\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path class=\"d-head\" d=\"M0 0L8 4L0 8z\"/></marker></defs><text class=\"d-label\" x=\"8\" y=\"12\">SOURCE</text><rect class=\"d-box\" x=\"8\" y=\"20\" width=\"88\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"52\" y=\"34\">doc v1</text><path class=\"d-arrow\" marker-end=\"url(#rag-stale-index-head)\" d=\"M96 34H222\"/><text class=\"d-note\" x=\"160\" y=\"25\">UPDATE</text><rect class=\"d-box\" x=\"224\" y=\"20\" width=\"88\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"268\" y=\"34\">doc v2</text><text class=\"d-label\" x=\"8\" y=\"84\">INDEX</text><path class=\"d-arrow\" marker-end=\"url(#rag-stale-index-head)\" d=\"M72 48V90\"/><text class=\"d-note d-start\" x=\"79\" y=\"66\">embed</text><rect class=\"d-box\" x=\"8\" y=\"92\" width=\"88\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"52\" y=\"106\">chunks v1</text><path class=\"d-arrow d-dash\" marker-end=\"url(#rag-stale-index-head)\" d=\"M96 106H222\"/><rect class=\"d-hi\" x=\"224\" y=\"92\" width=\"88\" height=\"28\" rx=\"6\"/><text class=\"d-text d-on-hi\" x=\"268\" y=\"106\">chunks v1</text><text class=\"d-note\" x=\"268\" y=\"70\">✗</text><path class=\"d-arrow\" marker-end=\"url(#rag-stale-index-head)\" d=\"M268 120V150\"/><rect class=\"d-box\" x=\"224\" y=\"152\" width=\"88\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"268\" y=\"166\">LLM</text></svg>",
         "alt": "Two rows. Source: doc v1 is updated to doc v2. Index: the chunks of v1 were embedded from doc v1 and nothing updates them, so the index still holds chunks v1, highlighted, next to doc v2. Those old chunks go to the LLM."
@@ -374,7 +374,7 @@
       "translations": {
         "es": {
           "title": "El índice es una copia, y una copia se queda obsoleta",
-          "body": "La trampa: indexas los documentos una vez y olvidas que cambian. El síntoma: la respuesta cita una política que se sustituyó el mes pasado, o una página borrada, con una cita que parece correcta. La solución: trata el índice como un almacén derivado. Reindexa un documento cuando cambia, borra sus chunks cuando se elimina y guarda la versión y la fecha del origen con cada chunk para poder encontrar los antiguos.",
+          "body": "La trampa: indexas los documentos una vez y olvidas que cambian.\n\nEl síntoma: la respuesta cita una política que se sustituyó el mes pasado, o una página borrada, con **una cita que parece correcta**.\n\nLa solución: trata el índice como un *almacén derivado*. **Reindexa un documento cuando cambia**, borra sus chunks cuando se elimina y guarda la versión y la fecha del origen con cada chunk para poder encontrar los antiguos.",
           "diagram": {
             "alt": "Dos filas. Origen: doc v1 se actualiza a doc v2. Índice: los chunks de v1 se calcularon a partir de doc v1 y nada los actualiza, así que el índice sigue con los chunks v1, resaltados, junto a doc v2. Esos chunks antiguos van al LLM."
           }
@@ -386,7 +386,7 @@
       "kind": "quiz",
       "level": "intermediate",
       "title": "You raise top-k from 5 to 40 and the answers get worse. What is the most likely cause?",
-      "body": "A larger k raises recall: the right chunk is more often in the prompt. It also adds chunks that are near the query but do not answer it. The model must find one good passage among 39 distractors, and the prompt costs more and takes longer. Keep k small and raise the quality instead: rerank, then send the best 5.",
+      "body": "A larger k raises recall: the right chunk is more often in the prompt. It also adds chunks that are *near* the query but do not answer it.\n\nThe model must find one good passage among 39 **distractors**, and the prompt costs more and takes longer.\n\n**Keep k small and raise the quality instead**: rerank, then send the best 5.",
       "options": [
         "The vector index returns results in random order above 10",
         "The embedding model has a limit of 5 results",
@@ -397,7 +397,7 @@
       "translations": {
         "es": {
           "title": "Subes top-k de 5 a 40 y las respuestas empeoran. ¿Cuál es la causa más probable?",
-          "body": "Un k mayor sube el recall: el chunk correcto está más veces en el prompt. También añade chunks que están cerca de la consulta pero no la responden. El modelo tiene que encontrar un pasaje bueno entre 39 distractores, y el prompt cuesta más y tarda más. Mantén k pequeño y sube la calidad: haz reranking y envía los 5 mejores.",
+          "body": "Un k mayor sube el recall: el chunk correcto está más veces en el prompt. También añade chunks que están *cerca* de la consulta pero no la responden.\n\nEl modelo tiene que encontrar un pasaje bueno entre 39 **distractores**, y el prompt cuesta más y tarda más.\n\n**Mantén k pequeño y sube la calidad**: haz reranking y envía los 5 mejores.",
           "options": [
             "El índice vectorial devuelve los resultados en orden aleatorio a partir de 10",
             "El modelo de embeddings tiene un límite de 5 resultados",
@@ -412,7 +412,7 @@
       "kind": "quiz",
       "level": "intermediate",
       "title": "Three queries: the first relevant chunk is at rank 1, 2 and 4. What is the MRR?",
-      "body": "Mean reciprocal rank takes 1 / rank of the first relevant result of each query and averages it: (1 + 0.5 + 0.25) / 3 = 0.58. The answer 0.43 is 1 over the mean rank, which is a different number. MRR rewards a retriever that puts one right chunk at the very top. Use recall@k when the answer needs several chunks.",
+      "body": "*Mean reciprocal rank* takes 1 / rank of the first relevant result of each query and averages it: **(1 + 0.5 + 0.25) / 3 = 0.58**.\n\nThe answer 0.43 is 1 over the mean rank, which is a different number.\n\nMRR rewards a retriever that **puts one right chunk at the very top**. Use recall@k when the answer needs several chunks.",
       "options": [
         "0.58",
         "0.43",
@@ -427,7 +427,7 @@
       "translations": {
         "es": {
           "title": "Tres consultas: el primer chunk relevante está en la posición 1, 2 y 4. ¿Cuál es el MRR?",
-          "body": "Mean reciprocal rank toma 1 / posición del primer resultado relevante de cada consulta y hace la media: (1 + 0,5 + 0,25) / 3 = 0,58. La respuesta 0,43 es 1 entre la posición media, que es otro número. El MRR premia a un retriever que pone un chunk correcto arriba del todo. Usa recall@k cuando la respuesta necesita varios chunks.",
+          "body": "*Mean reciprocal rank* toma 1 / posición del primer resultado relevante de cada consulta y hace la media: **(1 + 0,5 + 0,25) / 3 = 0,58**.\n\nLa respuesta 0,43 es 1 entre la posición media, que es otro número.\n\nEl MRR premia a un retriever que **pone un chunk correcto arriba del todo**. Usa recall@k cuando la respuesta necesita varios chunks.",
           "options": [
             "0,58",
             "0,43",
@@ -445,14 +445,14 @@
       "kind": "resource",
       "level": "intermediate",
       "title": "Paper: Lost in the Middle: How Language Models Use Long Contexts",
-      "body": "Liu and others move the one relevant document through a long prompt and measure the answer. Accuracy is highest when the document is first or last and drops in the middle, also for models with a large context window. The first figures are enough to change how you order chunks.",
+      "body": "Liu and others move the *one* relevant document through a long prompt and measure the answer.\n\nAccuracy is **highest when the document is first or last** and drops in the middle, also for models with a large context window.\n\nThe first figures are enough to **change how you order chunks**.",
       "url": "https://arxiv.org/abs/2307.03172",
       "media": "article",
       "minutes": 35,
       "translations": {
         "es": {
           "title": "Artículo: Lost in the Middle: How Language Models Use Long Contexts",
-          "body": "Liu y otros mueven el único documento relevante a lo largo de un prompt largo y miden la respuesta. El acierto es máximo cuando el documento va el primero o el último y cae en el medio, también en modelos con una ventana de contexto grande. Las primeras figuras bastan para cambiar cómo ordenas los chunks."
+          "body": "Liu y otros mueven el *único* documento relevante a lo largo de un prompt largo y miden la respuesta.\n\nEl acierto es **máximo cuando el documento va el primero o el último** y cae en el medio, también en modelos con una ventana de contexto grande.\n\nLas primeras figuras bastan para **cambiar cómo ordenas los chunks**."
         }
       }
     },
@@ -461,11 +461,11 @@
       "kind": "concept",
       "level": "advanced",
       "title": "Faithfulness: is each claim of the answer in the retrieved text?",
-      "body": "An answer can be correct and still unfaithful: the model used its memory, not your chunks. Tomorrow that memory is wrong and nothing warns you. To measure faithfulness, split the answer into claims and check each one against the retrieved chunks, usually with an LLM as judge. The score is the supported claims over all claims. Track it next to answer relevance: an answer that only says \"not found\" is faithful and useless.",
+      "body": "An answer can be correct and still *unfaithful*: the model used its memory, not your chunks. Tomorrow that memory is wrong and nothing warns you.\n\nTo measure faithfulness, **split the answer into claims and check each one** against the retrieved chunks, usually with an LLM as judge. The score is the supported claims over all claims.\n\nTrack it next to answer relevance: an answer that only says \"not found\" is **faithful and useless**.",
       "translations": {
         "es": {
           "title": "Faithfulness: ¿está cada afirmación de la respuesta en el texto recuperado?",
-          "body": "Una respuesta puede ser correcta y aun así no ser fiel: el modelo usó su memoria, no tus chunks. Mañana esa memoria falla y nada te avisa. Para medir la fidelidad, divide la respuesta en afirmaciones y comprueba cada una con los chunks recuperados, normalmente con un LLM como juez. La puntuación es el número de afirmaciones respaldadas entre el total. Síguela junto a la relevancia de la respuesta: una respuesta que solo dice \"no encontrado\" es fiel e inútil."
+          "body": "Una respuesta puede ser correcta y aun así *no ser fiel*: el modelo usó su memoria, no tus chunks. Mañana esa memoria falla y nada te avisa.\n\nPara medir la fidelidad, **divide la respuesta en afirmaciones y comprueba cada una** con los chunks recuperados, normalmente con un LLM como juez. La puntuación es el número de afirmaciones respaldadas entre el total.\n\nSíguela junto a la relevancia de la respuesta: una respuesta que solo dice \"no encontrado\" es **fiel e inútil**."
         }
       }
     },
@@ -474,7 +474,7 @@
       "kind": "concept",
       "level": "advanced",
       "title": "Agentic retrieval lets the model decide what to search, and when",
-      "body": "A classic pipeline searches one time, with the user's words. Some questions need more: \"compare the refund policy of this year and last year\" needs two searches, and a second one may depend on the first result. Give the model a search tool. It writes a query, reads the chunks, and searches again or answers. It handles multi-step questions, at a price: several LLM calls per answer, more latency, and a loop that needs a step limit.",
+      "body": "A classic pipeline searches *one time*, with the user's words. Some questions need more: \"compare the refund policy of this year and last year\" needs two searches, and a second one may depend on the first result.\n\n**Give the model a search tool.** It writes a query, reads the chunks, and searches again or answers.\n\nIt handles multi-step questions, at a price: several LLM calls per answer, more latency, and **a loop that needs a step limit**.",
       "diagram": {
         "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 172\" role=\"img\"><defs><marker id=\"rag-agentic-retrieval-head\" viewBox=\"0 0 8 8\" refX=\"7\" refY=\"4\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path class=\"d-head\" d=\"M0 0L8 4L0 8z\"/></marker></defs><rect class=\"d-box\" x=\"48\" y=\"8\" width=\"64\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"80\" y=\"22\">query</text><path class=\"d-arrow\" marker-end=\"url(#rag-agentic-retrieval-head)\" d=\"M80 36V58\"/><rect class=\"d-hi\" x=\"24\" y=\"60\" width=\"112\" height=\"40\" rx=\"6\"/><text class=\"d-text d-on-hi\" x=\"80\" y=\"80\">LLM</text><path class=\"d-arrow\" marker-end=\"url(#rag-agentic-retrieval-head)\" d=\"M136 68H206\"/><text class=\"d-note\" x=\"171\" y=\"59\">query</text><path class=\"d-arrow\" marker-end=\"url(#rag-agentic-retrieval-head)\" d=\"M208 92H138\"/><text class=\"d-note\" x=\"171\" y=\"102\">chunks</text><text class=\"d-note\" x=\"171\" y=\"80\">× n</text><rect class=\"d-box\" x=\"208\" y=\"60\" width=\"104\" height=\"40\" rx=\"6\"/><text class=\"d-text\" x=\"260\" y=\"73\">search</text><text class=\"d-note\" x=\"260\" y=\"89\">tool</text><path class=\"d-arrow\" marker-end=\"url(#rag-agentic-retrieval-head)\" d=\"M80 100V130\"/><rect class=\"d-box\" x=\"24\" y=\"132\" width=\"112\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"80\" y=\"146\">output</text></svg>",
         "alt": "The query enters the LLM, highlighted. The LLM sends a query to a search tool and gets chunks back, in a loop that repeats n times. Then the LLM writes the output."
@@ -482,7 +482,7 @@
       "translations": {
         "es": {
           "title": "La recuperación agéntica deja que el modelo decida qué buscar y cuándo",
-          "body": "Un pipeline clásico busca una vez, con las palabras del usuario. Algunas preguntas necesitan más: \"compara la política de devoluciones de este año y del anterior\" necesita dos búsquedas, y la segunda puede depender del primer resultado. Da al modelo una herramienta de búsqueda. Escribe una consulta, lee los chunks y busca otra vez o responde. Resuelve preguntas de varios pasos, con un precio: varias llamadas al LLM por respuesta, más latencia y un bucle que necesita un límite de pasos.",
+          "body": "Un pipeline clásico busca *una vez*, con las palabras del usuario. Algunas preguntas necesitan más: \"compara la política de devoluciones de este año y del anterior\" necesita dos búsquedas, y la segunda puede depender del primer resultado.\n\n**Da al modelo una herramienta de búsqueda.** Escribe una consulta, lee los chunks y busca otra vez o responde.\n\nResuelve preguntas de varios pasos, con un precio: varias llamadas al LLM por respuesta, más latencia y **un bucle que necesita un límite de pasos**.",
           "diagram": {
             "alt": "La consulta entra en el LLM, resaltado. El LLM envía una consulta a una herramienta de búsqueda y recibe chunks, en un bucle que se repite n veces. Después el LLM escribe la salida."
           }
@@ -494,13 +494,13 @@
       "kind": "snippet",
       "level": "advanced",
       "title": "Measure the retriever with recall@k and reciprocal rank",
-      "body": "Both functions score one query: the ranked ids from the retriever against the ids that a person marked as relevant. Average each one over the test set; the mean of rr is the MRR. No LLM runs, so the whole evaluation takes seconds and you can run it on each change to the chunking, the embedding model or the index. The labels are the cost: start with 50 real questions.",
+      "body": "Both functions score one query: the ranked ids from the retriever against the ids that a person marked as *relevant*. Average each one over the test set; the mean of rr is the MRR.\n\n**No LLM runs**, so the whole evaluation takes seconds and you can run it on each change to the chunking, the embedding model or the index.\n\nThe labels are the cost: **start with 50 real questions**.",
       "code": "// run: { ranked: [ids], relevant: Set of ids }\nconst recallAt = (k) => ({ ranked, relevant }) =>\n  ranked.slice(0, k).filter((id) => relevant.has(id)).length\n  / relevant.size;\n\nconst rr = ({ ranked, relevant }) => {\n  const i = ranked.findIndex((id) => relevant.has(id));\n  return i < 0 ? 0 : 1 / (i + 1);\n};",
       "syntax": "js",
       "translations": {
         "es": {
           "title": "Mide el retriever con recall@k y reciprocal rank",
-          "body": "Las dos funciones puntúan una consulta: los ids ordenados del retriever frente a los ids que una persona marcó como relevantes. Haz la media de cada una sobre el conjunto de prueba; la media de rr es el MRR. No se ejecuta ningún LLM, así que toda la evaluación tarda segundos y puedes lanzarla en cada cambio del chunking, del modelo de embeddings o del índice. El coste son las etiquetas: empieza con 50 preguntas reales."
+          "body": "Las dos funciones puntúan una consulta: los ids ordenados del retriever frente a los ids que una persona marcó como *relevantes*. Haz la media de cada una sobre el conjunto de prueba; la media de rr es el MRR.\n\n**No se ejecuta ningún LLM**, así que toda la evaluación tarda segundos y puedes lanzarla en cada cambio del chunking, del modelo de embeddings o del índice.\n\nEl coste son las etiquetas: **empieza con 50 preguntas reales**."
         }
       }
     },
@@ -509,11 +509,11 @@
       "kind": "pitfall",
       "level": "advanced",
       "title": "Filter by permission in the search, not in the prompt",
-      "body": "The trap: one index holds the documents of every team, and the prompt tells the model to hide what the user must not see. The symptom: a question about salaries retrieves an HR chunk, and the model quotes it. An instruction is not access control. The fix: store the allowed groups with each chunk and filter on them in the retrieval query itself. A chunk that the user cannot read must never reach the prompt.",
+      "body": "The trap: one index holds the documents of every team, and the prompt tells the model to hide what the user must not see.\n\nThe symptom: a question about salaries retrieves an HR chunk, and the model quotes it. **An instruction is not access control.**\n\nThe fix: store the allowed groups with each chunk and **filter on them in the retrieval query** itself. A chunk that the user cannot read must *never* reach the prompt.",
       "translations": {
         "es": {
           "title": "Filtra por permisos en la búsqueda, no en el prompt",
-          "body": "La trampa: un solo índice tiene los documentos de todos los equipos, y el prompt le dice al modelo que oculte lo que el usuario no debe ver. El síntoma: una pregunta sobre sueldos recupera un chunk de RR. HH., y el modelo lo cita. Una instrucción no es control de acceso. La solución: guarda los grupos permitidos con cada chunk y filtra por ellos en la propia consulta de recuperación. Un chunk que el usuario no puede leer nunca debe llegar al prompt."
+          "body": "La trampa: un solo índice tiene los documentos de todos los equipos, y el prompt le dice al modelo que oculte lo que el usuario no debe ver.\n\nEl síntoma: una pregunta sobre sueldos recupera un chunk de RR. HH., y el modelo lo cita. **Una instrucción no es control de acceso.**\n\nLa solución: guarda los grupos permitidos con cada chunk y **filtra por ellos en la propia consulta de recuperación**. Un chunk que el usuario no puede leer *nunca* debe llegar al prompt."
         }
       }
     },
@@ -522,11 +522,11 @@
       "kind": "pitfall",
       "level": "advanced",
       "title": "One end-to-end score hides which stage failed",
-      "body": "The trap: you judge only the final answer. The symptom: quality drops and you change the prompt for a week, while the cause is a retriever that no longer returns the right chunk. The fix: measure the two stages apart. Retrieval: recall@k and MRR against labelled chunks. Generation: faithfulness and relevance, given the retrieved chunks. Low recall: fix the chunking or the search. High recall with bad answers: fix the prompt or the model.",
+      "body": "The trap: you judge only the final answer. The symptom: quality drops and you change the prompt for a week, while the cause is a retriever that no longer returns the right chunk.\n\nThe fix: **measure the two stages apart**.\n*Retrieval*: recall@k and MRR against labelled chunks.\n*Generation*: faithfulness and relevance, given the retrieved chunks.\n\nLow recall: **fix the chunking or the search**. High recall with bad answers: fix the prompt or the model.",
       "translations": {
         "es": {
           "title": "Una sola puntuación de extremo a extremo oculta qué etapa falló",
-          "body": "La trampa: evalúas solo la respuesta final. El síntoma: la calidad baja y cambias el prompt durante una semana, cuando la causa es un retriever que ya no devuelve el chunk correcto. La solución: mide las dos etapas por separado. Recuperación: recall@k y MRR frente a chunks etiquetados. Generación: fidelidad y relevancia, dados los chunks recuperados. Recall bajo: arregla el chunking o la búsqueda. Recall alto con malas respuestas: arregla el prompt o el modelo."
+          "body": "La trampa: evalúas solo la respuesta final. El síntoma: la calidad baja y cambias el prompt durante una semana, cuando la causa es un retriever que ya no devuelve el chunk correcto.\n\nLa solución: **mide las dos etapas por separado**.\n*Recuperación*: recall@k y MRR frente a chunks etiquetados.\n*Generación*: fidelidad y relevancia, dados los chunks recuperados.\n\nRecall bajo: **arregla el chunking o la búsqueda**. Recall alto con malas respuestas: arregla el prompt o el modelo."
         }
       }
     },
@@ -535,7 +535,7 @@
       "kind": "quiz",
       "level": "advanced",
       "title": "Your whole corpus fits in the context window of a large model. Why can RAG still be the better choice?",
-      "body": "Cost and latency grow with the tokens of the prompt, on each query. RAG sends a few thousand tokens in place of the whole corpus, so it is cheaper and faster, and it gives citations. Long context is not always wrong: for one small document set, a few queries, or reasoning over a whole text, it is simpler and often better. Prompt caching narrows the cost gap.",
+      "body": "**Cost and latency grow with the tokens of the prompt**, on each query. RAG sends a few thousand tokens in place of the whole corpus, so it is cheaper and faster, and it gives citations.\n\nLong context is *not* always wrong: for one small document set, a few queries, or reasoning over a whole text, **it is simpler and often better**. Prompt caching narrows the cost gap.",
       "options": [
         "A long prompt always gives wrong answers",
         "Each query pays for every token of the corpus, and waits for it",
@@ -546,7 +546,7 @@
       "translations": {
         "es": {
           "title": "Todo tu corpus cabe en la ventana de contexto de un modelo grande. ¿Por qué RAG puede seguir siendo mejor?",
-          "body": "El coste y la latencia crecen con los tokens del prompt, en cada consulta. RAG envía unos miles de tokens en lugar de todo el corpus, así que es más barato y más rápido, y da citas. El contexto largo no siempre es un error: con un conjunto pequeño de documentos, pocas consultas o un razonamiento sobre un texto entero, es más sencillo y a menudo mejor. El prompt caching reduce la diferencia de coste.",
+          "body": "**El coste y la latencia crecen con los tokens del prompt**, en cada consulta. RAG envía unos miles de tokens en lugar de todo el corpus, así que es más barato y más rápido, y da citas.\n\nEl contexto largo *no* siempre es un error: con un conjunto pequeño de documentos, pocas consultas o un razonamiento sobre un texto entero, **es más sencillo y a menudo mejor**. El prompt caching reduce la diferencia de coste.",
           "options": [
             "Un prompt largo siempre da respuestas incorrectas",
             "Cada consulta paga todos los tokens del corpus y espera por ellos",
@@ -561,14 +561,14 @@
       "kind": "resource",
       "level": "advanced",
       "title": "Paper: Ragas: Automated Evaluation of Retrieval Augmented Generation",
-      "body": "Defines three metrics for a RAG system that need no reference answer: faithfulness, answer relevance and context relevance, each computed with an LLM. Read it for the definitions and for how a claim is checked against the context. The open-source library of the same name implements them.",
+      "body": "Defines three metrics for a RAG system that **need no reference answer**: *faithfulness*, *answer relevance* and *context relevance*, each computed with an LLM.\n\nRead it for the definitions and for **how a claim is checked against the context**. The open-source library of the same name implements them.",
       "url": "https://arxiv.org/abs/2309.15217",
       "media": "article",
       "minutes": 30,
       "translations": {
         "es": {
           "title": "Artículo: Ragas: Automated Evaluation of Retrieval Augmented Generation",
-          "body": "Define tres métricas para un sistema RAG que no necesitan una respuesta de referencia: fidelidad, relevancia de la respuesta y relevancia del contexto, cada una calculada con un LLM. Léelo por las definiciones y por cómo se comprueba una afirmación con el contexto. La librería de código abierto del mismo nombre las implementa."
+          "body": "Define tres métricas para un sistema RAG que **no necesitan una respuesta de referencia**: *fidelidad*, *relevancia de la respuesta* y *relevancia del contexto*, cada una calculada con un LLM.\n\nLéelo por las definiciones y por **cómo se comprueba una afirmación con el contexto**. La librería de código abierto del mismo nombre las implementa."
         }
       }
     }
