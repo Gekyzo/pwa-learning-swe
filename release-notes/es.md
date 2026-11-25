@@ -4,6 +4,10 @@ Lo que cambia para ti en cada versión de la app. La versión más nueva va prim
 
 ## Unreleased
 
+No change.
+
+## 0.6.5 - 2026-11-26
+
 - Un tema nuevo, LLMs en una aplicación web, con 30 tarjetas: el proxy en el servidor, el streaming, los reintentos, los timeouts y los límites de coste. 13 de las tarjetas tienen un diagrama.
 - Un tema nuevo, Agentes, herramientas y MCP, con 30 tarjetas: el bucle del agente, la ingeniería de contexto, los servidores MCP y la seguridad de los agentes. 11 de las tarjetas tienen un diagrama.
 - Un tema nuevo, Evals y observabilidad, con 30 tarjetas: conjuntos de evals, evaluadores, varianza, trazas y la opinión de los usuarios. 10 de las tarjetas tienen un diagrama.
