@@ -1,6 +1,6 @@
 {
   "id": "embeddings",
-  "version": 1,
+  "version": 2,
   "title": "Embeddings and vector search",
   "translations": {
     "es": {
@@ -13,7 +13,7 @@
       "kind": "concept",
       "level": "intro",
       "title": "An embedding turns meaning into a position in space",
-      "body": "An embedding model reads a text and returns a list of numbers, for example 1536 of them: a vector. The model is trained so that texts with a similar meaning get vectors that are close together. \"GET\" lands near \"POST\" and far from \"JOIN\". Search then becomes geometry: embed the query and take the nearest vectors. No single number means anything alone; only the distances do.",
+      "body": "An *embedding model* reads a text and returns a list of numbers, for example 1536 of them: a **vector**.\n\nThe model is trained so that texts with a similar meaning get **vectors that are close together**. \"GET\" lands near \"POST\" and far from \"JOIN\".\n\nSearch then becomes geometry: embed the query and take the nearest vectors. No single number means anything alone; only the *distances* do.",
       "diagram": {
         "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 156\" role=\"img\"><path class=\"d-line\" d=\"M24 12V140H304\"/><circle class=\"d-ink\" cx=\"72\" cy=\"36\" r=\"3\"/><text class=\"d-note d-start\" x=\"80\" y=\"36\">GET</text><circle class=\"d-ink\" cx=\"56\" cy=\"72\" r=\"3\"/><text class=\"d-note d-start\" x=\"64\" y=\"72\">PUT</text><circle class=\"d-ink\" cx=\"104\" cy=\"84\" r=\"3\"/><text class=\"d-note d-start\" x=\"112\" y=\"84\">POST</text><circle class=\"d-ink\" cx=\"216\" cy=\"92\" r=\"3\"/><text class=\"d-note d-start\" x=\"224\" y=\"92\">SELECT</text><circle class=\"d-ink\" cx=\"264\" cy=\"114\" r=\"3\"/><text class=\"d-note d-start\" x=\"272\" y=\"114\">JOIN</text><circle class=\"d-ink\" cx=\"184\" cy=\"126\" r=\"3\"/><text class=\"d-note d-start\" x=\"192\" y=\"126\">WHERE</text><circle class=\"d-dot\" cx=\"120\" cy=\"52\" r=\"4.5\"/><text class=\"d-note d-start\" x=\"129\" y=\"52\">PATCH</text></svg>",
         "alt": "Points on a plane. GET, PUT, POST and PATCH form one group at the top left; SELECT, JOIN and WHERE form another group at the bottom right. PATCH, highlighted, is inside the group of the HTTP methods."
@@ -21,7 +21,7 @@
       "translations": {
         "es": {
           "title": "Un embedding convierte el significado en una posición en el espacio",
-          "body": "Un modelo de embeddings lee un texto y devuelve una lista de números, por ejemplo 1536: un vector. El modelo se entrena para que los textos con un significado parecido tengan vectores cercanos. \"GET\" queda cerca de \"POST\" y lejos de \"JOIN\". La búsqueda pasa a ser geometría: calcula el embedding de la consulta y toma los vectores más cercanos. Ningún número significa nada por sí solo; solo cuentan las distancias.",
+          "body": "Un *modelo de embeddings* lee un texto y devuelve una lista de números, por ejemplo 1536: un **vector**.\n\nEl modelo se entrena para que los textos con un significado parecido tengan **vectores cercanos**. \"GET\" queda cerca de \"POST\" y lejos de \"JOIN\".\n\nLa búsqueda pasa a ser geometría: calcula el embedding de la consulta y toma los vectores más cercanos. Ningún número significa nada por sí solo; solo cuentan las *distancias*.",
           "diagram": {
             "alt": "Puntos en un plano. GET, PUT, POST y PATCH forman un grupo arriba a la izquierda; SELECT, JOIN y WHERE forman otro grupo abajo a la derecha. PATCH, resaltado, está dentro del grupo de los métodos HTTP."
           }
@@ -33,7 +33,7 @@
       "kind": "concept",
       "level": "intro",
       "title": "Cosine similarity ignores the length of the vectors",
-      "body": "Cosine similarity is the cosine of the angle between two vectors: 1 for the same direction, 0 for a right angle, −1 for opposite directions. Only the direction counts. A long document and a short one about the same topic point the same way, so they score near 1. Compute it as the dot product divided by the product of the two lengths. Most text embedding models are trained for it.",
+      "body": "*Cosine similarity* is the cosine of the angle between two vectors: 1 for the same direction, 0 for a right angle, −1 for opposite directions.\n\n**Only the direction counts.** A long document and a short one about the same topic point the same way, so they score near 1.\n\nCompute it as **the dot product divided by the product of the two lengths**. Most text embedding models are trained for it.",
       "diagram": {
         "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 152\" role=\"img\"><defs><marker id=\"embeddings-cosine-head\" viewBox=\"0 0 8 8\" refX=\"7\" refY=\"4\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path class=\"d-head\" d=\"M0 0L8 4L0 8z\"/></marker></defs><path class=\"d-line\" d=\"M40 12V140H304\"/><path class=\"d-arrow\" marker-end=\"url(#embeddings-cosine-head)\" d=\"M40 140L200 60\"/><path class=\"d-arrow\" marker-end=\"url(#embeddings-cosine-head)\" d=\"M40 140L240 120\"/><path class=\"d-data-line\" d=\"M100 134A60 60 0 0 0 94 113\"/><text class=\"d-note\" x=\"112\" y=\"123\">θ</text><text class=\"d-note\" x=\"208\" y=\"52\">a</text><text class=\"d-note\" x=\"250\" y=\"116\">b</text><text class=\"d-text\" x=\"232\" y=\"28\">cos θ = 0.93</text></svg>",
         "alt": "Two vectors, a and b, start at the origin. The small angle θ between them is highlighted. A label says cos θ = 0.93."
@@ -41,7 +41,7 @@
       "translations": {
         "es": {
           "title": "La similitud del coseno no tiene en cuenta la longitud de los vectores",
-          "body": "La similitud del coseno es el coseno del ángulo entre dos vectores: 1 para la misma dirección, 0 para un ángulo recto, −1 para direcciones opuestas. Solo cuenta la dirección. Un documento largo y uno corto sobre el mismo tema apuntan hacia el mismo sitio, así que puntúan cerca de 1. Se calcula como el producto escalar dividido por el producto de las dos longitudes. La mayoría de los modelos de embeddings de texto se entrenan para ella.",
+          "body": "La *similitud del coseno* es el coseno del ángulo entre dos vectores: 1 para la misma dirección, 0 para un ángulo recto, −1 para direcciones opuestas.\n\n**Solo cuenta la dirección.** Un documento largo y uno corto sobre el mismo tema apuntan hacia el mismo sitio, así que puntúan cerca de 1.\n\nSe calcula como **el producto escalar dividido entre las dos longitudes**. La mayoría de los modelos de embeddings de texto se entrenan para ella.",
           "diagram": {
             "alt": "Dos vectores, a y b, salen del origen. El ángulo pequeño θ entre ellos está resaltado. Una etiqueta dice cos θ = 0,93."
           }
@@ -53,11 +53,11 @@
       "kind": "concept",
       "level": "intro",
       "title": "Each dimension costs memory on every vector",
-      "body": "A vector of 1536 float32 values takes 1536 × 4 bytes: about 6 KB. One million of them take 6 GB before any index, and a search must read them. More dimensions can hold finer meaning, but the gain flattens while storage, RAM and latency grow in a straight line. Some models let you cut a vector to its first 256 or 512 values with a small loss. Measure recall before you pay for the largest size.",
+      "body": "A vector of 1536 float32 values takes 1536 × 4 bytes: **about 6 KB**. One million of them take 6 GB before any index, and a search must read them.\n\nMore dimensions can hold finer meaning, but *the gain flattens* while storage, RAM and latency grow in a straight line.\n\nSome models let you cut a vector to its first 256 or 512 values with a small loss. **Measure recall before you pay for the largest size.**",
       "translations": {
         "es": {
           "title": "Cada dimensión cuesta memoria en todos los vectores",
-          "body": "Un vector de 1536 valores float32 ocupa 1536 × 4 bytes: unos 6 KB. Un millón de ellos ocupan 6 GB antes de cualquier índice, y una búsqueda tiene que leerlos. Más dimensiones pueden guardar un significado más fino, pero la mejora se aplana mientras el almacenamiento, la RAM y la latencia crecen en línea recta. Algunos modelos permiten recortar un vector a sus primeros 256 o 512 valores con poca pérdida. Mide el recall antes de pagar el tamaño mayor."
+          "body": "Un vector de 1536 valores float32 ocupa 1536 × 4 bytes: **unos 6 KB**. Un millón de ellos ocupan 6 GB antes de cualquier índice, y una búsqueda tiene que leerlos.\n\nMás dimensiones pueden guardar un significado más fino, pero *la mejora se aplana* mientras el almacenamiento, la RAM y la latencia crecen en línea recta.\n\nAlgunos modelos permiten recortar un vector a sus primeros 256 o 512 valores con poca pérdida. **Mide el recall antes de pagar el tamaño mayor.**"
         }
       }
     },
@@ -66,13 +66,13 @@
       "kind": "snippet",
       "level": "intro",
       "title": "Cosine similarity is a dot product over two lengths",
-      "body": "The dot product multiplies the two vectors value by value and adds the results. The norm is the length of a vector. Divide the dot product by both lengths and only the angle is left. In floating point the first result can be 0.9999999999999998. A database does this for you, with SIMD; write it by hand only to understand it or to test.",
+      "body": "The *dot product* multiplies the two vectors value by value and adds the results. The *norm* is the length of a vector. Divide the dot product by both lengths and **only the angle is left**.\n\nIn floating point the first result can be 0.9999999999999998. **A database does this for you**, with SIMD; write it by hand only to understand it or to test.",
       "code": "const dot = (a, b) =>\n  a.reduce((sum, x, i) => sum + x * b[i], 0);\nconst norm = (a) => Math.sqrt(dot(a, a));\n\nconst cosine = (a, b) => dot(a, b) / (norm(a) * norm(b));\n\ncosine([1, 2], [2, 4]);  // 1: same direction\ncosine([1, 0], [0, 1]);  // 0: right angle\ncosine([1, 0], [-1, 0]); // -1: opposite",
       "syntax": "js",
       "translations": {
         "es": {
           "title": "La similitud del coseno es un producto escalar entre dos longitudes",
-          "body": "El producto escalar multiplica los dos vectores valor a valor y suma los resultados. La norma es la longitud de un vector. Divide el producto escalar por las dos longitudes y solo queda el ángulo. En coma flotante el primer resultado puede ser 0,9999999999999998. Una base de datos lo hace por ti, con SIMD; escríbelo a mano solo para entenderlo o para probar."
+          "body": "El *producto escalar* multiplica los dos vectores valor a valor y suma los resultados. La *norma* es la longitud de un vector. Divide el producto escalar por las dos longitudes y **solo queda el ángulo**.\n\nEn coma flotante el primer resultado puede ser 0,9999999999999998. **Una base de datos lo hace por ti**, con SIMD; escríbelo a mano solo para entenderlo o para probar."
         }
       }
     },
@@ -81,13 +81,13 @@
       "kind": "snippet",
       "level": "intro",
       "title": "pgvector stores vectors in a Postgres column",
-      "body": "The vector type holds a fixed number of dimensions. The operator <=> is cosine distance, which is 1 minus cosine similarity, so order ascending: the smallest distance is the best match. With no index, Postgres compares the query with each row, which is exact and fine up to some tens of thousands of rows. The vectors live next to your data: joins, filters and transactions work as usual.",
+      "body": "The vector type holds a fixed number of dimensions. The operator <=> is *cosine distance*, which is 1 minus cosine similarity, so **order ascending: the smallest distance is the best match**.\n\nWith no index, Postgres compares the query with each row, which is exact and fine **up to some tens of thousands of rows**.\n\nThe vectors live next to your data: joins, filters and transactions work as usual.",
       "code": "CREATE EXTENSION vector;\n\nCREATE TABLE chunks (\n  id bigserial PRIMARY KEY,\n  body text,\n  embedding vector(1536)\n);\n\n-- the 5 chunks nearest to the query vector $1\nSELECT id, body, embedding <=> $1 AS distance\nFROM chunks\nORDER BY embedding <=> $1\nLIMIT 5;",
       "syntax": "sql",
       "translations": {
         "es": {
           "title": "pgvector guarda vectores en una columna de Postgres",
-          "body": "El tipo vector tiene un número fijo de dimensiones. El operador <=> es la distancia del coseno, que es 1 menos la similitud del coseno, así que ordena de menor a mayor: la distancia más pequeña es la mejor coincidencia. Sin índice, Postgres compara la consulta con cada fila, lo que es exacto y suficiente hasta unas decenas de miles de filas. Los vectores viven junto a tus datos: los joins, los filtros y las transacciones funcionan como siempre."
+          "body": "El tipo vector tiene un número fijo de dimensiones. El operador <=> es la *distancia del coseno*, que es 1 menos la similitud del coseno, así que **ordena de menor a mayor: la distancia más pequeña gana**.\n\nSin índice, Postgres compara la consulta con cada fila, lo que es exacto y suficiente **hasta unas decenas de miles de filas**.\n\nLos vectores viven junto a tus datos: los joins, los filtros y las transacciones funcionan como siempre."
         }
       }
     },
@@ -96,11 +96,11 @@
       "kind": "pitfall",
       "level": "intro",
       "title": "A query and a document from two models share no space",
-      "body": "The trap: you index the documents with one embedding model and embed the queries with another, perhaps a cheaper one. The symptom: no error, the dimensions may even be equal, and the results look random. Each model has its own space; a distance between vectors of two models means nothing. The fix: store the model name with the index and embed each query with exactly that model and the same settings.",
+      "body": "The trap: you index the documents with one embedding model and embed the queries with another, perhaps a cheaper one.\n\nThe symptom: no error, the dimensions may even be equal, and the results look random. **Each model has its own space**; a distance between vectors of two models means *nothing*.\n\nThe fix: store the model name with the index and **embed each query with exactly that model** and the same settings.",
       "translations": {
         "es": {
           "title": "Una consulta y un documento de dos modelos no comparten espacio",
-          "body": "La trampa: indexas los documentos con un modelo de embeddings y calculas los de las consultas con otro, quizá más barato. El síntoma: ningún error, las dimensiones pueden incluso coincidir, y los resultados parecen aleatorios. Cada modelo tiene su propio espacio; una distancia entre vectores de dos modelos no significa nada. La solución: guarda el nombre del modelo con el índice y calcula el embedding de cada consulta con ese mismo modelo y los mismos ajustes."
+          "body": "La trampa: indexas los documentos con un modelo de embeddings y calculas los de las consultas con otro, quizá más barato.\n\nEl síntoma: ningún error, las dimensiones pueden incluso coincidir, y los resultados parecen aleatorios. **Cada modelo tiene su propio espacio**; una distancia entre vectores de dos modelos no significa *nada*.\n\nLa solución: guarda el nombre del modelo con el índice y **calcula cada consulta con ese mismo modelo** y los mismos ajustes."
         }
       }
     },
@@ -109,11 +109,11 @@
       "kind": "pitfall",
       "level": "intro",
       "title": "An embedding model drops the text that goes past its limit",
-      "body": "The trap: you send a 20-page document to an embedding model with an input limit of 512 tokens. The symptom: depending on the API, an error or a silent cut. With the cut, the vector describes only the first page, and a search for page 10 never finds the document. The fix: count the tokens before you embed, split long texts into chunks under the limit and embed each chunk.",
+      "body": "The trap: you send a 20-page document to an embedding model with an input limit of 512 tokens.\n\nThe symptom: depending on the API, an error or a *silent cut*. With the cut, **the vector describes only the first page**, and a search for page 10 never finds the document.\n\nThe fix: count the tokens before you embed, **split long texts into chunks under the limit** and embed each chunk.",
       "translations": {
         "es": {
           "title": "Un modelo de embeddings descarta el texto que pasa de su límite",
-          "body": "La trampa: envías un documento de 20 páginas a un modelo de embeddings con un límite de entrada de 512 tokens. El síntoma: según la API, un error o un corte silencioso. Con el corte, el vector describe solo la primera página, y una búsqueda sobre la página 10 nunca encuentra el documento. La solución: cuenta los tokens antes de calcular el embedding, divide los textos largos en chunks por debajo del límite y calcula el embedding de cada chunk."
+          "body": "La trampa: envías un documento de 20 páginas a un modelo de embeddings con un límite de entrada de 512 tokens.\n\nEl síntoma: según la API, un error o un *corte silencioso*. Con el corte, **el vector describe solo la primera página**, y una búsqueda sobre la página 10 nunca encuentra el documento.\n\nLa solución: cuenta los tokens antes de calcular el embedding, **divide los textos largos en chunks por debajo del límite** y calcula el embedding de cada chunk."
         }
       }
     },
@@ -122,7 +122,7 @@
       "kind": "quiz",
       "level": "intro",
       "title": "Vectors a = (2, 1) and b = (6, 3): what is their cosine similarity?",
-      "body": "b is a times 3: the same direction, a different length. The angle between them is 0, and the cosine of 0 is 1. Check: the dot product is 15, the lengths are √5 and √45, and 15 / √225 = 1. The answer 0.33 compares the lengths, which cosine ignores. The dot product alone, 15, would grow with the length.",
+      "body": "b is a times 3: the same direction, a different length. The angle between them is 0, and **the cosine of 0 is 1**.\n\nCheck: the dot product is 15, the lengths are √5 and √45, and 15 / √225 = 1.\n\nThe answer 0.33 compares the lengths, which cosine *ignores*. The dot product alone, 15, would grow with the length.",
       "options": [
         "0.33",
         "3",
@@ -137,7 +137,7 @@
       "translations": {
         "es": {
           "title": "Vectores a = (2, 1) y b = (6, 3): ¿cuál es su similitud del coseno?",
-          "body": "b es a multiplicado por 3: la misma dirección, otra longitud. El ángulo entre ellos es 0, y el coseno de 0 es 1. Comprobación: el producto escalar es 15, las longitudes son √5 y √45, y 15 / √225 = 1. La respuesta 0,33 compara las longitudes, que el coseno no tiene en cuenta. El producto escalar solo, 15, crecería con la longitud.",
+          "body": "b es a multiplicado por 3: la misma dirección, otra longitud. El ángulo entre ellos es 0, y **el coseno de 0 es 1**.\n\nComprobación: el producto escalar es 15, las longitudes son √5 y √45, y 15 / √225 = 1.\n\nLa respuesta 0,33 compara las longitudes, que el coseno *ignora*. El producto escalar solo, 15, crecería con la longitud.",
           "options": [
             "0,33",
             "3",
@@ -155,7 +155,7 @@
       "kind": "quiz",
       "level": "intro",
       "title": "How much memory do 1 million float32 vectors of 768 dimensions take, without an index?",
-      "body": "A float32 is 4 bytes, so one vector is 768 × 4 = 3072 bytes, and a million of them are about 3 GB. 768 MB counts one byte per dimension, which is true only after int8 quantisation. An ANN index adds its own structure on top. Do this sum before you choose a model: the dimension count sets the bill.",
+      "body": "A float32 is 4 bytes, so one vector is 768 × 4 = 3072 bytes, and **a million of them are about 3 GB**.\n\n768 MB counts one byte per dimension, which is true only after *int8 quantisation*. An ANN index adds its own structure on top.\n\nDo this sum before you choose a model: **the dimension count sets the bill**.",
       "options": [
         "About 768 MB",
         "About 3 GB",
@@ -166,7 +166,7 @@
       "translations": {
         "es": {
           "title": "¿Cuánta memoria ocupan 1 millón de vectores float32 de 768 dimensiones, sin índice?",
-          "body": "Un float32 son 4 bytes, así que un vector son 768 × 4 = 3072 bytes, y un millón de ellos son unos 3 GB. 768 MB cuenta un byte por dimensión, lo que solo es cierto después de una cuantización a int8. Un índice ANN añade su propia estructura encima. Haz esta suma antes de elegir un modelo: el número de dimensiones decide la factura.",
+          "body": "Un float32 son 4 bytes, así que un vector son 768 × 4 = 3072 bytes, y **un millón de ellos son unos 3 GB**.\n\n768 MB cuenta un byte por dimensión, lo que solo es cierto después de una *cuantización a int8*. Un índice ANN añade su propia estructura encima.\n\nHaz esta suma antes de elegir un modelo: **el número de dimensiones decide la factura**.",
           "options": [
             "Unos 768 MB",
             "Unos 3 GB",
@@ -181,14 +181,14 @@
       "kind": "resource",
       "level": "intro",
       "title": "Repo: pgvector, vector similarity search for Postgres",
-      "body": "The README is the manual: the vector types, the distance operators, exact and approximate search, the HNSW and IVFFlat indexes with their parameters, and filtering. It is short, complete and kept up to date. Read it before you add a separate vector database to a system that already has Postgres.",
+      "body": "**The README is the manual**: the vector types, the distance operators, exact and approximate search, the HNSW and IVFFlat indexes with their parameters, and filtering. It is short, complete and kept up to date.\n\nRead it before you add a *separate* vector database to **a system that already has Postgres**.",
       "url": "https://github.com/pgvector/pgvector",
       "media": "repo",
       "minutes": 30,
       "translations": {
         "es": {
           "title": "Repo: pgvector, búsqueda por similitud vectorial para Postgres",
-          "body": "El README es el manual: los tipos de vector, los operadores de distancia, la búsqueda exacta y la aproximada, los índices HNSW e IVFFlat con sus parámetros, y el filtrado. Es corto, completo y está al día. Léelo antes de añadir una base de datos vectorial aparte a un sistema que ya tiene Postgres."
+          "body": "**El README es el manual**: los tipos de vector, los operadores de distancia, la búsqueda exacta y la aproximada, los índices HNSW e IVFFlat con sus parámetros, y el filtrado. Es corto, completo y está al día.\n\nLéelo antes de añadir una base de datos vectorial *aparte* a **un sistema que ya tiene Postgres**."
         }
       }
     },
@@ -197,7 +197,7 @@
       "kind": "concept",
       "level": "intermediate",
       "title": "On unit vectors, cosine, dot product and L2 give the same ranking",
-      "body": "To normalise a vector, divide it by its length; it then has length 1 and sits on the unit sphere. For unit vectors the cosine similarity equals the dot product, and the squared L2 distance equals 2 − 2 × cosine. So all three metrics order the neighbours the same way. Normalise one time, at write, and use the dot product: it is the cheapest to compute. Many embedding APIs return unit vectors already; check before you rely on it.",
+      "body": "To *normalise* a vector, divide it by its length; it then has length 1 and sits on the unit sphere.\n\nFor unit vectors the cosine similarity equals the dot product, and the squared L2 distance equals 2 − 2 × cosine. So **all three metrics order the neighbours the same way**.\n\n**Normalise one time, at write, and use the dot product**: it is the cheapest to compute. Many embedding APIs return unit vectors already; check before you rely on it.",
       "diagram": {
         "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 180\" role=\"img\"><path class=\"d-line\" d=\"M72 92H256\"/><path class=\"d-line\" d=\"M160 24V156\"/><circle class=\"d-line\" cx=\"160\" cy=\"92\" r=\"60\"/><path class=\"d-line d-dash\" d=\"M160 92L243 44\"/><path class=\"d-line d-dash\" d=\"M160 92L130 40\"/><circle class=\"d-ink\" cx=\"243\" cy=\"44\" r=\"3\"/><circle class=\"d-ink\" cx=\"146\" cy=\"68\" r=\"3\"/><circle class=\"d-dot\" cx=\"212\" cy=\"62\" r=\"4\"/><circle class=\"d-dot\" cx=\"130\" cy=\"40\" r=\"4\"/><text class=\"d-note d-start\" x=\"250\" y=\"44\">1.6</text><text class=\"d-note d-end\" x=\"139\" y=\"73\">0.5</text><text class=\"d-note\" x=\"160\" y=\"168\">|v| = 1</text></svg>",
         "alt": "A unit circle, |v| = 1, around the origin. One raw vector of length 1.6 ends outside the circle and another of length 0.5 ends inside. Each one is moved along its own direction to the highlighted point on the circle."
@@ -205,7 +205,7 @@
       "translations": {
         "es": {
           "title": "Con vectores unitarios, coseno, producto escalar y L2 dan el mismo orden",
-          "body": "Para normalizar un vector, divídelo por su longitud; entonces tiene longitud 1 y está en la esfera unidad. Para vectores unitarios, la similitud del coseno es igual al producto escalar, y la distancia L2 al cuadrado es igual a 2 − 2 × coseno. Así que las tres métricas ordenan los vecinos igual. Normaliza una vez, al escribir, y usa el producto escalar: es el más barato de calcular. Muchas API de embeddings ya devuelven vectores unitarios; compruébalo antes de darlo por hecho.",
+          "body": "Para *normalizar* un vector, divídelo por su longitud; entonces tiene longitud 1 y está en la esfera unidad.\n\nPara vectores unitarios, la similitud del coseno es igual al producto escalar, y la distancia L2 al cuadrado es igual a 2 − 2 × coseno. Así que **las tres métricas ordenan los vecinos igual**.\n\n**Normaliza una vez, al escribir, y usa el producto escalar**: es el más barato de calcular. Muchas API de embeddings ya devuelven vectores unitarios; compruébalo antes de darlo por hecho.",
           "diagram": {
             "alt": "Una circunferencia unidad, |v| = 1, alrededor del origen. Un vector original de longitud 1,6 acaba fuera de la circunferencia y otro de longitud 0,5 acaba dentro. Cada uno se mueve en su propia dirección hasta el punto resaltado sobre la circunferencia."
           }
@@ -217,7 +217,7 @@
       "kind": "concept",
       "level": "intermediate",
       "title": "Exact search compares everything; ANN trades a little recall for speed",
-      "body": "Exact k-nearest-neighbour search computes the distance from the query to each vector: always right, and linear in the size of the data. At ten million vectors that is seconds per query. Approximate nearest neighbour (ANN) search builds an index, such as HNSW or IVF, that visits only a small part of the data. It answers in milliseconds and misses a few true neighbours. Stay exact while it is fast enough: there is nothing to tune.",
+      "body": "*Exact* k-nearest-neighbour search computes the distance from the query to each vector: always right, and linear in the size of the data. At ten million vectors that is seconds per query.\n\n*Approximate* nearest neighbour (ANN) search builds an index, such as HNSW or IVF, that visits only a small part of the data. It **answers in milliseconds and misses a few true neighbours**.\n\n**Stay exact while it is fast enough**: there is nothing to tune.",
       "diagram": {
         "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 160\" role=\"img\"><text class=\"d-label\" x=\"8\" y=\"12\">EXACT KNN</text><text class=\"d-label\" x=\"168\" y=\"12\">ANN</text><path class=\"d-line\" d=\"M80 82L28 54\"/><path class=\"d-line\" d=\"M80 82L58 44\"/><path class=\"d-line\" d=\"M80 82L98 50\"/><path class=\"d-line\" d=\"M80 82L128 64\"/><path class=\"d-line\" d=\"M80 82L38 94\"/><path class=\"d-line\" d=\"M80 82L118 104\"/><path class=\"d-line\" d=\"M80 82L68 118\"/><path class=\"d-line\" d=\"M80 82L104 126\"/><circle class=\"d-ink\" cx=\"28\" cy=\"54\" r=\"3\"/><circle class=\"d-ink\" cx=\"58\" cy=\"44\" r=\"3\"/><circle class=\"d-ink\" cx=\"98\" cy=\"50\" r=\"3\"/><circle class=\"d-ink\" cx=\"128\" cy=\"64\" r=\"3\"/><circle class=\"d-ink\" cx=\"38\" cy=\"94\" r=\"3\"/><circle class=\"d-ink\" cx=\"118\" cy=\"104\" r=\"3\"/><circle class=\"d-ink\" cx=\"68\" cy=\"118\" r=\"3\"/><circle class=\"d-ink\" cx=\"104\" cy=\"126\" r=\"3\"/><circle class=\"d-dot\" cx=\"80\" cy=\"82\" r=\"4.5\"/><path class=\"d-line\" d=\"M240 82L218 44\"/><path class=\"d-line\" d=\"M240 82L258 50\"/><path class=\"d-line\" d=\"M240 82L228 118\"/><circle class=\"d-ink\" cx=\"188\" cy=\"54\" r=\"3\"/><circle class=\"d-ink\" cx=\"218\" cy=\"44\" r=\"3\"/><circle class=\"d-ink\" cx=\"258\" cy=\"50\" r=\"3\"/><circle class=\"d-ink\" cx=\"288\" cy=\"64\" r=\"3\"/><circle class=\"d-ink\" cx=\"198\" cy=\"94\" r=\"3\"/><circle class=\"d-ink\" cx=\"278\" cy=\"104\" r=\"3\"/><circle class=\"d-ink\" cx=\"228\" cy=\"118\" r=\"3\"/><circle class=\"d-ink\" cx=\"264\" cy=\"126\" r=\"3\"/><circle class=\"d-dot\" cx=\"240\" cy=\"82\" r=\"4.5\"/><text class=\"d-note\" x=\"80\" y=\"148\">O(n)</text><text class=\"d-note\" x=\"240\" y=\"148\">O(log n)</text></svg>",
         "alt": "Two panels with the same eight points and one highlighted query point. Exact kNN: a line goes from the query to each of the eight points, cost O(n). ANN: lines go to three near points only, cost O(log n)."
@@ -225,7 +225,7 @@
       "translations": {
         "es": {
           "title": "La búsqueda exacta lo compara todo; ANN cambia un poco de recall por velocidad",
-          "body": "La búsqueda exacta de los k vecinos más cercanos calcula la distancia de la consulta a cada vector: siempre acierta, y es lineal con el tamaño de los datos. Con diez millones de vectores son segundos por consulta. La búsqueda aproximada (ANN) construye un índice, como HNSW o IVF, que visita solo una parte pequeña de los datos. Responde en milisegundos y pierde algunos vecinos verdaderos. Sigue con la exacta mientras sea bastante rápida: no hay nada que ajustar.",
+          "body": "La búsqueda *exacta* de los k vecinos más cercanos calcula la distancia de la consulta a cada vector: siempre acierta, y es lineal con el tamaño de los datos. Con diez millones de vectores son segundos por consulta.\n\nLa búsqueda *aproximada* (ANN) construye un índice, como HNSW o IVF, que visita solo una parte pequeña de los datos. **Responde en milisegundos y pierde algunos vecinos verdaderos**.\n\n**Sigue con la exacta mientras sea bastante rápida**: no hay nada que ajustar.",
           "diagram": {
             "alt": "Dos paneles con los mismos ocho puntos y un punto de consulta resaltado. kNN exacto: una línea va de la consulta a cada uno de los ocho puntos, coste O(n). ANN: las líneas van solo a tres puntos cercanos, coste O(log n)."
           }
@@ -237,7 +237,7 @@
       "kind": "concept",
       "level": "intermediate",
       "title": "Every ANN index has one dial: recall against latency",
-      "body": "Recall here is the share of the true nearest neighbours that the index returns. An ANN index has a search parameter, ef_search for HNSW or probes for IVF, that sets how much of the data a query visits. Raise it: recall goes up, and so does latency. The curve flattens: the last points of recall cost the most. Measure recall against an exact search on a sample of real queries, then pick the lowest setting that meets your target.",
+      "body": "*Recall* here is the share of the true nearest neighbours that the index returns. An ANN index has a search parameter, ef_search for HNSW or probes for IVF, that sets how much of the data a query visits.\n\nRaise it: **recall goes up, and so does latency**. The curve flattens: the last points of recall cost the most.\n\nMeasure recall against an exact search on a sample of real queries, then **pick the lowest setting that meets your target**.",
       "diagram": {
         "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 160\" role=\"img\"><path class=\"d-line\" d=\"M40 16V136H304\"/><text class=\"d-note\" x=\"40\" y=\"8\">recall</text><path class=\"d-line d-dash\" d=\"M40 28H304\"/><text class=\"d-note d-end\" x=\"34\" y=\"28\">1.0</text><path class=\"d-data-line\" d=\"M48 124C70 50 140 34 296 28\"/><circle class=\"d-ink\" cx=\"56\" cy=\"104\" r=\"3\"/><circle class=\"d-ink\" cx=\"82\" cy=\"72\" r=\"3\"/><circle class=\"d-ink\" cx=\"148\" cy=\"43\" r=\"3\"/><circle class=\"d-ink\" cx=\"296\" cy=\"28\" r=\"3\"/><text class=\"d-note d-start\" x=\"64\" y=\"109\">ef 10</text><text class=\"d-note d-start\" x=\"90\" y=\"79\">ef 40</text><text class=\"d-note\" x=\"148\" y=\"58\">ef 200</text><text class=\"d-note\" x=\"290\" y=\"43\">kNN</text><text class=\"d-note d-end\" x=\"304\" y=\"149\">p95 ms</text></svg>",
         "alt": "A curve of recall against p95 latency in milliseconds. It rises fast from ef 10 to ef 40, flattens at ef 200 and reaches recall 1.0 only at exact kNN, at the far right."
@@ -245,7 +245,7 @@
       "translations": {
         "es": {
           "title": "Todo índice ANN tiene un mando: recall frente a latencia",
-          "body": "Aquí el recall es la parte de los vecinos más cercanos verdaderos que devuelve el índice. Un índice ANN tiene un parámetro de búsqueda, ef_search en HNSW o probes en IVF, que fija cuánta parte de los datos visita una consulta. Súbelo: el recall sube, y la latencia también. La curva se aplana: los últimos puntos de recall son los más caros. Mide el recall frente a una búsqueda exacta con una muestra de consultas reales y elige el valor más bajo que cumpla tu objetivo.",
+          "body": "Aquí el *recall* es la parte de los vecinos más cercanos verdaderos que devuelve el índice. Un índice ANN tiene un parámetro de búsqueda, ef_search en HNSW o probes en IVF, que fija cuánta parte de los datos visita una consulta.\n\nSúbelo: **el recall sube, y la latencia también**. La curva se aplana: los últimos puntos de recall son los más caros.\n\nMide el recall frente a una búsqueda exacta con una muestra de consultas reales y **elige el valor más bajo que cumpla tu objetivo**.",
           "diagram": {
             "alt": "Una curva de recall frente a latencia p95 en milisegundos. Sube rápido de ef 10 a ef 40, se aplana en ef 200 y llega a recall 1,0 solo con kNN exacto, en el extremo derecho."
           }
@@ -257,7 +257,7 @@
       "kind": "concept",
       "level": "intermediate",
       "title": "A filter after an ANN search can return fewer than k results",
-      "body": "A search often has a condition: this tenant, this language, this year. Post-filter: the index returns the k nearest, then the filter drops rows; with a selective filter, 10 results become 3 or none. Pre-filter: apply the condition first and search inside the matching rows; exact, but slow when many rows match. Engines mix both. For a few large groups, such as tenants, a partition or a partial index per group is the clean fix.",
+      "body": "A search often has a condition: this tenant, this language, this year.\n\n*Post-filter*: the index returns the k nearest, then the filter drops rows; with a selective filter, **10 results become 3 or none**.\n*Pre-filter*: apply the condition first and search inside the matching rows; exact, but slow when many rows match.\n\nEngines mix both. For a few large groups, such as tenants, **a partition or a partial index per group** is the clean fix.",
       "diagram": {
         "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 128\" role=\"img\"><defs><marker id=\"embeddings-metadata-filter-head\" viewBox=\"0 0 8 8\" refX=\"7\" refY=\"4\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path class=\"d-head\" d=\"M0 0L8 4L0 8z\"/></marker></defs><text class=\"d-label\" x=\"8\" y=\"12\">PRE-FILTER</text><rect class=\"d-box\" x=\"8\" y=\"20\" width=\"72\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"44\" y=\"34\">WHERE</text><path class=\"d-arrow\" marker-end=\"url(#embeddings-metadata-filter-head)\" d=\"M80 34H102\"/><rect class=\"d-box\" x=\"104\" y=\"20\" width=\"96\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"152\" y=\"34\">ANN k=10</text><path class=\"d-arrow\" marker-end=\"url(#embeddings-metadata-filter-head)\" d=\"M200 34H222\"/><rect class=\"d-box\" x=\"224\" y=\"20\" width=\"88\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"268\" y=\"34\">10 / 10</text><text class=\"d-label\" x=\"8\" y=\"84\">POST-FILTER</text><rect class=\"d-box\" x=\"8\" y=\"92\" width=\"96\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"56\" y=\"106\">ANN k=10</text><path class=\"d-arrow\" marker-end=\"url(#embeddings-metadata-filter-head)\" d=\"M104 106H126\"/><rect class=\"d-box\" x=\"128\" y=\"92\" width=\"72\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"164\" y=\"106\">WHERE</text><path class=\"d-arrow\" marker-end=\"url(#embeddings-metadata-filter-head)\" d=\"M200 106H222\"/><rect class=\"d-hi\" x=\"224\" y=\"92\" width=\"88\" height=\"28\" rx=\"6\"/><text class=\"d-text d-on-hi\" x=\"268\" y=\"106\">3 / 10</text></svg>",
         "alt": "Two rows. Pre-filter: WHERE runs first, then an ANN search with k = 10, and 10 of 10 results come back. Post-filter: the ANN search with k = 10 runs first, then WHERE, and only 3 of 10 results are left, highlighted."
@@ -265,7 +265,7 @@
       "translations": {
         "es": {
           "title": "Un filtro después de una búsqueda ANN puede devolver menos de k resultados",
-          "body": "Una búsqueda suele tener una condición: este tenant, este idioma, este año. Post-filtro: el índice devuelve los k más cercanos y luego el filtro quita filas; con un filtro selectivo, 10 resultados se quedan en 3 o en ninguno. Pre-filtro: aplica primero la condición y busca entre las filas que la cumplen; es exacto, pero lento cuando la cumplen muchas filas. Los motores combinan los dos. Para pocos grupos grandes, como los tenants, lo limpio es una partición o un índice parcial por grupo.",
+          "body": "Una búsqueda suele tener una condición: este tenant, este idioma, este año.\n\n*Post-filtro*: el índice devuelve los k más cercanos y luego el filtro quita filas; con un filtro selectivo, **10 resultados se quedan en 3 o en ninguno**.\n*Pre-filtro*: aplica primero la condición y busca entre las filas que la cumplen; es exacto, pero lento cuando la cumplen muchas filas.\n\nLos motores combinan los dos. Para pocos grupos grandes, como los tenants, lo limpio es **una partición o un índice parcial por grupo**.",
           "diagram": {
             "alt": "Dos filas. Pre-filtro: primero se ejecuta WHERE, luego una búsqueda ANN con k = 10, y vuelven 10 de 10 resultados. Post-filtro: primero la búsqueda ANN con k = 10, luego WHERE, y solo quedan 3 de 10 resultados, resaltados."
           }
@@ -277,13 +277,13 @@
       "kind": "snippet",
       "level": "intermediate",
       "title": "Normalise once at write, then a dot product is enough",
-      "body": "Math.hypot gives the length of the vector. After the division each vector has length 1, so the dot product of two of them is their cosine similarity, with no square root and no division per comparison. The zero check avoids a division by zero for an all-zero vector. Store the normalised vector and normalise the query the same way.",
+      "body": "Math.hypot gives the length of the vector. After the division each vector has length 1, so the dot product of two of them **is their cosine similarity**, with *no* square root and no division per comparison.\n\nThe zero check avoids a division by zero for an all-zero vector. **Store the normalised vector** and normalise the query the same way.",
       "code": "const normalise = (v) => {\n  const length = Math.hypot(...v);\n  return length === 0 ? v : v.map((x) => x / length);\n};\n\nconst dot = (a, b) =>\n  a.reduce((sum, x, i) => sum + x * b[i], 0);\n\nconst a = normalise([3, 4]);  // [0.6, 0.8]\nconst b = normalise([4, 3]);  // [0.8, 0.6]\ndot(a, b);                    // 0.96 = cosine",
       "syntax": "js",
       "translations": {
         "es": {
           "title": "Normaliza una vez al escribir; después basta un producto escalar",
-          "body": "Math.hypot da la longitud del vector. Después de la división cada vector tiene longitud 1, así que el producto escalar de dos de ellos es su similitud del coseno, sin raíz cuadrada ni división en cada comparación. La comprobación del cero evita una división por cero con un vector de ceros. Guarda el vector normalizado y normaliza la consulta de la misma forma."
+          "body": "Math.hypot da la longitud del vector. Después de la división cada vector tiene longitud 1, así que el producto escalar de dos de ellos **es su similitud del coseno**, *sin* raíz cuadrada ni división en cada comparación.\n\nLa comprobación del cero evita una división por cero con un vector de ceros. **Guarda el vector normalizado** y normaliza la consulta de la misma forma."
         }
       }
     },
@@ -292,13 +292,13 @@
       "kind": "snippet",
       "level": "intermediate",
       "title": "An HNSW index in pgvector is tied to one distance operator",
-      "body": "The operator class names the metric: vector_cosine_ops for <=>, vector_l2_ops for <-> and vector_ip_ops for <#>, the negative inner product. m is the number of links per node and ef_construction is the effort of the build; both raise recall, build time and memory. The values here are the defaults. The planner uses the index only for an ORDER BY on the distance with a LIMIT.",
+      "body": "The *operator class* names the metric: vector_cosine_ops for <=>, vector_l2_ops for <-> and vector_ip_ops for <#>, the negative inner product.\n\nm is the number of links per node and ef_construction is the effort of the build; both **raise recall, build time and memory**. The values here are the defaults.\n\nThe planner uses the index **only for an ORDER BY on the distance with a LIMIT**.",
       "code": "CREATE INDEX chunks_embedding_idx ON chunks\nUSING hnsw (embedding vector_cosine_ops)\nWITH (m = 16, ef_construction = 64);\n\n-- uses the index: <=> is cosine distance\nSELECT id FROM chunks\nORDER BY embedding <=> $1\nLIMIT 10;",
       "syntax": "sql",
       "translations": {
         "es": {
           "title": "Un índice HNSW de pgvector está ligado a un operador de distancia",
-          "body": "La clase de operador nombra la métrica: vector_cosine_ops para <=>, vector_l2_ops para <-> y vector_ip_ops para <#>, el producto interno negativo. m es el número de enlaces por nodo y ef_construction es el esfuerzo de la construcción; los dos suben el recall, el tiempo de construcción y la memoria. Los valores de aquí son los predeterminados. El planificador usa el índice solo para un ORDER BY por la distancia con un LIMIT."
+          "body": "La *clase de operador* nombra la métrica: vector_cosine_ops para <=>, vector_l2_ops para <-> y vector_ip_ops para <#>, el producto interno negativo.\n\nm es el número de enlaces por nodo y ef_construction es el esfuerzo de la construcción; los dos **suben el recall, el tiempo de construcción y la memoria**. Los valores de aquí son los predeterminados.\n\nEl planificador usa el índice **solo para un ORDER BY por la distancia con un LIMIT**."
         }
       }
     },
@@ -307,11 +307,11 @@
       "kind": "pitfall",
       "level": "intermediate",
       "title": "A dot product on raw vectors rewards length, not meaning",
-      "body": "The trap: you rank by dot product and the vectors are not normalised. The symptom: the same few documents are at the top of every query. The dot product is the cosine times both lengths, so a vector with a large norm beats a better match with a small one. The fix: normalise all vectors at write and at query, or use cosine distance. Use a raw dot product only when the model documents that the length carries a signal.",
+      "body": "The trap: you rank by dot product and the vectors are not normalised. The symptom: the same few documents are at the top of every query.\n\nThe dot product is the cosine times both lengths, so **a vector with a large norm beats a better match** with a small one.\n\nThe fix: **normalise all vectors at write and at query**, or use cosine distance. Use a raw dot product only when the model documents that the length *carries a signal*.",
       "translations": {
         "es": {
           "title": "Un producto escalar con vectores sin normalizar premia la longitud, no el significado",
-          "body": "La trampa: ordenas por producto escalar y los vectores no están normalizados. El síntoma: los mismos pocos documentos salen arriba en todas las consultas. El producto escalar es el coseno por las dos longitudes, así que un vector con una norma grande gana a una coincidencia mejor con una norma pequeña. La solución: normaliza todos los vectores al escribir y al consultar, o usa la distancia del coseno. Usa un producto escalar sin normalizar solo cuando el modelo documenta que la longitud lleva información."
+          "body": "La trampa: ordenas por producto escalar y los vectores no están normalizados. El síntoma: los mismos pocos documentos salen arriba en todas las consultas.\n\nEl producto escalar es el coseno por las dos longitudes, así que **un vector con una norma grande gana a una coincidencia mejor** con una norma pequeña.\n\nLa solución: **normaliza todos los vectores al escribir y al consultar**, o usa la distancia del coseno. Usa un producto escalar sin normalizar solo cuando el modelo documenta que la longitud *lleva información*."
         }
       }
     },
@@ -320,11 +320,11 @@
       "kind": "pitfall",
       "level": "intermediate",
       "title": "The wrong distance operator skips the index without an error",
-      "body": "The trap: the index uses vector_l2_ops and the query orders by <=>, cosine distance. The symptom: correct results and a query that takes two seconds, because Postgres falls back to a sequential scan. An ANN index serves only the operator of its class. The fix: run EXPLAIN and look for an Index Scan on the vector index. Use one metric everywhere: in the index, in each query and in the tests.",
+      "body": "The trap: the index uses vector_l2_ops and the query orders by <=>, cosine distance.\n\nThe symptom: correct results and a query that takes two seconds, because Postgres falls back to a *sequential scan*. **An ANN index serves only the operator of its class.**\n\nThe fix: **run EXPLAIN and look for an Index Scan** on the vector index. Use one metric everywhere: in the index, in each query and in the tests.",
       "translations": {
         "es": {
           "title": "El operador de distancia equivocado salta el índice sin dar error",
-          "body": "La trampa: el índice usa vector_l2_ops y la consulta ordena por <=>, la distancia del coseno. El síntoma: resultados correctos y una consulta que tarda dos segundos, porque Postgres recurre a un recorrido secuencial. Un índice ANN solo sirve al operador de su clase. La solución: ejecuta EXPLAIN y busca un Index Scan sobre el índice vectorial. Usa una sola métrica en todas partes: en el índice, en cada consulta y en las pruebas."
+          "body": "La trampa: el índice usa vector_l2_ops y la consulta ordena por <=>, la distancia del coseno.\n\nEl síntoma: resultados correctos y una consulta que tarda dos segundos, porque Postgres recurre a un *recorrido secuencial*. **Un índice ANN solo sirve al operador de su clase.**\n\nLa solución: **ejecuta EXPLAIN y busca un Index Scan** sobre el índice vectorial. Usa una sola métrica en todas partes: en el índice, en cada consulta y en las pruebas."
         }
       }
     },
@@ -333,7 +333,7 @@
       "kind": "pitfall",
       "level": "intermediate",
       "title": "A new embedding model makes every stored vector obsolete",
-      "body": "The trap: you upgrade the embedding model and embed the new documents and the queries with it. The symptom: old documents vanish from the results, because their vectors are in the space of the old model. There is no way to convert them. The fix: embed the whole corpus again into a second index while the first one serves traffic, compare recall on your test set, then switch the queries in one step. Keep the model version in a column.",
+      "body": "The trap: you upgrade the embedding model and embed the new documents and the queries with it.\n\nThe symptom: old documents vanish from the results, because their vectors are in the space of the old model. **There is no way to convert them.**\n\nThe fix: **embed the whole corpus again into a second index** while the first one serves traffic, compare recall on your test set, then switch the queries in *one* step. Keep the model version in a column.",
       "diagram": {
         "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 128\" role=\"img\"><defs><marker id=\"embeddings-model-change-head\" viewBox=\"0 0 8 8\" refX=\"7\" refY=\"4\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path class=\"d-head\" d=\"M0 0L8 4L0 8z\"/></marker></defs><text class=\"d-label\" x=\"8\" y=\"12\">LIVE</text><rect class=\"d-box\" x=\"8\" y=\"20\" width=\"64\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"40\" y=\"34\">query</text><path class=\"d-arrow\" marker-end=\"url(#embeddings-model-change-head)\" d=\"M72 34H102\"/><rect class=\"d-box\" x=\"104\" y=\"20\" width=\"88\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"148\" y=\"34\">model v1</text><path class=\"d-arrow\" marker-end=\"url(#embeddings-model-change-head)\" d=\"M192 34H222\"/><rect class=\"d-box\" x=\"224\" y=\"20\" width=\"88\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"268\" y=\"34\">index v1</text><text class=\"d-label\" x=\"8\" y=\"84\">BACKFILL</text><rect class=\"d-box\" x=\"8\" y=\"92\" width=\"64\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"40\" y=\"106\">docs</text><path class=\"d-arrow\" marker-end=\"url(#embeddings-model-change-head)\" d=\"M72 106H102\"/><rect class=\"d-box\" x=\"104\" y=\"92\" width=\"88\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"148\" y=\"106\">model v2</text><path class=\"d-arrow\" marker-end=\"url(#embeddings-model-change-head)\" d=\"M192 106H222\"/><rect class=\"d-hi\" x=\"224\" y=\"92\" width=\"88\" height=\"28\" rx=\"6\"/><text class=\"d-text d-on-hi\" x=\"268\" y=\"106\">index v2</text></svg>",
         "alt": "Two rows. Live: the query goes through model v1 to index v1. Backfill: all the documents go through model v2 into a second index, index v2, highlighted, which is built next to the first one."
@@ -341,7 +341,7 @@
       "translations": {
         "es": {
           "title": "Un modelo de embeddings nuevo deja obsoletos todos los vectores guardados",
-          "body": "La trampa: actualizas el modelo de embeddings y calculas con él los documentos nuevos y las consultas. El síntoma: los documentos antiguos desaparecen de los resultados, porque sus vectores están en el espacio del modelo anterior. No hay forma de convertirlos. La solución: calcula otra vez todo el corpus en un segundo índice mientras el primero atiende el tráfico, compara el recall con tu conjunto de prueba y cambia las consultas en un solo paso. Guarda la versión del modelo en una columna.",
+          "body": "La trampa: actualizas el modelo de embeddings y calculas con él los documentos nuevos y las consultas.\n\nEl síntoma: los documentos antiguos desaparecen de los resultados, porque sus vectores están en el espacio del modelo anterior. **No hay forma de convertirlos.**\n\nLa solución: **calcula otra vez todo el corpus en un segundo índice** mientras el primero atiende el tráfico, compara el recall con tu conjunto de prueba y cambia las consultas en *un solo* paso. Guarda la versión del modelo en una columna.",
           "diagram": {
             "alt": "Dos filas. En producción: la consulta pasa por el modelo v1 hacia el índice v1. Recarga: todos los documentos pasan por el modelo v2 hacia un segundo índice, el índice v2, resaltado, que se construye junto al primero."
           }
@@ -353,7 +353,7 @@
       "kind": "quiz",
       "level": "intermediate",
       "title": "In pgvector, which operator orders rows by cosine distance?",
-      "body": "<=> is cosine distance: 1 minus the cosine similarity. <-> is L2 distance, the straight line between two points. <#> is the negative inner product; it is negative because a Postgres index scan only orders ascending. On normalised vectors all three give the same order, and <#> is the fastest.",
+      "body": "<=> is **cosine distance**: 1 minus the cosine similarity. <-> is L2 distance, the straight line between two points.\n\n<#> is the *negative* inner product; it is negative because a Postgres index scan only orders ascending.\n\nOn normalised vectors **all three give the same order**, and <#> is the fastest.",
       "options": [
         "<->",
         "<#>",
@@ -364,7 +364,7 @@
       "translations": {
         "es": {
           "title": "En pgvector, ¿qué operador ordena las filas por distancia del coseno?",
-          "body": "<=> es la distancia del coseno: 1 menos la similitud del coseno. <-> es la distancia L2, la línea recta entre dos puntos. <#> es el producto interno negativo; es negativo porque un recorrido de índice de Postgres solo ordena de menor a mayor. Con vectores normalizados los tres dan el mismo orden, y <#> es el más rápido.",
+          "body": "<=> es **la distancia del coseno**: 1 menos la similitud del coseno. <-> es la distancia L2, la línea recta entre dos puntos.\n\n<#> es el producto interno *negativo*; es negativo porque un recorrido de índice de Postgres solo ordena de menor a mayor.\n\nCon vectores normalizados **los tres dan el mismo orden**, y <#> es el más rápido.",
           "options": [
             "<->",
             "<#>",
@@ -379,7 +379,7 @@
       "kind": "quiz",
       "level": "intermediate",
       "title": "You know the true 10 nearest neighbours. Your ANN index returns 8 of them and 2 others. What is recall@10?",
-      "body": "ANN recall is the share of the true neighbours that the index found: 8 of 10. The 2 other results are near the query, but they are not the nearest, so they do not count. It is not 1.0 only because 10 rows came back: an ANN index fills the list with what it found. Measure it on some hundred real queries against an exact scan of the same table.",
+      "body": "ANN recall is **the share of the true neighbours that the index found**: 8 of 10. The 2 other results are near the query, but they are not the *nearest*, so they do not count.\n\nIt is not 1.0 only because 10 rows came back: an ANN index fills the list with what it found.\n\n**Measure it on some hundred real queries** against an exact scan of the same table.",
       "options": [
         "0.8",
         "0.2",
@@ -390,7 +390,7 @@
       "translations": {
         "es": {
           "title": "Conoces los 10 vecinos más cercanos verdaderos. Tu índice ANN devuelve 8 de ellos y otros 2. ¿Cuál es recall@10?",
-          "body": "El recall de ANN es la parte de los vecinos verdaderos que el índice encontró: 8 de 10. Los otros 2 resultados están cerca de la consulta, pero no son los más cercanos, así que no cuentan. No es 1,0 solo porque volvieron 10 filas: un índice ANN llena la lista con lo que encontró. Mídelo con unos cientos de consultas reales frente a un recorrido exacto de la misma tabla.",
+          "body": "El recall de ANN es **la parte de los vecinos verdaderos que el índice encontró**: 8 de 10. Los otros 2 resultados están cerca de la consulta, pero no son los *más cercanos*, así que no cuentan.\n\nNo es 1,0 solo porque volvieron 10 filas: un índice ANN llena la lista con lo que encontró.\n\n**Mídelo con unos cientos de consultas reales** frente a un recorrido exacto de la misma tabla.",
           "options": [
             "0,8",
             "0,2",
@@ -405,14 +405,14 @@
       "kind": "resource",
       "level": "intermediate",
       "title": "Paper: MTEB: Massive Text Embedding Benchmark",
-      "body": "The benchmark behind the public leaderboard of embedding models. It scores a model on retrieval, clustering, classification and more, over many datasets. The lesson of the paper: no model wins every task. So read the retrieval column, then test the top candidates on your own data.",
+      "body": "The benchmark behind the public leaderboard of embedding models. It scores a model on retrieval, clustering, classification and more, over many datasets.\n\nThe lesson of the paper: **no model wins every task**. So read the *retrieval* column, then **test the top candidates on your own data**.",
       "url": "https://arxiv.org/abs/2210.07316",
       "media": "article",
       "minutes": 40,
       "translations": {
         "es": {
           "title": "Artículo: MTEB: Massive Text Embedding Benchmark",
-          "body": "El benchmark que hay detrás de la clasificación pública de modelos de embeddings. Puntúa un modelo en recuperación, clustering, clasificación y más, sobre muchos conjuntos de datos. La lección del artículo: ningún modelo gana en todas las tareas. Lee la columna de recuperación y luego prueba los mejores candidatos con tus propios datos."
+          "body": "El benchmark que hay detrás de la clasificación pública de modelos de embeddings. Puntúa un modelo en recuperación, clustering, clasificación y más, sobre muchos conjuntos de datos.\n\nLa lección del artículo: **ningún modelo gana en todas las tareas**. Lee la columna de *recuperación* y luego **prueba los mejores candidatos con tus propios datos**."
         }
       }
     },
@@ -421,7 +421,7 @@
       "kind": "concept",
       "level": "advanced",
       "title": "HNSW is a skip list for vectors: express layers on top, all points below",
-      "body": "HNSW builds a graph in layers. Layer 0 holds every vector, each one linked to its near neighbours. Each higher layer holds a random fraction of the layer below, with longer links. A search enters at the top, moves greedily to the node nearest to the query, drops one layer and repeats. The top layers cross the space in a few hops; layer 0 refines. The cost grows about with the logarithm of the size. The graph lives in RAM and is slow to build.",
+      "body": "HNSW builds a graph in *layers*. Layer 0 holds every vector, each one linked to its near neighbours. Each higher layer holds a random fraction of the layer below, with longer links.\n\nA search enters at the top, moves greedily to the node nearest to the query, drops one layer and repeats. **The top layers cross the space in a few hops**; layer 0 refines.\n\nThe cost grows about with **the logarithm of the size**. The graph lives in RAM and is slow to build.",
       "diagram": {
         "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 164\" role=\"img\"><defs><marker id=\"embeddings-hnsw-data-head\" viewBox=\"0 0 8 8\" refX=\"7\" refY=\"4\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path class=\"d-data-head\" d=\"M0 0L8 4L0 8z\"/></marker></defs><text class=\"d-note\" x=\"20\" y=\"32\">L2</text><text class=\"d-note\" x=\"20\" y=\"88\">L1</text><text class=\"d-note\" x=\"20\" y=\"144\">L0</text><path class=\"d-line\" d=\"M48 32H304\"/><path class=\"d-line\" d=\"M48 88H304\"/><path class=\"d-line\" d=\"M48 144H304\"/><path class=\"d-line d-dash\" d=\"M60 32V144\"/><path class=\"d-line d-dash\" d=\"M200 88V144\"/><path class=\"d-line d-dash\" d=\"M130 88V144\"/><path class=\"d-line d-dash\" d=\"M290 88V144\"/><circle class=\"d-ink\" cx=\"60\" cy=\"32\" r=\"3\"/><circle class=\"d-ink\" cx=\"200\" cy=\"32\" r=\"3\"/><circle class=\"d-ink\" cx=\"60\" cy=\"88\" r=\"3\"/><circle class=\"d-ink\" cx=\"130\" cy=\"88\" r=\"3\"/><circle class=\"d-ink\" cx=\"200\" cy=\"88\" r=\"3\"/><circle class=\"d-ink\" cx=\"240\" cy=\"88\" r=\"3\"/><circle class=\"d-ink\" cx=\"290\" cy=\"88\" r=\"3\"/><circle class=\"d-ink\" cx=\"60\" cy=\"144\" r=\"3\"/><circle class=\"d-ink\" cx=\"84\" cy=\"144\" r=\"3\"/><circle class=\"d-ink\" cx=\"108\" cy=\"144\" r=\"3\"/><circle class=\"d-ink\" cx=\"130\" cy=\"144\" r=\"3\"/><circle class=\"d-ink\" cx=\"156\" cy=\"144\" r=\"3\"/><circle class=\"d-ink\" cx=\"180\" cy=\"144\" r=\"3\"/><circle class=\"d-ink\" cx=\"200\" cy=\"144\" r=\"3\"/><circle class=\"d-ink\" cx=\"220\" cy=\"144\" r=\"3\"/><circle class=\"d-ink\" cx=\"240\" cy=\"144\" r=\"3\"/><circle class=\"d-ink\" cx=\"260\" cy=\"144\" r=\"3\"/><circle class=\"d-ink\" cx=\"290\" cy=\"144\" r=\"3\"/><path class=\"d-data-line\" marker-end=\"url(#embeddings-hnsw-data-head)\" d=\"M60 32H200V88H240V144H254\"/><circle class=\"d-dot\" cx=\"270\" cy=\"126\" r=\"4.5\"/><text class=\"d-note d-start\" x=\"279\" y=\"126\">query</text></svg>",
         "alt": "Three layers of nodes: L2 with 2 nodes, L1 with 5 and L0 with 11. The highlighted search path enters at the left of L2, moves right, drops to L1, moves right, drops to L0 and stops at the node nearest to the query point."
@@ -429,7 +429,7 @@
       "translations": {
         "es": {
           "title": "HNSW es una skip list para vectores: capas exprés arriba, todos los puntos abajo",
-          "body": "HNSW construye un grafo en capas. La capa 0 tiene todos los vectores, cada uno enlazado con sus vecinos cercanos. Cada capa superior tiene una fracción aleatoria de la capa de abajo, con enlaces más largos. Una búsqueda entra por arriba, avanza de forma voraz hasta el nodo más cercano a la consulta, baja una capa y repite. Las capas altas cruzan el espacio en pocos saltos; la capa 0 afina. El coste crece más o menos con el logaritmo del tamaño. El grafo vive en RAM y se construye despacio.",
+          "body": "HNSW construye un grafo en *capas*. La capa 0 tiene todos los vectores, cada uno enlazado con sus vecinos cercanos. Cada capa superior tiene una fracción aleatoria de la de abajo, con enlaces más largos.\n\nUna búsqueda entra por arriba, avanza de forma voraz hasta el nodo más cercano a la consulta, baja una capa y repite. **Las capas altas cruzan el espacio en pocos saltos**; la capa 0 afina.\n\nEl coste crece más o menos con **el logaritmo del tamaño**. El grafo vive en RAM y se construye despacio.",
           "diagram": {
             "alt": "Tres capas de nodos: L2 con 2 nodos, L1 con 5 y L0 con 11. El camino de búsqueda resaltado entra por la izquierda de L2, avanza a la derecha, baja a L1, avanza a la derecha, baja a L0 y se para en el nodo más cercano al punto de la consulta."
           }
@@ -441,7 +441,7 @@
       "kind": "concept",
       "level": "advanced",
       "title": "IVF searches only the clusters nearest to the query",
-      "body": "An inverted file index runs k-means over the vectors and stores each one in the list of its nearest centroid. A query compares itself with the centroids, then scans only the closest lists: the probes parameter. With 1000 lists and 10 probes it reads about 1% of the data. The weak point is the border: a true neighbour in a list that you did not probe is missed. IVF builds faster and takes less memory than HNSW, with lower recall at equal speed.",
+      "body": "An *inverted file index* runs k-means over the vectors and stores each one in the list of its nearest centroid. A query compares itself with the centroids, then **scans only the closest lists**: the probes parameter. With 1000 lists and 10 probes it reads about 1% of the data.\n\nThe weak point is the border: **a true neighbour in a list that you did not probe is missed**.\n\nIVF builds faster and takes less memory than HNSW, with lower recall at equal speed.",
       "diagram": {
         "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 164\" role=\"img\"><rect class=\"d-box\" x=\"112\" y=\"12\" width=\"96\" height=\"64\"/><rect class=\"d-box\" x=\"208\" y=\"12\" width=\"96\" height=\"64\"/><rect class=\"d-box\" x=\"16\" y=\"76\" width=\"96\" height=\"64\"/><rect class=\"d-box\" x=\"112\" y=\"76\" width=\"96\" height=\"64\"/><rect class=\"d-box\" x=\"208\" y=\"76\" width=\"96\" height=\"64\"/><rect class=\"d-hi\" x=\"16\" y=\"12\" width=\"96\" height=\"64\"/><circle class=\"d-ink\" cx=\"40\" cy=\"30\" r=\"2.5\"/><circle class=\"d-ink\" cx=\"64\" cy=\"52\" r=\"2.5\"/><circle class=\"d-ink\" cx=\"88\" cy=\"28\" r=\"2.5\"/><circle class=\"d-ink\" cx=\"120\" cy=\"72\" r=\"2.5\"/><circle class=\"d-ink\" cx=\"160\" cy=\"36\" r=\"2.5\"/><circle class=\"d-ink\" cx=\"186\" cy=\"58\" r=\"2.5\"/><circle class=\"d-ink\" cx=\"230\" cy=\"30\" r=\"2.5\"/><circle class=\"d-ink\" cx=\"262\" cy=\"50\" r=\"2.5\"/><circle class=\"d-ink\" cx=\"286\" cy=\"26\" r=\"2.5\"/><circle class=\"d-ink\" cx=\"36\" cy=\"104\" r=\"2.5\"/><circle class=\"d-ink\" cx=\"70\" cy=\"122\" r=\"2.5\"/><circle class=\"d-ink\" cx=\"94\" cy=\"96\" r=\"2.5\"/><circle class=\"d-ink\" cx=\"136\" cy=\"110\" r=\"2.5\"/><circle class=\"d-ink\" cx=\"170\" cy=\"96\" r=\"2.5\"/><circle class=\"d-ink\" cx=\"190\" cy=\"126\" r=\"2.5\"/><circle class=\"d-ink\" cx=\"228\" cy=\"118\" r=\"2.5\"/><circle class=\"d-ink\" cx=\"258\" cy=\"98\" r=\"2.5\"/><circle class=\"d-ink\" cx=\"288\" cy=\"124\" r=\"2.5\"/><circle class=\"d-dot\" cx=\"104\" cy=\"66\" r=\"4.5\"/><text class=\"d-note d-end\" x=\"95\" y=\"66\">query</text><text class=\"d-note\" x=\"160\" y=\"152\">probes = 1</text></svg>",
         "alt": "A plane cut into six cells, each with three points. With probes = 1 only the cell of the query is highlighted and searched. The query sits at the edge of its cell, and the point nearest to it is just across the border, in a cell that is not searched."
@@ -449,7 +449,7 @@
       "translations": {
         "es": {
           "title": "IVF busca solo en los clústeres más cercanos a la consulta",
-          "body": "Un índice de fichero invertido ejecuta k-means sobre los vectores y guarda cada uno en la lista de su centroide más cercano. Una consulta se compara con los centroides y luego recorre solo las listas más próximas: el parámetro probes. Con 1000 listas y 10 probes lee más o menos el 1 % de los datos. El punto débil es la frontera: un vecino verdadero en una lista que no recorriste se pierde. IVF se construye más rápido y ocupa menos memoria que HNSW, con menos recall a igual velocidad.",
+          "body": "Un *índice de fichero invertido* ejecuta k-means sobre los vectores y guarda cada uno en la lista de su centroide más cercano. Una consulta se compara con los centroides y luego **recorre solo las listas más próximas**: el parámetro probes. Con 1000 listas y 10 probes lee más o menos el 1 % de los datos.\n\nEl punto débil es la frontera: **un vecino verdadero en una lista que no recorriste se pierde**.\n\nIVF se construye más rápido y ocupa menos memoria que HNSW, con menos recall a igual velocidad.",
           "diagram": {
             "alt": "Un plano dividido en seis celdas, cada una con tres puntos. Con probes = 1 solo la celda de la consulta está resaltada y se recorre. La consulta está en el borde de su celda, y el punto más cercano a ella está justo al otro lado de la frontera, en una celda que no se recorre."
           }
@@ -461,7 +461,7 @@
       "kind": "concept",
       "level": "advanced",
       "title": "Quantisation stores each dimension in fewer bits",
-      "body": "A float32 dimension takes 32 bits. Scalar quantisation maps it to an int8: 4 times smaller, with a small recall loss. Binary quantisation keeps one bit, the sign: 32 times smaller and compared with a fast Hamming distance, but coarse. Product quantisation encodes groups of dimensions as one code. The usual pattern: search the small vectors for 100 candidates, then rescore them with the full vectors from disk.",
+      "body": "A float32 dimension takes 32 bits. *Scalar quantisation* maps it to an int8: **4 times smaller, with a small recall loss**.\n\n*Binary quantisation* keeps one bit, the sign: 32 times smaller and compared with a fast Hamming distance, but coarse. *Product quantisation* encodes groups of dimensions as one code.\n\nThe usual pattern: **search the small vectors for 100 candidates**, then rescore them with the full vectors from disk.",
       "diagram": {
         "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 128\" role=\"img\"><text class=\"d-label\" x=\"8\" y=\"12\">1536 DIMS</text><text class=\"d-note d-end\" x=\"72\" y=\"34\">float32</text><rect class=\"d-box\" x=\"80\" y=\"24\" width=\"176\" height=\"20\" rx=\"3\"/><text class=\"d-note d-start\" x=\"264\" y=\"34\">6144 B</text><text class=\"d-note d-end\" x=\"72\" y=\"70\">int8</text><rect class=\"d-hi\" x=\"80\" y=\"60\" width=\"44\" height=\"20\" rx=\"3\"/><text class=\"d-note d-start\" x=\"132\" y=\"70\">1536 B</text><text class=\"d-note d-end\" x=\"72\" y=\"106\">1 bit</text><rect class=\"d-hi\" x=\"80\" y=\"96\" width=\"6\" height=\"20\"/><text class=\"d-note d-start\" x=\"94\" y=\"106\">192 B</text></svg>",
         "alt": "Three bars for one vector of 1536 dimensions. float32: 6144 bytes. int8, highlighted: 1536 bytes, a quarter of the bar. 1 bit, highlighted: 192 bytes, a thin sliver."
@@ -469,7 +469,7 @@
       "translations": {
         "es": {
           "title": "La cuantización guarda cada dimensión en menos bits",
-          "body": "Una dimensión float32 ocupa 32 bits. La cuantización escalar la convierte en un int8: 4 veces menos, con una pérdida pequeña de recall. La cuantización binaria guarda un bit, el signo: 32 veces menos y se compara con una distancia de Hamming rápida, pero es tosca. La cuantización de producto codifica grupos de dimensiones como un solo código. El patrón habitual: busca 100 candidatos con los vectores pequeños y vuelve a puntuarlos con los vectores completos del disco.",
+          "body": "Una dimensión float32 ocupa 32 bits. La *cuantización escalar* la convierte en un int8: **4 veces menos, con una pérdida pequeña de recall**.\n\nLa *cuantización binaria* guarda un bit, el signo: 32 veces menos y se compara con una distancia de Hamming rápida, pero es tosca. La *cuantización de producto* codifica grupos de dimensiones como un solo código.\n\nEl patrón habitual: **busca 100 candidatos con los vectores pequeños** y vuelve a puntuarlos con los vectores completos del disco.",
           "diagram": {
             "alt": "Tres barras para un vector de 1536 dimensiones. float32: 6144 bytes. int8, resaltada: 1536 bytes, un cuarto de la barra. 1 bit, resaltada: 192 bytes, una franja fina."
           }
@@ -481,13 +481,13 @@
       "kind": "snippet",
       "level": "advanced",
       "title": "Tune recall per query with ef_search and probes",
-      "body": "These settings act at query time; the index stays as it is. A higher value visits more of the index: better recall, slower query. Keep hnsw.ef_search at or above your LIMIT, because it also caps the candidates that a scan can return. Use SET LOCAL to give one important query more effort and leave the rest fast.",
+      "body": "These settings act *at query time*; the index stays as it is. A higher value visits more of the index: **better recall, slower query**.\n\nKeep hnsw.ef_search at or above your LIMIT, because **it also caps the candidates that a scan can return**.\n\nUse SET LOCAL to give one important query more effort and leave the rest fast.",
       "code": "-- HNSW: size of the candidate list (default 40)\nSET hnsw.ef_search = 100;\n\n-- IVFFlat: lists to scan (default 1)\nSET ivfflat.probes = 10;\n\n-- for one transaction only\nBEGIN;\nSET LOCAL hnsw.ef_search = 200;\nSELECT id FROM chunks ORDER BY embedding <=> $1 LIMIT 10;\nCOMMIT;",
       "syntax": "sql",
       "translations": {
         "es": {
           "title": "Ajusta el recall por consulta con ef_search y probes",
-          "body": "Estos ajustes actúan en la consulta; el índice no cambia. Un valor más alto visita más parte del índice: mejor recall, consulta más lenta. Mantén hnsw.ef_search igual o por encima de tu LIMIT, porque también limita los candidatos que un recorrido puede devolver. Usa SET LOCAL para dar más esfuerzo a una consulta importante y dejar rápidas las demás."
+          "body": "Estos ajustes actúan *en la consulta*; el índice no cambia. Un valor más alto visita más parte del índice: **mejor recall, consulta más lenta**.\n\nMantén hnsw.ef_search igual o por encima de tu LIMIT, porque **también limita los candidatos de un recorrido**.\n\nUsa SET LOCAL para dar más esfuerzo a una consulta importante y dejar rápidas las demás."
         }
       }
     },
@@ -496,11 +496,11 @@
       "kind": "pitfall",
       "level": "advanced",
       "title": "An IVFFlat index built on an empty table has useless centroids",
-      "body": "The trap: the migration creates the IVFFlat index first and loads the vectors after. The symptom: recall is poor at any probes value. IVF picks its centroids with k-means from the rows present at build time; with no rows, or a small sample, the lists do not match the data. The fix: load the data, then build the index, and rebuild it after the data grows or shifts a lot. An HNSW index has no training step and can be built first.",
+      "body": "The trap: the migration creates the IVFFlat index first and loads the vectors after. The symptom: recall is poor at any probes value.\n\nIVF picks its centroids with k-means from **the rows present at build time**; with no rows, or a small sample, the lists do not match the data.\n\nThe fix: **load the data, then build the index**, and rebuild it after the data grows or shifts a lot. An HNSW index has *no* training step and can be built first.",
       "translations": {
         "es": {
           "title": "Un índice IVFFlat construido sobre una tabla vacía tiene centroides inútiles",
-          "body": "La trampa: la migración crea primero el índice IVFFlat y carga los vectores después. El síntoma: el recall es malo con cualquier valor de probes. IVF elige sus centroides con k-means a partir de las filas presentes al construir; sin filas, o con una muestra pequeña, las listas no se ajustan a los datos. La solución: carga los datos, construye después el índice y reconstrúyelo cuando los datos crezcan o cambien mucho. Un índice HNSW no tiene paso de entrenamiento y se puede crear antes."
+          "body": "La trampa: la migración crea primero el índice IVFFlat y carga los vectores después. El síntoma: el recall es malo con cualquier valor de probes.\n\nIVF elige sus centroides con k-means a partir de **las filas presentes al construir**; sin filas, o con una muestra pequeña, las listas no se ajustan a los datos.\n\nLa solución: **carga los datos y construye después el índice**, y reconstrúyelo cuando los datos crezcan o cambien mucho. Un índice HNSW *no* tiene paso de entrenamiento y se puede crear antes."
         }
       }
     },
@@ -509,7 +509,7 @@
       "kind": "quiz",
       "level": "advanced",
       "title": "You raise hnsw.ef_search from 40 to 400. What happens?",
-      "body": "ef_search is the size of the candidate list during a search. A larger list explores more of the graph, finds more of the true neighbours and takes longer. It is a query setting: nothing is rebuilt. The links per node are m, fixed when the index is built. Past some point recall is flat near 1 and you only pay latency.",
+      "body": "ef_search is the size of the *candidate list* during a search. A larger list explores more of the graph, **finds more of the true neighbours and takes longer**.\n\nIt is a query setting: **nothing is rebuilt**. The links per node are m, fixed when the index is built.\n\nPast some point recall is flat near 1 and you only pay latency.",
       "options": [
         "The index is rebuilt with more links per node",
         "Recall goes up and each query gets slower",
@@ -520,7 +520,7 @@
       "translations": {
         "es": {
           "title": "Subes hnsw.ef_search de 40 a 400. ¿Qué pasa?",
-          "body": "ef_search es el tamaño de la lista de candidatos durante una búsqueda. Una lista mayor explora más parte del grafo, encuentra más vecinos verdaderos y tarda más. Es un ajuste de consulta: no se reconstruye nada. Los enlaces por nodo son m, que se fija al construir el índice. A partir de cierto punto el recall se queda plano cerca de 1 y solo pagas latencia.",
+          "body": "ef_search es el tamaño de la *lista de candidatos* durante una búsqueda. Una lista mayor explora más parte del grafo, **encuentra más vecinos verdaderos y tarda más**.\n\nEs un ajuste de consulta: **no se reconstruye nada**. Los enlaces por nodo son m, que se fija al construir el índice.\n\nA partir de cierto punto el recall se queda plano cerca de 1 y solo pagas latencia.",
           "options": [
             "El índice se reconstruye con más enlaces por nodo",
             "El recall sube y cada consulta va más lenta",
@@ -535,7 +535,7 @@
       "kind": "quiz",
       "level": "advanced",
       "title": "You quantise float32 vectors to int8. How much smaller is the vector data?",
-      "body": "A float32 takes 4 bytes and an int8 takes 1, so the data is 4 times smaller: 1536 dimensions go from 6144 to 1536 bytes. 32 times is binary quantisation, one bit per dimension. 8 is the number of bits in an int8, not the ratio. The recall loss of int8 is usually small, and a rescore with the full vectors recovers most of it.",
+      "body": "A float32 takes 4 bytes and an int8 takes 1, so **the data is 4 times smaller**: 1536 dimensions go from 6144 to 1536 bytes.\n\n32 times is *binary* quantisation, one bit per dimension. 8 is the number of bits in an int8, not the ratio.\n\nThe recall loss of int8 is usually small, and **a rescore with the full vectors** recovers most of it.",
       "options": [
         "2 times",
         "8 times",
@@ -546,7 +546,7 @@
       "translations": {
         "es": {
           "title": "Cuantizas vectores float32 a int8. ¿Cuánto se reducen los datos de los vectores?",
-          "body": "Un float32 ocupa 4 bytes y un int8 ocupa 1, así que los datos ocupan 4 veces menos: 1536 dimensiones pasan de 6144 a 1536 bytes. 32 veces es la cuantización binaria, un bit por dimensión. 8 es el número de bits de un int8, no la proporción. La pérdida de recall de int8 suele ser pequeña, y volver a puntuar con los vectores completos recupera casi toda.",
+          "body": "Un float32 ocupa 4 bytes y un int8 ocupa 1, así que **los datos ocupan 4 veces menos**: 1536 dimensiones pasan de 6144 a 1536 bytes.\n\n32 veces es la cuantización *binaria*, un bit por dimensión. 8 es el número de bits de un int8, no la proporción.\n\nLa pérdida de recall de int8 suele ser pequeña, y **volver a puntuar con los vectores completos** recupera casi toda.",
           "options": [
             "2 veces",
             "8 veces",
@@ -561,14 +561,14 @@
       "kind": "resource",
       "level": "advanced",
       "title": "Paper: Efficient and robust approximate nearest neighbor search using HNSW graphs",
-      "body": "Malkov and Yashunin describe the hierarchical navigable small world graph, the index behind most vector databases. Read the description of the algorithm for the layers, the insert and the search, and for what M and efConstruction do. It makes the parameters of your database less of a mystery.",
+      "body": "Malkov and Yashunin describe the *hierarchical navigable small world* graph, the index behind **most vector databases**.\n\nRead the description of the algorithm for the layers, the insert and the search, and for what M and efConstruction do. **It makes the parameters of your database less of a mystery.**",
       "url": "https://arxiv.org/abs/1603.09320",
       "media": "article",
       "minutes": 60,
       "translations": {
         "es": {
           "title": "Artículo: Efficient and robust approximate nearest neighbor search using HNSW graphs",
-          "body": "Malkov y Yashunin describen el grafo hierarchical navigable small world, el índice que hay detrás de la mayoría de las bases de datos vectoriales. Lee la descripción del algoritmo por las capas, la inserción y la búsqueda, y por lo que hacen M y efConstruction. Hace que los parámetros de tu base de datos sean menos misteriosos."
+          "body": "Malkov y Yashunin describen el grafo *hierarchical navigable small world*, el índice que hay detrás de **la mayoría de las bases vectoriales**.\n\nLee la descripción del algoritmo por las capas, la inserción y la búsqueda, y por lo que hacen M y efConstruction. Así **los parámetros de tu base de datos ya no son un misterio**."
         }
       }
     }
