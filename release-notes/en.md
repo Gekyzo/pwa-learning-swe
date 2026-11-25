@@ -4,7 +4,7 @@ What changes for you in each version of the app. The newest version is first.
 
 ## Unreleased
 
-No change.
+- Three new topics with 90 cards: large language models, embeddings and vector search, and retrieval-augmented generation (RAG). 32 of the cards have a diagram.
 
 ## 0.6.0 - 2026-10-31
 

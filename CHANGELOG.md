@@ -5,6 +5,7 @@ User-visible changes, newest first.
 ## Unreleased
 
 - Card diagrams (CARD-9): a card may carry `diagram: { svg, alt }`, and a translation its `diagram.alt`. New pure module `src/diagram.js` (`parseDiagram(svg, id)`, `CLASSES`, `MAX_DIAGRAM` 6000): a strict parser of an SVG subset into a tree, with allowlists of elements, attributes per element, `d-` classes and plain values, ids and marker references prefixed by the card id, and the XML entities only. `normalizeCard` keeps a valid diagram and drops a bad one (`MAX_ALT` 400); `cardTexts` needs the alt of a translation. `diagramSvg` of `src/ui/controls.js` builds the nodes from the tree, with `aria-label`; `cardNode` puts it after the title in part `feed-card-diagram`. New component `diagram` in `styles.css` (the `d-` classes, token `--diagram-max`). `docs/prompts/` holds the prompt for the AI, embeddings and RAG packs and a sample card.
+- Three packs with 90 cards (CARD-6): `content/llm.json` (30 cards, 10 diagrams), `content/embeddings.json` (30 cards, 11 diagrams) and `content/rag.json` (30 cards, 11 diagrams), each with Spanish text, in `content/index.json` and in `SHELL` of `sw.js`. `rag-pipeline` is the sample card of `docs/prompts/`, unchanged.
 
 ## 0.6.0 - 2026-10-31
 
