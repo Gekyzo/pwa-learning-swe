@@ -1,6 +1,6 @@
 {
   "id": "design",
-  "version": 1,
+  "version": 2,
   "title": "Software design",
   "translations": {
     "es": {
@@ -13,11 +13,11 @@
       "kind": "concept",
       "level": "intro",
       "title": "Low coupling, high cohesion",
-      "body": "Cohesion: the parts of a module change for the same reason. Coupling: how much one module must know about another. A change that touches five files in five folders is the sign of low cohesion and high coupling.",
+      "body": "*Cohesion*: the parts of a module change for the same reason. *Coupling*: how much one module must know about another.\n\nA **change that touches five files in five folders** is the sign of low cohesion and high coupling. Group the code that changes together, and let modules talk through a **small, stable interface**.",
       "translations": {
         "es": {
           "title": "Bajo acoplamiento, alta cohesión",
-          "body": "Cohesión: las partes de un módulo cambian por el mismo motivo. Acoplamiento: cuánto debe saber un módulo de otro. Un cambio que toca cinco archivos en cinco carpetas es la señal de baja cohesión y alto acoplamiento."
+          "body": "*Cohesión*: las partes de un módulo cambian por el mismo motivo. *Acoplamiento*: cuánto debe saber un módulo de otro.\n\nUn **cambio que toca cinco archivos en cinco carpetas** es la señal de baja cohesión y alto acoplamiento. Agrupa el código que cambia a la vez, y haz que los módulos hablen por una **interfaz pequeña y estable**."
         }
       }
     },
@@ -26,11 +26,11 @@
       "kind": "concept",
       "level": "intermediate",
       "title": "Functional core, imperative shell",
-      "body": "Keep the decisions in pure functions that take values and return values, and push the I/O (database, network, clock, DOM) to a thin outer layer. The core is easy to test; the shell is too simple to need many tests.",
+      "body": "Keep the decisions in **pure functions** that take values and return values. Push the I/O (database, network, clock, DOM) to a *thin* outer layer.\n\nThe core is easy to test with plain inputs and outputs, no mocks. The shell is **too simple to need many tests**.",
       "translations": {
         "es": {
           "title": "Núcleo funcional, capa imperativa",
-          "body": "Pon las decisiones en funciones puras que reciben valores y devuelven valores, y lleva la E/S (base de datos, red, reloj, DOM) a una capa exterior fina. El núcleo es fácil de probar; la capa exterior es tan simple que apenas necesita pruebas."
+          "body": "Pon las decisiones en **funciones puras** que reciben valores y devuelven valores. Lleva la E/S (base de datos, red, reloj, DOM) a una capa exterior *fina*.\n\nEl núcleo es fácil de probar con entradas y salidas simples, sin mocks. La capa exterior es **tan simple que apenas necesita pruebas**."
         }
       }
     },
@@ -39,13 +39,13 @@
       "kind": "snippet",
       "level": "intro",
       "title": "A strategy is often just a map of functions",
-      "body": "In a language with first-class functions, the strategy pattern needs no class hierarchy. A new rule is a new entry.",
+      "body": "In a language with *first-class functions*, the strategy pattern needs **no class hierarchy**. A map from a key to a function does the same job.\n\nA new rule is **a new entry**, and the caller does not change. An unknown key returns undefined, so check it before the call.",
       "code": "const PRICE = {\n  standard: (base) => base,\n  member: (base) => base * 0.9,\n  staff: () => 0,\n};\nconst total = PRICE[customer.kind](base);",
       "syntax": "js",
       "translations": {
         "es": {
           "title": "Una estrategia suele ser solo un mapa de funciones",
-          "body": "En un lenguaje con funciones de primera clase, el patrón estrategia no necesita una jerarquía de clases. Una regla nueva es una entrada nueva."
+          "body": "En un lenguaje con *funciones de primera clase*, el patrón estrategia **no necesita una jerarquía de clases**. Un mapa de una clave a una función hace el mismo trabajo.\n\nUna regla nueva es **una entrada nueva**, y quien llama no cambia. Una clave desconocida devuelve undefined, así que compruébala antes de la llamada."
         }
       }
     },
@@ -54,11 +54,11 @@
       "kind": "pitfall",
       "level": "intermediate",
       "title": "An abstraction with one user",
-      "body": "An interface, a factory and a plugin system for the one case you have make the code harder to change, not easier. Wait for the second or third real case; then the right seam is visible.",
+      "body": "An interface, a factory and a plugin system for the one case you have make the code **harder to change, not easier**. Each layer is a guess about a future you cannot see yet.\n\n**Wait for the second or third real case**; then the right *seam* is visible.",
       "translations": {
         "es": {
           "title": "Una abstracción con un solo usuario",
-          "body": "Una interfaz, una factoría y un sistema de plugins para el único caso que tienes hacen el código más difícil de cambiar, no más fácil. Espera al segundo o al tercer caso real; entonces se ve el punto de corte correcto."
+          "body": "Una interfaz, una factoría y un sistema de plugins para el único caso que tienes hacen el código **más difícil de cambiar, no más fácil**. Cada capa es una apuesta sobre un futuro que aún no ves.\n\n**Espera al segundo o al tercer caso real**; entonces se ve el *punto de corte* correcto."
         }
       }
     },
@@ -74,11 +74,11 @@
         "Dependency inversion"
       ],
       "answer": 2,
-      "body": "Liskov substitution: code written for the base type must work with any subtype. A Square that changes its height when its width is set breaks the promise of Rectangle.",
+      "body": "*Liskov substitution*: code written for the base type **must work with any subtype**. A Square that changes its height when its width is set breaks the promise of Rectangle.\n\nIt is tempting to call it open/closed, but nothing had to be modified to extend it. The break is in the **behaviour the subtype promises**.",
       "translations": {
         "es": {
           "title": "Una subclase Square rompe el código que fija el ancho de un Rectangle. ¿Qué principio rompe?",
-          "body": "Sustitución de Liskov: el código escrito para el tipo base debe funcionar con cualquier subtipo. Un Square que cambia su alto cuando se fija su ancho rompe la promesa de Rectangle.",
+          "body": "*Sustitución de Liskov*: el código escrito para el tipo base **debe funcionar con cualquier subtipo**. Un Square que cambia su alto cuando se fija su ancho rompe la promesa de Rectangle.\n\nEs tentador decir abierto/cerrado, pero no hubo que modificar nada para extenderlo. El fallo está en el **comportamiento que promete el subtipo**.",
           "options": [
             "Responsabilidad única",
             "Abierto/cerrado",
@@ -100,11 +100,11 @@
         "Thread safety"
       ],
       "answer": 1,
-      "body": "The function now depends on an input, not on the world. A test passes a fixed time and gets the same result on every run.",
+      "body": "The function now **depends on an input, not on the world**. A test passes a fixed time and gets the same result on every run: a *deterministic* test.\n\nSpeed and memory do not change, and the clock has nothing to do with threads. The gain is **control over time in the test**.",
       "translations": {
         "es": {
           "title": "¿Cuál es la ventaja principal de pasar un reloj a una función en lugar de llamar a Date.now() dentro?",
-          "body": "La función depende ahora de una entrada, no del mundo. Una prueba pasa una hora fija y obtiene el mismo resultado en cada ejecución.",
+          "body": "La función **depende ahora de una entrada, no del mundo**. Una prueba pasa una hora fija y obtiene el mismo resultado en cada ejecución: una prueba *determinista*.\n\nLa velocidad y la memoria no cambian, y el reloj no tiene que ver con los hilos. Lo que ganas es **controlar el tiempo en la prueba**.",
           "options": [
             "Velocidad",
             "Una prueba determinista",
@@ -119,14 +119,14 @@
       "kind": "resource",
       "level": "intro",
       "title": "Refactoring.Guru: design patterns",
-      "body": "Each classic pattern with the problem it solves, a diagram and short examples in several languages. Read the problem section first: a pattern is only worth its cost when you have that problem.",
+      "body": "Each classic *design pattern* with the problem it solves, a diagram and short examples in several languages. The catalogue also covers *refactorings* and code smells.\n\nRead the problem section first: a pattern is **only worth its cost when you have that problem**.",
       "url": "https://refactoring.guru/design-patterns",
       "media": "article",
       "minutes": 30,
       "translations": {
         "es": {
           "title": "Refactoring.Guru: patrones de diseño",
-          "body": "Cada patrón clásico con el problema que resuelve, un diagrama y ejemplos cortos en varios lenguajes. Lee primero la sección del problema: un patrón solo compensa su coste cuando tienes ese problema."
+          "body": "Cada *patrón de diseño* clásico con el problema que resuelve, un diagrama y ejemplos cortos en varios lenguajes. El catálogo también cubre las *refactorizaciones* y los code smells.\n\nLee primero la sección del problema: un patrón **solo compensa su coste cuando tienes ese problema**."
         }
       }
     }

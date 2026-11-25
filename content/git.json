@@ -1,6 +1,6 @@
 {
   "id": "git",
-  "version": 1,
+  "version": 2,
   "title": "Git",
   "translations": {
     "es": {
@@ -13,11 +13,11 @@
       "kind": "concept",
       "level": "intro",
       "title": "A commit is a snapshot, not a diff",
-      "body": "Git stores each commit as a full tree of the project, plus its parent commits, author and message. A diff is computed when you ask for one. Identical files share one blob, so snapshots stay cheap.",
+      "body": "Git stores each commit as a **full tree of the project**, plus its parent commits, author and message. A diff is computed when you ask for one.\n\nIdentical files share one *blob*, so snapshots stay cheap. Git also packs similar objects with deltas on disk, but **the model is still a snapshot**.",
       "translations": {
         "es": {
           "title": "Un commit es una instantánea, no un diff",
-          "body": "Git guarda cada commit como un árbol completo del proyecto, más sus commits padre, su autor y su mensaje. El diff se calcula cuando lo pides. Los archivos idénticos comparten un blob, así que las instantáneas siguen siendo baratas."
+          "body": "Git guarda cada commit como un **árbol completo del proyecto**, más sus commits padre, su autor y su mensaje. El diff se calcula cuando lo pides.\n\nLos archivos idénticos comparten un *blob*, así que las instantáneas siguen siendo baratas. Git también empaqueta objetos parecidos con deltas en disco, pero **el modelo sigue siendo una instantánea**."
         }
       }
     },
@@ -26,11 +26,11 @@
       "kind": "concept",
       "level": "intro",
       "title": "A branch is a movable pointer",
-      "body": "A branch is a file that holds one commit hash. A new commit on the branch moves the pointer forward. HEAD points at the branch you are on, or directly at a commit when it is detached.",
+      "body": "A branch is **a file that holds one commit hash**. A new commit on the branch moves the pointer forward.\n\nHEAD points at the branch you are on, or directly at a commit when it is *detached*. That is why creating or deleting a branch is instant: **no commit is copied or removed**.",
       "translations": {
         "es": {
           "title": "Una rama es un puntero que se mueve",
-          "body": "Una rama es un archivo que guarda el hash de un commit. Un commit nuevo en la rama mueve el puntero hacia delante. HEAD apunta a la rama en la que estás, o directamente a un commit cuando está detached."
+          "body": "Una rama es **un archivo que guarda el hash de un commit**. Un commit nuevo en la rama mueve el puntero hacia delante.\n\nHEAD apunta a la rama en la que estás, o directamente a un commit cuando está *detached*. Por eso crear o borrar una rama es instantáneo: **no se copia ni se borra ningún commit**."
         }
       }
     },
@@ -39,13 +39,13 @@
       "kind": "snippet",
       "level": "intro",
       "title": "See the shape of the history",
-      "body": "One line per commit, with the branch graph and every ref name. Add a path at the end to see only the commits that touched it.",
+      "body": "One line per commit, with the **branch graph and every ref name**. --all shows every branch, not only the one you are on.\n\nAdd a path at the end to see *only* the commits that touched it. Save the command as an alias, such as git lg, because you will **run it every day**.",
       "code": "git log --oneline --graph --decorate --all",
       "syntax": "sh",
       "translations": {
         "es": {
           "title": "Ver la forma del historial",
-          "body": "Una línea por commit, con el grafo de ramas y el nombre de cada ref. Añade una ruta al final para ver solo los commits que la tocaron."
+          "body": "Una línea por commit, con el **grafo de ramas y el nombre de cada ref**. --all muestra todas las ramas, no solo la tuya.\n\nAñade una ruta al final para ver *solo* los commits que la tocaron. Guarda el comando como alias, por ejemplo git lg, porque lo vas a **usar cada día**."
         }
       }
     },
@@ -54,11 +54,11 @@
       "kind": "pitfall",
       "level": "intermediate",
       "title": "Plain --force can erase a teammate's push",
-      "body": "git push --force overwrites the remote branch with your copy, even if someone pushed in the meantime. Use --force-with-lease: it refuses when the remote moved since your last fetch.",
+      "body": "git push --force overwrites the remote branch with your copy, **even if someone pushed in the meantime**. Their commits vanish from the branch with no warning.\n\nUse **--force-with-lease**: it refuses when the remote moved since your last *fetch*. Then fetch, rebase on their work and push again.",
       "translations": {
         "es": {
           "title": "Un --force a secas puede borrar el push de un compañero",
-          "body": "git push --force sobrescribe la rama remota con tu copia, aunque alguien haya hecho push mientras tanto. Usa --force-with-lease: se niega cuando el remoto cambió desde tu último fetch."
+          "body": "git push --force sobrescribe la rama remota con tu copia, **aunque alguien haya hecho push mientras tanto**. Sus commits desaparecen de la rama sin aviso.\n\nUsa **--force-with-lease**: se niega cuando el remoto cambió desde tu último *fetch*. Entonces haz fetch, rebase sobre su trabajo y push de nuevo."
         }
       }
     },
@@ -73,11 +73,11 @@
         "Deletes the branch and recreates it from main"
       ],
       "answer": 1,
-      "body": "Rebase rewrites the branch: each commit is applied again on top of main and gets a new hash. That is why rebasing a shared branch forces everyone else to reset.",
+      "body": "Rebase *rewrites* the branch: each commit is applied again on top of main and **gets a new hash**. No merge commit is made; that is git merge.\n\nThat is why **rebasing a shared branch** forces everyone else to reset.",
       "translations": {
         "es": {
           "title": "¿Qué hace git rebase main en una rama de feature?",
-          "body": "El rebase reescribe la rama: cada commit se aplica de nuevo sobre main y recibe un hash nuevo. Por eso, hacer rebase de una rama compartida obliga a todos los demás a hacer reset.",
+          "body": "El rebase *reescribe* la rama: cada commit se aplica de nuevo sobre main y **recibe un hash nuevo**. No se crea un commit de merge; eso es git merge.\n\nPor eso, **hacer rebase de una rama compartida** obliga a todos los demás a hacer reset.",
           "options": [
             "Fusiona main en la rama con un commit de merge",
             "Vuelve a aplicar los commits de la rama sobre main como commits nuevos",
@@ -98,11 +98,11 @@
         "It is gone"
       ],
       "answer": 0,
-      "body": "The reflog records every move of HEAD and the branches, about 90 days by default. git reflog shows the hash; git reset --hard <hash> brings it back.",
+      "body": "The *reflog* records every move of HEAD and the branches, **about 90 days by default**. git reflog shows the hash; git reset --hard <hash> brings it back.\n\nThe commit is not gone: reset only moved a pointer. git stash list shows only stashes, and fsck is the **last resort, not the first**.",
       "translations": {
         "es": {
           "title": "Ejecutaste git reset --hard y perdiste un commit. ¿Dónde encuentras su hash?",
-          "body": "El reflog registra cada movimiento de HEAD y de las ramas, unos 90 días por defecto. git reflog muestra el hash; git reset --hard <hash> lo recupera.",
+          "body": "El *reflog* registra cada movimiento de HEAD y de las ramas, **unos 90 días por defecto**. git reflog muestra el hash; git reset --hard <hash> lo recupera.\n\nEl commit no se ha perdido: reset solo movió un puntero. git stash list solo muestra stashes, y fsck es el **último recurso, no el primero**.",
           "options": [
             "git reflog",
             "git stash list",
@@ -117,14 +117,14 @@
       "kind": "resource",
       "level": "intro",
       "title": "Pro Git, chapter 10: Git Internals",
-      "body": "The free book by Scott Chacon and Ben Straub. Chapter 10 builds a commit by hand from blobs and trees, which makes every other command easier to reason about.",
+      "body": "The free book by Scott Chacon and Ben Straub, *Pro Git*, free to read online in many languages.\n\nChapter 10 **builds a commit by hand from blobs and trees**, which makes every other command easier to reason about.",
       "url": "https://git-scm.com/book/en/v2/Git-Internals-Plumbing-and-Porcelain",
       "media": "book",
       "minutes": 45,
       "translations": {
         "es": {
           "title": "Pro Git, capítulo 10: Los entresijos de Git",
-          "body": "El libro gratuito de Scott Chacon y Ben Straub. El capítulo 10 construye un commit a mano a partir de blobs y árboles, y así es más fácil razonar sobre cualquier otro comando."
+          "body": "El libro gratuito de Scott Chacon y Ben Straub, *Pro Git*, gratis para leer en línea en muchos idiomas.\n\nEl capítulo 10 **construye un commit a mano a partir de blobs y árboles**, y así es más fácil razonar sobre cualquier otro comando."
         }
       }
     }
