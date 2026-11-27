@@ -1,5 +1,5 @@
 import { normalizePack, buildPool, normalizePaths } from '#cards';
-import { nextCards, seenAgain, dueBars, newCount, stateCounts, topicLedger, sessionDone, greetingOf, hiddenTopics, hintIds, switchTopic, pathProgress } from '#feed';
+import { nextCards, seenAgain, dueBars, newCount, stateCounts, topicLedger, sessionDone, greetingOf, hiddenTopics, hintIds, switchTopic, pathProgress, guideTopicsOff } from '#feed';
 import { markSeen, isUpdated } from '#learning';
 import { $, el, ui, state, pool, lang, cardLang, firstStart, t, scroller, topicsOff, pathId, setPool, setTopics, setPath, commit, render } from '#ui/context';
 import { cardOf, cardNode } from '#ui/card';
@@ -254,6 +254,7 @@ export const chooseTopic = (id, on) => {
 export const choosePath = (id, on) => {
   if (!pool) return;
   setPath(on ? id : null);
+  if (on && activePath()) setTopics(guideTopicsOff(pool, topicsOff, activePath().ids));
   ui.ended = false;
   fill();
 };

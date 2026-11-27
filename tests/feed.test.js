@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { DUE_SHARE, NEW_SHARE, nextCard, nextCards, seenAgain, dueCount, savedCards, hiddenTopics, switchTopic, dueBars, newCount, stateCounts, topicLedger, greetingOf, tagOf, sessionDone, hintIds, pathProgress } from '#feed';
+import { DUE_SHARE, NEW_SHARE, nextCard, nextCards, seenAgain, dueCount, savedCards, hiddenTopics, switchTopic, dueBars, newCount, stateCounts, topicLedger, greetingOf, tagOf, sessionDone, hintIds, pathProgress, guideTopicsOff } from '#feed';
 import { DAY } from '#learning';
 
 const NOW = Date.UTC(2026, 9, 30, 12);
@@ -292,4 +292,14 @@ test('pathProgress counts the path cards that have a record (FEED-20)', () => {
   const cards = [card('git-a', 'git'), card('git-b', 'git'), card('http-a', 'http')];
   assert.deepEqual(pathProgress(pool(cards), doc({ 'git-a': record(), 'http-a': record() }), ['git-a', 'git-b']), { seen: 1, total: 2 });
   assert.deepEqual(pathProgress(pool(cards), doc(), []), { seen: 0, total: 0 });
+});
+
+test('guideTopicsOff turns on the topics of the cards of a guide, and keeps the other topics off', () => {
+  const pool = {
+    topics: [{ id: 'a' }, { id: 'b' }, { id: 'c' }],
+    cards: [{ id: 'a-1', topic: 'a' }, { id: 'b-1', topic: 'b' }, { id: 'c-1', topic: 'c' }],
+  };
+  assert.deepEqual(guideTopicsOff(pool, ['a', 'b', 'c'], ['b-1', 'a-1']), ['c']);
+  assert.deepEqual(guideTopicsOff(pool, ['c'], ['a-1']), ['c']);
+  assert.deepEqual(guideTopicsOff(pool, [], ['a-1']), []);
 });

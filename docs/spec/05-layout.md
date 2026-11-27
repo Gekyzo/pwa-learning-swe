@@ -65,7 +65,8 @@ cards in each class; this app has no `pane` layout (LAY-3).
 - **SET-5** **Guía** is the first group of Settings, with the line `settings.guideNote`, once the
   packs load and only when they have a path (CARD-11): one switch for each path, in index order,
   with the title of the path in the card language and its card count (`onboarding.count`) under
-  it. At most one guide is on: turning one on turns the other off. A switch acts at once: the
+  it. At most one guide is on: turning one on turns the other off, and turns on the topics of its
+  cards (FEED-14); a topic turned off after that stays off. A switch acts at once: the
   feed adds its next cards in the order of the guide (FEED-20), and the cards already in the list
   stay. The choice is `pwa-learning-swe.path`, with no key for none; a stored id of no path counts
   as none (FEED-21).

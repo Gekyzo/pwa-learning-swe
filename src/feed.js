@@ -77,6 +77,13 @@ export const nextCards = (pool, state, { now, random, exclude = [], off = [], pa
 // The cards of a path that have a record, of all its cards (FEED-20).
 export const pathProgress = (pool, state, ids) => ({ seen: ids.filter((id) => state.records[id]).length, total: ids.length });
 
+// The topics that are off once a guide is on: the topics of its cards turn on (SET-5).
+export const guideTopicsOff = (pool, off, ids) => {
+  const wanted = new Set(ids);
+  const needed = new Set(pool.cards.filter((card) => wanted.has(card.id)).map((card) => card.topic));
+  return off.filter((id) => !needed.has(id));
+};
+
 // The seen cards that may show, the least recently seen first (FEED-4).
 export const seenAgain = (pool, state, { exclude = [], off = [], count }) =>
   eligible(pool, state, exclude, off)

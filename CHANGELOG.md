@@ -4,7 +4,7 @@ User-visible changes, newest first.
 
 ## Unreleased
 
-No change.
+- Guide switch (SET-5): turning a guide on also turns on the topics of its cards (`guideTopicsOff` of `src/feed.js`). Before, a guide whose topics were off showed none of its cards.
 
 ## 0.6.7 - 2026-11-27
 

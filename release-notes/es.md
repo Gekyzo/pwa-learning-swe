@@ -4,7 +4,7 @@ Lo que cambia para ti en cada versión de la app. La versión más nueva va prim
 
 ## Unreleased
 
-No change.
+- Activar una guía ahora activa también los temas que necesita. Antes, una guía con sus temas desactivados no mostraba ninguna de sus tarjetas.
 
 ## 0.6.7 - 2026-11-27
 
