@@ -4,6 +4,10 @@ What changes for you in each version of the app. The newest version is first.
 
 ## Unreleased
 
+No change.
+
+## 0.6.8 - 2026-11-27
+
 - Turning a guide on now also turns on the topics it needs. Before, a guide whose topics were off showed none of its cards.
 
 ## 0.6.7 - 2026-11-27
