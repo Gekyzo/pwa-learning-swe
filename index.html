@@ -48,6 +48,10 @@
                 <div id="today-progress" class="progress data" role="progressbar" aria-valuemin="0" aria-labelledby="today-title today-count"></div>
                 <p id="today-note" class="feed-panel-note"></p>
               </section>
+              <section id="panel-path" class="feed-panel" hidden>
+                <h2 class="feed-panel-head"><span id="path-title"></span><span id="path-count" class="feed-panel-aside"></span></h2>
+                <div id="path-progress" class="progress data" role="progressbar" aria-valuemin="0" aria-labelledby="path-title path-count"></div>
+              </section>
               <section id="panel-bars" class="feed-panel">
                 <h2 class="feed-panel-head"><span data-i18n="side.bars"></span><span class="feed-panel-aside" data-i18n="side.barsNote"></span></h2>
                 <ol id="due-bars" class="due-bars"></ol>
@@ -79,6 +83,15 @@
       </section>
 
       <section id="settings" class="settings" hidden>
+        <section class="settings-group" hidden>
+          <div class="settings-label">
+            <h2 class="list-group-head" data-i18n="settings.guide"></h2>
+            <p class="settings-note" data-i18n="settings.guideNote"></p>
+          </div>
+          <div class="settings-rows">
+            <div id="paths" class="list-group"></div>
+          </div>
+        </section>
         <section class="settings-group">
           <div class="settings-label">
             <h2 class="list-group-head" data-i18n="settings.topics"></h2>

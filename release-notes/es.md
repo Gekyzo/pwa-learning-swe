@@ -4,7 +4,7 @@ Lo que cambia para ti en cada versión de la app. La versión más nueva va prim
 
 ## Unreleased
 
-No change.
+- Ajustes tiene un grupo nuevo, Guía. Activa una guía y las tarjetas nuevas llegan en su orden, con un panel en el feed que muestra cuánto llevas.
 
 ## 0.6.6 - 2026-11-26
 

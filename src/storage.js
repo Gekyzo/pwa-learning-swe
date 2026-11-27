@@ -252,6 +252,30 @@ export const saveTopics = (storage, off) => {
   }
 };
 
+// The guide that is on (FEED-21), by path id. A preference of the device, as the topics are. An id
+// of no path reads as none in the Feed, so the key can stay.
+export const PATH_KEY = keyOf('path');
+
+export const loadPath = (storage) => {
+  try {
+    const id = storage.getItem(PATH_KEY);
+    return typeof id === 'string' && TOPIC_ID.test(id) ? id : null;
+  } catch {
+    return null;
+  }
+};
+
+// No guide is the app with no choice: it removes the key.
+export const savePath = (storage, id) => {
+  try {
+    if (id) storage.setItem(PATH_KEY, id);
+    else storage.removeItem(PATH_KEY);
+    return true;
+  } catch {
+    return false;
+  }
+};
+
 // Set after the walkthrough of the first start closed. It is a preference of the device, as the
 // hand is.
 export const ONBOARDED_KEY = keyOf('onboarded');

@@ -3,7 +3,7 @@ import { bind as bindNav, renderNav } from '#ui/nav';
 import { bind as bindFeed, renderFeed, loadPool, subline } from '#ui/feed';
 import { bind as bindSaved, renderSaved } from '#ui/saved';
 import { bind as bindCard, renderCardSheet, closeCardSheet } from '#ui/card';
-import { bind as bindSettings, applyLanguage, renderTopics } from '#ui/settings';
+import { bind as bindSettings, applyLanguage, renderPaths, renderTopics } from '#ui/settings';
 import { bind as bindInstall, renderInstall } from '#ui/install';
 import { readVersion, renderVersion, offerUpdate } from '#ui/update';
 import { bind as bindOnboarding, renderOnboarding, closeOnboarding, isReviewOpen, closeReview } from '#ui/onboarding';
@@ -23,6 +23,7 @@ const renderAll = () => {
   renderSaved();
   renderCardSheet();
   $('settings').hidden = ui.view !== 'settings';
+  renderPaths();
   renderTopics();
   renderOnboarding();
   renderVersion();

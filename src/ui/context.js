@@ -18,6 +18,8 @@ import {
   saveModules,
   loadTopics,
   saveTopics,
+  loadPath,
+  savePath,
   loadOnboarded,
   hasStoredDoc,
 } from '#storage';
@@ -79,6 +81,9 @@ export let navMotion = false;
 
 // The topics that the user turned off (FEED-14), by pack id.
 export let topicsOff = storage ? loadTopics(storage) : [];
+
+// The id of the guide that is on (FEED-21), or null.
+export let pathId = storage ? loadPath(storage) : null;
 
 // The text of a message of a pure module.
 export const textOf = ({ key, params }) => t(key, params);
@@ -225,6 +230,11 @@ export const setModules = (next) => {
 export const setTopics = (next) => {
   topicsOff = next;
   if (storage) saveTopics(storage, topicsOff);
+};
+
+export const setPath = (id) => {
+  pathId = id;
+  if (storage) savePath(storage, pathId);
 };
 
 // Set by a switch of Modules, so that the render that follows animates the navigation (MOD-3).

@@ -34,7 +34,7 @@ cards in each class; this app has no `pane` layout (LAY-3).
 ## Settings
 
 - **SET-1** Settings is a column of groups, each a `settings-group`: a `list-group-head` with an
-  optional muted line, above a `list-group` of settings rows. The order is **Temas** (FEED-15, with the
+  optional muted line, above a `list-group` of settings rows. The order is **Guía** (SET-5, only when the index has a path), **Temas** (FEED-15, with the
   line `settings.topicsNote`: topics on of all, and the cards of the topics on), **Preferencias**
   (**Language**, **Card language** (I18N-7), **Hand**, **Theme** (SET-4), **Code theme** (SET-3), then the switch of Saved, MOD-1; line `settings.preferencesNote`),
   **Cuenta y copia** (the account rows, ACC-8, then **Export** and **Import**), **Aplicación**
@@ -61,6 +61,14 @@ cards in each class; this app has no `pane` layout (LAY-3).
   VS Code theme). Nord, Nord Light and Monokai Dimmed take fixed colours from their official palettes,
   each with a light or dark colour scheme; text keeps a contrast of 4.5:1 on its ground. The choice
   is `pwa-learning-swe.theme`, with no key for **Automatic**, and `data-theme` on the root element.
+
+- **SET-5** **Guía** is the first group of Settings, with the line `settings.guideNote`, once the
+  packs load and only when they have a path (CARD-11): one switch for each path, in index order,
+  with the title of the path in the card language and its card count (`onboarding.count`) under
+  it. At most one guide is on: turning one on turns the other off. A switch acts at once: the
+  feed adds its next cards in the order of the guide (FEED-20), and the cards already in the list
+  stay. The choice is `pwa-learning-swe.path`, with no key for none; a stored id of no path counts
+  as none (FEED-21).
 
 ## Walkthrough
 

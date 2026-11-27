@@ -32,6 +32,9 @@ import {
   TOPICS_KEY,
   loadTopics,
   saveTopics,
+  PATH_KEY,
+  loadPath,
+  savePath,
   ONBOARDED_KEY, SEEN_VERSION_KEY, loadSeen, saveSeen,
   loadOnboarded,
   saveOnboarded,
@@ -182,6 +185,7 @@ test('a preference is not part of the stored doc', () => {
   saveTheme(storage, 'dark');
   saveModules(storage, ['saved']);
   saveTopics(storage, ['git']);
+  savePath(storage, 'ai');
   saveOnboarded(storage);
   assert.deepEqual(loadDoc(storage, opts), empty());
   assert.equal(hasStoredDoc(storage, KEY), false);
@@ -321,6 +325,30 @@ test('saveTopics stores the ids and an empty list removes the key', () => {
 test('the topic functions do not throw when the storage does', () => {
   assert.deepEqual(loadTopics(brokenStorage()), []);
   assert.equal(saveTopics(brokenStorage(), ['git']), false);
+});
+
+test('loadPath returns the stored path id', () => {
+  assert.equal(loadPath(fakeStorage({ [PATH_KEY]: 'ai' })), 'ai');
+});
+
+test('loadPath returns null for no value and for a value that is not an id', () => {
+  assert.equal(loadPath(fakeStorage()), null);
+  assert.equal(loadPath(fakeStorage({ [PATH_KEY]: '' })), null);
+  assert.equal(loadPath(fakeStorage({ [PATH_KEY]: 'Bad id' })), null);
+  assert.equal(loadPath(fakeStorage({ [PATH_KEY]: '["ai"]' })), null);
+});
+
+test('savePath stores the id and null removes the key', () => {
+  const storage = fakeStorage();
+  assert.equal(savePath(storage, 'ai'), true);
+  assert.equal(storage.getItem(PATH_KEY), 'ai');
+  assert.equal(savePath(storage, null), true);
+  assert.equal(storage.getItem(PATH_KEY), null);
+});
+
+test('the path functions do not throw when the storage does', () => {
+  assert.equal(loadPath(brokenStorage()), null);
+  assert.equal(savePath(brokenStorage(), 'ai'), false);
 });
 
 test('loadOnboarded is true only when the flag is stored', () => {

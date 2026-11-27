@@ -40,11 +40,13 @@ test('the Feed has its list, the mark of its end, and its end and error states (
   assert.match(section, /<div id="feed-error" class="empty-state" hidden>[\s\S]*<button id="feed-retry" class="button primary"/);
 });
 
-test('the Feed has the side column with its four panels (FEED-18)', () => {
+test('the Feed has the side column with its panels (FEED-18, FEED-21)', () => {
   const [side = ''] = body.match(/<aside id="feed-side" class="feed-side-col">[\s\S]*?<\/aside>/) ?? [];
   assert.match(side, /^<aside id="feed-side" class="feed-side-col">\s*<div id="feed-panels" class="feed-panels" hidden>/);
-  const panels = [...side.matchAll(/<section id="([^"]+)" class="feed-panel">/g)].map(([, id]) => id);
-  assert.deepEqual(panels, ['panel-today', 'panel-bars', 'panel-states', 'panel-topics']);
+  const panels = [...side.matchAll(/<section id="([^"]+)" class="feed-panel"( hidden)?>/g)].map(([, id]) => id);
+  assert.deepEqual(panels, ['panel-today', 'panel-path', 'panel-bars', 'panel-states', 'panel-topics']);
+  assert.match(side, /<section id="panel-path" class="feed-panel" hidden>/);
+  assert.match(side, /<div id="path-progress" class="progress data" role="progressbar" aria-valuemin="0" aria-labelledby="path-title path-count"><\/div>/);
   assert.match(side, /<div id="today-progress" class="progress data" role="progressbar" aria-valuemin="0" aria-labelledby="today-title today-count"><\/div>/);
   assert.match(side, /<ol id="due-bars" class="due-bars"><\/ol>/);
   assert.match(side, /<ol id="topic-ledger" class="topic-ledger"><\/ol>/);
@@ -132,15 +134,15 @@ test('the account screens cover the app: Sign in with Google or offline, and Wai
   assert.deepEqual(buttons, ['waiting-check', 'waiting-logout']);
 });
 
-test('Settings has its groups in order: Temas, Preferencias, Cuenta y copia, Aplicación, Borrar (SET-1)', () => {
+test('Settings has its groups in order: Guía, Temas, Preferencias, Cuenta y copia, Aplicación, Borrar (SET-1)', () => {
   const [settings = ''] = body.match(/<section id="settings"[\s\S]*?<\/main>/) ?? [];
   const heads = [...settings.matchAll(/<h2 class="list-group-head" data-i18n="([^"]+)">/g)].map(([, key]) => key);
-  assert.deepEqual(heads, ['settings.topics', 'settings.preferences', 'settings.accountBackup', 'settings.app', 'settings.erase']);
+  assert.deepEqual(heads, ['settings.guide', 'settings.topics', 'settings.preferences', 'settings.accountBackup', 'settings.app', 'settings.erase']);
   assert.match(settings, /data-i18n="settings.preferencesNote"/);
   assert.match(settings, /data-i18n="settings.eraseNote"/);
   assert.match(settings, /<p id="topics-note" class="settings-note">/);
   // The ids that go with each group, in order.
-  const order = ['id="topics"', 'id="language"', 'id="card-language"', 'id="hand"', 'id="theme"', 'id="code-theme"', 'data-module="saved"', 'id="account-group"', 'id="export"', 'id="import"', 'id="install-group"', 'id="show-onboarding"', 'id="show-review"', 'id="show-whatsnew"', 'class="about"', 'id="reset"'];
+  const order = ['id="paths"', 'id="topics"', 'id="language"', 'id="card-language"', 'id="hand"', 'id="theme"', 'id="code-theme"', 'data-module="saved"', 'id="account-group"', 'id="export"', 'id="import"', 'id="install-group"', 'id="show-onboarding"', 'id="show-review"', 'id="show-whatsnew"', 'class="about"', 'id="reset"'];
   const at = order.map((mark) => settings.indexOf(mark));
   assert.ok(at.every((index) => index >= 0), 'every part is there');
   assert.deepEqual(at, [...at].sort((a, b) => a - b));

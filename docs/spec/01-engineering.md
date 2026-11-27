@@ -28,7 +28,7 @@
 | `src/ui/install.js` | The Install button | `install`, `ui/context` |
 | `src/ui/nav.js` | The navigation, the change and the slide of a section | `sections`, `modules`, `ui/context`, `ui/update`, `ui/dust` |
 | `src/ui/card.js` | One card of the feed or of Saved, its actions, and the sheet of its other signals (FEED-9 to FEED-12) | `learning`, `feed`, `highlight`, `diagram`, `richtext`, `ds/sheet`, `ui/context`, `ui/controls` |
-| `src/ui/feed.js` | The Feed section: the load of the packs, the next cards as the list scrolls, the seen cards, the due line and the switch of a topic (FEED-6 to FEED-8, FEED-14) | `cards`, `feed`, `learning`, `ui/context`, `ui/card` |
+| `src/ui/feed.js` | The Feed section: the load of the packs, the next cards as the list scrolls, the seen cards, the due line, the switch of a topic and of a guide (FEED-6 to FEED-8, FEED-14, FEED-21) | `cards`, `feed`, `learning`, `ui/context`, `ui/card` |
 | `src/ui/saved.js` | The Saved section (FEED-13) | `feed`, `ui/context`, `ui/card`, `ui/nav` |
 | `src/ui/settings.js` | Settings, Delete all data (SET-2), the Topics group (FEED-15), and the text of the page in its language | `learning`, `storage`, `i18n`, `modules`, `ui/context`, `ui/update`, `ui/feed`, `ui/account` |
 | `src/ui/dust.js` | The dust of a navigation item (optional) | `particles`, `ui/context`, `ui/controls` |
@@ -69,7 +69,7 @@
 ## Storage keys
 
 The doc keys are in [09-feed.md](09-feed.md). The device preferences are `pwa-learning-swe.lang`, `pwa-learning-swe.cardLang`,
-`pwa-learning-swe.hand`, `pwa-learning-swe.theme`, `pwa-learning-swe.codeTheme`, `pwa-learning-swe.modules`, `pwa-learning-swe.topics` and `pwa-learning-swe.onboarded`. The account keeps `pwa-learning-swe.session` (ACC-5) and
+`pwa-learning-swe.hand`, `pwa-learning-swe.theme`, `pwa-learning-swe.codeTheme`, `pwa-learning-swe.modules`, `pwa-learning-swe.topics`, `pwa-learning-swe.path` and `pwa-learning-swe.onboarded`. The account keeps `pwa-learning-swe.session` (ACC-5) and
 `pwa-learning-swe.offline` (ACC-10), and `pwa-learning-swe.oauth` in `sessionStorage` for the time of a Google redirect (ACC-4).
 
 ## Change guide

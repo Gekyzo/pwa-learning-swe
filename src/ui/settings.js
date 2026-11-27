@@ -29,7 +29,7 @@ import {
   setNavMotion,
 } from '#ui/context';
 import { runUpdate } from '#ui/update';
-import { chooseTopic, topicStates, localizePool } from '#ui/feed';
+import { chooseTopic, topicStates, localizePool, paths, activePath, choosePath } from '#ui/feed';
 import { signedIn } from '#ui/account';
 
 // The value of a row of Preferences is the text of the option that its select has.
@@ -86,6 +86,29 @@ export const applyLanguage = () => {
 
 // The Topics group (FEED-15): one switch for each pack, once the packs load. A switch node stays
 // while the topics stay, so the focus stays on the switch that was pressed.
+// The Guide group (SET-5): one switch for each path, at most one on. Hidden with no path.
+export const renderPaths = () => {
+  const list = $('paths');
+  list.closest('.settings-group').hidden = !paths.length;
+  if (list.dataset.ids !== paths.map(({ id }) => id).join()) {
+    list.dataset.ids = paths.map(({ id }) => id).join();
+    list.replaceChildren(
+      ...paths.map(({ id }) => {
+        const box = el('input', { className: 'switch-input', type: 'checkbox', onchange: (event) => choosePath(id, event.target.checked) });
+        box.setAttribute('role', 'switch');
+        const name = el('span', { className: 'switch-title' }, [el('span'), el('span', { className: 'switch-meta' })]);
+        return el('label', { className: 'switch' }, [name, box]);
+      }),
+    );
+  }
+  const on = activePath();
+  [...list.querySelectorAll('.switch')].forEach((label, index) => {
+    Object.assign(label.querySelector('.switch-title').firstElementChild, { textContent: paths[index].title, lang: paths[index].lang });
+    label.querySelector('.switch-meta').textContent = t('onboarding.count', { count: paths[index].ids.length });
+    label.querySelector('.switch-input').checked = paths[index] === on;
+  });
+};
+
 export const renderTopics = () => {
   const topics = topicStates();
   $('topics').closest('.settings-group').hidden = !topics.length;

@@ -4,7 +4,7 @@ What changes for you in each version of the app. The newest version is first.
 
 ## Unreleased
 
-No change.
+- Settings has a new Guide group. Turn on a guide and the new cards come in its order, with a panel in the Feed that shows how far you are.
 
 ## 0.6.6 - 2026-11-26
 

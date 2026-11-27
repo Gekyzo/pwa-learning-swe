@@ -188,7 +188,7 @@ Rules of `src/ui/feed.js`, `src/ui/card.js` and `src/ui/saved.js`.
   pack order, with the title of the pack in English and its card count (`onboarding.count`) under it. A switch acts at once, as a tile of ONB-4
   does: the switch of the last topic that is on is disabled, and a topic that comes back on may
   add its cards at the end of the list.
-- **FEED-18** The Feed has four panels, once the packs load. **Hoy** shows `side.todayCount`:
+- **FEED-18** The Feed has four panels, once the packs load, and the panel of FEED-21 after **Hoy** while a guide is on. **Hoy** shows `side.todayCount`:
   `done` is the cards that came into the feed as due in this start and were seen, of a topic that
   is on (`sessionDone`); **Show seen cards again** does not reset it. `total` is `done` plus the
   due count (bar 0 of FEED-16); a progress bar, named by the head and the count, shows
@@ -200,7 +200,13 @@ Rules of `src/ui/feed.js`, `src/ui/card.js` and `src/ui/saved.js`.
   panels stand in a column beside the cards, sticky at the top; below 840px one node of the
   panels stands in the list after the third card, or at the end of a shorter list, and moves
   when the width changes, so the cards keep their nodes (FEED-12). The data hue is only on the
-  bar of today and the progress of **Hoy**.
+  bar of today, the progress of **Hoy** and the progress of the guide.
+- **FEED-21** While a guide is on (SET-5), the Feed shows the panel of the guide after **Hoy**: the
+  title of the path as its head, and `side.pathCount` with `pathProgress` (FEED-20), `seen` of
+  `count`. A progress bar, named by the head and the count, shows `seen / count`, with the classes
+  and the data hue of the progress of **Hoy**. The guide that is on is the id under
+  `pwa-learning-swe.path` when a path of the index has it; any other id counts as no guide, and the
+  panel is hidden.
 - **FEED-19** On a first start (ONB-1), the first two cards that come into the feed in this start (their ids are kept in `ui.hinted`, set once and never cleared, so **Show seen cards again** and a filter do not move the hint) show one line, `card.hint`,
   under the tags of their card: `feed-card-hint`, in `--faint` and `--text-s`, with no data hue. Nothing
   is stored, so the line goes with the next start. A preview card never shows it. The hint is part of

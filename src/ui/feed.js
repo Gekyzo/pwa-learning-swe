@@ -1,7 +1,7 @@
-import { normalizePack, buildPool } from '#cards';
-import { nextCards, seenAgain, dueBars, newCount, stateCounts, topicLedger, sessionDone, greetingOf, hiddenTopics, hintIds, switchTopic } from '#feed';
+import { normalizePack, buildPool, normalizePaths } from '#cards';
+import { nextCards, seenAgain, dueBars, newCount, stateCounts, topicLedger, sessionDone, greetingOf, hiddenTopics, hintIds, switchTopic, pathProgress } from '#feed';
 import { markSeen, isUpdated } from '#learning';
-import { $, el, ui, state, pool, lang, cardLang, firstStart, t, scroller, topicsOff, setPool, setTopics, commit, render } from '#ui/context';
+import { $, el, ui, state, pool, lang, cardLang, firstStart, t, scroller, topicsOff, pathId, setPool, setTopics, setPath, commit, render } from '#ui/context';
 import { cardOf, cardNode } from '#ui/card';
 
 // The Feed section: the packs, the cards that come in as the user scrolls, and the seen ones
@@ -24,8 +24,11 @@ const getJson = async (url) => {
   return response.json();
 };
 
-// The packs as they loaded, so a new card language builds the pool again with no fetch.
+// The packs and the paths of the index as they loaded, so a new card language builds the pool again with no fetch.
 let packs = [];
+let rawPaths = [];
+// The paths of the pool (CARD-11), in `cardLang`.
+export let paths = [];
 
 // A pack that cannot be read is left out; an index that cannot be read is an error.
 export const loadPool = async () => {
@@ -35,7 +38,9 @@ export const loadPool = async () => {
     const index = await getJson('./content/index.json');
     const read = (id) => getJson(`./content/${id}.json`).then((data) => normalizePack(data).pack, () => null);
     packs = (await Promise.all(index.packs.map(read))).filter(Boolean);
+    rawPaths = index.paths;
     setPool(buildPool(packs, cardLang));
+    paths = normalizePaths(rawPaths, pool, cardLang);
   } catch {
     ui.loadError = true;
   }
@@ -44,8 +49,13 @@ export const loadPool = async () => {
 
 // The cards in the language of `cardLang` (I18N-7), once the packs load. The feed keeps its cards.
 export const localizePool = () => {
-  if (pool) setPool(buildPool(packs, cardLang));
+  if (!pool) return;
+  setPool(buildPool(packs, cardLang));
+  paths = normalizePaths(rawPaths, pool, cardLang);
 };
+
+// The guide that is on (FEED-21): a stored id of no path is none.
+export const activePath = () => paths.find((path) => path.id === pathId) ?? null;
 
 // The topics whose cards do not show (FEED-14).
 const off = () => hiddenTopics(pool.topics, topicsOff);
@@ -61,7 +71,7 @@ const fill = () => {
   const exclude = ui.feed.map((entry) => entry.id);
   const entries = ui.again
     ? seenAgain(pool, state, { exclude, off: off(), count: BATCH })
-    : nextCards(pool, state, { now: Date.now(), random: Math.random, exclude, off: off(), count: BATCH });
+    : nextCards(pool, state, { now: Date.now(), random: Math.random, exclude, off: off(), path: activePath()?.ids, count: BATCH });
   ui.feed.push(...entries.map(({ card, reason }) => ({ id: card.id, reason, updated: isUpdated(state.records[card.id], card) })));
   if (firstStart) ui.hinted = hintIds(ui.hinted, entries.map(({ card }) => card.id), HINTED);
   for (const { card, reason } of entries) if (reason === 'due') ui.dueIds.add(card.id);
@@ -149,8 +159,8 @@ export const renderFeed = () => {
 
 const ledgerCell = (text, number) => el('span', { textContent: text, className: number ? 'topic-ledger-value' : 'topic-ledger-title' });
 
-// The panels of the side column: Today, the coming reviews, the card states and the topics
-// (FEED-18). Hidden until the packs load.
+// The panels of the side column: Today, the guide, the coming reviews, the card states and the topics
+// (FEED-18, FEED-21). Hidden until the packs load.
 const renderSide = () => {
   $('feed-panels').hidden = !pool;
   slot.hidden = !pool;
@@ -171,6 +181,18 @@ const renderSide = () => {
   progress.setAttribute('aria-valuemax', String(total));
   progress.setAttribute('aria-valuenow', String(done));
   $('today-note').textContent = bars[0] > 0 ? t('side.todayNote', { count: bars[0] }) : t('side.todayDone');
+
+  const path = activePath();
+  $('panel-path').hidden = !path;
+  if (path) {
+    const { seen, total: count } = pathProgress(pool, state, path.ids);
+    Object.assign($('path-title'), { textContent: path.title, lang: path.lang });
+    $('path-count').textContent = t('side.pathCount', { seen, count });
+    const bar = $('path-progress');
+    bar.style.setProperty('--pct', `${(seen / count) * 100}%`);
+    bar.setAttribute('aria-valuemax', String(count));
+    bar.setAttribute('aria-valuenow', String(seen));
+  }
 
   const max = Math.max(1, ...bars);
   $('due-bars').replaceChildren(
@@ -223,6 +245,15 @@ export const subline = () => {
 export const chooseTopic = (id, on) => {
   if (!pool) return;
   setTopics(switchTopic(pool.topics, topicsOff, id, on));
+  ui.ended = false;
+  fill();
+};
+
+// A switch of a guide in Settings: one guide at most is on. New cards follow it from the next ones
+// that come in.
+export const choosePath = (id, on) => {
+  if (!pool) return;
+  setPath(on ? id : null);
   ui.ended = false;
   fill();
 };
