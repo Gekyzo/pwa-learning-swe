@@ -6,6 +6,7 @@ Lo que cambia para ti en cada versión de la app. La versión más nueva va prim
 
 - Ajustes tiene un grupo nuevo, Guía. Activa una guía y las tarjetas nuevas llegan en su orden, con un panel en el feed que muestra cuánto llevas.
 - Un tema nuevo, Fundamentos de IA, con 30 tarjetas: cómo aprende un modelo, desde una pérdida y un gradiente hasta attention y el transformer. 12 de las tarjetas tienen un diagrama.
+- Una primera guía, Aprender IA: ocho etapas, desde los fundamentos de IA hasta la IA en el navegador. Cada etapa tiene una tarjeta sobre por qué llega ahora, su tema, un quiz de control y un pequeño proyecto que construir. Las 30 tarjetas de la guía están en un tema nuevo, Hoja de ruta de IA.
 
 ## 0.6.6 - 2026-11-26
 

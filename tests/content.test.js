@@ -73,3 +73,20 @@ test('each body follows the style rules, in each language (CARD-10)', () => {
     }
   }
 });
+
+test('the paths of the index have unique ids, a Spanish title and only known steps (CARD-11)', () => {
+  const paths = index.paths ?? [];
+  assert.equal(new Set(paths.map((path) => path.id)).size, paths.length);
+  const cardIds = new Set(packs.flatMap(({ data }) => data.cards.map((card) => card.id)));
+  for (const path of paths) {
+    assert.ok(path.translations?.es?.title, `${path.id} es`);
+    for (const step of path.steps) assert.ok(index.packs.includes(step) || cardIds.has(step), `${path.id} ${step}`);
+  }
+});
+
+test('each ai-roadmap card is a step of the ai path', () => {
+  const steps = index.paths?.find((path) => path.id === 'ai')?.steps ?? [];
+  const roadmap = packs.find(({ id }) => id === 'ai-roadmap');
+  assert.ok(roadmap, 'ai-roadmap pack');
+  for (const card of roadmap.data.cards) assert.ok(steps.includes(card.id), card.id);
+});

@@ -61,6 +61,7 @@ const SHELL = [
   './content/evals.json',
   './content/browser-ai.json',
   './content/ai-foundations.json',
+  './content/ai-roadmap.json',
   './release-notes/en.md',
   './release-notes/es.md',
   './icons/icon-192.png',

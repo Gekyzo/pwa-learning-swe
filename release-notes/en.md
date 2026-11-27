@@ -6,6 +6,7 @@ What changes for you in each version of the app. The newest version is first.
 
 - Settings has a new Guide group. Turn on a guide and the new cards come in its order, with a panel in the Feed that shows how far you are.
 - A new topic, AI foundations, with 30 cards: how a model learns, from a loss and a gradient to attention and the transformer. 12 of the cards have a diagram.
+- A first guide, Learn AI: eight stages from AI foundations to AI in the browser. Each stage has a card on why it comes now, its topic, a checkpoint quiz and a small project to build. The 30 cards of the guide are in a new topic, AI roadmap.
 
 ## 0.6.6 - 2026-11-26
 

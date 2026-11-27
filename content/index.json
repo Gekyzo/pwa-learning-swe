@@ -1,3 +1,25 @@
 {
-  "packs": ["git", "http", "databases", "javascript", "testing", "design", "llm", "embeddings", "rag", "ai-web", "agents", "evals", "browser-ai", "ai-foundations"]
+  "packs": ["git", "http", "databases", "javascript", "testing", "design", "llm", "embeddings", "rag", "ai-web", "agents", "evals", "browser-ai", "ai-foundations", "ai-roadmap"],
+  "paths": [
+    {
+      "id": "ai",
+      "title": "Learn AI",
+      "translations": { "es": { "title": "Aprender IA" } },
+      "steps": [
+        "ai-roadmap-start",
+        "ai-roadmap-foundations", "ai-foundations", "ai-roadmap-quiz-foundations", "ai-roadmap-build-foundations",
+        "ai-roadmap-tutorial-hell",
+        "ai-roadmap-llm", "llm", "ai-roadmap-quiz-llm", "ai-roadmap-build-llm",
+        "ai-roadmap-embeddings", "embeddings", "ai-roadmap-quiz-embeddings",
+        "ai-roadmap-rag", "rag", "ai-roadmap-quiz-rag", "ai-roadmap-build-rag",
+        "ai-roadmap-ai-web", "ai-web", "ai-roadmap-quiz-ai-web", "ai-roadmap-build-ai-web",
+        "ai-roadmap-framework-first",
+        "ai-roadmap-agents", "agents", "ai-roadmap-quiz-agents", "ai-roadmap-build-agents",
+        "ai-roadmap-skip-evals",
+        "ai-roadmap-evals", "evals", "ai-roadmap-quiz-evals", "ai-roadmap-build-evals",
+        "ai-roadmap-browser-ai", "browser-ai", "ai-roadmap-quiz-browser-ai", "ai-roadmap-build-browser-ai",
+        "ai-roadmap-res-hf-course", "ai-roadmap-res-fastai", "ai-roadmap-res-api-docs"
+      ]
+    }
+  ]
 }
