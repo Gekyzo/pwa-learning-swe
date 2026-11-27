@@ -4,6 +4,10 @@ User-visible changes, newest first.
 
 ## Unreleased
 
+No change.
+
+## 0.6.7 - 2026-11-27
+
 - Guide setting and panel (SET-5, FEED-21): the Settings group **Guía** has one switch for each path of `content/index.json`, at most one on, stored under `pwa-learning-swe.path` (`PATH_KEY`, `loadPath`, `savePath`); an id of no path counts as none. With a guide on, the feed draws new cards in its order (FEED-20) and the panel of the guide shows its title, `side.pathCount` and a progress bar. Both are hidden while the index has no path.
 - Pack `ai-foundations` (CARD-6): `content/ai-foundations.json`, 30 cards with Spanish text and 12 diagrams, from section 5.1 of `docs/prompts/ai-cards-catalog.md`, in `content/index.json` and in `SHELL` of `sw.js`.
 - Pack `ai-roadmap` and path `ai` (CARD-6, CARD-11): `content/ai-roadmap.json`, 30 cards with Spanish text and 11 diagrams, from section 5.2 of `docs/prompts/ai-cards-catalog.md`, in `content/index.json` and in `SHELL` of `sw.js`. `content/index.json` has its first path, `ai` ("Learn AI" / "Aprender IA"), with the steps of section 5.3: a bridge card, the pack, a checkpoint quiz and a milestone for each of eight stages. New content tests: path ids unique, each step a pack or a card, a Spanish title, each `ai-roadmap` card a step of `ai`.
