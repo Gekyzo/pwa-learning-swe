@@ -229,6 +229,133 @@ Each fills a gap the gap analysis names. Append them to the pack, in level order
 | `rag-contextual-chunks` | concept | advanced | Add a line of context to each chunk before you embed it | "From the 2025 refund policy, section 3:" makes a bare chunk findable. Generate the line once at index time. | yes |
 | `rag-hyde` | concept | advanced | HyDE embeds a draft answer to find the real one | The model writes a guess; the guess looks more like the documents than the question does. Search with its vector. | yes |
 
+## 5. The Learn AI path
+
+Two new packs and the `ai` path that runs through them and the six AI packs above. The path
+model is in `docs/superpowers/plans/2026-11-27-ai-guide-path.md`: a step is a pack id (all its
+cards, in pack order) or a card id (that one card).
+
+| id | Title (en) | Title (es) | Needs |
+|---|---|---|---|
+| `ai-foundations` | AI foundations | Fundamentos de IA | none |
+| `ai-roadmap` | AI roadmap | Hoja de ruta de IA | none |
+
+- **`ai-foundations`**: how a model learns, from a loss and a gradient to a transformer, and
+  what pretraining and post-training add. It ends where `llm-tokens` begins.
+- **`ai-roadmap`**: the guide itself. A start card, one bridge card and one checkpoint quiz per
+  stage, milestone projects and resources. Its cards are meant to be read in path order, not
+  in pack order.
+
+### 5.1 `ai-foundations` — AI foundations
+
+13 concept, 3 snippet, 6 pitfall, 5 quiz, 3 resource: the plan lists 13 ideas that need a
+concept card. Levels 9 intro, 13 intermediate, 8 advanced. 12 diagrams.
+
+| id | kind | level | title | gist | diagram |
+|---|---|---|---|---|---|
+| `ai-foundations-ai-ml-dl` | concept | intro | Deep learning is a kind of machine learning, and machine learning is a kind of AI | Three nested sets. AI: any program that acts smart, rules included. ML: rules learned from data. Deep learning: ML with many-layer networks. | yes |
+| `ai-foundations-learning-types` | concept | intro | Three ways to learn: from answers, from structure, from reward | Supervised: examples with the right answer. Unsupervised: no answers, find groups. Reinforcement: actions, then a reward signal. | yes |
+| `ai-foundations-features-labels` | concept | intro | Features are what the model sees; the label is what it must predict | One row per example: area, rooms and street are features, price is the label. A model without labels cannot learn a supervised task. | yes |
+| `ai-foundations-loss` | concept | intro | A loss function turns "how wrong" into one number to make smaller | Squared error for a number, cross-entropy for a class. Training is a search for the weights with the lowest average loss. | yes |
+| `ai-foundations-overfitting` | pitfall | intro | A model that learns the training set by heart fails on new data | Symptom: training loss falls, validation loss rises. Fix: more data, a smaller model, regularisation, stop early. | yes |
+| `ai-foundations-data-leakage` | pitfall | intro | Test data that leaks into training makes a bad model look excellent | Duplicates across sets, a feature computed from the label, normalising before the split. Fix: split first, then fit anything. | no |
+| `ai-foundations-imbalanced` | pitfall | intro | 99 % accuracy means nothing when 99 % of the examples are one class | A model that always says "not fraud" scores 99 %. Fix: precision, recall and a confusion matrix per class. | no |
+| `ai-foundations-quiz-split` | quiz | intro | You have a training, a validation and a test set. Which one picks the learning rate? | Right: validation. Wrong: training (it rewards memorising), test (then it no longer measures new data), all three. | no |
+| `ai-foundations-res-3b1b` | resource | intro | 3Blue1Brown: Neural networks | video, https://www.3blue1brown.com/topics/neural-networks, ~2 h. | no |
+| `ai-foundations-gradient-descent` | concept | intermediate | Gradient descent walks downhill on the loss, one small step at a time | The gradient points uphill; step against it. The learning rate sets the step size. | yes |
+| `ai-foundations-gradient-descent-js` | snippet | intermediate | Fit a line with gradient descent in ten lines of JavaScript | `js`: `y = w * x + b`, mean squared error, the two partial derivatives, `w -= lr * dw` in a loop. | no |
+| `ai-foundations-learning-rate` | pitfall | intermediate | A learning rate too high makes the loss jump or explode | Each step overshoots the valley. Symptom: loss oscillates or becomes `NaN`. Fix: divide it by 10; too low only makes training slow. | yes |
+| `ai-foundations-neuron-layers` | concept | intermediate | A neuron is a weighted sum plus an activation; a layer is many of them side by side | Inputs × weights + bias, then a nonlinear function. Layers feed each other; "deep" means many layers. | yes |
+| `ai-foundations-quiz-activation` | quiz | intermediate | Why does a network need a nonlinear activation between its layers? | Right: without one, many linear layers collapse into one linear map. Wrong: to speed up training, to keep the outputs positive, to save memory. | no |
+| `ai-foundations-backprop` | concept | intermediate | Backpropagation sends the error back through the layers to get every gradient | The chain rule, applied from the loss to the first layer. One backward pass gives the gradient of every weight. | yes |
+| `ai-foundations-softmax` | snippet | intermediate | Softmax turns raw scores into probabilities that sum to 1 | `js`: subtract the max for stability, `Math.exp`, divide by the sum. The function behind `llm-temperature`, here without the temperature. | no |
+| `ai-foundations-representations` | concept | intermediate | The hidden layers learn their own features, and those features are the representation | Early layers find simple patterns, later ones combine them. Differs from `embeddings-what-is`: how a network learns vectors, not how to store and search them. | no |
+| `ai-foundations-rnn-attention` | concept | intermediate | An RNN squeezes the whole past into one vector; attention looks back at every token | The fixed vector forgets the start of a long text, and the steps cannot run in parallel. Attention keeps every position and weighs them. | yes |
+| `ai-foundations-self-attention` | concept | intermediate | In self-attention, each token mixes in the tokens of the same text it finds relevant | Query, key and value per token. Scores are query · key, softmax gives the weights, the output is the weighted sum of values. | yes |
+| `ai-foundations-attention-js` | snippet | intermediate | Dot-product attention for one query, in plain JavaScript | `js`: `scores = keys.map(k => dot(q, k) / Math.sqrt(d))`, softmax, then the weighted sum of `values`. | no |
+| `ai-foundations-quiz-positional` | quiz | intermediate | You shuffle the words of a sentence. Without positional encoding, what does self-attention see? | Right: the same set of tokens, so the same outputs in a new order. Wrong: a different meaning, an error, random noise. Order comes only from the position signal. | no |
+| `ai-foundations-res-karpathy` | resource | intermediate | Andrej Karpathy: Neural Networks: Zero to Hero | video, https://karpathy.ai/zero-to-hero.html, ~15 h. | no |
+| `ai-foundations-transformer-block` | concept | advanced | A transformer is one block stacked many times: attention, then a small network | Each block: self-attention, a feed-forward layer, residual connections and normalisation. Depth is the number of blocks. | yes |
+| `ai-foundations-pretraining` | concept | advanced | Pretraining predicts the next token of a huge text, and the text itself is the label | No human labels: every position is a training example. The text is first cut into tokens; `llm-tokens` begins there. | no |
+| `ai-foundations-post-training` | concept | advanced | Instruction tuning shows good answers; preference tuning ranks two of them | Instruction data: prompt and ideal reply. RLHF: people pick the better of two replies, a reward model learns it. Differs from `llm-base-vs-instruct`: how the data looks, not the behaviour. | no |
+| `ai-foundations-knows-facts` | pitfall | advanced | A model stores the statistics of text, not a table of facts | It has no lookup and no date for what it read. A rare fact is a weak pattern. Differs from `llm-hallucination`: why it happens, not how it looks. Fix: give it the source. | no |
+| `ai-foundations-bigger-better` | pitfall | advanced | Scaling laws predict a lower loss, not a better result on your task | Loss falls smoothly with more parameters, data and compute. A smaller tuned model can win on one task, faster and cheaper. Fix: measure on your eval set. | no |
+| `ai-foundations-quiz-gpu-memory` | quiz | advanced | A 7 billion parameter model in 16-bit floats. How much GPU memory do its weights take? | Right: about 14 GB (2 bytes × 7 B). Wrong: 7 GB, 28 GB, 3.5 GB. The cache of the context and the activations come on top. | no |
+| `ai-foundations-quiz-inference-cost` | quiz | advanced | You train a model once and serve it to millions of users. Which cost usually grows without limit? | Right: inference, paid on every request. Wrong: training, the dataset, storage of the weights. Training is large but paid once. | no |
+| `ai-foundations-res-alammar` | resource | advanced | Jay Alammar: The Illustrated Transformer | article, https://jalammar.github.io/illustrated-transformer/, ~40 min. | no |
+
+### 5.2 `ai-roadmap` — AI roadmap
+
+Built for the path, so it breaks the usual kind mix: 15 concept, 1 snippet, 3 pitfall,
+8 quiz, 3 resource. One bridge card (`ai-roadmap-<stage>`), one checkpoint quiz
+(`ai-roadmap-quiz-<stage>`) and at most one milestone (`ai-roadmap-build-<stage>`) per stage.
+Levels follow the stage: foundations, `llm` and `embeddings` intro; `rag`, `ai-web` and
+`agents` intermediate; `evals` and `browser-ai` advanced. 10 intro, 13 intermediate,
+7 advanced. 11 diagrams: the start card and the bridges show the eight stages with the
+current one in blue. A bridge says why the stage comes now and what you can build after it.
+Each card names its place in the steps in the last column.
+
+| id | kind | level | title | gist | diagram | place |
+|---|---|---|---|---|---|---|
+| `ai-roadmap-start` | concept | intro | The guide gives you the cards in order: eight stages, each one a pack | Bridge, pack, checkpoint quiz, milestone, then the next stage. Switch it off in Settings to go back to the random feed. | yes | step 1 |
+| `ai-roadmap-foundations` | concept | intro | Stage 1, foundations: learn how a model learns before you use one | Loss, gradients, layers and attention explain every later limit. After it: train a tiny model and read a model card. | yes | before `ai-foundations` |
+| `ai-roadmap-quiz-foundations` | quiz | intro | Training loss falls, validation loss rises after epoch 5. What do you do? | Right: stop at epoch 5 or regularise. Wrong: train longer, raise the learning rate, test on the training set. Checks `ai-foundations-overfitting`. | no | after `ai-foundations` |
+| `ai-roadmap-build-foundations` | concept | intro | Milestone: train one neuron in JavaScript and plot its loss | Two inputs, one weight each, gradient descent, a falling loss curve. No library. Uses `ai-foundations-gradient-descent-js`. | no | after `ai-roadmap-quiz-foundations` |
+| `ai-roadmap-res-hf-course` | resource | intro | Hugging Face: LLM Course | course, https://huggingface.co/learn/llm-course, ~20 h. | no | last steps, 1 of 3 |
+| `ai-roadmap-llm` | concept | intro | Stage 2, LLMs: what a model call costs and what it cannot know | Tokens, context, sampling and prompts. After it: call a model API and read its usage. | yes | before `llm` |
+| `ai-roadmap-quiz-llm` | quiz | intro | You send a second message without the first. What does the model remember of the first? | Right: nothing; you send the history on every call. Wrong: the last turn, a summary, everything for 24 h. Checks `llm-stateless`. | no | after `llm` |
+| `ai-roadmap-build-llm` | snippet | intro | Milestone: call a model from a Node script and print the stop reason and token counts | `js`: `fetch` to the API, key from `process.env`, log the reply, `stop_reason` and the input and output tokens. | no | after `ai-roadmap-quiz-llm` |
+| `ai-roadmap-embeddings` | concept | intro | Stage 3, embeddings: search by meaning, not by words | Vectors, distances and indexes. After it: find similar notes or tickets. No milestone: the `rag` one uses it. | yes | before `embeddings` |
+| `ai-roadmap-quiz-embeddings` | quiz | intro | You switch to a new embedding model. What happens to the stored vectors? | Right: embed them all again. Wrong: keep them, convert them, re-embed only new rows. Checks `embeddings-model-change`. | no | after `embeddings` |
+| `ai-roadmap-tutorial-hell` | pitfall | intermediate | Ten tutorials and no project: reading feels like progress, building is progress | Symptom: you follow each step and cannot start alone. Fix: do each milestone before the next stage. | no | after `ai-roadmap-build-foundations` |
+| `ai-roadmap-rag` | concept | intermediate | Stage 4, RAG: give the model the facts it does not have | Chunk, embed, retrieve, answer with sources. After it: Q&A over your own documents. | yes | before `rag` |
+| `ai-roadmap-quiz-rag` | quiz | intermediate | A RAG answer is wrong and the right chunk is not in the top-k. What do you fix first? | Right: retrieval (chunks, query, index). Wrong: the prompt, the model, the temperature. Checks `rag-evaluate-stages`. | no | after `rag` |
+| `ai-roadmap-build-rag` | concept | intermediate | Milestone: Q&A over your own notes, with a citation on every answer | Chunk the notes, embed them, search the top 5, answer with source links. Covers `embeddings` and `rag`. | yes | after `ai-roadmap-quiz-rag` |
+| `ai-roadmap-ai-web` | concept | intermediate | Stage 5, LLMs in a web app: from a script to a feature people use | Proxy, streaming, cancel, limits, safe rendering. After it: ship a chat page. | yes | before `ai-web` |
+| `ai-roadmap-quiz-ai-web` | quiz | intermediate | Which two changes stop one user from spending your monthly model budget? | Right: an output token cap per request and a token budget per user. Wrong: CORS, a longer timeout, a semantic cache. Checks `ai-web-token-budget`. | no | after `ai-web` |
+| `ai-roadmap-build-ai-web` | concept | intermediate | Milestone: a streamed chat page behind your own route, with a stop button | Key on the server, SSE, abort up to the model call, a daily token cap, `textContent` for output. | no | after `ai-roadmap-quiz-ai-web` |
+| `ai-roadmap-framework-first` | pitfall | intermediate | A framework first hides the one API call you must understand | Symptom: an error inside five layers you never read. Fix: build the milestone with plain `fetch`, then pick a framework. | no | after `ai-roadmap-build-ai-web` |
+| `ai-roadmap-agents` | concept | intermediate | Stage 6, agents: let the model choose the next tool call | The loop, step limits, context and MCP. After it: an assistant that acts, not only answers. | yes | before `agents` |
+| `ai-roadmap-quiz-agents` | quiz | intermediate | Your agent calls the same tool 40 times and never answers. What was missing? | Right: a step limit. Wrong: a bigger model, a higher temperature, a longer context. Checks `agents-loop`. | no | after `agents` |
+| `ai-roadmap-build-agents` | concept | intermediate | Milestone: an agent with two tools and a step limit that answers questions about a repo | Tools: list files and read a file. Max 10 steps, a log of each call. | yes | after `ai-roadmap-quiz-agents` |
+| `ai-roadmap-res-fastai` | resource | intermediate | fast.ai: Practical Deep Learning for Coders | course, https://course.fast.ai/, ~20 h. | no | last steps, 2 of 3 |
+| `ai-roadmap-res-api-docs` | resource | intermediate | Anthropic API docs: Messages (or the reference of your provider) | docs, https://docs.anthropic.com/en/api/messages, ~30 min. | no | last steps, 3 of 3 |
+| `ai-roadmap-skip-evals` | pitfall | advanced | Without an eval set, every prompt change is a guess | Symptom: a fix for one case breaks three others, and nobody sees it. Fix: the `evals` stage before more features. | no | after `ai-roadmap-build-agents` |
+| `ai-roadmap-evals` | concept | advanced | Stage 7, evals: prove that a change made things better | Eval sets, graders, variance, traces. After it: change a prompt without fear. | yes | before `evals` |
+| `ai-roadmap-quiz-evals` | quiz | advanced | A prompt change raises the eval score from 81 % to 83 % on one run. Is it better? | Right: unknown until you run it several times and see the variance. Wrong: yes, no, only with a bigger set. Checks the variance cards of `evals`. | no | after `evals` |
+| `ai-roadmap-build-evals` | concept | advanced | Milestone: 30 eval cases in CI that block a prompt change with a lower score | Cases from real questions, a grader per case, a threshold, a run on every pull request. | no | after `ai-roadmap-quiz-evals` |
+| `ai-roadmap-browser-ai` | concept | advanced | Stage 8, AI in the browser: run the model on the device | WebGPU, WASM, workers, model size, caching. After it: AI features that work offline and keep data local. | yes | before `browser-ai` |
+| `ai-roadmap-quiz-browser-ai` | quiz | advanced | Where does a 300 MB model belong in an offline PWA? | Right: a runtime cache, filled after install. Wrong: the precache, `localStorage`, the app bundle. Checks `browser-ai-sw-precache`. | no | after `browser-ai` |
+| `ai-roadmap-build-browser-ai` | concept | advanced | Milestone: offline semantic search in a PWA, with the model in a worker | Embed in a Web Worker, cache the weights, search with the network off. | no | after `ai-roadmap-quiz-browser-ai` |
+
+### 5.3 The `ai` path
+
+```json
+{
+  "id": "ai",
+  "title": "Learn AI",
+  "translations": { "es": { "title": "Aprender IA" } },
+  "steps": [
+    "ai-roadmap-start",
+    "ai-roadmap-foundations", "ai-foundations", "ai-roadmap-quiz-foundations", "ai-roadmap-build-foundations",
+    "ai-roadmap-tutorial-hell",
+    "ai-roadmap-llm", "llm", "ai-roadmap-quiz-llm", "ai-roadmap-build-llm",
+    "ai-roadmap-embeddings", "embeddings", "ai-roadmap-quiz-embeddings",
+    "ai-roadmap-rag", "rag", "ai-roadmap-quiz-rag", "ai-roadmap-build-rag",
+    "ai-roadmap-ai-web", "ai-web", "ai-roadmap-quiz-ai-web", "ai-roadmap-build-ai-web",
+    "ai-roadmap-framework-first",
+    "ai-roadmap-agents", "agents", "ai-roadmap-quiz-agents", "ai-roadmap-build-agents",
+    "ai-roadmap-skip-evals",
+    "ai-roadmap-evals", "evals", "ai-roadmap-quiz-evals", "ai-roadmap-build-evals",
+    "ai-roadmap-browser-ai", "browser-ai", "ai-roadmap-quiz-browser-ai", "ai-roadmap-build-browser-ai",
+    "ai-roadmap-res-hf-course", "ai-roadmap-res-fastai", "ai-roadmap-res-api-docs"
+  ]
+}
+```
+
+Every `ai-roadmap` card is a step of its own, so the pack id is not a step. Flattened, the path
+has 283 cards today (30 + 30 + 103 in `llm`, `embeddings`, `rag` + 120 in the four packs of section 3), each once.
+
 ## Totals
 
 | Part | Cards |
@@ -240,4 +367,6 @@ Each fills a gap the gap analysis names. Append them to the pack, in level order
 | `llm` extensions | 5 |
 | `embeddings` extensions | 4 |
 | `rag` extensions | 4 |
-| **All** | **133** |
+| `ai-foundations` | 30 |
+| `ai-roadmap` | 30 |
+| **All** | **193** |
