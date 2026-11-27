@@ -19,9 +19,19 @@ const topicsOf = (cards) => [...new Set(cards.map((card) => card.topic))];
 
 const pickDue = ({ due }) => (due.length ? { card: due[0], reason: 'due' } : null);
 
+// The first fresh card in the order of the path, or null (FEED-20).
+const pathCard = ({ fresh, path }) => {
+  if (!path) return null;
+  const ids = new Set(fresh.map((card) => card.id));
+  const id = path.find((one) => ids.has(one));
+  return id ? fresh.find((card) => card.id === id) : null;
+};
+
 // A topic of the new cards, drawn with the weight 1 + the likes of the topic.
-const pickNew = ({ fresh, pool, state, random }) => {
+const pickNew = ({ fresh, pool, state, random, path }) => {
   if (!fresh.length) return null;
+  const next = pathCard({ fresh, path });
+  if (next) return { card: next, reason: 'new' };
   const topics = topicsOf(fresh);
   const weights = topics.map((topic) => 1 + pool.cards.filter((card) => card.topic === topic && state.records[card.id]?.liked).length);
   let draw = random() * weights.reduce((sum, weight) => sum + weight, 0);
@@ -31,36 +41,41 @@ const pickNew = ({ fresh, pool, state, random }) => {
 };
 
 // The topic of the new cards with the fewest seen cards; the first one in pack order on a tie.
-const pickExplore = ({ fresh, pool, state }) => {
+const pickExplore = ({ fresh, pool, state, path }) => {
   if (!fresh.length) return null;
+  const next = pathCard({ fresh, path });
+  if (next) return { card: next, reason: 'explore' };
   const seen = (topic) => pool.cards.filter((card) => card.topic === topic && state.records[card.id]).length;
   const topic = topicsOf(fresh).reduce((best, topic) => (seen(topic) < seen(best) ? topic : best));
   return { card: easiest(fresh.filter((card) => card.topic === topic)), reason: 'explore' };
 };
 
-// { card, reason } for the next card of the feed, or null at its end (FEED-1 to FEED-3).
-export const nextCard = (pool, state, { now, random, exclude = [], off = [] }) => {
+// { card, reason } for the next card of the feed, or null at its end (FEED-1 to FEED-3, FEED-20).
+export const nextCard = (pool, state, { now, random, exclude = [], off = [], path }) => {
   const cards = eligible(pool, state, exclude, off);
   const due = cards
     .filter((card) => isDue(state.records[card.id], now))
     .sort((a, b) => state.records[a.id].due - state.records[b.id].due);
   const fresh = cards.filter((card) => !state.records[card.id]);
-  const context = { due, fresh, pool, state, random };
+  const context = { due, fresh, pool, state, random, path };
   const draw = random();
   if (draw < DUE_SHARE) return pickDue(context) ?? pickNew(context);
   if (draw < NEW_SHARE) return pickNew(context) ?? pickDue(context);
   return pickExplore(context) ?? pickDue(context);
 };
 
-export const nextCards = (pool, state, { now, random, exclude = [], off = [], count }) => {
+export const nextCards = (pool, state, { now, random, exclude = [], off = [], path, count }) => {
   const entries = [];
   while (entries.length < count) {
-    const entry = nextCard(pool, state, { now, random, off, exclude: [...exclude, ...entries.map(({ card }) => card.id)] });
+    const entry = nextCard(pool, state, { now, random, off, path, exclude: [...exclude, ...entries.map(({ card }) => card.id)] });
     if (!entry) break;
     entries.push(entry);
   }
   return entries;
 };
+
+// The cards of a path that have a record, of all its cards (FEED-20).
+export const pathProgress = (pool, state, ids) => ({ seen: ids.filter((id) => state.records[id]).length, total: ids.length });
 
 // The seen cards that may show, the least recently seen first (FEED-4).
 export const seenAgain = (pool, state, { exclude = [], off = [], count }) =>

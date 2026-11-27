@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { DUE_SHARE, NEW_SHARE, nextCard, nextCards, seenAgain, dueCount, savedCards, hiddenTopics, switchTopic, dueBars, newCount, stateCounts, topicLedger, greetingOf, tagOf, sessionDone, hintIds } from '#feed';
+import { DUE_SHARE, NEW_SHARE, nextCard, nextCards, seenAgain, dueCount, savedCards, hiddenTopics, switchTopic, dueBars, newCount, stateCounts, topicLedger, greetingOf, tagOf, sessionDone, hintIds, pathProgress } from '#feed';
 import { DAY } from '#learning';
 
 const NOW = Date.UTC(2026, 9, 30, 12);
@@ -255,4 +255,41 @@ test('the hint ids are the first cards that come into the feed, never more than 
   assert.deepEqual([...hintIds(new Set(['a']), ['b', 'c'], 2)], ['a', 'b']);
   assert.deepEqual([...hintIds(new Set(['a', 'b']), ['c'], 2)], ['a', 'b']);
   assert.deepEqual([...hintIds(new Set(), [], 2)], []);
+});
+
+const pathPick = (cards, records, values, path, more = {}) =>
+  nextCard(pool(cards), doc(records), { now: NOW, random: seq(...values), path, ...more });
+
+test('with a path, a new or explore draw takes the first fresh card in path order (FEED-20)', () => {
+  const cards = [card('git-a', 'git'), card('git-b', 'git', 'advanced'), card('http-a', 'http')];
+  const path = ['git-b', 'http-a', 'git-a'];
+  assert.deepEqual(pathPick(cards, {}, [0.5], path), { card: cards[1], reason: 'new' });
+  assert.deepEqual(pathPick(cards, {}, [0.9], path), { card: cards[1], reason: 'explore' });
+  assert.deepEqual(pathPick(cards, { 'git-b': record() }, [0.5], path), { card: cards[2], reason: 'new' });
+  const ids = nextCards(pool(cards), doc(), { now: NOW, random: seq(0.5), path, count: 3 }).map((entry) => entry.card.id);
+  assert.deepEqual(ids, path);
+});
+
+test('with a path, a due draw still takes the most overdue card (FEED-20)', () => {
+  const cards = [card('git-a', 'git'), card('http-a', 'http')];
+  const records = { 'git-a': record({ due: NOW - DAY }) };
+  assert.deepEqual(pathPick(cards, records, [0.1], ['http-a']), { card: cards[0], reason: 'due' });
+});
+
+test('a finished path falls back to the normal draw, so the feed does not end early (FEED-20)', () => {
+  const cards = [card('git-a', 'git'), card('http-a', 'http')];
+  assert.deepEqual(pathPick(cards, { 'git-a': record() }, [0.5, 0], ['git-a']), { card: cards[1], reason: 'new' });
+});
+
+test('a suspended, retired or off path card is skipped, not a stall (FEED-20)', () => {
+  const cards = [card('git-a', 'git', 'intro', { retired: true }), card('git-b', 'git'), card('http-a', 'http'), card('css-a', 'css')];
+  const path = ['git-a', 'git-b', 'http-a', 'css-a'];
+  const records = { 'git-b': record({ suspended: true }) };
+  assert.deepEqual(pathPick(cards, records, [0.5], path, { off: ['http'] }), { card: cards[3], reason: 'new' });
+});
+
+test('pathProgress counts the path cards that have a record (FEED-20)', () => {
+  const cards = [card('git-a', 'git'), card('git-b', 'git'), card('http-a', 'http')];
+  assert.deepEqual(pathProgress(pool(cards), doc({ 'git-a': record(), 'http-a': record() }), ['git-a', 'git-b']), { seen: 1, total: 2 });
+  assert.deepEqual(pathProgress(pool(cards), doc(), []), { seen: 0, total: 0 });
 });

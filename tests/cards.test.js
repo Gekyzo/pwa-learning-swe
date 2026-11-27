@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { KINDS, LEVELS, MEDIA, MAX_TITLE, MAX_BODY, MAX_BODY_SOURCE, MAX_ALT, SOURCE_LANG, normalizeCard, normalizePack, buildPool } from '#cards';
+import { KINDS, LEVELS, MEDIA, MAX_TITLE, MAX_BODY, MAX_BODY_SOURCE, MAX_ALT, SOURCE_LANG, normalizeCard, normalizePack, buildPool, normalizePaths } from '#cards';
 import { plainText } from '#richtext';
 
 const concept = (over = {}) => ({ id: 'git-a', kind: 'concept', level: 'intro', title: 'Title', body: 'Body.', ...over });
@@ -250,4 +250,41 @@ test('the pool gives a card the diagram with the alt text of its language (CARD-
   const { pack: built } = normalizePack(pack([card]));
   assert.deepEqual(buildPool([built], 'es').cards[0].diagram, { svg: DIAGRAM, alt: 'Una caja.' });
   assert.deepEqual(buildPool([built], 'en').cards[0].diagram, { svg: DIAGRAM, alt: 'A box.' });
+});
+
+const PATH_POOL = {
+  topics: [{ id: 'git', title: 'Git', lang: 'en' }, { id: 'http', title: 'HTTP', lang: 'en' }],
+  cards: [{ id: 'git-a', topic: 'git' }, { id: 'git-b', topic: 'git' }, { id: 'http-a', topic: 'http' }, { id: 'http-b', topic: 'http' }],
+};
+
+test('a path flattens its steps, a pack to its cards in pack order and a card to itself (CARD-11)', () => {
+  const raw = [{ id: 'web', title: ' Web ', steps: ['http-b', 'git'] }];
+  assert.deepEqual(normalizePaths(raw, PATH_POOL), [{ id: 'web', title: 'Web', lang: 'en', ids: ['http-b', 'git-a', 'git-b'] }]);
+});
+
+test('a card listed alone and inside a listed pack is in the path once, at its first place (CARD-11)', () => {
+  const [path] = normalizePaths([{ id: 'web', title: 'Web', steps: ['git-b', 'git', 'http', 'http-a'] }], PATH_POOL);
+  assert.deepEqual(path.ids, ['git-b', 'git-a', 'http-a', 'http-b']);
+});
+
+test('a step that did not load is dropped, and a path with no card is dropped (CARD-11)', () => {
+  const raw = [
+    { id: 'web', title: 'Web', steps: ['css', 'git-z', 'http-a', 7] },
+    { id: 'gone', title: 'Gone', steps: ['css', 'git-z'] },
+  ];
+  assert.deepEqual(normalizePaths(raw, PATH_POOL).map(({ id, ids }) => [id, ids]), [['web', ['http-a']]]);
+});
+
+test('a path with a bad or repeated id, a bad title or no steps is dropped; no list is no path (CARD-11)', () => {
+  const ok = { id: 'web', title: 'Web', steps: ['git'] };
+  const raw = [ok, { ...ok, title: 'Again' }, { ...ok, id: 'Web' }, { ...ok, id: 'x', title: 'a'.repeat(MAX_TITLE + 1) }, { ...ok, id: 'y', steps: 'git' }, null];
+  assert.deepEqual(normalizePaths(raw, PATH_POOL).map(({ title }) => title), ['Web']);
+  assert.deepEqual(normalizePaths(undefined, PATH_POOL), []);
+  assert.deepEqual(normalizePaths({}, PATH_POOL), []);
+});
+
+test('the title of a path takes the language of the screen, like a pack (CARD-11)', () => {
+  const raw = [{ id: 'ai', title: 'Learn AI', translations: { es: { title: 'Aprender IA' } }, steps: ['git'] }];
+  assert.deepEqual(normalizePaths(raw, PATH_POOL, 'es').map(({ title, lang }) => [title, lang]), [['Aprender IA', 'es']]);
+  assert.deepEqual(normalizePaths(raw, PATH_POOL, 'en').map(({ title, lang }) => [title, lang]), [['Learn AI', 'en']]);
 });

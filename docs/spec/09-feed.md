@@ -74,6 +74,13 @@ for review on a spaced schedule. Rules of `src/cards.js` and the packs of `conte
   `bodyIssues(text)` on `content/` and never at run time, are: 2 to 4 paragraphs (`paragraphs`),
   1 to 3 bold runs (`bold`), at least one italic run (`italic`), no unclosed marker
   (`unclosed`), and no bold run over 60 visible characters (`bold-length`).
+- **CARD-11** `content/index.json` may have `paths`: a list of `{ id, title, translations, steps }`.
+  A step is a pack id (all its cards, in pack order) or a card id (that one card).
+  `normalizePaths(raw, pool, lang)` keeps a path with a lowercase `id` (the first of an id that is
+  twice), a title of at most 120 characters and a `steps` list. The title takes `lang` like a pack
+  title (CARD-7). It gives `{ id, title, lang, ids }`: `ids` are the card ids of the steps in the
+  pool, each once at its first place. A step that did not load is dropped, and a path with no
+  card is dropped. A `paths` that is not a list gives no path.
 
 ## Learning
 
@@ -115,8 +122,8 @@ Rules of `src/feed.js`. The random source is a parameter; the screen passes `Mat
   due draw with no due card takes a new card.
 - **FEED-3** A new card comes from a topic drawn with the weight 1 plus the liked cards of the
   topic. An exploration card comes from the topic with the fewest seen cards, the first in pack
-  order on a tie. In both, the lowest level of the topic comes first, then the pack order. With no
-  due and no new card, the feed is at its end.
+  order on a tie. In both, the lowest level of the topic comes first, then the pack order; with a
+  path, FEED-20 comes first. With no due and no new card, the feed is at its end.
 - **FEED-4** At the end, **Show seen cards again** fills the feed with the seen cards that may
   show, the least recently seen first.
 - **FEED-5** The due count is the due cards that may show. The saved cards are the cards of the
@@ -129,6 +136,12 @@ Rules of `src/feed.js`. The random source is a parameter; the screen passes `Mat
   the seen cards that may show, in the groups of LRN-2: learning, known and mastered. The ledger
   has one row for each topic that is on, in pack order, with its seen, due and new cards that may
   show. The rows add up to the due bar 0, the new count and the state counts.
+- **FEED-20** With a path (CARD-11), a new or exploration draw takes the first new card that may
+  show (FEED-1) in the order of the path `ids`, with the reason `new` or `explore`. A path card
+  that is retired, suspended or of a topic that is off is skipped. The due share (FEED-2) does not
+  change. With no new path card, the draw of FEED-3 resumes, so a finished path does not end the
+  feed. `pathProgress(pool, state, ids)` is `{ seen, total }`: the path cards with a record, of
+  all the path cards.
 
 ## Screen
 

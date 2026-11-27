@@ -161,3 +161,30 @@ export const buildPool = (packs, lang = SOURCE_LANG) => {
     topics: used.map(({ id, title, translations }) => localize({ id, title, translations }, lang)),
   };
 };
+
+// The card ids of the steps of a path in `pool`: a pack id gives its cards in pack order, a card id
+// gives that card. A step that did not load is dropped, and a card that is twice keeps its first place (CARD-11).
+const pathIds = (steps, pool) => {
+  const ids = steps.flatMap((step) =>
+    pool.topics.some((topic) => topic.id === step)
+      ? pool.cards.filter((card) => card.topic === step).map((card) => card.id)
+      : pool.cards.some((card) => card.id === step) ? [step] : [],
+  );
+  return [...new Set(ids)];
+};
+
+// The paths of content/index.json, `[{ id, title, lang, ids }]`, with the title in `lang` (CARD-11).
+export const normalizePaths = (raw, pool, lang = SOURCE_LANG) => {
+  if (!Array.isArray(raw)) return [];
+  const paths = [];
+  for (const data of raw) {
+    if (typeof data !== 'object' || data === null || !Array.isArray(data.steps)) continue;
+    const { id } = data;
+    const title = text(data.title, MAX_TITLE);
+    if (typeof id !== 'string' || !ID.test(id) || !title || paths.some((path) => path.id === id)) continue;
+    const ids = pathIds(data.steps, pool);
+    const translations = translationsOf(data.translations, packTexts);
+    if (ids.length) paths.push({ ...localize({ id, title, ...withTranslations(translations) }, lang), ids });
+  }
+  return paths;
+};
