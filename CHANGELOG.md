@@ -5,6 +5,7 @@ User-visible changes, newest first.
 ## Unreleased
 
 - Guide setting and panel (SET-5, FEED-21): the Settings group **Guía** has one switch for each path of `content/index.json`, at most one on, stored under `pwa-learning-swe.path` (`PATH_KEY`, `loadPath`, `savePath`); an id of no path counts as none. With a guide on, the feed draws new cards in its order (FEED-20) and the panel of the guide shows its title, `side.pathCount` and a progress bar. Both are hidden while the index has no path.
+- Pack `ai-foundations` (CARD-6): `content/ai-foundations.json`, 30 cards with Spanish text and 12 diagrams, from section 5.1 of `docs/prompts/ai-cards-catalog.md`, in `content/index.json` and in `SHELL` of `sw.js`.
 
 ## 0.6.6 - 2026-11-26
 

@@ -60,6 +60,7 @@ const SHELL = [
   './content/agents.json',
   './content/evals.json',
   './content/browser-ai.json',
+  './content/ai-foundations.json',
   './release-notes/en.md',
   './release-notes/es.md',
   './icons/icon-192.png',

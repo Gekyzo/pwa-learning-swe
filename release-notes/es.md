@@ -5,6 +5,7 @@ Lo que cambia para ti en cada versión de la app. La versión más nueva va prim
 ## Unreleased
 
 - Ajustes tiene un grupo nuevo, Guía. Activa una guía y las tarjetas nuevas llegan en su orden, con un panel en el feed que muestra cuánto llevas.
+- Un tema nuevo, Fundamentos de IA, con 30 tarjetas: cómo aprende un modelo, desde una pérdida y un gradiente hasta attention y el transformer. 12 de las tarjetas tienen un diagrama.
 
 ## 0.6.6 - 2026-11-26
 

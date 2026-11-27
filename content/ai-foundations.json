@@ -1,0 +1,566 @@
+{
+  "id": "ai-foundations",
+  "version": 1,
+  "title": "AI foundations",
+  "translations": {
+    "es": {
+      "title": "Fundamentos de IA"
+    }
+  },
+  "cards": [
+    {
+      "id": "ai-foundations-ai-ml-dl",
+      "kind": "concept",
+      "level": "intro",
+      "title": "Deep learning is a kind of machine learning, and machine learning is a kind of AI",
+      "body": "*Artificial intelligence* is any program that acts smart, a set of hand-written rules included.\n\n*Machine learning* is the part where the program **learns its rules from data** instead of from a programmer. *Deep learning* is the part of machine learning that uses neural networks with many layers.\n\nA large language model is deep learning: **every LLM is ML, but not every AI is ML**.",
+      "diagram": {
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 208\" role=\"img\"><rect class=\"d-box\" x=\"16\" y=\"8\" width=\"288\" height=\"192\" rx=\"12\"/><text class=\"d-text\" x=\"160\" y=\"26\">AI</text><text class=\"d-note\" x=\"160\" y=\"190\">if / else</text><rect class=\"d-box\" x=\"48\" y=\"44\" width=\"224\" height=\"136\" rx=\"10\"/><text class=\"d-text\" x=\"160\" y=\"62\">ML</text><text class=\"d-note\" x=\"160\" y=\"168\">fit(X, y)</text><rect class=\"d-hi\" x=\"88\" y=\"80\" width=\"144\" height=\"76\" rx=\"8\"/><text class=\"d-text d-on-hi\" x=\"160\" y=\"108\">DL</text><text class=\"d-note\" x=\"160\" y=\"128\">deep learning</text></svg>",
+        "alt": "Three nested boxes. The outer box is AI, with hand-written if/else rules. Inside it is ML, which fits a model to data. Inside ML is the highlighted box: DL, deep learning."
+      },
+      "translations": {
+        "es": {
+          "title": "El deep learning es un tipo de machine learning, y el machine learning es un tipo de IA",
+          "body": "La *inteligencia artificial* es cualquier programa que actúa con inteligencia, también un conjunto de reglas escritas a mano.\n\nEl *machine learning* es la parte en que el programa **aprende sus reglas de los datos** y no de un programador. El *deep learning* es la parte del machine learning que usa redes neuronales de muchas capas.\n\nUn modelo de lenguaje grande es deep learning: **todo LLM es ML, pero no toda IA es ML**.",
+          "diagram": {
+            "alt": "Tres cajas anidadas. La exterior es IA, con reglas if/else escritas a mano. Dentro está ML, que ajusta un modelo a los datos. Dentro de ML está la caja resaltada: DL, deep learning."
+          }
+        }
+      }
+    },
+    {
+      "id": "ai-foundations-learning-types",
+      "kind": "concept",
+      "level": "intro",
+      "title": "Three ways to learn: from answers, from structure, from reward",
+      "body": "*Supervised* learning gets examples with the right answer: an email and its label, spam or not. It learns to predict the label.\n\n*Unsupervised* learning gets no answers. It **finds structure on its own**, such as groups of similar customers.\n\n*Reinforcement* learning acts, then gets a reward or a penalty. It learns **which actions lead to a high total reward**.",
+      "diagram": {
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 160\" role=\"img\"><defs><marker id=\"ai-foundations-learning-types-head\" viewBox=\"0 0 8 8\" refX=\"7\" refY=\"4\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path class=\"d-head\" d=\"M0 0L8 4L0 8z\"/></marker></defs><rect class=\"d-box\" x=\"8\" y=\"8\" width=\"96\" height=\"120\" rx=\"6\"/><text class=\"d-note\" x=\"56\" y=\"24\">x → y</text><text class=\"d-text\" x=\"56\" y=\"52\">x₁ → 1</text><text class=\"d-text\" x=\"56\" y=\"80\">x₂ → 0</text><text class=\"d-text\" x=\"56\" y=\"108\">x₃ → 1</text><rect class=\"d-box\" x=\"112\" y=\"8\" width=\"96\" height=\"120\" rx=\"6\"/><circle class=\"d-ink\" cx=\"138\" cy=\"44\" r=\"4\"/><circle class=\"d-ink\" cx=\"150\" cy=\"52\" r=\"4\"/><circle class=\"d-ink\" cx=\"134\" cy=\"58\" r=\"4\"/><circle class=\"d-ink\" cx=\"148\" cy=\"38\" r=\"4\"/><circle class=\"d-ink\" cx=\"178\" cy=\"92\" r=\"4\"/><circle class=\"d-ink\" cx=\"190\" cy=\"100\" r=\"4\"/><circle class=\"d-ink\" cx=\"176\" cy=\"106\" r=\"4\"/><circle class=\"d-ink\" cx=\"188\" cy=\"86\" r=\"4\"/><ellipse class=\"d-line d-dash\" cx=\"142\" cy=\"48\" rx=\"20\" ry=\"18\"/><ellipse class=\"d-line d-dash\" cx=\"183\" cy=\"96\" rx=\"20\" ry=\"18\"/><rect class=\"d-box\" x=\"216\" y=\"8\" width=\"96\" height=\"120\" rx=\"6\"/><rect class=\"d-box\" x=\"232\" y=\"20\" width=\"64\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"264\" y=\"34\">agent</text><rect class=\"d-box\" x=\"232\" y=\"88\" width=\"64\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"264\" y=\"102\">env</text><path class=\"d-arrow\" marker-end=\"url(#ai-foundations-learning-types-head)\" d=\"M248 48V86\"/><path class=\"d-arrow\" marker-end=\"url(#ai-foundations-learning-types-head)\" d=\"M280 88V50\"/><text class=\"d-note d-end\" x=\"240\" y=\"68\">a</text><text class=\"d-note d-start\" x=\"288\" y=\"68\">r</text><text class=\"d-note\" x=\"56\" y=\"146\">(x, y)</text><text class=\"d-note\" x=\"160\" y=\"146\">x</text><text class=\"d-note\" x=\"264\" y=\"146\">(a, r)</text></svg>",
+        "alt": "Three panels. Supervised: inputs x paired with labels y. Unsupervised: points with no labels that form two dashed clusters. Reinforcement: an agent sends an action a to an environment and gets a reward r back."
+      },
+      "translations": {
+        "es": {
+          "title": "Tres formas de aprender: de las respuestas, de la estructura, de la recompensa",
+          "body": "El aprendizaje *supervisado* recibe ejemplos con la respuesta correcta: un email y su etiqueta, spam o no. Aprende a predecir la etiqueta.\n\nEl aprendizaje *no supervisado* no recibe respuestas. **Encuentra la estructura por sí solo**, como grupos de clientes parecidos.\n\nEl aprendizaje *por refuerzo* actúa y luego recibe una recompensa o una penalización. Aprende **qué acciones llevan a una recompensa total alta**.",
+          "diagram": {
+            "alt": "Tres paneles. Supervisado: entradas x emparejadas con etiquetas y. No supervisado: puntos sin etiqueta que forman dos grupos con borde discontinuo. Por refuerzo: un agente envía una acción a a un entorno y recibe una recompensa r."
+          }
+        }
+      }
+    },
+    {
+      "id": "ai-foundations-features-labels",
+      "kind": "concept",
+      "level": "intro",
+      "title": "Features are what the model sees; the label is what it must predict",
+      "body": "A dataset has one row per example. To predict the price of a flat, the area, the rooms and the postcode are *features*; the price is the *label*.\n\nTraining shows the model rows with both. In use, it gets **only the features and predicts the label**.\n\nNo labels, no supervised task: **a model cannot learn an answer it never sees**. Labelling the data is often the largest cost.",
+      "diagram": {
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 148\" role=\"img\"><rect class=\"d-box\" x=\"16\" y=\"8\" width=\"288\" height=\"112\" rx=\"0\"/><rect class=\"d-hi\" x=\"232\" y=\"8\" width=\"72\" height=\"112\" rx=\"0\"/><path class=\"d-line\" d=\"M16 36H304\"/><path class=\"d-line\" d=\"M16 64H304\"/><path class=\"d-line\" d=\"M16 92H304\"/><path class=\"d-line\" d=\"M88 8V120\"/><path class=\"d-line\" d=\"M160 8V120\"/><text class=\"d-note\" x=\"52\" y=\"22\">x₁</text><text class=\"d-note\" x=\"124\" y=\"22\">x₂</text><text class=\"d-note\" x=\"196\" y=\"22\">x₃</text><text class=\"d-text d-on-hi\" x=\"268\" y=\"22\">y</text><text class=\"d-text\" x=\"52\" y=\"50\">90</text><text class=\"d-text\" x=\"124\" y=\"50\">3</text><text class=\"d-text\" x=\"196\" y=\"50\">28001</text><text class=\"d-text d-on-hi\" x=\"268\" y=\"50\">310k</text><text class=\"d-text\" x=\"52\" y=\"78\">54</text><text class=\"d-text\" x=\"124\" y=\"78\">2</text><text class=\"d-text\" x=\"196\" y=\"78\">08012</text><text class=\"d-text d-on-hi\" x=\"268\" y=\"78\">190k</text><text class=\"d-text\" x=\"52\" y=\"106\">120</text><text class=\"d-text\" x=\"124\" y=\"106\">4</text><text class=\"d-text\" x=\"196\" y=\"106\">41001</text><text class=\"d-text d-on-hi\" x=\"268\" y=\"106\">?</text><path class=\"d-line\" d=\"M16 128H226\"/><text class=\"d-note\" x=\"121\" y=\"140\">X</text><text class=\"d-note\" x=\"268\" y=\"140\">y</text></svg>",
+        "alt": "A table of three rows. The columns x1, x2 and x3 are the features: area, rooms and postcode. The highlighted column y is the label: the price, with a question mark in the last row, the one to predict."
+      },
+      "translations": {
+        "es": {
+          "title": "Las features son lo que ve el modelo; la etiqueta es lo que debe predecir",
+          "body": "Un dataset tiene una fila por ejemplo. Para predecir el precio de un piso, la superficie, las habitaciones y el código postal son *features*; el precio es la *etiqueta*.\n\nEl entrenamiento muestra al modelo filas con ambas cosas. En uso, recibe **solo las features y predice la etiqueta**.\n\nSin etiquetas no hay tarea supervisada: **un modelo no aprende una respuesta que nunca ve**. Etiquetar los datos es a menudo el mayor coste.",
+          "diagram": {
+            "alt": "Una tabla de tres filas. Las columnas x1, x2 y x3 son las features: superficie, habitaciones y código postal. La columna resaltada y es la etiqueta: el precio, con una interrogación en la última fila, la que hay que predecir."
+          }
+        }
+      }
+    },
+    {
+      "id": "ai-foundations-loss",
+      "kind": "concept",
+      "level": "intro",
+      "title": "A loss function turns \"how wrong\" into one number to make smaller",
+      "body": "A *loss function* compares a prediction with the right answer and returns one number. Zero means perfect.\n\nFor a number, use the squared error: a prediction of 12 for a true 10 costs 4. For a class, use *cross-entropy*: it punishes a confident wrong answer hard.\n\nTraining is a search for **the weights with the lowest average loss** over the training set.",
+      "diagram": {
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 156\" role=\"img\"><path class=\"d-line\" d=\"M24 12V136H304\"/><path class=\"d-line\" d=\"M40 24Q164 200 288 24\"/><circle class=\"d-ink\" cx=\"90\" cy=\"80\" r=\"4\"/><text class=\"d-note d-start\" x=\"100\" y=\"66\">L = 4.2</text><circle class=\"d-dot\" cx=\"164\" cy=\"112\" r=\"5\"/><text class=\"d-note\" x=\"164\" y=\"126\">min L</text><text class=\"d-note d-end\" x=\"304\" y=\"148\">w</text><text class=\"d-note\" x=\"12\" y=\"12\">L</text></svg>",
+        "alt": "A U-shaped curve of the loss L against a weight w. A small point high on the left wall has L = 4.2. The highlighted point at the bottom of the curve is the minimum loss."
+      },
+      "translations": {
+        "es": {
+          "title": "Una función de pérdida convierte «cuánto se equivoca» en un número que hay que reducir",
+          "body": "Una *función de pérdida* compara una predicción con la respuesta correcta y devuelve un número. Cero significa perfecto.\n\nPara un número, usa el error cuadrático: predecir 12 cuando el valor real es 10 cuesta 4. Para una clase, usa la *entropía cruzada*: castiga mucho una respuesta errónea y segura.\n\nEntrenar es buscar **los pesos con la menor pérdida media** sobre el conjunto de entrenamiento.",
+          "diagram": {
+            "alt": "Una curva en U de la pérdida L frente a un peso w. Un punto pequeño arriba en la pared izquierda tiene L = 4,2. El punto resaltado en el fondo de la curva es la pérdida mínima."
+          }
+        }
+      }
+    },
+    {
+      "id": "ai-foundations-overfitting",
+      "kind": "pitfall",
+      "level": "intro",
+      "title": "A model that learns the training set by heart fails on new data",
+      "body": "The trap: *overfitting*. The model memorises the noise of its training examples instead of the pattern.\n\nThe symptom: training loss keeps falling while **validation loss rises**. The model looks better on data it has seen and worse on data it has not.\n\nThe fix: more data, a smaller model, regularisation such as dropout, or **stop at the epoch with the lowest validation loss**.",
+      "diagram": {
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 148\" role=\"img\"><path class=\"d-line\" d=\"M24 12V128H304\"/><path class=\"d-line\" d=\"M32 36Q100 124 296 124\"/><path class=\"d-data-line\" d=\"M32 40Q110 140 296 52\"/><path class=\"d-line d-dash\" d=\"M146 20V128\"/><circle class=\"d-dot\" cx=\"146\" cy=\"93\" r=\"4\"/><text class=\"d-note d-end\" x=\"296\" y=\"40\">val</text><text class=\"d-note d-end\" x=\"296\" y=\"112\">train</text><text class=\"d-note d-end\" x=\"304\" y=\"140\">epoch</text><text class=\"d-note d-start\" x=\"8\" y=\"8\">loss</text></svg>",
+        "alt": "Loss against epochs. The training curve falls all the way. The highlighted validation curve falls, reaches a minimum at a dashed vertical line, then rises again."
+      },
+      "translations": {
+        "es": {
+          "title": "Un modelo que se aprende de memoria el conjunto de entrenamiento falla con datos nuevos",
+          "body": "La trampa: el *overfitting*. El modelo memoriza el ruido de sus ejemplos de entrenamiento en lugar del patrón.\n\nEl síntoma: la pérdida de entrenamiento sigue bajando mientras **la de validación sube**. El modelo parece mejor con datos que ha visto y peor con datos que no ha visto.\n\nLa solución: más datos, un modelo más pequeño, regularización como dropout, o **parar en la época con la menor pérdida de validación**.",
+          "diagram": {
+            "alt": "Pérdida frente a épocas. La curva de entrenamiento baja todo el rato. La curva resaltada de validación baja, llega a un mínimo en una línea vertical discontinua y vuelve a subir."
+          }
+        }
+      }
+    },
+    {
+      "id": "ai-foundations-data-leakage",
+      "kind": "pitfall",
+      "level": "intro",
+      "title": "Test data that leaks into training makes a bad model look excellent",
+      "body": "The trap: *data leakage*. Information from the test set reaches training, so the test no longer measures new data.\n\nThe symptom: a great test score, then poor results in production. Common causes: the same row in both sets, a feature computed from the label, or normalising with the mean of all the data.\n\nThe fix: **split first, then fit anything**, even a scaler, only on the training set.",
+      "translations": {
+        "es": {
+          "title": "Los datos de test que se filtran al entrenamiento hacen que un mal modelo parezca excelente",
+          "body": "La trampa: la *fuga de datos*. Información del conjunto de test llega al entrenamiento, así que el test ya no mide datos nuevos.\n\nEl síntoma: una gran nota en test y luego malos resultados en producción. Causas comunes: la misma fila en los dos conjuntos, una feature calculada a partir de la etiqueta, o normalizar con la media de todos los datos.\n\nLa solución: **divide primero y luego ajusta cualquier cosa**, incluso un escalador, solo con el conjunto de entrenamiento."
+        }
+      }
+    },
+    {
+      "id": "ai-foundations-imbalanced",
+      "kind": "pitfall",
+      "level": "intro",
+      "title": "99 % accuracy means nothing when 99 % of the examples are one class",
+      "body": "The trap: *accuracy* on imbalanced data. If 1 payment in 100 is fraud, a model that always says \"not fraud\" scores 99 %.\n\nThe symptom: a high accuracy and **not one fraud caught**.\n\nThe fix: look at the rare class. *Precision* is the share of alarms that are real; *recall* is the share of real cases that raise an alarm. **Read a confusion matrix per class**, not one total.",
+      "translations": {
+        "es": {
+          "title": "Un 99 % de accuracy no significa nada cuando el 99 % de los ejemplos son de una clase",
+          "body": "La trampa: la *accuracy* con datos desequilibrados. Si 1 pago de cada 100 es fraude, un modelo que siempre dice «no es fraude» saca un 99 %.\n\nEl síntoma: una accuracy alta y **ni un solo fraude detectado**.\n\nLa solución: mira la clase rara. La *precisión* es la parte de las alarmas que son reales; el *recall* es la parte de los casos reales que dan una alarma. **Lee una matriz de confusión por clase**, no un único total."
+        }
+      }
+    },
+    {
+      "id": "ai-foundations-quiz-split",
+      "kind": "quiz",
+      "level": "intro",
+      "title": "You have a training, a validation and a test set. Which one picks the learning rate?",
+      "body": "The learning rate is a *hyperparameter*: you choose it by comparing runs, so **the validation set picks it**.\n\nThe training set rewards the run that memorises best. The test set must stay unseen until the end: once it chooses anything, **it no longer measures new data**.",
+      "options": [
+        "The training set",
+        "The validation set",
+        "The test set",
+        "All three together"
+      ],
+      "answer": 1,
+      "translations": {
+        "es": {
+          "title": "Tienes un conjunto de entrenamiento, uno de validación y uno de test. ¿Cuál elige el learning rate?",
+          "body": "El learning rate es un *hiperparámetro*: lo eliges comparando ejecuciones, así que **lo elige el conjunto de validación**.\n\nEl de entrenamiento premia la ejecución que mejor memoriza. El de test debe quedar sin ver hasta el final: en cuanto elige algo, **ya no mide datos nuevos**.",
+          "options": [
+            "El conjunto de entrenamiento",
+            "El conjunto de validación",
+            "El conjunto de test",
+            "Los tres juntos"
+          ]
+        }
+      }
+    },
+    {
+      "id": "ai-foundations-res-3b1b",
+      "kind": "resource",
+      "level": "intro",
+      "title": "Video: 3Blue1Brown, Neural networks",
+      "body": "A series of animated lessons on how a *neural network* works: neurons, layers, gradient descent and backpropagation, then transformers and attention.\n\n**The pictures carry the maths**: you see a gradient before you see its formula.\n\nWatch it before the gradient cards of this topic: **about two hours** in all.",
+      "url": "https://www.3blue1brown.com/topics/neural-networks",
+      "media": "video",
+      "minutes": 120,
+      "translations": {
+        "es": {
+          "title": "Vídeo: 3Blue1Brown, Neural networks",
+          "body": "Una serie de lecciones animadas sobre cómo funciona una *red neuronal*: neuronas, capas, descenso de gradiente y backpropagation, y luego transformers y attention.\n\n**Los dibujos llevan las matemáticas**: ves un gradiente antes de ver su fórmula.\n\nMíralo antes de las tarjetas de gradientes de este tema: **unas dos horas** en total."
+        }
+      }
+    },
+    {
+      "id": "ai-foundations-gradient-descent",
+      "kind": "concept",
+      "level": "intermediate",
+      "title": "Gradient descent walks downhill on the loss, one small step at a time",
+      "body": "The *gradient* of the loss says, for each weight, which way the loss goes up and how fast.\n\nGradient descent **steps against the gradient**: each weight moves by the learning rate times its gradient, w ← w − η·∇L. Repeat until the loss stops falling.\n\nThe *learning rate* η sets the step size. **Each step uses only local slope**, so the walk can stop in a local valley.",
+      "diagram": {
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 152\" role=\"img\"><defs><marker id=\"ai-foundations-gradient-descent-head\" viewBox=\"0 0 8 8\" refX=\"7\" refY=\"4\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path class=\"d-data-head\" d=\"M0 0L8 4L0 8z\"/></marker></defs><path class=\"d-line\" d=\"M24 24Q160 216 296 24\"/><circle class=\"d-ink\" cx=\"51\" cy=\"59\" r=\"3\"/><circle class=\"d-ink\" cx=\"78\" cy=\"85\" r=\"3\"/><circle class=\"d-ink\" cx=\"106\" cy=\"105\" r=\"3\"/><circle class=\"d-ink\" cx=\"133\" cy=\"116\" r=\"3\"/><circle class=\"d-dot\" cx=\"160\" cy=\"120\" r=\"5\"/><path class=\"d-data-line\" marker-end=\"url(#ai-foundations-gradient-descent-head)\" d=\"M55 52L76 72L100 92L128 104\"/><text class=\"d-note d-end\" x=\"48\" y=\"44\">w₀</text><text class=\"d-note\" x=\"160\" y=\"140\">w ← w − η · ∇L</text></svg>",
+        "alt": "A U-shaped loss curve. From a start point w0 high on the left, a highlighted chain of arrows steps down the curve in shorter and shorter steps to the minimum at the bottom. The update rule w ← w − η · ∇L is below."
+      },
+      "translations": {
+        "es": {
+          "title": "El descenso de gradiente baja por la pérdida, un paso pequeño cada vez",
+          "body": "El *gradiente* de la pérdida dice, para cada peso, hacia dónde sube la pérdida y a qué velocidad.\n\nEl descenso de gradiente **da un paso en contra del gradiente**: cada peso se mueve el learning rate por su gradiente, w ← w − η·∇L. Repite hasta que la pérdida deje de bajar.\n\nEl *learning rate* η fija el tamaño del paso. **Cada paso usa solo la pendiente local**, así que el camino puede parar en un valle local.",
+          "diagram": {
+            "alt": "Una curva de pérdida en U. Desde un punto de inicio w0 arriba a la izquierda, una cadena resaltada de flechas baja por la curva con pasos cada vez más cortos hasta el mínimo del fondo. Debajo está la regla w ← w − η · ∇L."
+          }
+        }
+      }
+    },
+    {
+      "id": "ai-foundations-gradient-descent-js",
+      "kind": "snippet",
+      "level": "intermediate",
+      "title": "Fit a line with gradient descent in ten lines of JavaScript",
+      "body": "The model is y = w·x + b and the loss is the *mean squared error*. Its partial derivatives give dw and db.\n\nEach step moves both weights **against their gradient**. After 2000 steps the model finds the line behind the data: w = 2, b = 1.\n\nA neural network does the same thing: **more weights, the same loop**.",
+      "code": "const xs = [1, 2, 3, 4], ys = [3, 5, 7, 9];\nlet w = 0, b = 0;\nconst lr = 0.05, n = xs.length;\nfor (let step = 0; step < 2000; step++) {\n  let dw = 0, db = 0;\n  xs.forEach((x, i) => {\n    const err = w * x + b - ys[i];\n    dw += (2 / n) * err * x;\n    db += (2 / n) * err;\n  });\n  w -= lr * dw; b -= lr * db;\n}\nconsole.log(w.toFixed(2), b.toFixed(2)); // 2.00 1.00",
+      "syntax": "js",
+      "translations": {
+        "es": {
+          "title": "Ajusta una recta con descenso de gradiente en diez líneas de JavaScript",
+          "body": "El modelo es y = w·x + b y la pérdida es el *error cuadrático medio*. Sus derivadas parciales dan dw y db.\n\nCada paso mueve los dos pesos **en contra de su gradiente**. Tras 2000 pasos el modelo encuentra la recta detrás de los datos: w = 2, b = 1.\n\nUna red neuronal hace lo mismo: **más pesos, el mismo bucle**."
+        }
+      }
+    },
+    {
+      "id": "ai-foundations-learning-rate",
+      "kind": "pitfall",
+      "level": "intermediate",
+      "title": "A learning rate too high makes the loss jump or explode",
+      "body": "The trap: a large *learning rate* to train faster. Each step overshoots the valley and lands higher on the other wall.\n\nThe symptom: **the loss jumps up and down, grows, or becomes NaN** after a few steps.\n\nThe fix: **divide the learning rate by 10** and run again. A rate too low only makes training slow, so start small and raise it.",
+      "diagram": {
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 148\" role=\"img\"><defs><marker id=\"ai-foundations-learning-rate-head\" viewBox=\"0 0 8 8\" refX=\"7\" refY=\"4\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path class=\"d-data-head\" d=\"M0 0L8 4L0 8z\"/></marker><marker id=\"ai-foundations-learning-rate-b-head\" viewBox=\"0 0 8 8\" refX=\"7\" refY=\"4\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path class=\"d-head\" d=\"M0 0L8 4L0 8z\"/></marker></defs><path class=\"d-line\" d=\"M16 24Q80 200 144 24\"/><path class=\"d-line\" d=\"M176 24Q240 200 304 24\"/><circle class=\"d-ink\" cx=\"42\" cy=\"80\" r=\"3\"/><circle class=\"d-ink\" cx=\"54\" cy=\"98\" r=\"3\"/><circle class=\"d-ink\" cx=\"65\" cy=\"107\" r=\"3\"/><circle class=\"d-ink\" cx=\"72\" cy=\"111\" r=\"3\"/><circle class=\"d-ink\" cx=\"80\" cy=\"112\" r=\"4\"/><path class=\"d-arrow\" marker-end=\"url(#ai-foundations-learning-rate-b-head)\" d=\"M44 84L52 95L62 105L70 110\"/><path class=\"d-data-line\" marker-end=\"url(#ai-foundations-learning-rate-head)\" d=\"M230 110L255 107L214 98L276 84L193 63\"/><text class=\"d-note\" x=\"80\" y=\"136\">η = 0.01</text><text class=\"d-note\" x=\"240\" y=\"136\">η = 1.5</text><text class=\"d-note\" x=\"240\" y=\"12\">NaN</text></svg>",
+        "alt": "Two loss valleys. Left, with η = 0.01, short steps go down the wall to the minimum. Right, with η = 1.5, a highlighted path jumps from wall to wall, higher at each step."
+      },
+      "translations": {
+        "es": {
+          "title": "Un learning rate demasiado alto hace que la pérdida salte o explote",
+          "body": "La trampa: un *learning rate* grande para entrenar más rápido. Cada paso se pasa del valle y cae más arriba en la otra pared.\n\nEl síntoma: **la pérdida sube y baja, crece o se vuelve NaN** tras unos pocos pasos.\n\nLa solución: **divide el learning rate entre 10** y vuelve a ejecutar. Uno demasiado bajo solo hace lento el entrenamiento, así que empieza bajo y súbelo.",
+          "diagram": {
+            "alt": "Dos valles de pérdida. A la izquierda, con η = 0,01, pasos cortos bajan por la pared hasta el mínimo. A la derecha, con η = 1,5, un camino resaltado salta de pared a pared, más alto en cada paso."
+          }
+        }
+      }
+    },
+    {
+      "id": "ai-foundations-neuron-layers",
+      "kind": "concept",
+      "level": "intermediate",
+      "title": "A neuron is a weighted sum plus an activation; a layer is many of them side by side",
+      "body": "A *neuron* multiplies each input by a weight, adds them and a bias b, then applies an *activation* such as ReLU: max(0, z).\n\nA layer is many neurons that read the same inputs. **The outputs of one layer are the inputs of the next.**\n\n\"Deep\" means **many layers in a row**. Training adjusts every weight and bias of every neuron.",
+      "diagram": {
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 144\" role=\"img\"><defs><marker id=\"ai-foundations-neuron-layers-head\" viewBox=\"0 0 8 8\" refX=\"7\" refY=\"4\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path class=\"d-head\" d=\"M0 0L8 4L0 8z\"/></marker></defs><text class=\"d-text\" x=\"24\" y=\"32\">x₁</text><text class=\"d-text\" x=\"24\" y=\"72\">x₂</text><text class=\"d-text\" x=\"24\" y=\"112\">x₃</text><path class=\"d-arrow\" marker-end=\"url(#ai-foundations-neuron-layers-head)\" d=\"M40 32L112 62\"/><path class=\"d-arrow\" marker-end=\"url(#ai-foundations-neuron-layers-head)\" d=\"M40 72H110\"/><path class=\"d-arrow\" marker-end=\"url(#ai-foundations-neuron-layers-head)\" d=\"M40 112L112 82\"/><text class=\"d-note\" x=\"76\" y=\"37\">w₁</text><text class=\"d-note\" x=\"76\" y=\"64\">w₂</text><text class=\"d-note\" x=\"76\" y=\"107\">w₃</text><circle class=\"d-hi\" cx=\"136\" cy=\"72\" r=\"24\"/><text class=\"d-text d-on-hi\" x=\"136\" y=\"72\">Σ</text><text class=\"d-note\" x=\"136\" y=\"108\">+ b</text><path class=\"d-arrow\" marker-end=\"url(#ai-foundations-neuron-layers-head)\" d=\"M160 72H190\"/><rect class=\"d-box\" x=\"192\" y=\"58\" width=\"64\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"224\" y=\"72\">ReLU</text><path class=\"d-arrow\" marker-end=\"url(#ai-foundations-neuron-layers-head)\" d=\"M256 72H286\"/><text class=\"d-text\" x=\"300\" y=\"72\">y</text></svg>",
+        "alt": "Three inputs x1, x2 and x3 enter a highlighted neuron through weights w1, w2 and w3. The neuron sums them and adds a bias b. The sum goes through a ReLU box and becomes the output y."
+      },
+      "translations": {
+        "es": {
+          "title": "Una neurona es una suma ponderada más una activación; una capa es muchas de ellas una al lado de otra",
+          "body": "Una *neurona* multiplica cada entrada por un peso, las suma con un sesgo b y aplica una *activación* como ReLU: max(0, z).\n\nUna capa es un grupo de neuronas que leen las mismas entradas. **Las salidas de una capa son las entradas de la siguiente.**\n\n«Profunda» significa **muchas capas seguidas**. El entrenamiento ajusta cada peso y cada sesgo de cada neurona.",
+          "diagram": {
+            "alt": "Tres entradas x1, x2 y x3 entran en una neurona resaltada a través de los pesos w1, w2 y w3. La neurona las suma y añade un sesgo b. La suma pasa por una caja ReLU y se convierte en la salida y."
+          }
+        }
+      }
+    },
+    {
+      "id": "ai-foundations-quiz-activation",
+      "kind": "quiz",
+      "level": "intermediate",
+      "title": "Why does a network need a nonlinear activation between its layers?",
+      "body": "Two linear layers in a row are one linear layer: W₂(W₁x) = (W₂W₁)x. Without a *nonlinear* activation, **a deep network is no more powerful than one layer**.\n\nThe activation is what lets the layers **bend the function** to fit curves and boundaries. Speed and memory have nothing to do with it; ReLU does keep outputs positive, but that is not why it is there.",
+      "options": [
+        "To make training faster",
+        "To keep the outputs positive",
+        "Without one, the layers collapse into one linear map",
+        "To use less memory"
+      ],
+      "answer": 2,
+      "translations": {
+        "es": {
+          "title": "¿Por qué necesita una red una activación no lineal entre sus capas?",
+          "body": "Dos capas lineales seguidas son una capa lineal: W₂(W₁x) = (W₂W₁)x. Sin una activación *no lineal*, **una red profunda no es más potente que una capa**.\n\nLa activación es lo que permite a las capas **curvar la función** para ajustar curvas y fronteras. La velocidad y la memoria no tienen nada que ver; ReLU sí deja las salidas positivas, pero no está ahí por eso.",
+          "options": [
+            "Para entrenar más rápido",
+            "Para que las salidas sean positivas",
+            "Sin ella, las capas se reducen a una sola función lineal",
+            "Para usar menos memoria"
+          ]
+        }
+      }
+    },
+    {
+      "id": "ai-foundations-backprop",
+      "kind": "concept",
+      "level": "intermediate",
+      "title": "Backpropagation sends the error back through the layers to get every gradient",
+      "body": "The *forward pass* runs the input through the layers to the loss. The *backward pass* goes the other way.\n\nIt applies the chain rule from the loss to the first layer: each layer takes the gradient of its output and returns the gradient of its input and of its weights.\n\n**One backward pass gives the gradient of every weight**, at about the cost of two forward passes.",
+      "diagram": {
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 112\" role=\"img\"><defs><marker id=\"ai-foundations-backprop-head\" viewBox=\"0 0 8 8\" refX=\"7\" refY=\"4\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path class=\"d-data-head\" d=\"M0 0L8 4L0 8z\"/></marker><marker id=\"ai-foundations-backprop-f-head\" viewBox=\"0 0 8 8\" refX=\"7\" refY=\"4\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path class=\"d-head\" d=\"M0 0L8 4L0 8z\"/></marker></defs><rect class=\"d-box\" x=\"8\" y=\"24\" width=\"48\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"32\" y=\"38\">x</text><rect class=\"d-box\" x=\"88\" y=\"24\" width=\"48\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"112\" y=\"38\">L1</text><rect class=\"d-box\" x=\"168\" y=\"24\" width=\"48\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"192\" y=\"38\">L2</text><rect class=\"d-box\" x=\"248\" y=\"24\" width=\"64\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"280\" y=\"38\">loss</text><path class=\"d-arrow\" marker-end=\"url(#ai-foundations-backprop-f-head)\" d=\"M56 38H86\"/><path class=\"d-arrow\" marker-end=\"url(#ai-foundations-backprop-f-head)\" d=\"M136 38H166\"/><path class=\"d-arrow\" marker-end=\"url(#ai-foundations-backprop-f-head)\" d=\"M216 38H246\"/><path class=\"d-data-line\" marker-end=\"url(#ai-foundations-backprop-head)\" d=\"M280 52V76H112V54\"/><text class=\"d-note\" x=\"192\" y=\"92\">∂L/∂w₂</text><text class=\"d-note\" x=\"112\" y=\"92\">∂L/∂w₁</text></svg>",
+        "alt": "A row of boxes: input x, layer L1, layer L2 and the loss, joined by forward arrows. A highlighted arrow returns from the loss under L2 and L1, with the gradients of the weights of L2 and of L1."
+      },
+      "translations": {
+        "es": {
+          "title": "La backpropagation envía el error hacia atrás por las capas para obtener cada gradiente",
+          "body": "El *paso hacia delante* lleva la entrada por las capas hasta la pérdida. El *paso hacia atrás* va en sentido contrario.\n\nAplica la regla de la cadena desde la pérdida hasta la primera capa: cada capa recibe el gradiente de su salida y devuelve el gradiente de su entrada y de sus pesos.\n\n**Un paso hacia atrás da el gradiente de cada peso**, con un coste de unos dos pasos hacia delante.",
+          "diagram": {
+            "alt": "Una fila de cajas: la entrada x, la capa L1, la capa L2 y la pérdida, unidas por flechas hacia delante. Una flecha resaltada vuelve desde la pérdida por debajo de L2 y L1, con los gradientes de los pesos de L2 y de L1."
+          }
+        }
+      }
+    },
+    {
+      "id": "ai-foundations-softmax",
+      "kind": "snippet",
+      "level": "intermediate",
+      "title": "Softmax turns raw scores into probabilities that sum to 1",
+      "body": "*Softmax* takes any list of scores, the *logits*, and returns positive numbers that sum to 1. A larger score gets a larger share.\n\nSubtract the maximum first: Math.exp(1000) is Infinity, and the shift **does not change the result**.\n\nIt is the last step of a classifier and of each next-token choice. **Temperature divides the scores before this step.**",
+      "code": "function softmax(scores) {\n  const max = Math.max(...scores);\n  const exps = scores.map((s) => Math.exp(s - max));\n  const sum = exps.reduce((a, b) => a + b, 0);\n  return exps.map((e) => e / sum);\n}\n\nsoftmax([2, 1, 0.1]); // [0.659, 0.242, 0.099]\nsoftmax([1000, 999]); // [0.731, 0.269], no NaN",
+      "syntax": "js",
+      "translations": {
+        "es": {
+          "title": "Softmax convierte puntuaciones en probabilidades que suman 1",
+          "body": "*Softmax* toma cualquier lista de puntuaciones, los *logits*, y devuelve números positivos que suman 1. Una puntuación mayor recibe una parte mayor.\n\nResta antes el máximo: Math.exp(1000) es Infinity, y el desplazamiento **no cambia el resultado**.\n\nEs el último paso de un clasificador y de cada elección del siguiente token. **La temperatura divide las puntuaciones antes de este paso.**"
+        }
+      }
+    },
+    {
+      "id": "ai-foundations-representations",
+      "kind": "concept",
+      "level": "intermediate",
+      "title": "The hidden layers learn their own features, and those features are the representation",
+      "body": "Nobody tells a network what to look for. In an image model, *early layers* find edges, middle layers find textures and later layers find eyes and wheels.\n\nThe activations of a hidden layer are a *representation*: **a vector of features the network built for itself**.\n\nAn embedding model exposes such a vector. The embedding cards say how to store and search it; this one says **where it comes from**.",
+      "translations": {
+        "es": {
+          "title": "Las capas ocultas aprenden sus propias features, y esas features son la representación",
+          "body": "Nadie le dice a una red qué buscar. En un modelo de imágenes, las *primeras capas* encuentran bordes, las del medio texturas y las últimas ojos y ruedas.\n\nLas activaciones de una capa oculta son una *representación*: **un vector de features que la red construyó por sí misma**.\n\nUn modelo de embeddings expone un vector así. Las tarjetas de embeddings dicen cómo guardarlo y buscarlo; esta dice **de dónde sale**."
+        }
+      }
+    },
+    {
+      "id": "ai-foundations-rnn-attention",
+      "kind": "concept",
+      "level": "intermediate",
+      "title": "An RNN squeezes the whole past into one vector; attention looks back at every token",
+      "body": "A *recurrent network* (RNN) reads one token at a time and keeps one state vector h. Each step overwrites part of it.\n\nTwo limits follow: **the start of a long text fades**, and step 5 must wait for step 4, so training cannot run in parallel.\n\n*Attention* keeps the vector of every position. **Each output weighs all of them directly**, and all positions run at once.",
+      "diagram": {
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 188\" role=\"img\"><defs><marker id=\"ai-foundations-rnn-attention-head\" viewBox=\"0 0 8 8\" refX=\"7\" refY=\"4\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path class=\"d-head\" d=\"M0 0L8 4L0 8z\"/></marker></defs><text class=\"d-label\" x=\"8\" y=\"12\">RNN</text><rect class=\"d-box\" x=\"8\" y=\"20\" width=\"56\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"36\" y=\"34\">h₁</text><path class=\"d-arrow\" marker-end=\"url(#ai-foundations-rnn-attention-head)\" d=\"M64 34H78\"/><rect class=\"d-box\" x=\"80\" y=\"20\" width=\"56\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"108\" y=\"34\">h₂</text><path class=\"d-arrow\" marker-end=\"url(#ai-foundations-rnn-attention-head)\" d=\"M136 34H150\"/><rect class=\"d-box\" x=\"152\" y=\"20\" width=\"56\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"180\" y=\"34\">h₃</text><path class=\"d-arrow\" marker-end=\"url(#ai-foundations-rnn-attention-head)\" d=\"M208 34H222\"/><rect class=\"d-box\" x=\"224\" y=\"20\" width=\"56\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"252\" y=\"34\">h₄</text><path class=\"d-arrow\" marker-end=\"url(#ai-foundations-rnn-attention-head)\" d=\"M280 34H290\"/><text class=\"d-text\" x=\"302\" y=\"34\">y</text><text class=\"d-label\" x=\"8\" y=\"84\">ATTENTION</text><rect class=\"d-box\" x=\"8\" y=\"92\" width=\"56\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"36\" y=\"106\">x₁</text><path class=\"d-arrow\" marker-end=\"url(#ai-foundations-rnn-attention-head)\" d=\"M36 120L142 150\"/><rect class=\"d-box\" x=\"80\" y=\"92\" width=\"56\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"108\" y=\"106\">x₂</text><path class=\"d-arrow\" marker-end=\"url(#ai-foundations-rnn-attention-head)\" d=\"M108 120L154 150\"/><rect class=\"d-box\" x=\"152\" y=\"92\" width=\"56\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"180\" y=\"106\">x₃</text><path class=\"d-arrow\" marker-end=\"url(#ai-foundations-rnn-attention-head)\" d=\"M180 120L166 150\"/><rect class=\"d-box\" x=\"224\" y=\"92\" width=\"56\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"252\" y=\"106\">x₄</text><path class=\"d-arrow\" marker-end=\"url(#ai-foundations-rnn-attention-head)\" d=\"M252 120L178 150\"/><rect class=\"d-hi\" x=\"124\" y=\"152\" width=\"72\" height=\"28\" rx=\"6\"/><text class=\"d-text d-on-hi\" x=\"160\" y=\"166\">y</text></svg>",
+        "alt": "Two rows. RNN: states h1 to h4 in a chain, and only h4 reaches the output y. Attention: tokens x1 to x4 each send an arrow straight to the highlighted output y."
+      },
+      "translations": {
+        "es": {
+          "title": "Una RNN comprime todo el pasado en un vector; attention vuelve a mirar cada token",
+          "body": "Una *red recurrente* (RNN) lee un token cada vez y guarda un vector de estado h. Cada paso sobrescribe parte de él.\n\nDe ahí salen dos límites: **el principio de un texto largo se borra**, y el paso 5 debe esperar al paso 4, así que el entrenamiento no puede ir en paralelo.\n\n*Attention* guarda el vector de cada posición. **Cada salida los pondera todos directamente**, y todas las posiciones se calculan a la vez.",
+          "diagram": {
+            "alt": "Dos filas. RNN: los estados h1 a h4 en cadena, y solo h4 llega a la salida y. Attention: los tokens x1 a x4 envían cada uno una flecha directa a la salida resaltada y."
+          }
+        }
+      }
+    },
+    {
+      "id": "ai-foundations-self-attention",
+      "kind": "concept",
+      "level": "intermediate",
+      "title": "In self-attention, each token mixes in the tokens of the same text it finds relevant",
+      "body": "Each token gets three vectors from learned weights: a *query* (what it looks for), a *key* (what it offers) and a *value* (what it passes on).\n\nThe score of token i for token j is query · key. Softmax turns the scores into weights, and **the output is the weighted sum of the values**.\n\nIn \"the cat sat because it was tired\", the token \"it\" gives **a high weight to \"cat\"**.",
+      "diagram": {
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 192\" role=\"img\"><defs><marker id=\"ai-foundations-self-attention-head\" viewBox=\"0 0 8 8\" refX=\"7\" refY=\"4\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path class=\"d-head\" d=\"M0 0L8 4L0 8z\"/></marker></defs><text class=\"d-note\" x=\"56\" y=\"12\">q₃ · kᵢ</text><text class=\"d-note d-start\" x=\"104\" y=\"12\">softmax</text><text class=\"d-note\" x=\"290\" y=\"12\">v</text><text class=\"d-note\" x=\"56\" y=\"36\">1.2</text><rect class=\"d-box\" x=\"104\" y=\"28\" width=\"18\" height=\"16\" rx=\"2\"/><text class=\"d-note d-start\" x=\"128\" y=\"36\">0.11</text><text class=\"d-text\" x=\"290\" y=\"36\">v₁</text><text class=\"d-note\" x=\"56\" y=\"68\">0.3</text><rect class=\"d-box\" x=\"104\" y=\"60\" width=\"8\" height=\"16\" rx=\"2\"/><text class=\"d-note d-start\" x=\"118\" y=\"68\">0.05</text><text class=\"d-text\" x=\"290\" y=\"68\">v₂</text><text class=\"d-note\" x=\"56\" y=\"100\">3.1</text><rect class=\"d-hi\" x=\"104\" y=\"92\" width=\"122\" height=\"16\" rx=\"2\"/><text class=\"d-note d-start\" x=\"232\" y=\"100\">0.76</text><text class=\"d-text\" x=\"290\" y=\"100\">v₃</text><text class=\"d-note\" x=\"56\" y=\"132\">0.8</text><rect class=\"d-box\" x=\"104\" y=\"124\" width=\"13\" height=\"16\" rx=\"2\"/><text class=\"d-note d-start\" x=\"123\" y=\"132\">0.08</text><text class=\"d-text\" x=\"290\" y=\"132\">v₄</text><path class=\"d-arrow\" marker-end=\"url(#ai-foundations-self-attention-head)\" d=\"M290 146V170H226\"/><rect class=\"d-box\" x=\"96\" y=\"156\" width=\"128\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"160\" y=\"170\">z₃ = Σ wᵢ vᵢ</text></svg>",
+        "alt": "For the query of token 3, four rows show the score q3 · ki for each key, its softmax weight as a bar and its value vi. The highlighted bar of token 3 has weight 0.76. The output z3 is the sum of the values times their weights."
+      },
+      "translations": {
+        "es": {
+          "title": "En self-attention, cada token mezcla los tokens del mismo texto que le parecen relevantes",
+          "body": "Cada token recibe tres vectores de unos pesos aprendidos: una *query* (lo que busca), una *key* (lo que ofrece) y un *value* (lo que pasa).\n\nLa puntuación del token i para el token j es query · key. Softmax convierte las puntuaciones en pesos, y **la salida es la suma ponderada de los values**.\n\nEn «el gato se sentó porque estaba cansado», el token de «estaba» da **un peso alto a «gato»**.",
+          "diagram": {
+            "alt": "Para la query del token 3, cuatro filas muestran la puntuación q3 · ki de cada key, su peso softmax como una barra y su value vi. La barra resaltada del token 3 tiene peso 0,76. La salida z3 es la suma de los values por sus pesos."
+          }
+        }
+      }
+    },
+    {
+      "id": "ai-foundations-attention-js",
+      "kind": "snippet",
+      "level": "intermediate",
+      "title": "Dot-product attention for one query, in plain JavaScript",
+      "body": "Score each key against the query with a *dot product*, divided by the square root of the dimension so that large vectors do not saturate softmax.\n\nSoftmax gives the weights. **The output is the weighted sum of the values**: here 67 % of v₁ and 33 % of v₂.\n\nA transformer runs this for **every token and every head at once**, as matrix products.",
+      "code": "const dot = (a, b) =>\n  a.reduce((s, x, i) => s + x * b[i], 0);\n\nfunction attend(q, keys, values) {\n  const scale = Math.sqrt(q.length);\n  const scores = keys.map((k) => dot(q, k) / scale);\n  const w = softmax(scores); // from the softmax card\n  return values[0].map((_, j) =>\n    w.reduce((s, wi, i) => s + wi * values[i][j], 0));\n}\n\nattend([1, 0], [[1, 0], [0, 1]], [[10, 0], [0, 10]]);\n// [6.7, 3.3]",
+      "syntax": "js",
+      "translations": {
+        "es": {
+          "title": "Attention por producto escalar para una query, en JavaScript",
+          "body": "Puntúa cada key contra la query con un *producto escalar*, dividido por la raíz de la dimensión para que los vectores grandes no saturen softmax.\n\nSoftmax da los pesos. **La salida es la suma ponderada de los values**: aquí un 67 % de v₁ y un 33 % de v₂.\n\nUn transformer hace esto para **cada token y cada head a la vez**, con productos de matrices."
+        }
+      }
+    },
+    {
+      "id": "ai-foundations-quiz-positional",
+      "kind": "quiz",
+      "level": "intermediate",
+      "title": "You shuffle the words of a sentence. Without positional encoding, what does self-attention see?",
+      "body": "Self-attention compares every token with every other one, and **nothing in that sum depends on order**. Shuffle the input and each token gets the same output, only in a new order.\n\nSo the model sees the same *set* of tokens, not a new meaning. **Word order comes only from the position signal** added to each token.",
+      "options": [
+        "The same tokens, with the same outputs in a new order",
+        "A sentence with a different meaning",
+        "An error, because the order is invalid",
+        "Random noise"
+      ],
+      "answer": 0,
+      "translations": {
+        "es": {
+          "title": "Desordenas las palabras de una frase. Sin codificación posicional, ¿qué ve self-attention?",
+          "body": "Self-attention compara cada token con todos los demás, y **nada en esa suma depende del orden**. Desordena la entrada y cada token recibe la misma salida, solo que en otro orden.\n\nAsí que el modelo ve el mismo *conjunto* de tokens, no un significado nuevo. **El orden de las palabras solo llega de la señal de posición** que se suma a cada token.",
+          "options": [
+            "Los mismos tokens, con las mismas salidas en otro orden",
+            "Una frase con otro significado",
+            "Un error, porque el orden no es válido",
+            "Ruido aleatorio"
+          ]
+        }
+      }
+    },
+    {
+      "id": "ai-foundations-res-karpathy",
+      "kind": "resource",
+      "level": "intermediate",
+      "title": "Course: Andrej Karpathy, Neural Networks: Zero to Hero",
+      "body": "A video course that builds everything in code: *micrograd*, a tiny backpropagation engine, then language models up to a small GPT.\n\n**You write each line yourself**, in Python, with no framework magic.\n\nPlan about **15 hours**. Do the first two lectures even if you stop there: they make backpropagation concrete.",
+      "url": "https://karpathy.ai/zero-to-hero.html",
+      "media": "course",
+      "minutes": 600,
+      "translations": {
+        "es": {
+          "title": "Curso: Andrej Karpathy, Neural Networks: Zero to Hero",
+          "body": "Un curso en vídeo que lo construye todo en código: *micrograd*, un pequeño motor de backpropagation, y luego modelos de lenguaje hasta un GPT pequeño.\n\n**Escribes tú cada línea**, en Python, sin la magia de un framework.\n\nCuenta con **unas 15 horas**. Haz las dos primeras lecciones aunque pares ahí: hacen concreta la backpropagation."
+        }
+      }
+    },
+    {
+      "id": "ai-foundations-transformer-block",
+      "kind": "concept",
+      "level": "advanced",
+      "title": "A transformer is one block stacked many times: attention, then a small network",
+      "body": "Each *block* has two parts. Self-attention lets the tokens exchange information. A *feed-forward* network (FFN) then works on each token alone.\n\nAround each part, a *residual* connection adds the input back to the output, and a normalisation keeps the values stable. **The residuals let the gradient reach deep layers.**\n\n**Depth is the number of blocks**: a large model stacks dozens of them.",
+      "diagram": {
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 260\" role=\"img\"><defs><marker id=\"ai-foundations-transformer-block-head\" viewBox=\"0 0 8 8\" refX=\"7\" refY=\"4\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path class=\"d-head\" d=\"M0 0L8 4L0 8z\"/></marker></defs><text class=\"d-text\" x=\"140\" y=\"12\">x</text><rect class=\"d-hi\" x=\"56\" y=\"36\" width=\"176\" height=\"180\" rx=\"8\"/><path class=\"d-arrow\" marker-end=\"url(#ai-foundations-transformer-block-head)\" d=\"M140 22V46\"/><rect class=\"d-box\" x=\"80\" y=\"48\" width=\"120\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"140\" y=\"62\">self-attn</text><path class=\"d-arrow\" marker-end=\"url(#ai-foundations-transformer-block-head)\" d=\"M140 76V90\"/><rect class=\"d-box\" x=\"80\" y=\"92\" width=\"120\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"140\" y=\"106\">add + norm</text><path class=\"d-arrow\" marker-end=\"url(#ai-foundations-transformer-block-head)\" d=\"M140 120V134\"/><rect class=\"d-box\" x=\"80\" y=\"136\" width=\"120\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"140\" y=\"150\">FFN</text><path class=\"d-arrow\" marker-end=\"url(#ai-foundations-transformer-block-head)\" d=\"M140 164V178\"/><rect class=\"d-box\" x=\"80\" y=\"180\" width=\"120\" height=\"28\" rx=\"6\"/><text class=\"d-text\" x=\"140\" y=\"194\">add + norm</text><path class=\"d-arrow\" marker-end=\"url(#ai-foundations-transformer-block-head)\" d=\"M140 40H216V106H202\"/><path class=\"d-arrow\" marker-end=\"url(#ai-foundations-transformer-block-head)\" d=\"M140 128H216V194H202\"/><text class=\"d-note d-start\" x=\"244\" y=\"126\">× N</text><path class=\"d-arrow\" marker-end=\"url(#ai-foundations-transformer-block-head)\" d=\"M140 208V234\"/><text class=\"d-text\" x=\"140\" y=\"248\">h</text></svg>",
+        "alt": "A highlighted block, repeated N times. The input x goes through self-attention, then add and norm, then a feed-forward network, then add and norm again. Two residual arrows skip around each part. The output is h."
+      },
+      "translations": {
+        "es": {
+          "title": "Un transformer es un bloque apilado muchas veces: attention y luego una red pequeña",
+          "body": "Cada *bloque* tiene dos partes. Self-attention deja que los tokens intercambien información. Una red *feed-forward* (FFN) trabaja luego con cada token por separado.\n\nAlrededor de cada parte, una conexión *residual* suma la entrada a la salida, y una normalización mantiene estables los valores. **Las residuales llevan el gradiente a las capas profundas.**\n\n**La profundidad es el número de bloques**: un modelo grande apila docenas.",
+          "diagram": {
+            "alt": "Un bloque resaltado, repetido N veces. La entrada x pasa por self-attention, luego add y norm, luego una red feed-forward, y otra vez add y norm. Dos flechas residuales saltan cada parte. La salida es h."
+          }
+        }
+      }
+    },
+    {
+      "id": "ai-foundations-pretraining",
+      "kind": "concept",
+      "level": "advanced",
+      "title": "Pretraining predicts the next token of a huge text, and the text itself is the label",
+      "body": "*Pretraining* needs no human labels. The text is cut into tokens, and **every position is a training example**: the tokens before it are the input, the token at it is the label.\n\nA trillion tokens of web pages, books and code give a trillion examples. The model learns grammar, facts and style as a way to guess better.\n\n**The tokenizer comes first**, and the next topic starts there.",
+      "translations": {
+        "es": {
+          "title": "El preentrenamiento predice el siguiente token de un texto enorme, y el propio texto es la etiqueta",
+          "body": "El *preentrenamiento* no necesita etiquetas humanas. El texto se corta en tokens, y **cada posición es un ejemplo de entrenamiento**: los tokens anteriores son la entrada y el token de esa posición es la etiqueta.\n\nUn billón de tokens de webs, libros y código dan un billón de ejemplos. El modelo aprende gramática, hechos y estilo como una forma de acertar más.\n\n**El tokenizer va primero**, y el siguiente tema empieza ahí."
+        }
+      }
+    },
+    {
+      "id": "ai-foundations-post-training",
+      "kind": "concept",
+      "level": "advanced",
+      "title": "Instruction tuning shows good answers; preference tuning ranks two of them",
+      "body": "*Instruction tuning* trains on pairs of a prompt and an ideal reply, written or checked by people. The model learns the format of an answer.\n\n*Preference tuning* shows two replies to one prompt and **which one people prefer**. In *RLHF*, a reward model learns those choices and the LLM is trained to score high on it.\n\nThis card is about **how the data looks**; the base versus instruct card is about the behaviour that results.",
+      "translations": {
+        "es": {
+          "title": "El instruction tuning muestra buenas respuestas; el tuning de preferencias ordena dos de ellas",
+          "body": "El *instruction tuning* entrena con pares de un prompt y una respuesta ideal, escrita o revisada por personas. El modelo aprende el formato de una respuesta.\n\nEl *tuning de preferencias* muestra dos respuestas a un prompt y **cuál prefieren las personas**. En *RLHF*, un modelo de recompensa aprende esas elecciones y el LLM se entrena para puntuar alto en él.\n\nEsta tarjeta trata de **cómo son los datos**; la de modelo base frente a instruct trata del comportamiento que resulta."
+        }
+      }
+    },
+    {
+      "id": "ai-foundations-knows-facts",
+      "kind": "pitfall",
+      "level": "advanced",
+      "title": "A model stores the statistics of text, not a table of facts",
+      "body": "The trap: you treat the model as a database. It has *no lookup* and no date for what it read; **a fact is only a pattern in the weights**.\n\nThe symptom: a common fact comes back right, a rare one comes back wrong but fluent, and a recent one is missing. A rare fact is a weak pattern.\n\nThe fix: **give the model the source text** in the prompt and ask it to answer from that.",
+      "translations": {
+        "es": {
+          "title": "Un modelo guarda la estadística del texto, no una tabla de hechos",
+          "body": "La trampa: tratas el modelo como una base de datos. No tiene *búsqueda* ni fecha para lo que leyó; **un hecho es solo un patrón en los pesos**.\n\nEl síntoma: un hecho común sale bien, uno raro sale mal pero fluido, y uno reciente no está. Un hecho raro es un patrón débil.\n\nLa solución: **dale al modelo el texto fuente** en el prompt y pídele que responda a partir de él."
+        }
+      }
+    },
+    {
+      "id": "ai-foundations-bigger-better",
+      "kind": "pitfall",
+      "level": "advanced",
+      "title": "Scaling laws predict a lower loss, not a better result on your task",
+      "body": "The trap: you pick the largest model because *scaling laws* say bigger is better. They predict that **the average loss falls smoothly** with more parameters, data and compute.\n\nThe symptom: a model ten times larger, slower and more expensive, and no gain on your task. A smaller model, tuned or well prompted, often wins on one narrow job.\n\nThe fix: **measure each model on your own eval set** before you choose.",
+      "translations": {
+        "es": {
+          "title": "Las leyes de escala predicen una pérdida menor, no un mejor resultado en tu tarea",
+          "body": "La trampa: eliges el modelo más grande porque las *leyes de escala* dicen que más grande es mejor. Predicen que **la pérdida media baja de forma suave** con más parámetros, datos y cómputo.\n\nEl síntoma: un modelo diez veces más grande, más lento y más caro, y ninguna mejora en tu tarea. Un modelo más pequeño, ajustado o con un buen prompt, gana a menudo en una tarea acotada.\n\nLa solución: **mide cada modelo con tu propio eval set** antes de elegir."
+        }
+      }
+    },
+    {
+      "id": "ai-foundations-quiz-gpu-memory",
+      "kind": "quiz",
+      "level": "advanced",
+      "title": "A 7 billion parameter model in 16-bit floats. How much GPU memory do its weights take?",
+      "body": "16 bits are 2 bytes, so **7 billion × 2 bytes = 14 GB** for the weights.\n\n7 GB is the size in 8 bits and 28 GB in 32 bits. The *KV cache* of the context and the activations come on top, so **plan for more than 14 GB**.",
+      "options": [
+        "About 7 GB",
+        "About 3.5 GB",
+        "About 28 GB",
+        "About 14 GB"
+      ],
+      "answer": 3,
+      "translations": {
+        "es": {
+          "title": "Un modelo de 7000 millones de parámetros en floats de 16 bits. ¿Cuánta memoria de GPU ocupan sus pesos?",
+          "body": "16 bits son 2 bytes, así que **7000 millones × 2 bytes = 14 GB** para los pesos.\n\n7 GB es el tamaño con 8 bits y 28 GB con 32 bits. La *KV cache* del contexto y las activaciones van aparte, así que **cuenta con más de 14 GB**.",
+          "options": [
+            "Unos 7 GB",
+            "Unos 3,5 GB",
+            "Unos 28 GB",
+            "Unos 14 GB"
+          ]
+        }
+      }
+    },
+    {
+      "id": "ai-foundations-quiz-inference-cost",
+      "kind": "quiz",
+      "level": "advanced",
+      "title": "You train a model once and serve it to millions of users. Which cost usually grows without limit?",
+      "body": "*Inference* runs on every request, so **its cost grows with every user and every token**.\n\nTraining is large but paid once per model. The dataset and the storage of the weights are fixed sizes. That is why **a smaller, faster model often pays back** its extra tuning.",
+      "options": [
+        "Training",
+        "Inference",
+        "The dataset",
+        "Storage of the weights"
+      ],
+      "answer": 1,
+      "translations": {
+        "es": {
+          "title": "Entrenas un modelo una vez y lo sirves a millones de usuarios. ¿Qué coste suele crecer sin límite?",
+          "body": "La *inferencia* se ejecuta en cada petición, así que **su coste crece con cada usuario y cada token**.\n\nEl entrenamiento es grande pero se paga una vez por modelo. El dataset y el almacenamiento de los pesos tienen un tamaño fijo. Por eso **un modelo más pequeño y rápido suele compensar** su ajuste extra.",
+          "options": [
+            "El entrenamiento",
+            "La inferencia",
+            "El dataset",
+            "El almacenamiento de los pesos"
+          ]
+        }
+      }
+    },
+    {
+      "id": "ai-foundations-res-alammar",
+      "kind": "resource",
+      "level": "advanced",
+      "title": "Article: Jay Alammar, The Illustrated Transformer",
+      "body": "A long article that draws the *transformer* step by step: embeddings, queries, keys and values, multi-head attention, the encoder and the decoder.\n\n**Each matrix has a picture with its shape**, so you can follow the numbers.\n\nRead it after the self-attention cards: **about 40 minutes**.",
+      "url": "https://jalammar.github.io/illustrated-transformer/",
+      "media": "article",
+      "minutes": 40,
+      "translations": {
+        "es": {
+          "title": "Artículo: Jay Alammar, The Illustrated Transformer",
+          "body": "Un artículo largo que dibuja el *transformer* paso a paso: embeddings, queries, keys y values, multi-head attention, el encoder y el decoder.\n\n**Cada matriz tiene un dibujo con su forma**, así que puedes seguir los números.\n\nLéelo después de las tarjetas de self-attention: **unos 40 minutos**."
+        }
+      }
+    }
+  ]
+}
